@@ -17,6 +17,9 @@ import {
   deleteTeam,
   getEmailLogs,
   getNextTeamNumber,
+  createPptSubmission,
+  getAllPptSubmissions,
+  deletePptSubmission,
 } from '../src/db/neonDb.js';
 import {
   dispatchTeamRegistrationEmails,
@@ -761,5 +764,43 @@ app.get('/api/export/csv', async (req: Request, res: Response) => {
   }
 });
 
+// =====================
+// PPT SUBMISSION ROUTES
+// =====================
+
+// Public: Submit PPT
+app.post('/api/ppt-submission', async (req: Request, res: Response) => {
+  try {
+    const { teamId, teamName, leaderName, leaderEmail, fileUrl, note } = req.body;
+    if (!teamId || !teamName || !leaderName || !leaderEmail || !fileUrl) {
+      return res.status(400).json({ success: false, message: 'All fields are required.' });
+    }
+    const id = `PPT-${teamId}-${Date.now()}`;
+    const submission = await createPptSubmission({ id, teamId, teamName, leaderName, leaderEmail, fileUrl, note });
+    res.json({ success: true, message: 'PPT submitted successfully!', submission });
+  } catch (err: any) {
+    res.status(500).json({ success: false, message: err.message || 'Failed to submit PPT.' });
+  }
+});
+
+// Admin: Get all PPT submissions
+app.get('/api/admin/ppt-submissions', async (req: Request, res: Response) => {
+  try {
+    const submissions = await getAllPptSubmissions();
+    res.json({ success: true, submissions });
+  } catch (err: any) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+// Admin: Delete a PPT submission
+app.delete('/api/admin/ppt-submissions/:id', async (req: Request, res: Response) => {
+  try {
+    await deletePptSubmission(req.params.id);
+    res.json({ success: true, message: 'PPT submission deleted.' });
+  } catch (err: any) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
 
 export default app;

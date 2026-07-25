@@ -358,6 +358,8 @@ export const RegistrationRulesView: React.FC = () => {
     }
   };
 
+  const { team, isTeamLoggedIn } = useAuth();
+  
   const now = new Date();
   const deadline = new Date(settings.registrationDeadline);
   const isDeadlinePassed = !settings.isRegistrationOpen || now > deadline;
@@ -370,12 +372,28 @@ export const RegistrationRulesView: React.FC = () => {
           <span className="h-2 w-2 rounded-full bg-[#C1272D] animate-pulse" />
           Internal SIH 2026 Registration Portal
         </div>
-        <h1 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
-          Streamlined Registration
-        </h1>
-        <p className="text-xs sm:text-sm text-slate-600 max-w-xl mx-auto mt-2 font-medium">
-          Register your team and submit mentor details in one continuous, simplified workflow.
-        </p>
+        
+        {isTeamLoggedIn && team ? (
+          <>
+            <h1 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
+              {team.status === 'completed' ? 'You are all set!' : 'Complete Your Registration'}
+            </h1>
+            <p className="text-xs sm:text-sm text-slate-600 max-w-xl mx-auto mt-2 font-medium">
+              {team.status === 'completed' 
+                ? 'Your team and mentor details are successfully registered. Keep an eye out for further announcements and prepare your pitch!' 
+                : 'Please complete the remaining steps to finalize your team registration.'}
+            </p>
+          </>
+        ) : (
+          <>
+            <h1 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
+              Streamlined Registration
+            </h1>
+            <p className="text-xs sm:text-sm text-slate-600 max-w-xl mx-auto mt-2 font-medium">
+              Register your team and submit mentor details in one continuous, simplified workflow.
+            </p>
+          </>
+        )}
 
         {/* Mode Toggle & Lookup banner removed - Phase 2 Mentor Submission now accessed strictly post-registration or via Team Portal login */}
       </div>
