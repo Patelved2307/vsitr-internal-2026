@@ -136,6 +136,7 @@ export const RegistrationPage: React.FC = () => {
 
     // Duplicate member name check removed per user request
 
+    const allMembers = [leader, ...members];
     const allMobiles = allMembers.map(m => m.mobile.trim());
     if (new Set(allMobiles).size !== allMobiles.length) {
       showAlert('Duplicate Mobile Number', 'A mobile number has been entered more than once. Each team member must have a unique mobile number.');
