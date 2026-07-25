@@ -12,7 +12,7 @@ export const Footer: React.FC = () => {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 pb-10 border-b border-slate-800/80">
-          
+
           {/* Col 1: Brand & Logos */}
           <div className="md:col-span-1 space-y-4">
             <div className="flex items-center gap-2 bg-white p-2.5 rounded-xl border border-slate-200 shadow-xs inline-flex">
@@ -32,7 +32,7 @@ export const Footer: React.FC = () => {
             </p>
 
             <div className="text-[11px] text-slate-400">
-              Organized by: <span className="text-slate-200 font-bold">Research, Coding, Design &amp; Soft Skills Clubs</span>
+              Managedv by: <span className="text-slate-200 font-bold">Research, Coding, Design &amp; Soft Skills Clubs</span>
             </div>
           </div>
 
@@ -110,7 +110,7 @@ export const Footer: React.FC = () => {
               </li>
               <li className="flex flex-col">
                 <span className="text-slate-400 text-[10px] uppercase font-bold">Internal Pitching Round</span>
-                <span className="font-bold text-blue-400">08 August 2026</span>
+                <span className="font-bold text-blue-400">TBC</span>
               </li>
             </ul>
           </div>
