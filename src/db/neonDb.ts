@@ -624,9 +624,10 @@ export async function updateTeam(id: string, updatedFields: Partial<Team>): Prom
     updatedAt: new Date().toISOString(),
   };
 
+  let neonSuccess = false;
   if (isNeonConnected) {
     try {
-      await runQuery(
+      const res = await runQuery(
         `UPDATE teams 
          SET team_name = $1, leader = $2, members = $3, mentor = $4, status = $5, updated_at = $6
          WHERE UPPER(id) = UPPER($7)`,
@@ -640,6 +641,7 @@ export async function updateTeam(id: string, updatedFields: Partial<Team>): Prom
           id.trim(),
         ]
       );
+      if (res.rowCount > 0) neonSuccess = true;
       await syncNormalizedMembersAndMentors(merged);
     } catch (err) {
       console.error('Error updating team in Neon DB:', err);
@@ -652,14 +654,17 @@ export async function updateTeam(id: string, updatedFields: Partial<Team>): Prom
   if (idx !== -1) {
     db.teams[idx] = merged;
     saveFileDb(db);
+    return merged;
   }
-  return merged;
+  return neonSuccess ? merged : null;
 }
 
 export async function deleteTeam(id: string): Promise<boolean> {
+  let neonSuccess = false;
   if (isNeonConnected) {
     try {
-      await runQuery('DELETE FROM teams WHERE UPPER(id) = UPPER($1)', [id.trim()]);
+      const res = await runQuery('DELETE FROM teams WHERE UPPER(id) = UPPER($1)', [id.trim()]);
+      if (res.rowCount > 0) neonSuccess = true;
     } catch (err) {
       console.error('Error deleting team in Neon DB:', err);
     }
@@ -672,7 +677,7 @@ export async function deleteTeam(id: string): Promise<boolean> {
     saveFileDb(db);
     return true;
   }
-  return false;
+  return neonSuccess;
 }
 
 // Email Logs
