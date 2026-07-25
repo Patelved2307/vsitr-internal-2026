@@ -1,0 +1,113 @@
+{
+  "settings": {
+    "registrationDeadline": "2026-08-02T23:59:59.000Z",
+    "isRegistrationOpen": true,
+    "whatsappGroupLink": "https://chat.whatsapp.com/SIH2026InternalVSITR",
+    "announcementBanner": "Internal SIH 2026 Registrations are now OPEN! Deadline: 02 August 2026, 11:59 PM.",
+    "problemStatementLink": "",
+    "problemStatementStatus": "",
+    "pptTemplateLink": "",
+    "pptTemplateStatus": ""
+  },
+  "timeline": [
+    {
+      "id": "t1",
+      "date": "02 August 2026, 11:59 PM",
+      "title": "Phase 1: Team Registration Deadline",
+      "active": true,
+      "description": "All teams must complete 6-member team registration with at least 1 female participant."
+    },
+    {
+      "id": "t2",
+      "date": "05 August 2026, 11:59 PM",
+      "title": "Phase 2: Mentor Details Submission",
+      "active": true,
+      "description": "Registered teams submit verified mentor contact details for final confirmation."
+    },
+    {
+      "id": "t3",
+      "date": "TBC",
+      "title": "Internal Screening & Presentation Round",
+      "active": false,
+      "description": "In-person pitch deck presentation & technical evaluation before faculty panel."
+    },
+    {
+      "id": "t4",
+      "date": "TBC",
+      "title": "Final Selected Teams Announcement",
+      "active": false,
+      "description": "Official nomination of top teams representing VSITR at National SIH 2026."
+    }
+  ],
+  "faqs": [
+    {
+      "id": "f1",
+      "answer": "All enrolled students from Vidush Somany Institute of Technology & Research (VSITR), Kadi across IT, CSE, and CE departments (Semesters 1-8) are eligible to participate.",
+      "question": "Who can participate in Internal SIH 2026?"
+    },
+    {
+      "id": "f2",
+      "answer": "Yes! Every team MUST include at least 1 female participant. All-girls teams are also fully welcome and eligible.",
+      "question": "Is it compulsory to have a female team member?"
+    },
+    {
+      "id": "f3",
+      "answer": "Yes! Registration is conducted in two phases. In Phase 1, you complete your 6-member Team Registration before the deadline. In Phase 2, you can submit your Mentor Details using your Team ID.",
+      "question": "Can I register without a mentor initially?"
+    },
+    {
+      "id": "f4",
+      "answer": "Team names must be unique across the institute. If your chosen team name is already taken, the registration portal will prompt you to choose another unique name.",
+      "question": "What happens if my team name already exists?"
+    },
+    {
+      "id": "f5",
+      "answer": "Post-submission changes to team members or details are not allowed through the portal. Any critical modifications require official approval from the organizing committee.",
+      "question": "Can I edit my team details after submission?"
+    },
+    {
+      "id": "f6",
+      "answer": "Registrations automatically close on 02 August 2026, 11:59 PM. Late entries will not be entertained under any circumstances.",
+      "question": "What if I miss the registration deadline?"
+    },
+    {
+      "id": "f7",
+      "answer": "All official updates, screening schedules, and problem statement announcements will be communicated exclusively to the Team Leader via their registered college email and the official WhatsApp group.",
+      "question": "How will I receive further updates?"
+    },
+    {
+      "id": "f8",
+      "answer": "Yes! Members can be from different departments (IT, CSE, CE) and different semesters/years, provided all 6 members belong to VSITR.",
+      "question": "Can members be from different departments or semesters?"
+    },
+    {
+      "id": "f9",
+      "answer": "Click \"Team Login\" in the navbar and enter your Team ID (e.g. SIH2026-001), Team Name, and Team Leader Email ID to access your dedicated Team Portal.",
+      "question": "How do I log back in to see my team status?"
+    },
+    {
+      "id": "f10",
+      "answer": "Check the confirmation email sent to your Team Leader upon registration, or reach out to your club student coordinators with your team leader enrollment number.",
+      "question": "I forgot my Team ID — how do I recover it?"
+    }
+  ],
+  "rules": [
+    "Each team must consist of exactly 6 members, including the Team Leader.",
+    "Each team must include at least 1 female participant. All-girls teams are welcome and eligible.",
+    "All participants must be from the same college (VSITR) — inter-college teams are not permitted.",
+    "Members may belong to different years, branches, or disciplines within the same college (IT, CSE, CE).",
+    "Each team must use a unique team name that does NOT include the institute's name (e.g. VSITR, Vidush Somany).",
+    "Each participant (by enrollment number) may be part of only one team.",
+    "A team once registered cannot add/replace members after the registration deadline without admin approval.",
+    "Registration is split into two independent phases: (a) Team Registration and (b) Mentor Details Submission. Phase (a) must be completed by deadline; Phase (b) is mandatory for final confirmation.",
+    "Only the Team Leader may register the team and will be the sole point of contact for all official communication.",
+    "All communication (screening schedules, problem statements, presentation dates, selection updates) will be sent only to the Team Leader's registered college email.",
+    "Teams must report on time for screening rounds/presentations as per the schedule communicated via email.",
+    "Plagiarism, misrepresentation of information, or providing false enrollment/contact details will lead to disqualification.",
+    "Decisions of the organizing committee (Research, Coding, Design, Soft Skills clubs) and faculty coordinators are final and binding.",
+    "Any change in team composition or mentor after submission must be communicated to the organizing committee in writing/email — not self-editable post-deadline."
+  ],
+  "teams": [],
+  "emailLogs": [],
+  "nextTeamNumber": 1
+}
