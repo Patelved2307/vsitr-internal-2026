@@ -31,15 +31,14 @@ export const Navbar: React.FC = () => {
 
   return (
     <header
-      className={`sticky top-0 z-40 w-full transition-all duration-300 ${
-        isScrolled
+      className={`sticky top-0 z-40 w-full transition-all duration-300 ${isScrolled
           ? 'bg-white/95 backdrop-blur-md shadow-md py-2.5 border-b border-slate-200'
           : 'bg-white py-3 border-b border-slate-100'
-      }`}
+        }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
-          
+
           {/* Left: 3 Logos + Title */}
           <div
             onClick={() => setActiveTab('home')}
@@ -61,7 +60,7 @@ export const Navbar: React.FC = () => {
               <img
                 src="/logos/vsitr-logo.png"
                 alt="VSITR Logo"
-                className="h-8 w-auto sm:h-10 object-contain"
+                className="h-7 w-auto sm:h-8 object-contain shrink-0"
               />
             </div>
 
@@ -79,11 +78,10 @@ export const Navbar: React.FC = () => {
           <nav className="hidden lg:flex items-center gap-6">
             <button
               onClick={() => setActiveTab('home')}
-              className={`relative py-1 text-sm font-semibold transition ${
-                activeTab === 'home'
+              className={`relative py-1 text-sm font-semibold transition ${activeTab === 'home'
                   ? 'text-[#1B3F8B]'
                   : 'text-slate-600 hover:text-slate-900'
-              }`}
+                }`}
             >
               Register &amp; Rules
               {activeTab === 'home' && (
@@ -93,11 +91,10 @@ export const Navbar: React.FC = () => {
 
             <button
               onClick={() => setActiveTab('admin')}
-              className={`relative py-1 text-sm font-semibold transition flex items-center gap-1.5 ${
-                activeTab === 'admin'
+              className={`relative py-1 text-sm font-semibold transition flex items-center gap-1.5 ${activeTab === 'admin'
                   ? 'text-[#1B3F8B]'
                   : 'text-slate-500 hover:text-slate-800'
-              }`}
+                }`}
             >
               <ShieldAlert className="h-4 w-4 text-[#C1272D]" />
               {isAdminLoggedIn ? 'Admin Panel' : 'Admin Login'}
@@ -174,9 +171,8 @@ export const Navbar: React.FC = () => {
                 setActiveTab('home');
                 setMobileMenuOpen(false);
               }}
-              className={`text-left px-3 py-2 rounded-lg font-medium text-sm ${
-                activeTab === 'home' ? 'bg-blue-50 text-[#1B3F8B] font-bold' : 'text-slate-700'
-              }`}
+              className={`text-left px-3 py-2 rounded-lg font-medium text-sm ${activeTab === 'home' ? 'bg-blue-50 text-[#1B3F8B] font-bold' : 'text-slate-700'
+                }`}
             >
               Register &amp; Rules
             </button>
@@ -185,9 +181,8 @@ export const Navbar: React.FC = () => {
                 setActiveTab('admin');
                 setMobileMenuOpen(false);
               }}
-              className={`text-left px-3 py-2 rounded-lg font-medium text-sm flex items-center gap-2 ${
-                activeTab === 'admin' ? 'bg-red-50 text-red-700 font-bold' : 'text-slate-600'
-              }`}
+              className={`text-left px-3 py-2 rounded-lg font-medium text-sm flex items-center gap-2 ${activeTab === 'admin' ? 'bg-red-50 text-red-700 font-bold' : 'text-slate-600'
+                }`}
             >
               <ShieldAlert className="h-4 w-4 text-[#C1272D]" />
               {isAdminLoggedIn ? 'Admin Panel' : 'Admin Login'}
