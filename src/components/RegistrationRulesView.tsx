@@ -358,7 +358,7 @@ export const RegistrationRulesView: React.FC = () => {
     }
   };
 
-  const { team, isTeamLoggedIn } = useAuth();
+
   
   const now = new Date();
   const deadline = new Date(settings.registrationDeadline);
