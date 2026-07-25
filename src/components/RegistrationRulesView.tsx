@@ -628,16 +628,17 @@ export const RegistrationRulesView: React.FC = () => {
               {regStep <= 3 && (
                 <div className="mb-6 max-w-md mx-auto">
                   <div className="relative flex items-center justify-between">
-                    <div className="absolute top-5 left-5 right-5 h-0.5 bg-slate-100 -translate-y-1/2 z-0" />
-                    <div
-                      className="absolute top-5 left-5 h-0.5 bg-gradient-to-r from-[#C1272D] to-[#1B3F8B] -translate-y-1/2 z-0 transition-all duration-300"
-                      style={{
-                        width: regStep === 1 ? '0%' : regStep === 2 ? '50%' : '100%',
-                      }}
-                    />
+                    <div className="absolute top-5 left-10 right-10 h-0.5 bg-slate-100 -translate-y-1/2 z-0 overflow-hidden">
+                      <div
+                        className="h-full bg-gradient-to-r from-[#C1272D] to-[#1B3F8B] transition-all duration-300"
+                        style={{
+                          width: regStep === 1 ? '0%' : regStep === 2 ? '50%' : '100%',
+                        }}
+                      />
+                    </div>
 
                     {/* Circle 1 */}
-                    <div className="relative z-10 flex flex-col items-center">
+                    <div className="relative z-10 flex flex-col items-center w-20">
                       <div
                         className={`h-9 w-9 rounded-full flex items-center justify-center font-bold text-xs border transition-all ${
                           regStep >= 1 ? 'bg-[#C1272D] text-white border-[#C1272D] ring-4 ring-red-50' : 'bg-white text-slate-400 border-slate-200'
@@ -645,11 +646,11 @@ export const RegistrationRulesView: React.FC = () => {
                       >
                         1
                       </div>
-                      <span className="text-[10px] font-extrabold mt-1 text-slate-600">Team Name</span>
+                      <span className={`text-[10px] font-extrabold mt-1 ${regStep >= 1 ? 'text-[#1B3F8B]' : 'text-slate-500'}`}>Team Name</span>
                     </div>
 
                     {/* Circle 2 */}
-                    <div className="relative z-10 flex flex-col items-center">
+                    <div className="relative z-10 flex flex-col items-center w-20">
                       <div
                         className={`h-9 w-9 rounded-full flex items-center justify-center font-bold text-xs border transition-all ${
                           regStep >= 2 ? 'bg-[#1B3F8B] text-white border-[#1B3F8B] ring-4 ring-blue-50' : 'bg-white text-slate-400 border-slate-200'
@@ -657,11 +658,11 @@ export const RegistrationRulesView: React.FC = () => {
                       >
                         2
                       </div>
-                      <span className="text-[10px] font-extrabold mt-1 text-slate-600">Leader</span>
+                      <span className={`text-[10px] font-extrabold mt-1 ${regStep >= 2 ? 'text-[#1B3F8B]' : 'text-slate-500'}`}>Leader</span>
                     </div>
 
                     {/* Circle 3 */}
-                    <div className="relative z-10 flex flex-col items-center">
+                    <div className="relative z-10 flex flex-col items-center w-20">
                       <div
                         className={`h-9 w-9 rounded-full flex items-center justify-center font-bold text-xs border transition-all ${
                           regStep >= 3 ? 'bg-amber-600 text-white border-amber-600 ring-4 ring-amber-50' : 'bg-white text-slate-400 border-slate-200'
@@ -669,7 +670,7 @@ export const RegistrationRulesView: React.FC = () => {
                       >
                         3
                       </div>
-                      <span className="text-[10px] font-extrabold mt-1 text-slate-600">Members</span>
+                      <span className={`text-[10px] font-extrabold mt-1 ${regStep >= 3 ? 'text-[#1B3F8B]' : 'text-slate-500'}`}>Members</span>
                     </div>
                   </div>
                 </div>

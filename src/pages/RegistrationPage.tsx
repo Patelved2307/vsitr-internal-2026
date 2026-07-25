@@ -215,7 +215,7 @@ export const RegistrationPage: React.FC = () => {
       <div className="mb-8 max-w-md mx-auto px-4">
         <div className="relative flex items-center justify-between">
           {/* Track line passing right through the center of 40px (h-10) circles (top-5) */}
-          <div className="absolute top-5 left-5 right-5 h-1 bg-slate-200 -translate-y-1/2 z-0 overflow-hidden">
+          <div className="absolute top-5 left-12 right-12 h-1 bg-slate-200 -translate-y-1/2 z-0 overflow-hidden">
             <div
               className="h-full bg-gradient-to-r from-[#C1272D] to-[#1B3F8B] transition-all duration-300"
               style={{
@@ -225,7 +225,7 @@ export const RegistrationPage: React.FC = () => {
           </div>
 
           {/* Step 1 Circle */}
-          <div className="relative z-10 flex flex-col items-center">
+          <div className="relative z-10 flex flex-col items-center w-24">
             <div
               className={`h-10 w-10 rounded-full flex items-center justify-center font-bold text-sm border-2 shadow-xs transition-all ${
                 step >= 1
@@ -235,11 +235,11 @@ export const RegistrationPage: React.FC = () => {
             >
               1
             </div>
-            <span className="text-[11px] font-extrabold mt-1.5 text-slate-700">Team Name</span>
+            <span className={`text-xs font-bold mt-2 ${step >= 1 ? 'text-[#1B3F8B]' : 'text-slate-500'}`}>Team Name</span>
           </div>
 
           {/* Step 2 Circle */}
-          <div className="relative z-10 flex flex-col items-center">
+          <div className="relative z-10 flex flex-col items-center w-24">
             <div
               className={`h-10 w-10 rounded-full flex items-center justify-center font-bold text-sm border-2 shadow-xs transition-all ${
                 step >= 2
@@ -249,21 +249,21 @@ export const RegistrationPage: React.FC = () => {
             >
               2
             </div>
-            <span className="text-[11px] font-extrabold mt-1.5 text-slate-700">Team Leader</span>
+            <span className={`text-xs font-bold mt-2 ${step >= 2 ? 'text-[#1B3F8B]' : 'text-slate-500'}`}>Leader</span>
           </div>
 
           {/* Step 3 Circle */}
-          <div className="relative z-10 flex flex-col items-center">
+          <div className="relative z-10 flex flex-col items-center w-24">
             <div
               className={`h-10 w-10 rounded-full flex items-center justify-center font-bold text-sm border-2 shadow-xs transition-all ${
-                step === 3
+                step >= 3
                   ? 'bg-amber-600 text-white border-amber-600 ring-4 ring-amber-100'
                   : 'bg-white text-slate-400 border-slate-300'
               }`}
             >
               3
             </div>
-            <span className="text-[11px] font-extrabold mt-1.5 text-slate-700">Team Members</span>
+            <span className={`text-xs font-bold mt-2 ${step >= 3 ? 'text-[#1B3F8B]' : 'text-slate-500'}`}>Members</span>
           </div>
         </div>
       </div>
