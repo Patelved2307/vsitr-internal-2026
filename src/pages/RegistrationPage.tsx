@@ -287,7 +287,7 @@ export const RegistrationPage: React.FC = () => {
                 </p>
               </div>
 
-              <div className="pt-4 flex justify-end">
+              <div className="pt-4 flex flex-col sm:flex-row justify-end gap-3">
                 <button
                   type="button"
                   onClick={handleStep1Next}

@@ -641,7 +641,7 @@ export const RegistrationRulesView: React.FC = () => {
                         </p>
                       </div>
 
-                      <div className="pt-4 flex justify-end">
+                      <div className="pt-4 flex flex-col sm:flex-row justify-end gap-3">
                         <button
                           type="button"
                           onClick={handleStep1Next}
@@ -770,7 +770,7 @@ export const RegistrationRulesView: React.FC = () => {
                         </div>
                       </div>
 
-                      <div className="pt-4 flex justify-between">
+                      <div className="pt-4 flex flex-col-reverse sm:flex-row justify-between gap-3">
                         <button
                           type="button"
                           onClick={() => setRegStep(1)}
@@ -922,7 +922,7 @@ export const RegistrationRulesView: React.FC = () => {
                         ))}
                       </div>
 
-                      <div className="pt-4 flex justify-between border-t border-slate-100">
+                      <div className="pt-4 flex flex-col-reverse sm:flex-row justify-between gap-3 border-t border-slate-100">
                         <button
                           type="button"
                           onClick={() => setRegStep(2)}
@@ -1132,7 +1132,7 @@ export const RegistrationRulesView: React.FC = () => {
                 Organizing coordinators will contact your Team Leader via registered college email for screening rounds and further presentations.
               </div>
 
-              <div className="pt-4 flex justify-center gap-3">
+              <div className="pt-4 flex flex-col-reverse sm:flex-row justify-center gap-3">
                 <button
                   onClick={() => {
                     setMode('register');
