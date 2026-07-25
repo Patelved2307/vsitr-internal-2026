@@ -225,7 +225,7 @@ export const TeamPortalPage: React.FC = () => {
           </div>
 
           <a
-            href={settings.whatsappGroupLink}
+            href="https://chat.whatsapp.com/EfS0SSUc9aX4DJUhfrpD2U"
             target="_blank"
             rel="noreferrer"
             className="shrink-0 inline-flex items-center justify-center gap-2 px-6 py-3 rounded-2xl font-bold text-sm text-white bg-emerald-600 hover:bg-emerald-700 shadow-md transition"

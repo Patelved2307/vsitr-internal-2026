@@ -3,7 +3,7 @@ import { ClubCoordinator, EventSettings, FAQItem, TimelineEvent } from '../types
 export const INITIAL_SETTINGS: EventSettings = {
   registrationDeadline: '2026-08-02T23:59:59.000Z',
   isRegistrationOpen: true,
-  whatsappGroupLink: 'https://chat.whatsapp.com/SIH2026InternalVSITR',
+  whatsappGroupLink: 'https://chat.whatsapp.com/EfS0SSUc9aX4DJUhfrpD2U',
   announcementBanner: 'Internal SIH 2026 Registrations are now OPEN! Deadline: 02 August 2026, 11:59 PM.',
   problemStatementLink: 'https://www.sih.gov.in/sih2025PS',
   problemStatementStatus: 'Problem statement announcements will be announced once we get update from the official SIH website.',
