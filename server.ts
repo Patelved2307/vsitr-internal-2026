@@ -102,7 +102,10 @@ async function startServer() {
   // 2. Admin Login
   app.post('/api/admin/login', (req: Request, res: Response) => {
     const { username, password } = req.body;
-    if ((username === 'admin' && password === 'admin2026') || (username === 'sih' && password === 'vsitr2026')) {
+    const ADMIN_USER = process.env.ADMIN_USERNAME || 'sih_admin_vsitr';
+    const ADMIN_PASS = process.env.ADMIN_PASSWORD || 'Sih!2026@SecureAdmin';
+
+    if (username === ADMIN_USER && password === ADMIN_PASS) {
       return res.json({ success: true, token: 'sih-admin-secret-token-2026', adminName: 'VSITR SIH Admin' });
     }
     return res.status(401).json({ success: false, message: 'Invalid admin credentials.' });

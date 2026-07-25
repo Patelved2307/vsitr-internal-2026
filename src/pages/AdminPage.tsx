@@ -484,7 +484,7 @@ export const AdminPage: React.FC = () => {
             </div>
 
             <div className="mt-6 p-3 rounded-2xl bg-slate-50 border border-slate-200 text-center text-[11px] text-slate-500">
-              Default Login: <code className="font-bold text-slate-800">admin</code> / <code className="font-bold text-slate-800">admin2026</code>
+              Default Login: <code className="font-bold text-slate-800">sih_admin_vsitr</code> / <code className="font-bold text-slate-800">Sih!2026@SecureAdmin</code>
             </div>
           </div>
 
