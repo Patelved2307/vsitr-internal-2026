@@ -20,6 +20,7 @@ import {
   updateTeam,
   deleteTeam,
   getEmailLogs,
+  getNextTeamNumber,
 } from './src/db/neonDb.js';
 import {
   dispatchTeamRegistrationEmails,
@@ -290,7 +291,7 @@ async function startServer() {
         }
       }
 
-      const teamNumber = config.nextTeamNumber || 1;
+      const teamNumber = await getNextTeamNumber();
       const teamId = generateTeamId(teamNumber);
 
       const formattedLeader = { ...leader, isLeader: true };

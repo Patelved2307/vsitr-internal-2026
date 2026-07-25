@@ -433,6 +433,32 @@ export async function getGlobalConfig() {
   };
 }
 
+export async function getNextTeamNumber(): Promise<number> {
+  if (isNeonConnected) {
+    try {
+      const res = await runQuery(`
+        UPDATE app_config 
+        SET value = jsonb_set(value, '{nextTeamNumber}', (COALESCE((value->>'nextTeamNumber')::int, 1) + 1)::text::jsonb) 
+        WHERE key = 'global_settings' 
+        RETURNING value->>'nextTeamNumber' as next_num;
+      `);
+      if (res.rows.length > 0) {
+        // We incremented it in the DB, so the number for the CURRENT team is next_num - 1
+        return parseInt(res.rows[0].next_num, 10) - 1;
+      }
+    } catch (err) {
+      console.error('Error atomically incrementing nextTeamNumber:', err);
+    }
+  }
+  
+  // Fallback for local DB
+  const db = ensureFileDb();
+  const num = db.nextTeamNumber || 1;
+  db.nextTeamNumber = num + 1;
+  saveFileDb(db);
+  return num;
+}
+
 export async function saveGlobalConfig(data: { settings?: EventSettings; timeline?: TimelineEvent[]; faqs?: FAQItem[]; rules?: string[]; nextTeamNumber?: number }) {
   const currentConfig = await getGlobalConfig();
   const updated = { ...currentConfig, ...data };
@@ -535,11 +561,6 @@ export async function createTeam(team: Team): Promise<Team> {
         ]
       );
       await syncNormalizedMembersAndMentors(team);
-
-      // Increment nextTeamNumber in global settings
-      const config = await getGlobalConfig();
-      config.nextTeamNumber = (config.nextTeamNumber || 1) + 1;
-      await saveGlobalConfig({ nextTeamNumber: config.nextTeamNumber });
     } catch (err) {
       console.error('Error creating team in Neon DB:', err);
     }
@@ -552,7 +573,6 @@ export async function createTeam(team: Team): Promise<Team> {
     db.teams[existingIdx] = team;
   } else {
     db.teams.push(team);
-    db.nextTeamNumber += 1;
   }
   saveFileDb(db);
 
