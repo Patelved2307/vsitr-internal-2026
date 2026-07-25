@@ -47,19 +47,19 @@ export const Navbar: React.FC = () => {
           >
             <div className="flex items-center gap-1.5 sm:gap-2 bg-slate-50 p-1.5 rounded-xl border border-slate-200 shadow-xs group-hover:border-slate-300 transition">
               <img
-                src="/logos/sih-logo.svg"
+                src="/logos/sih-logo.png"
                 alt="SIH Official Logo"
                 className="h-8 w-auto sm:h-10 object-contain"
               />
-              <span className="text-slate-300 text-xs">|</span>
+              <div className="w-px h-8 sm:h-10 bg-slate-200/60" />
               <img
-                src="/logos/ksv-logo.svg"
+                src="/logos/ksv-logo.png"
                 alt="KSV Logo"
                 className="h-8 w-auto sm:h-10 object-contain"
               />
-              <span className="text-slate-300 text-xs">|</span>
+              <div className="w-px h-8 sm:h-10 bg-slate-200/60" />
               <img
-                src="/logos/vsitr-logo.svg"
+                src="/logos/vsitr-logo.png"
                 alt="VSITR Logo"
                 className="h-8 w-auto sm:h-10 object-contain"
               />

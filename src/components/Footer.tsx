@@ -15,12 +15,12 @@ export const Footer: React.FC = () => {
 
           {/* Col 1: Brand & Logos */}
           <div className="md:col-span-1 space-y-4">
-            <div className="flex items-center gap-2 bg-white p-2.5 rounded-xl border border-slate-200 shadow-xs inline-flex">
-              <img src="/logos/sih-logo.svg" alt="SIH" className="h-8 w-auto" />
-              <span className="text-slate-300 text-xs">|</span>
-              <img src="/logos/ksv-logo.svg" alt="KSV" className="h-8 w-auto" />
-              <span className="text-slate-300 text-xs">|</span>
-              <img src="/logos/vsitr-logo.svg" alt="VSITR" className="h-9 w-auto object-contain shrink-0" />
+            <div className="flex items-center gap-2 sm:gap-3 bg-white p-2 rounded-2xl border border-slate-100 shadow-xs inline-flex mb-6">
+              <img src="/logos/sih-logo.png" alt="SIH" className="h-8 w-auto" />
+              <div className="w-px h-6 bg-slate-200" />
+              <img src="/logos/ksv-logo.png" alt="KSV" className="h-8 w-auto" />
+              <div className="w-px h-6 bg-slate-200" />
+              <img src="/logos/vsitr-logo.png" alt="VSITR" className="h-9 w-auto object-contain shrink-0" />
             </div>
 
             <h3 className="text-lg font-black text-white">
