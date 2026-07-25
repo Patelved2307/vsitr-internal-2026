@@ -359,22 +359,29 @@ export async function initDatabase(): Promise<void> {
 }
 
 function ensureFileDb(): DatabaseSchema {
-  if (!fs.existsSync(DATA_DIR)) {
-    fs.mkdirSync(DATA_DIR, { recursive: true });
-  }
+  try {
+    if (!fs.existsSync(DATA_DIR)) {
+      fs.mkdirSync(DATA_DIR, { recursive: true });
+    }
+  } catch (err) { /* ignore on Vercel read-only */ }
 
-  if (!fs.existsSync(DB_FILE)) {
-    const initialDb: DatabaseSchema = {
-      settings: INITIAL_SETTINGS,
-      timeline: INITIAL_TIMELINE_EVENTS,
-      faqs: INITIAL_FAQS,
-      rules: INITIAL_RULES,
-      teams: [],
-      emailLogs: [],
-      nextTeamNumber: 1,
-    };
-    fs.writeFileSync(DB_FILE, JSON.stringify(initialDb, null, 2), 'utf-8');
-    return initialDb;
+  const initialDb: DatabaseSchema = {
+    settings: INITIAL_SETTINGS,
+    timeline: INITIAL_TIMELINE_EVENTS,
+    faqs: INITIAL_FAQS,
+    rules: INITIAL_RULES,
+    teams: [],
+    emailLogs: [],
+    nextTeamNumber: 1,
+  };
+
+  try {
+    if (!fs.existsSync(DB_FILE)) {
+      fs.writeFileSync(DB_FILE, JSON.stringify(initialDb, null, 2), 'utf-8');
+      return initialDb;
+    }
+  } catch (err) {
+    if (!fs.existsSync(DB_FILE)) return initialDb;
   }
 
   try {
@@ -384,25 +391,22 @@ function ensureFileDb(): DatabaseSchema {
     return parsed;
   } catch (err) {
     console.error('Error reading DB file, reinitializing', err);
-    const initialDb: DatabaseSchema = {
-      settings: INITIAL_SETTINGS,
-      timeline: INITIAL_TIMELINE_EVENTS,
-      faqs: INITIAL_FAQS,
-      rules: INITIAL_RULES,
-      teams: [],
-      emailLogs: [],
-      nextTeamNumber: 1,
-    };
-    fs.writeFileSync(DB_FILE, JSON.stringify(initialDb, null, 2), 'utf-8');
+    try {
+      fs.writeFileSync(DB_FILE, JSON.stringify(initialDb, null, 2), 'utf-8');
+    } catch (e) {}
     return initialDb;
   }
 }
 
 function saveFileDb(db: DatabaseSchema) {
-  if (!fs.existsSync(DATA_DIR)) {
-    fs.mkdirSync(DATA_DIR, { recursive: true });
+  try {
+    if (!fs.existsSync(DATA_DIR)) {
+      fs.mkdirSync(DATA_DIR, { recursive: true });
+    }
+    fs.writeFileSync(DB_FILE, JSON.stringify(db, null, 2), 'utf-8');
+  } catch (err) {
+    // Ignore file write errors in read-only environments (like Vercel)
   }
-  fs.writeFileSync(DB_FILE, JSON.stringify(db, null, 2), 'utf-8');
 }
 
 // DB Data Getters & Setters
