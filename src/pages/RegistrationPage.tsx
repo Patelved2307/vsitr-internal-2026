@@ -159,7 +159,8 @@ export const RegistrationPage: React.FC = () => {
       });
 
       if (res.success) {
-        setSuccessData(res);
+        loginTeamSession(res.team);
+        setActiveTab('portal');
       }
     } catch (err: any) {
       showAlert('Registration Failed', err.message || 'An error occurred during registration.');

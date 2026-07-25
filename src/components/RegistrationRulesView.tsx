@@ -248,9 +248,8 @@ export const RegistrationRulesView: React.FC = () => {
       });
 
       if (res.success) {
-        setSuccessData(res);
-        setVerifiedTeam(res.team);
-        setRegStep(4); // Move directly to Success & Add Mentor step
+        loginTeamSession(res.team);
+        setActiveTab('portal');
       }
     } catch (err: any) {
       showAlert('Registration Failed', err.message || 'An error occurred during registration.');
