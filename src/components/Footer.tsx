@@ -20,7 +20,7 @@ export const Footer: React.FC = () => {
               <div className="w-px h-6 bg-slate-200" />
               <img src="/logos/ksv-logo.png" alt="KSV" className="h-8 w-auto" />
               <div className="w-px h-6 bg-slate-200" />
-              <img src="/logos/vsitr-logo.png" alt="VSITR" className="h-8 w-auto object-contain shrink-0 scale-[1.35]" />
+              <img src="/logos/vsitr-logo.png" alt="VSITR" className="h-8 w-auto object-contain shrink-0" />
             </div>
 
             <h3 className="text-lg font-black text-white">

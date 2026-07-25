@@ -60,7 +60,7 @@ export const Navbar: React.FC = () => {
               <img
                 src="/logos/vsitr-logo.png"
                 alt="VSITR Logo"
-                className="h-8 w-auto sm:h-10 object-contain scale-[1.35]"
+                className="h-8 w-auto sm:h-10 object-contain"
               />
             </div>
 
