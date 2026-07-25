@@ -44,23 +44,21 @@ export const Navbar: React.FC = () => {
             onClick={() => setActiveTab('home')}
             className="flex items-center gap-2 sm:gap-3 cursor-pointer group"
           >
-            <div className="flex items-center gap-1.5 sm:gap-2 bg-slate-50 p-1.5 rounded-xl border border-slate-200 shadow-xs group-hover:border-slate-300 transition">
+            <div className="flex items-center gap-2 sm:gap-3">
               <img
                 src="/logos/sih-logo.png"
                 alt="SIH Official Logo"
-                className="h-8 w-auto sm:h-10 object-contain"
+                className="h-9 w-9 sm:h-11 sm:w-11 object-contain"
               />
-              <div className="w-px h-8 sm:h-10 bg-slate-200/60" />
               <img
                 src="/logos/ksv-logo.png"
                 alt="KSV Logo"
-                className="h-8 w-auto sm:h-10 object-contain"
+                className="h-9 w-9 sm:h-11 sm:w-11 object-contain"
               />
-              <div className="w-px h-8 sm:h-10 bg-slate-200/60" />
               <img
                 src="/logos/vsitr-logo.png"
                 alt="VSITR Logo"
-                className="h-8 w-auto sm:h-10 object-contain"
+                className="h-9 w-9 sm:h-11 sm:w-11 object-contain"
               />
             </div>
 
