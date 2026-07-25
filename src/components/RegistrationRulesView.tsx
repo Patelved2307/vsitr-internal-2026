@@ -26,7 +26,7 @@ import {
 } from 'lucide-react';
 
 export const RegistrationRulesView: React.FC = () => {
-  const { loginTeamSession, setActiveTab, showAlert, settings, rules, team, isTeamLoggedIn } = useAuth();
+  const { loginTeamSession, setActiveTab, showAlert, settings, rules, timeline, team, isTeamLoggedIn } = useAuth();
 
   // Mode state: 'register' or 'mentor_lookup'
   const [mode, setMode] = useState<'register' | 'mentor_lookup'>('register');
@@ -393,14 +393,17 @@ export const RegistrationRulesView: React.FC = () => {
               Important Registration Deadlines
             </h3>
             <div className="space-y-3.5">
-              <div className="flex justify-between items-center text-xs">
-                <span className="text-slate-500 font-medium">Phase 1: Team Registration</span>
-                <span className="font-extrabold text-slate-800">02 August 2026</span>
-              </div>
-              <div className="flex justify-between items-center text-xs">
-                <span className="text-slate-500 font-medium">Phase 2: Mentor Submission</span>
-                <span className="font-extrabold text-red-600">05 August 2026 (Mandatory)</span>
-              </div>
+              {timeline && timeline.map((event, idx) => (
+                <div key={event.id || idx} className="flex justify-between items-center text-xs">
+                  <span className="text-slate-500 font-medium pr-2 truncate" title={event.title}>{event.title}</span>
+                  <span className={`font-extrabold shrink-0 ${event.date.includes('Mandatory') || idx === 1 ? 'text-red-600' : 'text-slate-800'}`}>
+                    {event.date}
+                  </span>
+                </div>
+              ))}
+              {(!timeline || timeline.length === 0) && (
+                <div className="text-xs text-slate-400 text-center py-2">No deadlines scheduled yet.</div>
+              )}
             </div>
           </div>
 
