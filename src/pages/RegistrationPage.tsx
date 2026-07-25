@@ -136,6 +136,18 @@ export const RegistrationPage: React.FC = () => {
 
     // Duplicate member name check removed per user request
 
+    const allMobiles = allMembers.map(m => m.mobile.trim());
+    if (new Set(allMobiles).size !== allMobiles.length) {
+      showAlert('Duplicate Mobile Number', 'A mobile number has been entered more than once. Each team member must have a unique mobile number.');
+      return;
+    }
+
+    const allEmails = allMembers.map(m => m.email.trim().toLowerCase());
+    if (new Set(allEmails).size !== allEmails.length) {
+      showAlert('Duplicate Email Address', 'An email address has been entered more than once. Each team member must have a unique email address.');
+      return;
+    }
+
     if (leader.mobile.trim().length !== 10 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(leader.email.trim())) {
       return;
     }
@@ -156,6 +168,11 @@ export const RegistrationPage: React.FC = () => {
 
       if (res.success) {
         loginTeamSession(res.team);
+        showAlert(
+          'Registration Successful!',
+          `Your Team ID is: ${res.team.id}\n\nPlease note this down. You have been redirected to your Team Portal to complete the mentor assignment.`,
+          'success'
+        );
         setActiveTab('portal');
       }
     } catch (err: any) {

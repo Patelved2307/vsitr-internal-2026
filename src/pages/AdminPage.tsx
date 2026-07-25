@@ -432,8 +432,16 @@ export const AdminPage: React.FC = () => {
           <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-[#C1272D] via-amber-500 to-[#1B3F8B] z-10" />
 
           {/* LEFT SIDE: LOGIN FORM */}
-          <div className="p-8 sm:p-10 flex flex-col justify-between">
-            <div>
+          <div className="p-8 sm:p-10 flex flex-col justify-between relative">
+            <button
+              type="button"
+              onClick={() => setActiveTab('home')}
+              className="absolute top-4 left-4 flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-slate-800 transition-colors bg-white px-3 py-1.5 rounded-full border border-slate-200 shadow-sm"
+            >
+              <ChevronRight className="h-4 w-4 rotate-180" />
+              Back to Home
+            </button>
+            <div className="mt-8">
               <div className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-red-50 text-[#C1272D] mb-4 shadow-xs">
                 <ShieldCheck className="h-6 w-6" />
               </div>
@@ -481,10 +489,6 @@ export const AdminPage: React.FC = () => {
                   {isAuthLoading ? 'Authenticating Admin...' : 'Login to Admin Console'}
                 </button>
               </form>
-            </div>
-
-            <div className="mt-6 p-3 rounded-2xl bg-slate-50 border border-slate-200 text-center text-[11px] text-slate-500">
-              Default Login: <code className="font-bold text-slate-800">sih_admin_vsitr</code> / <code className="font-bold text-slate-800">Sih!2026@SecureAdmin</code>
             </div>
           </div>
 
