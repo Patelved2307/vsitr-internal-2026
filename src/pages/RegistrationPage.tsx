@@ -215,13 +215,14 @@ export const RegistrationPage: React.FC = () => {
       <div className="mb-8 max-w-md mx-auto px-4">
         <div className="relative flex items-center justify-between">
           {/* Track line passing right through the center of 40px (h-10) circles (top-5) */}
-          <div className="absolute top-5 left-5 right-5 h-1 bg-slate-200 -translate-y-1/2 z-0" />
-          <div
-            className="absolute top-5 left-5 h-1 bg-gradient-to-r from-[#C1272D] to-[#1B3F8B] -translate-y-1/2 z-0 transition-all duration-300"
-            style={{
-              width: step === 1 ? '0%' : step === 2 ? 'calc(50% - 10px)' : 'calc(100% - 20px)',
-            }}
-          />
+          <div className="absolute top-5 left-5 right-5 h-1 bg-slate-200 -translate-y-1/2 z-0 overflow-hidden">
+            <div
+              className="h-full bg-gradient-to-r from-[#C1272D] to-[#1B3F8B] transition-all duration-300"
+              style={{
+                width: step === 1 ? '0%' : step === 2 ? '50%' : '100%',
+              }}
+            />
+          </div>
 
           {/* Step 1 Circle */}
           <div className="relative z-10 flex flex-col items-center">
