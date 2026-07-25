@@ -107,7 +107,144 @@
     "Decisions of the organizing committee (Research, Coding, Design, Soft Skills clubs) and faculty coordinators are final and binding.",
     "Any change in team composition or mentor after submission must be communicated to the organizing committee in writing/email — not self-editable post-deadline."
   ],
-  "teams": [],
+  "teams": [
+    {
+      "teamName": "Test Innovators 2915",
+      "leader": {
+        "id": "l1",
+        "fullName": "Alice Smith",
+        "gender": "Female",
+        "enrollmentNo": "24BEIT50001",
+        "semester": "5",
+        "department": "IT",
+        "mobile": "9876543210",
+        "email": "alice@test.com",
+        "isLeader": true
+      },
+      "members": [
+        {
+          "id": "m1",
+          "fullName": "Bob Jones",
+          "gender": "Male",
+          "enrollmentNo": "24BEIT50002",
+          "semester": "5",
+          "department": "IT",
+          "mobile": "9876543211",
+          "email": "bob@test.com"
+        },
+        {
+          "id": "m2",
+          "fullName": "Charlie Brown",
+          "gender": "Male",
+          "enrollmentNo": "24BEIT50003",
+          "semester": "5",
+          "department": "IT",
+          "mobile": "9876543212",
+          "email": "charlie@test.com"
+        },
+        {
+          "id": "m3",
+          "fullName": "Diana Prince",
+          "gender": "Female",
+          "enrollmentNo": "24BEIT50004",
+          "semester": "5",
+          "department": "IT",
+          "mobile": "9876543213",
+          "email": "diana@test.com"
+        },
+        {
+          "id": "m4",
+          "fullName": "Evan Wright",
+          "gender": "Male",
+          "enrollmentNo": "24BEIT50005",
+          "semester": "5",
+          "department": "IT",
+          "mobile": "9876543214",
+          "email": "evan@test.com"
+        },
+        {
+          "id": "m5",
+          "fullName": "Fiona Gallagher",
+          "gender": "Female",
+          "enrollmentNo": "24BEIT50006",
+          "semester": "5",
+          "department": "IT",
+          "mobile": "9876543215",
+          "email": "fiona@test.com"
+        }
+      ],
+      "status": "pending",
+      "id": "SIH2026-001"
+    },
+    {
+      "teamName": "Cyber Knights 2915",
+      "leader": {
+        "id": "l2",
+        "fullName": "George Harrison",
+        "gender": "Male",
+        "enrollmentNo": "24BECE50001",
+        "semester": "3",
+        "department": "CE",
+        "mobile": "9876543220",
+        "email": "george@test.com",
+        "isLeader": true
+      },
+      "members": [
+        {
+          "id": "m6",
+          "fullName": "Hannah Abbott",
+          "gender": "Female",
+          "enrollmentNo": "24BECE50002",
+          "semester": "3",
+          "department": "CE",
+          "mobile": "9876543221",
+          "email": "hannah@test.com"
+        },
+        {
+          "id": "m7",
+          "fullName": "Ian Malcolm",
+          "gender": "Male",
+          "enrollmentNo": "24BECE50003",
+          "semester": "3",
+          "department": "CE",
+          "mobile": "9876543222",
+          "email": "ian@test.com"
+        },
+        {
+          "id": "m8",
+          "fullName": "Jenny Weasley",
+          "gender": "Female",
+          "enrollmentNo": "24BECE50004",
+          "semester": "3",
+          "department": "CE",
+          "mobile": "9876543223",
+          "email": "jenny@test.com"
+        },
+        {
+          "id": "m9",
+          "fullName": "Kevin McCallister",
+          "gender": "Male",
+          "enrollmentNo": "24BECE50005",
+          "semester": "3",
+          "department": "CE",
+          "mobile": "9876543224",
+          "email": "kevin@test.com"
+        },
+        {
+          "id": "m10",
+          "fullName": "Luna Lovegood",
+          "gender": "Female",
+          "enrollmentNo": "24BECE50006",
+          "semester": "3",
+          "department": "CE",
+          "mobile": "9876543225",
+          "email": "luna@test.com"
+        }
+      ],
+      "status": "pending",
+      "id": "SIH2026-002"
+    }
+  ],
   "emailLogs": [],
   "nextTeamNumber": 1
 }

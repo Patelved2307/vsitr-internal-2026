@@ -338,23 +338,6 @@ export async function initDatabase(): Promise<void> {
             );
           }
         }
-      } else {
-        console.log('Local database has no teams. Resetting/clearing Neon PostgreSQL tables for a clean slate...');
-        await runQuery('TRUNCATE TABLE members CASCADE;');
-        await runQuery('TRUNCATE TABLE mentors CASCADE;');
-        await runQuery('TRUNCATE TABLE teams CASCADE;');
-        await runQuery('TRUNCATE TABLE email_logs CASCADE;');
-
-        // Also reset nextTeamNumber in global_settings to 1
-        const cfgRes = await runQuery('SELECT value FROM app_config WHERE key = $1', ['global_settings']);
-        if (cfgRes.rows.length > 0) {
-          const currentConfig = typeof cfgRes.rows[0].value === 'string' ? JSON.parse(cfgRes.rows[0].value) : cfgRes.rows[0].value;
-          currentConfig.nextTeamNumber = 1;
-          await runQuery(
-            'UPDATE app_config SET value = $1 WHERE key = $2',
-            [JSON.stringify(currentConfig), 'global_settings']
-          );
-        }
       }
 
       console.log('Successfully connected, initialized and synced Neon PostgreSQL database tables!');
