@@ -211,12 +211,7 @@ export const RegistrationRulesView: React.FC = () => {
       return;
     }
 
-    // Duplicate enrollment check
-    const enrollments = allMembers.map((m) => m.enrollmentNo.trim().toUpperCase());
-    if (new Set(enrollments).size !== enrollments.length) {
-      showAlert('Duplicate Entry', 'An enrollment number has been entered more than once in your team.');
-      return;
-    }
+    // Duplicate enrollment check removed per user request
 
     const allNames = [leader.fullName.trim().toLowerCase(), ...members.map(m => m.fullName.trim().toLowerCase())];
     if (new Set(allNames).size !== allNames.length) {
