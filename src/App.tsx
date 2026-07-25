@@ -6,6 +6,7 @@ import { ModalAlert } from './components/ModalAlert';
 
 import { RegistrationRulesView } from './components/RegistrationRulesView';
 import { MentorPendingCard } from './components/MentorPendingCard';
+import { FAQView, SupportView } from './components/InfoViews';
 import { RegistrationPage } from './pages/RegistrationPage';
 import { TeamLoginPage } from './pages/TeamLoginPage';
 import { TeamPortalPage } from './pages/TeamPortalPage';
@@ -42,6 +43,10 @@ const MainLayout: React.FC = () => {
             <RegistrationRulesView />
           </div>
         )}
+
+        {activeTab === 'faq' && <FAQView />}
+
+        {activeTab === 'support' && <SupportView />}
 
         {activeTab === 'register' && <RegistrationPage />}
 
