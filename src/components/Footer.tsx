@@ -32,7 +32,7 @@ export const Footer: React.FC = () => {
             </p>
 
             <div className="text-[11px] text-slate-400">
-              Managedv by: <span className="text-slate-200 font-bold">Research, Coding, Design &amp; Soft Skills Clubs</span>
+              Managed by: <span className="text-slate-200 font-bold">Research, Coding, Design &amp; Soft Skills Clubs</span>
             </div>
           </div>
 
@@ -110,7 +110,7 @@ export const Footer: React.FC = () => {
               </li>
               <li className="flex flex-col">
                 <span className="text-slate-400 text-[10px] uppercase font-bold">Internal Pitching Round</span>
-                <span className="font-bold text-blue-400">TBC</span>
+                <span className="font-bold text-blue-400">To be announced soon</span>
               </li>
             </ul>
           </div>
