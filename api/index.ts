@@ -744,7 +744,13 @@ app.post('/api/admin/smtp/test', async (req: Request, res: Response) => {
 app.get('/api/export/csv', async (req: Request, res: Response) => {
   try {
     const teams = await getAllTeams();
-    let csv = 'Team ID,Team Name,Status,Leader Name,Leader Email,Leader Phone,Leader Enrolment,Leader Dept,Leader Sem,Female Members Count,Mentor Name,Mentor Contact,Mentor Email,Registered At\n';
+    let csv = 'Team ID,Team Name,Status,Leader Name,Leader Email,Leader Phone,Leader Enrolment,Leader Dept,Leader Sem,Leader Gender,';
+    
+    // Add headers for 5 members
+    for (let i = 1; i <= 5; i++) {
+      csv += `M${i} Name,M${i} Email,M${i} Phone,M${i} Enrolment,M${i} Dept,M${i} Sem,M${i} Gender,`;
+    }
+    csv += 'Female Members Count,Mentor Name,Mentor Contact,Mentor Email,Registered At\n';
 
     teams.forEach((t) => {
       const allMembers = [t.leader, ...t.members];
@@ -753,7 +759,19 @@ app.get('/api/export/csv', async (req: Request, res: Response) => {
       const mContact = t.mentor ? t.mentor.contactNumber : '';
       const mEmail = t.mentor ? t.mentor.email : '';
 
-      csv += `"${t.id}","${t.teamName}","${t.status}","${t.leader.fullName}","${t.leader.email}","${t.leader.mobile}","${t.leader.enrollmentNo}","${t.leader.department}","${t.leader.semester}",${females},${mName},"${mContact}","${mEmail}","${t.createdAt}"\n`;
+      let row = `"${t.id}","${t.teamName}","${t.status}","${t.leader.fullName}","${t.leader.email}","${t.leader.mobile}","${t.leader.enrollmentNo}","${t.leader.department}","${t.leader.semester}","${t.leader.gender}",`;
+      
+      for (let i = 0; i < 5; i++) {
+        const m = t.members[i];
+        if (m && m.fullName && m.fullName.trim() !== '') {
+          row += `"${m.fullName}","${m.email}","${m.mobile}","${m.enrollmentNo}","${m.department}","${m.semester}","${m.gender}",`;
+        } else {
+          row += `,,,,,,,`; // 7 empty columns
+        }
+      }
+      
+      row += `${females},${mName},"${mContact}","${mEmail}","${t.createdAt}"\n`;
+      csv += row;
     });
 
     res.setHeader('Content-Type', 'text/csv');
