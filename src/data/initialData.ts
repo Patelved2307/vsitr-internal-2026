@@ -9,6 +9,10 @@ export const INITIAL_SETTINGS: EventSettings = {
   problemStatementStatus: 'Problem statement announcements will be announced once we get update from the official SIH website.',
   pptTemplateLink: '#',
   pptTemplateStatus: 'The template will be released soon. Download it from here.',
+  // PPT Submission
+  pptSubmissionOpen: false,
+  pptSubmissionStatus: 'PPT submission portal will open after the registration deadline. Stay tuned.',
+  pptSubmissionDeadline: '',
 };
 
 export const INITIAL_TIMELINE_EVENTS: TimelineEvent[] = [

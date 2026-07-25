@@ -243,6 +243,19 @@ export async function initDatabase(): Promise<void> {
         );
       `);
 
+      await runQuery(`
+        CREATE TABLE IF NOT EXISTS ppt_submissions (
+          id TEXT PRIMARY KEY,
+          team_id TEXT NOT NULL,
+          team_name TEXT NOT NULL,
+          leader_name TEXT NOT NULL,
+          leader_email TEXT NOT NULL,
+          file_url TEXT NOT NULL,
+          note TEXT,
+          submitted_at TIMESTAMPTZ DEFAULT NOW()
+        );
+      `);
+
       isNeonConnected = true;
 
       // Seed initial app_config in Neon if missing or update from local DB
@@ -724,4 +737,89 @@ export async function getEmailLogs(): Promise<EmailLog[]> {
 
   const db = ensureFileDb();
   return db.emailLogs || [];
+}
+
+// =====================
+// PPT SUBMISSIONS CRUD
+// =====================
+
+import type { PptSubmission } from '../types.js';
+
+export async function createPptSubmission(data: Omit<PptSubmission, 'submittedAt'>): Promise<PptSubmission> {
+  const submittedAt = new Date().toISOString();
+  const submission: PptSubmission = { ...data, submittedAt };
+
+  if (isNeonConnected) {
+    try {
+      await runQuery(
+        `INSERT INTO ppt_submissions (id, team_id, team_name, leader_name, leader_email, file_url, note, submitted_at)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+         ON CONFLICT (id) DO UPDATE SET file_url = EXCLUDED.file_url, note = EXCLUDED.note, submitted_at = EXCLUDED.submitted_at`,
+        [
+          submission.id,
+          submission.teamId,
+          submission.teamName,
+          submission.leaderName,
+          submission.leaderEmail,
+          submission.fileUrl,
+          submission.note || null,
+          submittedAt,
+        ]
+      );
+    } catch (err) {
+      console.error('Error saving PPT submission to Neon DB:', err);
+    }
+  }
+
+  // File DB fallback
+  const db = ensureFileDb() as any;
+  if (!db.pptSubmissions) db.pptSubmissions = [];
+  const existingIdx = db.pptSubmissions.findIndex((s: PptSubmission) => s.id === submission.id);
+  if (existingIdx !== -1) {
+    db.pptSubmissions[existingIdx] = submission;
+  } else {
+    db.pptSubmissions.unshift(submission);
+  }
+  saveFileDb(db);
+
+  return submission;
+}
+
+export async function getAllPptSubmissions(): Promise<PptSubmission[]> {
+  if (isNeonConnected) {
+    try {
+      const res = await runQuery('SELECT * FROM ppt_submissions ORDER BY submitted_at DESC');
+      return res.rows.map((row: any) => ({
+        id: row.id,
+        teamId: row.team_id,
+        teamName: row.team_name,
+        leaderName: row.leader_name,
+        leaderEmail: row.leader_email,
+        fileUrl: row.file_url,
+        note: row.note || undefined,
+        submittedAt: row.submitted_at,
+      }));
+    } catch (err) {
+      console.error('Error fetching PPT submissions from Neon DB:', err);
+    }
+  }
+
+  const db = ensureFileDb() as any;
+  return db.pptSubmissions || [];
+}
+
+export async function deletePptSubmission(id: string): Promise<void> {
+  if (isNeonConnected) {
+    try {
+      await runQuery('DELETE FROM ppt_submissions WHERE id = $1', [id]);
+    } catch (err) {
+      console.error('Error deleting PPT submission from Neon DB:', err);
+    }
+  }
+
+  const db = ensureFileDb() as any;
+  if (db.pptSubmissions) {
+    db.pptSubmissions = db.pptSubmissions.filter((s: PptSubmission) => s.id !== id);
+    saveFileDb(db);
+  }
 }

@@ -63,6 +63,10 @@ export interface EventSettings {
   problemStatementStatus?: string;
   pptTemplateLink?: string;
   pptTemplateStatus?: string;
+  // PPT Submission
+  pptSubmissionOpen?: boolean;
+  pptSubmissionStatus?: string;
+  pptSubmissionDeadline?: string;
 }
 
 export interface AdminStats {
@@ -93,4 +97,15 @@ export interface EmailLog {
   type: 'registration_confirmation' | 'deadline_reminder' | 'admin_announcement';
   status: 'sent' | 'simulated' | 'failed';
   sentAt: string;
+}
+
+export interface PptSubmission {
+  id: string;
+  teamId: string;
+  teamName: string;
+  leaderName: string;
+  leaderEmail: string;
+  fileUrl: string;
+  note?: string;
+  submittedAt: string;
 }

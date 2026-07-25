@@ -261,4 +261,41 @@ export const api = {
     }
     return data;
   },
+
+  // Submit PPT
+  submitPpt: async (payload: {
+    teamId: string;
+    teamName: string;
+    leaderName: string;
+    leaderEmail: string;
+    fileUrl: string;
+    note?: string;
+  }) => {
+    const res = await fetch('/api/ppt-submission', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message || 'PPT submission failed');
+    return data;
+  },
+
+  // Admin: Get all PPT submissions
+  getAdminPptSubmissions: async () => {
+    const res = await fetch('/api/admin/ppt-submissions');
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message || 'Failed to fetch PPT submissions');
+    return data;
+  },
+
+  // Admin: Delete PPT submission
+  deletePptSubmission: async (id: string) => {
+    const res = await fetch(`/api/admin/ppt-submissions/${encodeURIComponent(id)}`, {
+      method: 'DELETE',
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message || 'Failed to delete PPT submission');
+    return data;
+  },
 };

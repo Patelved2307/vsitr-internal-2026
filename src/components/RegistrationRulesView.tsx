@@ -557,6 +557,49 @@ export const RegistrationRulesView: React.FC = () => {
                   )}
                 </div>
               </div>
+
+              {/* PPT Submission Card */}
+              <div className="rounded-3xl bg-white border border-slate-200 p-6 sm:p-8 shadow-md relative overflow-hidden">
+                <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#C1272D] to-[#1B3F8B]" />
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="p-2 rounded-xl bg-red-50 text-[#C1272D]">
+                    <FileText className="h-6 w-6" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-black text-slate-900 tracking-tight">
+                      Submit Your PPT
+                    </h3>
+                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+                      Pitch Deck Submission Portal
+                    </span>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <p className="text-xs text-slate-600 leading-relaxed font-semibold">
+                    {settings.pptSubmissionStatus || 'PPT submission portal will open after the registration deadline. Stay tuned.'}
+                  </p>
+                  {settings.pptSubmissionDeadline && (
+                    <div className="flex items-center gap-2 text-xs font-bold text-[#C1272D]">
+                      <Calendar className="h-3.5 w-3.5" />
+                      Submission Deadline: {settings.pptSubmissionDeadline}
+                    </div>
+                  )}
+                  {settings.pptSubmissionOpen ? (
+                    <button
+                      onClick={() => setActiveTab('ppt-submit')}
+                      className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-[#C1272D] to-red-700 hover:opacity-95 transition shadow-xs"
+                    >
+                      Submit Your PPT
+                      <ArrowRight className="h-3.5 w-3.5" />
+                    </button>
+                  ) : (
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-extrabold bg-slate-100 text-slate-500">
+                      Submissions Not Yet Open
+                    </span>
+                  )}
+                </div>
+              </div>
             </div>
           ) : (
             <>

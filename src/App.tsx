@@ -12,6 +12,7 @@ import { TeamLoginPage } from './pages/TeamLoginPage';
 import { TeamPortalPage } from './pages/TeamPortalPage';
 import { MentorSubmissionPage } from './pages/MentorSubmissionPage';
 import { AdminPage } from './pages/AdminPage';
+import { PptSubmissionPage } from './pages/PptSubmissionPage';
 
 const MainLayout: React.FC = () => {
   const { activeTab, settings } = useAuth();
@@ -55,6 +56,8 @@ const MainLayout: React.FC = () => {
         {activeTab === 'portal' && <TeamPortalPage />}
 
         {activeTab === 'mentor' && <MentorSubmissionPage />}
+
+        {activeTab === 'ppt-submit' && <PptSubmissionPage />}
 
         {activeTab === 'admin' && <AdminPage />}
       </main>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { api } from '../services/api';
-import { Team, EventSettings, TimelineEvent, FAQItem, EmailLog } from '../types';
+import { Team, EventSettings, TimelineEvent, FAQItem, EmailLog, PptSubmission } from '../types';
 import {
   ShieldCheck,
   LogOut,
@@ -57,7 +57,7 @@ export const AdminPage: React.FC = () => {
   const [isAuthLoading, setIsAuthLoading] = useState(false);
 
   // Sidebar navigation selection
-  const [sidebarTab, setSidebarTab] = useState<'overview' | 'teams' | 'timeline' | 'faqs' | 'settings' | 'emails'>('overview');
+  const [sidebarTab, setSidebarTab] = useState<'overview' | 'teams' | 'timeline' | 'faqs' | 'settings' | 'emails' | 'ppt-submissions'>('overview');
 
   // Email & Neon Database state
   const [emailLogs, setEmailLogs] = useState<EmailLog[]>([]);
@@ -97,6 +97,14 @@ export const AdminPage: React.FC = () => {
   const [editProblemStatementStatus, setEditProblemStatementStatus] = useState(settings.problemStatementStatus || '');
   const [editPptTemplateLink, setEditPptTemplateLink] = useState(settings.pptTemplateLink || '');
   const [editPptTemplateStatus, setEditPptTemplateStatus] = useState(settings.pptTemplateStatus || '');
+  // PPT Submission Settings
+  const [editPptSubmissionOpen, setEditPptSubmissionOpen] = useState(settings.pptSubmissionOpen ?? false);
+  const [editPptSubmissionStatus, setEditPptSubmissionStatus] = useState(settings.pptSubmissionStatus || '');
+  const [editPptSubmissionDeadline, setEditPptSubmissionDeadline] = useState(settings.pptSubmissionDeadline || '');
+  // PPT Submissions list
+  const [pptSubmissions, setPptSubmissions] = useState<PptSubmission[]>([]);
+  const [isLoadingPptSubmissions, setIsLoadingPptSubmissions] = useState(false);
+  const [deletingPptId, setDeletingPptId] = useState<string | null>(null);
 
   // Editable Timeline State
   const [editTimeline, setEditTimeline] = useState<TimelineEvent[]>(timeline);
@@ -202,6 +210,9 @@ export const AdminPage: React.FC = () => {
     setEditProblemStatementStatus(settings.problemStatementStatus || '');
     setEditPptTemplateLink(settings.pptTemplateLink || '');
     setEditPptTemplateStatus(settings.pptTemplateStatus || '');
+    setEditPptSubmissionOpen(settings.pptSubmissionOpen ?? false);
+    setEditPptSubmissionStatus(settings.pptSubmissionStatus || '');
+    setEditPptSubmissionDeadline(settings.pptSubmissionDeadline || '');
     setEditTimeline(timeline);
     setEditFaqs(faqs);
     setEditRules(rules);
@@ -312,6 +323,9 @@ export const AdminPage: React.FC = () => {
           problemStatementStatus: editProblemStatementStatus,
           pptTemplateLink: editPptTemplateLink,
           pptTemplateStatus: editPptTemplateStatus,
+          pptSubmissionOpen: editPptSubmissionOpen,
+          pptSubmissionStatus: editPptSubmissionStatus,
+          pptSubmissionDeadline: editPptSubmissionDeadline,
         },
         timeline: editTimeline,
         faqs: editFaqs,
@@ -625,6 +639,23 @@ export const AdminPage: React.FC = () => {
                 </div>
                 <span className="px-2 py-0.5 rounded-full text-[10px] bg-blue-100 text-blue-700 font-bold">
                   {emailLogs.length}
+                </span>
+              </button>
+
+              <button
+                onClick={async () => { setSidebarTab('ppt-submissions'); setIsLoadingPptSubmissions(true); try { const d = await api.getAdminPptSubmissions(); setPptSubmissions(d.submissions || []); } catch(e) {} finally { setIsLoadingPptSubmissions(false); } }}
+                className={`w-full flex items-center justify-between px-3.5 py-3 rounded-2xl font-bold text-xs transition ${
+                  sidebarTab === 'ppt-submissions'
+                    ? 'bg-rose-50 text-[#C1272D] shadow-xs'
+                    : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
+                }`}
+              >
+                <div className="flex items-center gap-3">
+                  <FileText className="h-4 w-4" />
+                  <span>PPT Submissions</span>
+                </div>
+                <span className="px-2 py-0.5 rounded-full text-[10px] bg-red-100 text-red-700 font-bold">
+                  {pptSubmissions.length}
                 </span>
               </button>
             </nav>
@@ -1319,8 +1350,144 @@ export const AdminPage: React.FC = () => {
                       />
                     </div>
                   </div>
+
+                  {/* PPT Submission Settings */}
+                  <div className="p-4 rounded-2xl bg-red-50 border border-red-100 space-y-4">
+                    <h3 className="text-xs font-extrabold text-[#C1272D] uppercase tracking-wider">PPT Submission Portal Control</h3>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block font-bold text-slate-800 mb-1">Submission Portal Status</label>
+                        <select
+                          value={editPptSubmissionOpen ? 'true' : 'false'}
+                          onChange={(e) => setEditPptSubmissionOpen(e.target.value === 'true')}
+                          className="w-full px-4 py-2.5 rounded-xl border border-slate-300 font-bold outline-none"
+                        >
+                          <option value="true">OPEN — Teams Can Submit PPTs</option>
+                          <option value="false">CLOSED — Submission Not Allowed</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label className="block font-bold text-slate-800 mb-1">Submission Deadline (display text)</label>
+                        <input
+                          type="text"
+                          value={editPptSubmissionDeadline}
+                          onChange={(e) => setEditPptSubmissionDeadline(e.target.value)}
+                          className="w-full px-4 py-2.5 rounded-xl border border-slate-300 font-medium focus:border-[#C1272D] outline-none"
+                          placeholder="e.g. 08 August 2026, 11:59 PM"
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block font-bold text-slate-800 mb-1">Submission Status Message (shown on card)</label>
+                      <textarea
+                        rows={2}
+                        value={editPptSubmissionStatus}
+                        onChange={(e) => setEditPptSubmissionStatus(e.target.value)}
+                        className="w-full px-4 py-2.5 rounded-xl border border-slate-300 font-medium focus:border-[#C1272D] outline-none resize-none"
+                        placeholder="e.g. PPT submission portal is now open..."
+                      />
+                    </div>
+                  </div>
                 </div>
 
+              </div>
+            )}
+
+
+            {/* TAB: PPT SUBMISSIONS */}
+            {sidebarTab === 'ppt-submissions' && (
+              <div className="space-y-6 animate-in fade-in duration-200">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <div>
+                    <h1 className="text-2xl font-black text-slate-900 tracking-tight flex items-center gap-2">
+                      <FileText className="h-6 w-6 text-[#C1272D]" />
+                      PPT Submissions
+                    </h1>
+                    <p className="text-xs text-slate-500 font-medium mt-0.5">
+                      All team pitch deck submissions. Click the link to view the shared presentation.
+                    </p>
+                  </div>
+                  <button
+                    onClick={async () => { setIsLoadingPptSubmissions(true); try { const d = await api.getAdminPptSubmissions(); setPptSubmissions(d.submissions || []); } catch(e) {} finally { setIsLoadingPptSubmissions(false); } }}
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-2xl font-bold text-xs text-white bg-[#1B3F8B] hover:bg-blue-900 transition"
+                  >
+                    <RefreshCw className={`h-3.5 w-3.5 ${isLoadingPptSubmissions ? 'animate-spin' : ''}`} />
+                    Refresh
+                  </button>
+                </div>
+
+                {isLoadingPptSubmissions ? (
+                  <div className="flex items-center justify-center py-16">
+                    <div className="h-8 w-8 border-4 border-[#C1272D] border-t-transparent rounded-full animate-spin" />
+                  </div>
+                ) : pptSubmissions.length === 0 ? (
+                  <div className="text-center py-16 text-slate-400">
+                    <FileText className="h-10 w-10 mx-auto mb-3 opacity-30" />
+                    <p className="text-sm font-bold">No PPT submissions yet.</p>
+                    <p className="text-xs mt-1">Submissions will appear here once teams submit their presentations.</p>
+                  </div>
+                ) : (
+                  <div className="rounded-3xl bg-white border border-slate-200 overflow-hidden shadow-xs">
+                    <table className="w-full text-xs">
+                      <thead>
+                        <tr className="border-b border-slate-100 bg-slate-50">
+                          <th className="py-3 px-4 text-left font-extrabold text-slate-500 uppercase tracking-wider">Team ID</th>
+                          <th className="py-3 px-4 text-left font-extrabold text-slate-500 uppercase tracking-wider">Team Name</th>
+                          <th className="py-3 px-4 text-left font-extrabold text-slate-500 uppercase tracking-wider">Leader</th>
+                          <th className="py-3 px-4 text-left font-extrabold text-slate-500 uppercase tracking-wider">PPT Link</th>
+                          <th className="py-3 px-4 text-left font-extrabold text-slate-500 uppercase tracking-wider">Submitted</th>
+                          <th className="py-3 px-4 text-left font-extrabold text-slate-500 uppercase tracking-wider">Action</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-50">
+                        {pptSubmissions.map((sub) => (
+                          <tr key={sub.id} className="hover:bg-slate-50/80 transition">
+                            <td className="py-3.5 px-4 font-mono font-bold text-[#1B3F8B]">{sub.teamId}</td>
+                            <td className="py-3.5 px-4 font-black text-slate-900">{sub.teamName}</td>
+                            <td className="py-3.5 px-4">
+                              <span className="font-bold text-slate-900 block">{sub.leaderName}</span>
+                              <span className="text-[11px] text-slate-500">{sub.leaderEmail}</span>
+                            </td>
+                            <td className="py-3.5 px-4">
+                              <a
+                                href={sub.fileUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[10px] font-extrabold bg-blue-50 text-blue-700 hover:bg-blue-100 transition"
+                              >
+                                View PPT →
+                              </a>
+                            </td>
+                            <td className="py-3.5 px-4 text-slate-500">
+                              {new Date(sub.submittedAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
+                            </td>
+                            <td className="py-3.5 px-4">
+                              <button
+                                onClick={async () => {
+                                  if (!confirm(`Delete submission from ${sub.teamId}?`)) return;
+                                  setDeletingPptId(sub.id);
+                                  try {
+                                    await api.deletePptSubmission(sub.id);
+                                    setPptSubmissions(prev => prev.filter(s => s.id !== sub.id));
+                                  } catch(e: any) {
+                                    showAlert('Error', e.message || 'Could not delete submission.');
+                                  } finally {
+                                    setDeletingPptId(null);
+                                  }
+                                }}
+                                disabled={deletingPptId === sub.id}
+                                className="p-1.5 rounded-lg text-red-400 hover:bg-red-50 hover:text-red-600 transition disabled:opacity-50"
+                                title="Delete submission"
+                              >
+                                <Trash2 className="h-3.5 w-3.5" />
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
               </div>
             )}
 
