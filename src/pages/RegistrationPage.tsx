@@ -82,8 +82,8 @@ export const RegistrationPage: React.FC = () => {
       showAlert('Team Name Required', 'Please enter a unique name for your team.');
       return;
     }
-    if (trimmed.length < 3 || trimmed.length > 10) {
-      showAlert('Invalid Team Name', 'Team name must be between 3 and 10 characters long.');
+    if (trimmed.length < 3 || trimmed.length > 200) {
+      showAlert('Invalid Team Name', 'Team name must be between 3 and 200 characters long.');
       return;
     }
     const lower = trimmed.toLowerCase();

@@ -172,10 +172,11 @@ app.post('/api/register', async (req: Request, res: Response) => {
     }
 
     const cleanTeamName = teamName.trim();
-    if (cleanTeamName.length < 3 || cleanTeamName.length > 10) {
+    if (cleanTeamName.length < 3 || cleanTeamName.length > 200) {
       return res.status(400).json({
         success: false,
-        message: 'Team name must be between 3 and 10 characters long.',
+        title: 'Invalid Team Name',
+        message: 'Team name must be between 3 and 200 characters long.',
       });
     }
 
