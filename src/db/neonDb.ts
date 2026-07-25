@@ -492,16 +492,38 @@ export async function getAllTeams(): Promise<Team[]> {
   if (isNeonConnected) {
     try {
       const res = await runQuery('SELECT * FROM teams ORDER BY created_at DESC');
-      return res.rows.map((row: any) => ({
-        id: row.id,
-        teamName: row.team_name,
-        leader: typeof row.leader === 'string' ? JSON.parse(row.leader) : row.leader,
-        members: typeof row.members === 'string' ? JSON.parse(row.members) : row.members,
-        mentor: row.mentor ? (typeof row.mentor === 'string' ? JSON.parse(row.mentor) : row.mentor) : undefined,
-        status: row.status,
-        createdAt: row.created_at,
-        updatedAt: row.updated_at,
-      }));
+      
+      const parsedTeams = res.rows.map((row: any) => {
+        let leaderData: any = {};
+        let membersData: any = [];
+        let mentorData: any = undefined;
+
+        try {
+          leaderData = typeof row.leader === 'string' ? JSON.parse(row.leader) : row.leader;
+        } catch(e) { console.warn('Failed to parse leader json for team:', row.id); }
+
+        try {
+          membersData = typeof row.members === 'string' ? JSON.parse(row.members) : row.members;
+        } catch(e) { console.warn('Failed to parse members json for team:', row.id); }
+
+        try {
+          if (row.mentor) {
+            mentorData = typeof row.mentor === 'string' ? JSON.parse(row.mentor) : row.mentor;
+          }
+        } catch(e) { console.warn('Failed to parse mentor json for team:', row.id); }
+
+        return {
+          id: row.id,
+          teamName: row.team_name,
+          leader: leaderData,
+          members: membersData,
+          mentor: mentorData,
+          status: row.status,
+          createdAt: row.created_at,
+          updatedAt: row.updated_at,
+        };
+      });
+      return parsedTeams;
     } catch (err) {
       console.error('Error fetching teams from Neon, returning file teams:', err);
     }

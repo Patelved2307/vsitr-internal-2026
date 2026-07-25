@@ -521,14 +521,14 @@ async function startServer() {
           (t) =>
             t.id.toLowerCase().includes(q) ||
             t.teamName.toLowerCase().includes(q) ||
-            t.leader.fullName.toLowerCase().includes(q) ||
-            t.leader.enrollmentNo.toLowerCase().includes(q)
+            (t.leader?.fullName || '').toLowerCase().includes(q) ||
+            (t.leader?.enrollmentNo || '').toLowerCase().includes(q)
         );
       }
 
       if (department && department !== 'ALL') {
         result = result.filter((t) =>
-          [t.leader, ...t.members].some((m) => m.department === department)
+          [t.leader, ...(Array.isArray(t.members) ? t.members : [])].some((m) => m?.department === department)
         );
       }
 
@@ -538,13 +538,13 @@ async function startServer() {
 
       if (semester && semester !== 'ALL') {
         result = result.filter((t) =>
-          [t.leader, ...t.members].some((m) => m.semester === semester)
+          [t.leader, ...(Array.isArray(t.members) ? t.members : [])].some((m) => m?.semester === semester)
         );
       }
 
       if (gender === 'ALL_FEMALE') {
         result = result.filter((t) =>
-          [t.leader, ...t.members].every((m) => m.gender === 'Female')
+          [t.leader, ...(Array.isArray(t.members) ? t.members : [])].every((m) => m?.gender === 'Female')
         );
       }
 
