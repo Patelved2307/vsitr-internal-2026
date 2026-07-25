@@ -134,11 +134,7 @@ export const RegistrationPage: React.FC = () => {
       return;
     }
 
-    const allNames = [leader.fullName.trim().toLowerCase(), ...members.map(m => m.fullName.trim().toLowerCase())];
-    if (new Set(allNames).size !== allNames.length) {
-      showAlert('Duplicate Member Name', 'Each team member must have a unique name. Duplicate names are not allowed within the team.');
-      return;
-    }
+    // Duplicate member name check removed per user request
 
     if (leader.mobile.trim().length !== 10 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(leader.email.trim())) {
       return;
@@ -255,7 +251,7 @@ export const RegistrationPage: React.FC = () => {
 
       {/* Main Registration Card */}
       <div className="rounded-3xl bg-white p-6 sm:p-10 border border-slate-200 shadow-xl relative">
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={(e) => { e.preventDefault(); if (step === 3) handleSubmit(e); }}>
           
           {/* STEP 1: TEAM NAME */}
           {step === 1 && (

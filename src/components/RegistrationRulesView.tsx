@@ -213,11 +213,7 @@ export const RegistrationRulesView: React.FC = () => {
 
     // Duplicate enrollment check removed per user request
 
-    const allNames = [leader.fullName.trim().toLowerCase(), ...members.map(m => m.fullName.trim().toLowerCase())];
-    if (new Set(allNames).size !== allNames.length) {
-      showAlert('Duplicate Member Name', 'Each team member must have a unique name. Duplicate names are not allowed within the team.');
-      return;
-    }
+    // Duplicate member name check removed per user request
 
     if (leader.mobile.trim().length !== 10 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(leader.email.trim())) {
       return;
@@ -609,7 +605,7 @@ export const RegistrationRulesView: React.FC = () => {
                   </p>
                 </div>
               ) : (
-                <form onSubmit={handleRegisterSubmit}>
+                <form onSubmit={(e) => { e.preventDefault(); if (regStep === 3) handleRegisterSubmit(e); }}>
                   
                   {/* STEP 1: TEAM NAME */}
                   {regStep === 1 && (
