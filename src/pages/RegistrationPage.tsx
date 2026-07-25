@@ -495,11 +495,24 @@ export const RegistrationPage: React.FC = () => {
                   </p>
                 </div>
 
-                <div className="flex items-center gap-2">
-                  <span className="text-xs font-bold text-slate-700 bg-slate-100 px-3 py-1 rounded-full border">
-                    Total: {members.length + 1} / 6
-                  </span>
-                </div>
+                <div className="flex flex-col sm:flex-row gap-2">
+                    {(() => {
+                      const filledMembersCount = members.filter(m => m.fullName && m.fullName.trim().length > 0).length;
+                      const totalFilled = 1 + filledMembersCount; // 1 for leader
+                      const hasFemale = leader.gender === 'Female' || members.some(m => m.gender === 'Female' && m.fullName && m.fullName.trim().length > 0);
+                      
+                      return (
+                        <>
+                          <span className={`text-xs font-bold px-3 py-1 rounded-full border transition-colors duration-300 flex items-center justify-center ${hasFemale ? 'bg-emerald-50 border-emerald-200 text-emerald-700' : 'bg-rose-50 border-rose-200 text-rose-700'}`}>
+                            {hasFemale ? '✓ Female Selected' : '✗ No Female Selected'}
+                          </span>
+                          <span className="text-xs font-bold text-slate-700 bg-slate-100 px-3 py-1 rounded-full border flex items-center justify-center">
+                            Total: {totalFilled} / 6
+                          </span>
+                        </>
+                      );
+                    })()}
+                  </div>
               </div>
 
               {/* Members Inputs List */}
