@@ -1,7 +1,6 @@
 import React from 'react';
 import { useAuth } from '../context/AuthContext';
 import { Mail, MapPin, ExternalLink, ShieldCheck } from 'lucide-react';
-import { CountdownTimer } from './CountdownTimer';
 
 export const Footer: React.FC = () => {
   const { setActiveTab, isTeamLoggedIn, settings } = useAuth();
@@ -95,14 +94,25 @@ export const Footer: React.FC = () => {
             </ul>
           </div>
 
-          {/* Col 3: Countdown Timer */}
+          {/* Col 3: Key Deadlines */}
           <div className="space-y-3">
             <h4 className="text-sm font-bold text-white uppercase tracking-wider border-b border-slate-800 pb-2">
-              Time Remaining
+              Event Timeline
             </h4>
-            <div className="scale-75 origin-top-left -ml-2">
-              <CountdownTimer />
-            </div>
+            <ul className="space-y-2.5 text-xs text-slate-300">
+              <li className="flex flex-col">
+                <span className="text-slate-400 text-[10px] uppercase font-bold">Phase 1 Registration</span>
+                <span className="font-bold text-white">02 August 2026, 11:59 PM</span>
+              </li>
+              <li className="flex flex-col">
+                <span className="text-slate-400 text-[10px] uppercase font-bold">Phase 2 Mentor Details</span>
+                <span className="font-bold text-red-400">05 August 2026</span>
+              </li>
+              <li className="flex flex-col">
+                <span className="text-slate-400 text-[10px] uppercase font-bold">Internal Pitching Round</span>
+                <span className="font-bold text-blue-400">08 August 2026</span>
+              </li>
+            </ul>
           </div>
 
           {/* Col 4: Campus Contact */}
