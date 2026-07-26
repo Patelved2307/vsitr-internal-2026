@@ -89,26 +89,12 @@ export const RegistrationRulesView: React.FC = () => {
     setOpenAccordion(openAccordion === id ? null : id);
   };
 
-  const defaultRulesList = rules.length > 0 ? rules : [
-    "Each team must consist of exactly 6 members, including the Team Leader.",
-    "Each team must include at least 1 female participant. All-girls teams are welcome and eligible.",
-    "All participants must be from the same college (VSITR) — inter-college teams are not permitted.",
-    "Members may belong to different years, branches, or disciplines within the same college (IT, CSE, CE).",
-    "Each team must use a unique team name that does NOT include the institute's name (e.g. VSITR, Vidush Somany).",
-    "Each participant (by enrollment number) may be part of only one team.",
-    "A team once registered cannot add/replace members after the registration deadline without admin approval.",
-    "Registration is split into two independent phases: (a) Team Registration and (b) Mentor Details Submission. Phase (a) must be completed by deadline; Phase (b) is mandatory for final confirmation.",
-    "Only the Team Leader may register the team and will be the sole point of contact for all official communication.",
-    "All communication (screening schedules, problem statements, presentation dates, selection updates) will be sent only to the Team Leader's registered college email.",
-    "Teams must report on time for screening rounds/presentations as per the schedule communicated via email.",
-    "Plagiarism, misrepresentation of information, or providing false enrollment/contact details will lead to disqualification.",
-    "Decisions of the organizing committee (Research, Coding, Design, Soft Skills clubs) and faculty coordinators are final and binding.",
-    "Any change in team composition or mentor after submission must be communicated to the organizing committee in writing/email — not self-editable post-deadline."
-  ];
+  const eligibilityRules = rules.filter(r => r.categoryId === 'official');
+  const processRules = rules.filter(r => r.categoryId === 'phases');
+  const conductRules = rules.filter(r => r.categoryId === 'conduct');
 
-  const eligibilityRules = defaultRulesList.slice(0, 7);
-  const processRules = defaultRulesList.slice(7, 10);
-  const conductRules = defaultRulesList.slice(10);
+  const processOffset = eligibilityRules.length;
+  const conductOffset = eligibilityRules.length + processRules.length;
 
   const updateMember = (index: number, field: keyof TeamMember, value: any) => {
     const updated = [...members];
@@ -446,9 +432,9 @@ export const RegistrationRulesView: React.FC = () => {
                 {openAccordion === 'eligibility' && (
                   <div className="p-4 bg-white space-y-2 border-t border-slate-100">
                     {eligibilityRules.map((rule, idx) => (
-                      <div key={idx} className="flex items-start gap-2 text-xs text-slate-600">
+                      <div key={rule.id || idx} className="flex items-start gap-2 text-xs text-slate-600">
                         <CheckCircle className="h-3.5 w-3.5 text-[#C1272D] shrink-0 mt-0.5" />
-                        <p><span className="font-bold text-slate-800">Rule {idx + 1}:</span> {rule}</p>
+                        <p><span className="font-bold text-slate-800">Rule {idx + 1}:</span> {rule.text}</p>
                       </div>
                     ))}
                   </div>
@@ -467,9 +453,9 @@ export const RegistrationRulesView: React.FC = () => {
                 {openAccordion === 'process' && (
                   <div className="p-4 bg-white space-y-2 border-t border-slate-100">
                     {processRules.map((rule, idx) => (
-                      <div key={idx} className="flex items-start gap-2 text-xs text-slate-600">
+                      <div key={rule.id || idx} className="flex items-start gap-2 text-xs text-slate-600">
                         <FileText className="h-3.5 w-3.5 text-[#1B3F8B] shrink-0 mt-0.5" />
-                        <p><span className="font-bold text-slate-800">Rule {idx + 8}:</span> {rule}</p>
+                        <p><span className="font-bold text-slate-800">Rule {idx + 1 + processOffset}:</span> {rule.text}</p>
                       </div>
                     ))}
                   </div>
@@ -488,9 +474,9 @@ export const RegistrationRulesView: React.FC = () => {
                 {openAccordion === 'conduct' && (
                   <div className="p-4 bg-white space-y-2 border-t border-slate-100">
                     {conductRules.map((rule, idx) => (
-                      <div key={idx} className="flex items-start gap-2 text-xs text-slate-600">
+                      <div key={rule.id || idx} className="flex items-start gap-2 text-xs text-slate-600">
                         <AlertCircle className="h-3.5 w-3.5 text-amber-600 shrink-0 mt-0.5" />
-                        <p><span className="font-bold text-slate-800">Rule {idx + 11}:</span> {rule}</p>
+                        <p><span className="font-bold text-slate-800">Rule {idx + 1 + conductOffset}:</span> {rule.text}</p>
                       </div>
                     ))}
                   </div>

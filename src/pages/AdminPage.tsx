@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { api } from '../services/api';
-import { Team, EventSettings, TimelineEvent, FAQItem, EmailLog, PptSubmission } from '../types';
+import { Team, EventSettings, TimelineEvent, FAQItem, EmailLog, PptSubmission , Rule, RuleCategory} from '../types';
 import {
   ShieldCheck,
   LogOut,
@@ -34,7 +34,9 @@ import {
   LayoutDashboard,
   Send,
   Database,
-  SendHorizontal
+  SendHorizontal,
+  ChevronUp, 
+  ChevronDown
 } from 'lucide-react';
 
 export const AdminPage: React.FC = () => {
@@ -129,10 +131,11 @@ export const AdminPage: React.FC = () => {
   const [newFaqA, setNewFaqA] = useState('');
 
   // Editable Rules State
-  const [editRules, setEditRules] = useState<string[]>(rules);
-  const [editingRuleIndex, setEditingRuleIndex] = useState<number | null>(null);
+  const [editRules, setEditRules] = useState<Rule[]>(rules);
+  const [editingRuleId, setEditingRuleId] = useState<string | null>(null);
   const [ruleEditText, setRuleEditText] = useState('');
   const [newRuleText, setNewRuleText] = useState('');
+  const [newRuleCategory, setNewRuleCategory] = useState<RuleCategory>('official');
 
   const [isSavingSettings, setIsSavingSettings] = useState(false);
   const [isSyncingDb, setIsSyncingDb] = useState(false);
@@ -415,12 +418,37 @@ export const AdminPage: React.FC = () => {
   // Rule handlers
   const handleAddRule = () => {
     if (!newRuleText.trim()) return;
-    setEditRules([...editRules, newRuleText.trim()]);
+    setEditRules([...editRules, { id: 'r' + Date.now(), categoryId: newRuleCategory, text: newRuleText.trim() }]);
     setNewRuleText('');
   };
 
-  const handleDeleteRule = (idx: number) => {
-    setEditRules(editRules.filter((_, i) => i !== idx));
+  const handleDeleteRule = (id: string) => {
+    setEditRules(editRules.filter((r) => r.id !== id));
+  };
+
+  const handleMoveRule = (id: string, direction: 'up' | 'down') => {
+    const ruleIndex = editRules.findIndex(r => r.id === id);
+    if (ruleIndex === -1) return;
+    const rule = editRules[ruleIndex];
+    
+    const catRules = editRules.filter(r => r.categoryId === rule.categoryId);
+    const catIndex = catRules.findIndex(r => r.id === id);
+    
+    if (direction === 'up' && catIndex > 0) {
+      const prevRuleId = catRules[catIndex - 1].id;
+      const prevIndex = editRules.findIndex(r => r.id === prevRuleId);
+      const newRules = [...editRules];
+      newRules[ruleIndex] = newRules[prevIndex];
+      newRules[prevIndex] = rule;
+      setEditRules(newRules);
+    } else if (direction === 'down' && catIndex < catRules.length - 1) {
+      const nextRuleId = catRules[catIndex + 1].id;
+      const nextIndex = editRules.findIndex(r => r.id === nextRuleId);
+      const newRules = [...editRules];
+      newRules[ruleIndex] = newRules[nextIndex];
+      newRules[nextIndex] = rule;
+      setEditRules(newRules);
+    }
   };
 
   // Bulk Reminder
@@ -1174,29 +1202,67 @@ export const AdminPage: React.FC = () => {
                 </div>
 
                 {/* Rules List */}
-                <div className="space-y-3 pt-4 border-t border-slate-200">
+                <div className="space-y-6 pt-4 border-t border-slate-200">
                   <h3 className="text-sm font-bold text-slate-900">
                     Official Hackathon Rules ({editRules.length})
                   </h3>
-                  <div className="space-y-2">
-                    {editRules.map((r, idx) => (
-                      <div key={idx} className="p-3 rounded-xl bg-white border border-slate-200 text-xs flex items-center justify-between gap-3">
-                        <span className="font-medium text-slate-800">
-                          <strong className="text-[#C1272D]">Rule {idx + 1}:</strong> {r}
-                        </span>
-                        <button
-                          type="button"
-                          onClick={() => handleDeleteRule(idx)}
-                          className="text-red-500 hover:text-red-700 p-1 shrink-0"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </button>
+                  
+                  {(['official', 'phases', 'conduct'] as RuleCategory[]).map((catId) => {
+                    const catRules = editRules.filter(r => r.categoryId === catId);
+                    const title = catId === 'official' ? '01. Official SIH Rules & Regulations' : catId === 'phases' ? '02. Internal SIH 2026 Registration Phases' : '03. Internal SIH 2026 Conduct & Decisions';
+                    
+                    return (
+                      <div key={catId} className="space-y-3 bg-slate-50 p-4 rounded-2xl border border-slate-200">
+                        <h4 className="font-bold text-slate-800 text-xs uppercase tracking-wider">{title}</h4>
+                        <div className="space-y-2">
+                          {catRules.map((r, idx) => (
+                            <div key={r.id} className="p-3 rounded-xl bg-white border border-slate-200 text-xs flex items-center justify-between gap-3">
+                              <span className="font-medium text-slate-800 flex-1">
+                                <strong className="text-[#1B3F8B] mr-1">Rule {idx + 1}:</strong> {r.text}
+                              </span>
+                              <div className="flex items-center gap-1 shrink-0">
+                                <button
+                                  type="button"
+                                  onClick={() => handleMoveRule(r.id, 'up')}
+                                  disabled={idx === 0}
+                                  className="text-slate-400 hover:text-slate-700 disabled:opacity-30 p-1"
+                                >
+                                  <ChevronUp className="h-4 w-4" />
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() => handleMoveRule(r.id, 'down')}
+                                  disabled={idx === catRules.length - 1}
+                                  className="text-slate-400 hover:text-slate-700 disabled:opacity-30 p-1"
+                                >
+                                  <ChevronDown className="h-4 w-4" />
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() => handleDeleteRule(r.id)}
+                                  className="text-red-500 hover:text-red-700 p-1 ml-1"
+                                >
+                                  <Trash2 className="h-4 w-4" />
+                                </button>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
                       </div>
-                    ))}
-                  </div>
+                    );
+                  })}
 
-                  <div className="p-4 rounded-2xl bg-slate-100/70 border border-slate-200 space-y-2 text-xs">
+                  <div className="p-4 rounded-2xl bg-slate-100/70 border border-slate-200 space-y-3 text-xs">
                     <span className="font-bold text-slate-700 block">+ Add New Rule</span>
+                    <select
+                      value={newRuleCategory}
+                      onChange={(e) => setNewRuleCategory(e.target.value as RuleCategory)}
+                      className="w-full p-2 rounded-xl border border-slate-300 bg-white font-medium"
+                    >
+                      <option value="official">01. Official SIH Rules &amp; Regulations</option>
+                      <option value="phases">02. Internal SIH 2026 Registration Phases</option>
+                      <option value="conduct">03. Internal SIH 2026 Conduct &amp; Decisions</option>
+                    </select>
                     <input
                       type="text"
                       placeholder="Enter new rule text..."

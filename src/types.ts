@@ -54,6 +54,15 @@ export interface FAQItem {
   answer: string;
 }
 
+export type RuleCategory = 'official' | 'phases' | 'conduct';
+
+export interface Rule {
+  id: string;
+  categoryId: RuleCategory;
+  text: string;
+}
+
+
 export interface EventSettings {
   registrationDeadline: string; // ISO string e.g., "2026-08-02T23:59:00.000Z"
   isRegistrationOpen: boolean;

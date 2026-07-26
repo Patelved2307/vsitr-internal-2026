@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { ClubCoordinator, EventSettings, FAQItem, Team, TimelineEvent } from '../types';
+import { ClubCoordinator, EventSettings, FAQItem, Team, TimelineEvent, Rule } from '../types';
 import { CLUB_COORDINATORS, INITIAL_FAQS, INITIAL_SETTINGS, INITIAL_TIMELINE_EVENTS } from '../data/initialData';
 import { api } from '../services/api';
 
@@ -21,7 +21,7 @@ interface AuthContextType {
   settings: EventSettings;
   timeline: TimelineEvent[];
   faqs: FAQItem[];
-  rules: string[];
+  rules: Rule[];
   clubCoordinators: ClubCoordinator[];
   isLoadingSettings: boolean;
   reloadPortalData: () => Promise<void>;
@@ -51,7 +51,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [settings, setSettings] = useState<EventSettings>(INITIAL_SETTINGS);
   const [timeline, setTimeline] = useState<TimelineEvent[]>(INITIAL_TIMELINE_EVENTS);
   const [faqs, setFaqs] = useState<FAQItem[]>(INITIAL_FAQS);
-  const [rules, setRules] = useState<string[]>([]);
+  const [rules, setRules] = useState<Rule[]>([]);
   const [clubCoordinators, setClubCoordinators] = useState<ClubCoordinator[]>(CLUB_COORDINATORS);
   const [isLoadingSettings, setIsLoadingSettings] = useState<boolean>(true);
 
