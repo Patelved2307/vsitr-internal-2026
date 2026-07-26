@@ -429,7 +429,14 @@ export async function getGlobalConfig() {
           });
         }
         
-        return val;
+        const fileDb = ensureFileDb();
+        return {
+          settings: { ...fileDb.settings, ...(val.settings || {}) },
+          timeline: val.timeline || fileDb.timeline,
+          faqs: val.faqs || fileDb.faqs,
+          rules: val.rules || fileDb.rules,
+          nextTeamNumber: val.nextTeamNumber || fileDb.nextTeamNumber || 1,
+        };
       }
     } catch (err) {
       console.error('Error fetching global_settings from Neon:', err);

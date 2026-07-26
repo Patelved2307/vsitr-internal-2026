@@ -71,11 +71,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       setIsLoadingSettings(true);
       const data = await api.getSettings();
-      if (data.settings) setSettings(data.settings);
-      if (data.timeline) setTimeline(data.timeline);
-      if (data.faqs) setFaqs(data.faqs);
-      if (data.rules) setRules(data.rules);
-      if (data.clubCoordinators) setClubCoordinators(data.clubCoordinators);
+      if (data.settings) setSettings(prev => ({ ...INITIAL_SETTINGS, ...data.settings }));
+      if (data.timeline && data.timeline.length > 0) setTimeline(data.timeline);
+      if (data.faqs && data.faqs.length > 0) setFaqs(data.faqs);
+      if (data.rules && data.rules.length > 0) setRules(data.rules);
+      if (data.clubCoordinators && data.clubCoordinators.length > 0) setClubCoordinators(data.clubCoordinators);
     } catch (err) {
       console.error('Error loading settings', err);
     } finally {
