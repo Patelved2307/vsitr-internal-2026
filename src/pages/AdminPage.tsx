@@ -1314,7 +1314,7 @@ export const AdminPage: React.FC = () => {
                     <input
                       type="datetime-local"
                       required
-                      value={editDeadline.slice(0, 16)}
+                      value={(editDeadline || '').slice(0, 16)}
                       onChange={(e) => setEditDeadline(new Date(e.target.value).toISOString())}
                       className="w-full px-4 py-2.5 rounded-xl border border-slate-300 font-bold focus:border-[#C1272D] outline-none"
                     />
@@ -1344,7 +1344,7 @@ export const AdminPage: React.FC = () => {
                     <input
                       type="url"
                       required
-                      value={editWhatsapp}
+                      value={editWhatsapp || ''}
                       onChange={(e) => setEditWhatsapp(e.target.value)}
                       className="w-full px-4 py-2.5 rounded-xl border border-slate-300 font-medium focus:border-[#1B3F8B] outline-none"
                     />
@@ -1357,7 +1357,7 @@ export const AdminPage: React.FC = () => {
                     <input
                       type="text"
                       placeholder="e.g. 📢 Registrations close on 05 August 2026!"
-                      value={editBanner}
+                      value={editBanner || ''}
                       onChange={(e) => setEditBanner(e.target.value)}
                       className="w-full px-4 py-2.5 rounded-xl border border-slate-300 font-medium focus:border-[#1B3F8B] outline-none"
                     />
@@ -1370,7 +1370,7 @@ export const AdminPage: React.FC = () => {
                       </label>
                       <input
                         type="url"
-                        value={editProblemStatementLink}
+                        value={editProblemStatementLink || ''}
                         onChange={(e) => setEditProblemStatementLink(e.target.value)}
                         className="w-full px-4 py-2.5 rounded-xl border border-slate-300 font-medium focus:border-[#1B3F8B] outline-none"
                         placeholder="e.g. https://www.sih.gov.in/sih2025PS"
@@ -1382,7 +1382,7 @@ export const AdminPage: React.FC = () => {
                       </label>
                       <input
                         type="text"
-                        value={editProblemStatementStatus}
+                        value={editProblemStatementStatus || ''}
                         onChange={(e) => setEditProblemStatementStatus(e.target.value)}
                         className="w-full px-4 py-2.5 rounded-xl border border-slate-300 font-medium focus:border-[#1B3F8B] outline-none"
                         placeholder="e.g. Announced soon..."
@@ -1397,7 +1397,7 @@ export const AdminPage: React.FC = () => {
                       </label>
                       <input
                         type="text"
-                        value={editPptTemplateLink}
+                        value={editPptTemplateLink || ''}
                         onChange={(e) => setEditPptTemplateLink(e.target.value)}
                         className="w-full px-4 py-2.5 rounded-xl border border-slate-300 font-medium focus:border-[#1B3F8B] outline-none"
                         placeholder="e.g. /templates/sih_template.pptx"
@@ -1409,7 +1409,7 @@ export const AdminPage: React.FC = () => {
                       </label>
                       <input
                         type="text"
-                        value={editPptTemplateStatus}
+                        value={editPptTemplateStatus || ''}
                         onChange={(e) => setEditPptTemplateStatus(e.target.value)}
                         className="w-full px-4 py-2.5 rounded-xl border border-slate-300 font-medium focus:border-[#1B3F8B] outline-none"
                         placeholder="e.g. Coming soon..."
@@ -1436,7 +1436,7 @@ export const AdminPage: React.FC = () => {
                         <label className="block font-bold text-slate-800 mb-1">Submission Deadline (display text)</label>
                         <input
                           type="text"
-                          value={editPptSubmissionDeadline}
+                          value={editPptSubmissionDeadline || ''}
                           onChange={(e) => setEditPptSubmissionDeadline(e.target.value)}
                           className="w-full px-4 py-2.5 rounded-xl border border-slate-300 font-medium focus:border-[#C1272D] outline-none"
                           placeholder="e.g. 08 August 2026, 11:59 PM"
@@ -1447,7 +1447,7 @@ export const AdminPage: React.FC = () => {
                       <label className="block font-bold text-slate-800 mb-1">Submission Status Message (shown on card)</label>
                       <textarea
                         rows={2}
-                        value={editPptSubmissionStatus}
+                        value={editPptSubmissionStatus || ''}
                         onChange={(e) => setEditPptSubmissionStatus(e.target.value)}
                         className="w-full px-4 py-2.5 rounded-xl border border-slate-300 font-medium focus:border-[#C1272D] outline-none resize-none"
                         placeholder="e.g. PPT submission portal is now open..."

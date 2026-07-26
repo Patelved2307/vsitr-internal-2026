@@ -163,7 +163,76 @@
       "text": "Any change in team composition or mentor after submission must be communicated to the organizing committee in writing/email — not self-editable post-deadline."
     }
   ],
-  "teams": [],
+  "teams": [
+    {
+      "id": "SIH2026-000",
+      "teamName": "Test PPT Downloader",
+      "leader": {
+        "id": "l1",
+        "fullName": "John Doe",
+        "email": "john@test.com",
+        "mobile": "1234567890",
+        "enrollmentNo": "24BEIT50001",
+        "gender": "Male",
+        "department": "IT",
+        "semester": "5",
+        "isLeader": true
+      },
+      "members": [
+        {
+          "id": "m1",
+          "fullName": "Jane Doe",
+          "email": "jane@test.com",
+          "mobile": "1234567891",
+          "enrollmentNo": "24BEIT50002",
+          "gender": "Female",
+          "department": "IT",
+          "semester": "5"
+        },
+        {
+          "id": "m2",
+          "fullName": "Jim Doe",
+          "email": "jim@test.com",
+          "mobile": "1234567892",
+          "enrollmentNo": "24BEIT50003",
+          "gender": "Male",
+          "department": "IT",
+          "semester": "5"
+        },
+        {
+          "id": "m3",
+          "fullName": "Jack Doe",
+          "email": "jack@test.com",
+          "mobile": "1234567893",
+          "enrollmentNo": "24BEIT50004",
+          "gender": "Male",
+          "department": "IT",
+          "semester": "5"
+        },
+        {
+          "id": "m4",
+          "fullName": "Jill Doe",
+          "email": "jill@test.com",
+          "mobile": "1234567894",
+          "enrollmentNo": "24BEIT50005",
+          "gender": "Female",
+          "department": "IT",
+          "semester": "5"
+        },
+        {
+          "id": "m5",
+          "fullName": "Joe Doe",
+          "email": "joe@test.com",
+          "mobile": "1234567895",
+          "enrollmentNo": "24BEIT50006",
+          "gender": "Male",
+          "department": "IT",
+          "semester": "5"
+        }
+      ],
+      "status": "pending"
+    }
+  ],
   "emailLogs": [],
   "nextTeamNumber": 1
 }
