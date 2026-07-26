@@ -1,4 +1,21 @@
-import { ClubCoordinator, EventSettings, FAQItem, TimelineEvent } from '../types';
+import { ClubCoordinator, EventSettings, FAQItem, TimelineEvent, Rule } from '../types';
+
+export const INITIAL_RULES: Rule[] = [
+  { id: 'r1', categoryId: 'official', text: 'Each team must consist of exactly 6 members, including the Team Leader.' },
+  { id: 'r2', categoryId: 'official', text: 'Each team must include at least 1 female participant. All-girls teams are welcome and eligible.' },
+  { id: 'r3', categoryId: 'official', text: 'All participants must be from the same college (VSITR) — inter-college teams are not permitted.' },
+  { id: 'r4', categoryId: 'official', text: 'Members may belong to different years, branches, or disciplines within the same college (IT, CSE, CE).' },
+  { id: 'r5', categoryId: 'official', text: 'Each team must use a unique team name that does NOT include the institute\'s name (e.g. VSITR, Vidush Somany).' },
+  { id: 'r6', categoryId: 'official', text: 'Each participant (by enrollment number) may be part of only one team.' },
+  { id: 'r7', categoryId: 'official', text: 'A team once registered cannot add/replace members after the registration deadline without admin approval.' },
+  { id: 'r8', categoryId: 'phases', text: 'Registration is split into two independent phases: (a) Team Registration and (b) Mentor Details Submission. Phase (a) must be completed by deadline; Phase (b) is mandatory for final confirmation.' },
+  { id: 'r9', categoryId: 'phases', text: 'Only the Team Leader may register the team and will be the sole point of contact for all official communication.' },
+  { id: 'r10', categoryId: 'phases', text: 'All communication (screening schedules, problem statements, presentation dates, selection updates) will be sent only to the Team Leader\'s registered college email.' },
+  { id: 'r11', categoryId: 'conduct', text: 'Teams must report on time for screening rounds/presentations as per the schedule communicated via email.' },
+  { id: 'r12', categoryId: 'conduct', text: 'Plagiarism, misrepresentation of information, or providing false enrollment/contact details will lead to disqualification.' },
+  { id: 'r13', categoryId: 'conduct', text: 'Decisions of the organizing committee (Research, Coding, Design, Soft Skills clubs) and faculty coordinators are final and binding.' },
+  { id: 'r14', categoryId: 'conduct', text: 'Any change in team composition or mentor after submission must be communicated to the organizing committee in writing/email — not self-editable post-deadline.' }
+];
 
 export const INITIAL_SETTINGS: EventSettings = {
   registrationDeadline: '2026-08-02T23:59:59.000Z',
