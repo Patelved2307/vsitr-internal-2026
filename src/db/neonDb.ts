@@ -412,8 +412,24 @@ export async function getGlobalConfig() {
     try {
       const res = await runQuery('SELECT value FROM app_config WHERE key = $1', ['global_settings']);
       if (res.rows.length > 0) {
-        const val = res.rows[0].value;
-        return typeof val === 'string' ? JSON.parse(val) : val;
+        let val = res.rows[0].value;
+        val = typeof val === 'string' ? JSON.parse(val) : val;
+        
+        // Migrate legacy string rules to object rules if needed
+        if (val.rules && val.rules.length > 0 && typeof val.rules[0] === 'string') {
+          val.rules = val.rules.map((ruleStr: string, idx: number) => {
+            let categoryId = 'official';
+            if (idx >= 7 && idx < 10) categoryId = 'phases';
+            else if (idx >= 10) categoryId = 'conduct';
+            return {
+              id: `r${idx + 1}`,
+              categoryId,
+              text: ruleStr
+            };
+          });
+        }
+        
+        return val;
       }
     } catch (err) {
       console.error('Error fetching global_settings from Neon:', err);
