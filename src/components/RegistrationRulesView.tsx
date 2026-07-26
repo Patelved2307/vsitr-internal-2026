@@ -440,7 +440,7 @@ export const RegistrationRulesView: React.FC = () => {
                   onClick={() => toggleAccordion('eligibility')}
                   className="w-full px-4 py-3 flex items-center justify-between bg-slate-50/50 hover:bg-slate-100/50 transition text-left text-xs font-bold text-slate-800"
                 >
-                  <span>01. Team &amp; Gender Requirements</span>
+                  <span>01. Official SIH Rules &amp; Regulations</span>
                   {openAccordion === 'eligibility' ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
                 </button>
                 {openAccordion === 'eligibility' && (
@@ -461,7 +461,7 @@ export const RegistrationRulesView: React.FC = () => {
                   onClick={() => toggleAccordion('process')}
                   className="w-full px-4 py-3 flex items-center justify-between bg-slate-50/50 hover:bg-slate-100/50 transition text-left text-xs font-bold text-slate-800"
                 >
-                  <span>02. Registration Phases</span>
+                  <span>02. Internal SIH 2026 Registration Phases</span>
                   {openAccordion === 'process' ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
                 </button>
                 {openAccordion === 'process' && (
@@ -482,7 +482,7 @@ export const RegistrationRulesView: React.FC = () => {
                   onClick={() => toggleAccordion('conduct')}
                   className="w-full px-4 py-3 flex items-center justify-between bg-slate-50/50 hover:bg-slate-100/50 transition text-left text-xs font-bold text-slate-800"
                 >
-                  <span>03. Conduct &amp; Decisions</span>
+                  <span>03. Internal SIH 2026 Conduct &amp; Decisions</span>
                   {openAccordion === 'conduct' ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
                 </button>
                 {openAccordion === 'conduct' && (

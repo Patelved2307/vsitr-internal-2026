@@ -61,7 +61,7 @@ export const RulesSection: React.FC = () => {
                 01
               </span>
               <h3 className="text-base font-bold text-slate-900">
-                Eligibility &amp; Team Composition Rules
+                Official SIH Rules &amp; Regulations
               </h3>
             </div>
             {openAccordion === 'eligibility' ? (
@@ -96,7 +96,7 @@ export const RulesSection: React.FC = () => {
                 02
               </span>
               <h3 className="text-base font-bold text-slate-900">
-                Registration &amp; Communication Process
+                Internal SIH 2026 Registration Phases
               </h3>
             </div>
             {openAccordion === 'process' ? (
@@ -131,7 +131,7 @@ export const RulesSection: React.FC = () => {
                 03
               </span>
               <h3 className="text-base font-bold text-slate-900">
-                Conduct, Disqualification &amp; Decision Clauses
+                Internal SIH 2026 Conduct &amp; Decisions
               </h3>
             </div>
             {openAccordion === 'conduct' ? (
