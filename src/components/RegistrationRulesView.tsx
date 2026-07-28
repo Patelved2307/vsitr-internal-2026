@@ -455,7 +455,7 @@ export const RegistrationRulesView: React.FC = () => {
                     {processRules.map((rule, idx) => (
                       <div key={rule.id || idx} className="flex items-start gap-2 text-xs text-slate-600">
                         <FileText className="h-3.5 w-3.5 text-[#1B3F8B] shrink-0 mt-0.5" />
-                        <p><span className="font-bold text-slate-800">Rule {idx + 1 + processOffset}:</span> {rule.text}</p>
+                        <p><span className="font-bold text-slate-800">Step {idx + 1}:</span> {rule.text}</p>
                       </div>
                     ))}
                   </div>
