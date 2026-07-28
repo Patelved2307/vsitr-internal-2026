@@ -98,7 +98,7 @@ export const RulesSection: React.FC = () => {
                 <div key={rule.id || idx} className="flex items-start gap-3">
                   <FileText className="h-4 w-4 text-[#1B3F8B] shrink-0 mt-0.5" />
                   <p className="text-sm text-slate-700 leading-relaxed font-medium">
-                    <span className="font-bold text-slate-900">Rule {idx + 1 + processOffset}:</span> {rule.text}
+                    <span className="font-bold text-slate-900">Step {idx + 1}:</span> {rule.text}
                   </p>
                 </div>
               ))}

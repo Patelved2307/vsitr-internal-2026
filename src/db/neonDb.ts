@@ -4,8 +4,8 @@ import ws from 'ws';
 import fs from 'fs';
 import path from 'path';
 import dotenv from 'dotenv';
-import { EventSettings, FAQItem, Team, TimelineEvent, EmailLog } from '../types.js';
-import { CLUB_COORDINATORS, INITIAL_FAQS, INITIAL_SETTINGS, INITIAL_TIMELINE_EVENTS } from '../data/initialData.js';
+import { EventSettings, FAQItem, Team, TimelineEvent, EmailLog, Rule } from '../types.js';
+import { CLUB_COORDINATORS, INITIAL_FAQS, INITIAL_SETTINGS, INITIAL_TIMELINE_EVENTS, INITIAL_RULES } from '../data/initialData.js';
 
 // Configure WebSocket for serverless Neon pool in Node environment
 neonConfig.webSocketConstructor = ws;
@@ -22,28 +22,12 @@ export interface DatabaseSchema {
   settings: EventSettings;
   timeline: TimelineEvent[];
   faqs: FAQItem[];
-  rules: string[];
+  rules: Rule[];
   teams: Team[];
   emailLogs: EmailLog[];
   nextTeamNumber: number;
 }
 
-const INITIAL_RULES = [
-  "Each team must consist of exactly 6 members, including the Team Leader.",
-  "Each team must include at least 1 female participant. All-girls teams are welcome and eligible.",
-  "All participants must be from the same college (VSITR) — inter-college teams are not permitted.",
-  "Members may belong to different years, branches, or disciplines within the same college (IT, CSE, CE).",
-  "Each team must use a unique team name that does NOT include the institute's name (e.g. VSITR, Vidush Somany).",
-  "Each participant (by enrollment number) may be part of only one team.",
-  "A team once registered cannot add/replace members after the registration deadline without admin approval.",
-  "Registration is split into two independent phases: (a) Team Registration and (b) Mentor Details Submission. Phase (a) must be completed by deadline; Phase (b) is mandatory for final confirmation.",
-  "Only the Team Leader may register the team and will be the sole point of contact for all official communication.",
-  "All communication (screening schedules, problem statements, presentation dates, selection updates) will be sent only to the Team Leader's registered college email.",
-  "Teams must report on time for screening rounds/presentations as per the schedule communicated via email.",
-  "Plagiarism, misrepresentation of information, or providing false enrollment/contact details will lead to disqualification.",
-  "Decisions of the organizing committee (Research, Coding, Design, Soft Skills clubs) and faculty coordinators are final and binding.",
-  "Any change in team composition or mentor after submission must be communicated to the organizing committee in writing/email — not self-editable post-deadline."
-];
 
 let activePool: any = null;
 let neonSql: any = null;
@@ -478,7 +462,7 @@ export async function getNextTeamNumber(): Promise<number> {
   return num;
 }
 
-export async function saveGlobalConfig(data: { settings?: EventSettings; timeline?: TimelineEvent[]; faqs?: FAQItem[]; rules?: string[]; nextTeamNumber?: number }) {
+export async function saveGlobalConfig(data: { settings?: EventSettings; timeline?: TimelineEvent[]; faqs?: FAQItem[]; rules?: Rule[]; nextTeamNumber?: number }) {
   const currentConfig = await getGlobalConfig();
   const updated = { ...currentConfig, ...data };
 

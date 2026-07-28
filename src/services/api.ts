@@ -1,4 +1,4 @@
-import { EventSettings, FAQItem, Team, TimelineEvent } from '../types';
+import { EventSettings, FAQItem, Team, TimelineEvent, Rule } from '../types';
 
 export const api = {
   // Fetch site settings, FAQs, rules, and timeline
@@ -118,7 +118,7 @@ export const api = {
     settings?: Partial<EventSettings>;
     timeline?: TimelineEvent[];
     faqs?: FAQItem[];
-    rules?: string[];
+    rules?: Rule[];
   }) => {
     const res = await fetch('/api/settings', {
       method: 'PUT',
