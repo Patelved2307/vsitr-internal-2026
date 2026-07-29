@@ -218,7 +218,8 @@ app.post('/api/register', async (req: Request, res: Response) => {
 
     for (let i = 0; i < allMembers.length; i++) {
       const m = allMembers[i];
-      if (!m.fullName || !m.enrollmentNo || !m.mobile || !m.email || !m.department || !m.semester || !m.gender) {
+      const enrollmentRequired = m.semester !== '1';
+      if (!m.fullName || (enrollmentRequired && !m.enrollmentNo) || !m.mobile || !m.email || !m.department || !m.semester || !m.gender) {
         return res.status(400).json({
           success: false,
           title: 'Missing Member Information',
@@ -249,8 +250,10 @@ app.post('/api/register', async (req: Request, res: Response) => {
       });
     }
 
-    // Duplicate enrollment check WITHIN team
-    const enrollmentsInTeam = allMembers.map((m) => m.enrollmentNo.trim().toUpperCase());
+    // Duplicate enrollment check WITHIN team (skip empty enrollments from sem 1 students)
+    const enrollmentsInTeam = allMembers
+      .map((m) => m.enrollmentNo.trim().toUpperCase())
+      .filter((e) => e.length > 0);
     const uniqueInTeam = new Set(enrollmentsInTeam);
     if (uniqueInTeam.size !== enrollmentsInTeam.length) {
       return res.status(400).json({

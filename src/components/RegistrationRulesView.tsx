@@ -162,7 +162,8 @@ export const RegistrationRulesView: React.FC = () => {
   };
 
   const handleStep2Next = () => {
-    if (!leader.fullName || !leader.enrollmentNo || !leader.mobile || !leader.email) {
+    const leaderEnrollmentRequired = leader.semester !== '1';
+    if (!leader.fullName || (leaderEnrollmentRequired && !leader.enrollmentNo) || !leader.mobile || !leader.email) {
       showAlert('Team Leader Information Incomplete', 'Please fill in all details for the Team Leader.');
       return;
     }
@@ -219,7 +220,8 @@ export const RegistrationRulesView: React.FC = () => {
 
     // Mobile & Email Validation for members
     for (const m of members) {
-      if (!m.fullName || !m.enrollmentNo || !m.mobile || !m.email) {
+      const memberEnrollmentRequired = m.semester !== '1';
+      if (!m.fullName || (memberEnrollmentRequired && !m.enrollmentNo) || !m.mobile || !m.email) {
         showAlert('Member Information Incomplete', 'Please fill in all details for all team members.');
         return;
       }
@@ -748,11 +750,14 @@ export const RegistrationRulesView: React.FC = () => {
                         </div>
 
                         <div>
-                          <label className="block text-xs font-bold text-slate-700 mb-1">Enrollment Number *</label>
+                          <label className="block text-xs font-bold text-slate-700 mb-1">
+                            Enrollment Number {leader.semester !== '1' ? '*' : ''}
+                            {leader.semester === '1' && <span className="text-slate-400 text-[10px] ml-1">(Optional for Sem 1)</span>}
+                          </label>
                           <input
                             type="text"
-                            required
-                            placeholder="e.g. 24BEIT54001"
+                            required={leader.semester !== '1'}
+                            placeholder={leader.semester === '1' ? 'Not required for Sem 1' : 'e.g. 24BEIT54001'}
                             value={leader.enrollmentNo}
                             onChange={(e) => setLeader({ ...leader, enrollmentNo: e.target.value })}
                             className="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-mono outline-none"
@@ -912,11 +917,14 @@ export const RegistrationRulesView: React.FC = () => {
                               </div>
 
                               <div>
-                                <label className="block text-[10px] font-bold text-slate-600">Enrollment No *</label>
+                                <label className="block text-[10px] font-bold text-slate-600">
+                                  Enrollment No {member.semester !== '1' ? '*' : ''}
+                                  {member.semester === '1' && <span className="text-slate-400 text-[9px] ml-1">(Optional)</span>}
+                                </label>
                                 <input
                                   type="text"
-                                  required
-                                  placeholder="Enrollment No"
+                                  required={member.semester !== '1'}
+                                  placeholder={member.semester === '1' ? 'Not required for Sem 1' : 'Enrollment No'}
                                   value={member.enrollmentNo}
                                   onChange={(e) => updateMember(idx, 'enrollmentNo', e.target.value)}
                                   className="w-full px-2.5 py-1.5 rounded-lg border border-slate-200 text-xs font-mono bg-white"

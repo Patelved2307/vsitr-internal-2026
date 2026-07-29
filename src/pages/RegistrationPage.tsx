@@ -108,7 +108,8 @@ export const RegistrationPage: React.FC = () => {
 
   // Step 2 Next Handler
   const handleStep2Next = () => {
-    if (!leader.fullName || !leader.enrollmentNo || !leader.mobile || !leader.email) {
+    const leaderEnrollmentRequired = leader.semester !== '1';
+    if (!leader.fullName || (leaderEnrollmentRequired && !leader.enrollmentNo) || !leader.mobile || !leader.email) {
       showAlert('Team Leader Information Incomplete', 'Please fill in all details for the Team Leader.');
       return;
     }
@@ -363,12 +364,13 @@ export const RegistrationPage: React.FC = () => {
                 {/* Enrollment Number */}
                 <div>
                   <label className="block text-xs font-bold text-slate-700 mb-1">
-                    Enrollment Number <span className="text-red-600">*</span>
+                    Enrollment Number {leader.semester !== '1' && <span className="text-red-600">*</span>}
+                    {leader.semester === '1' && <span className="text-slate-400 text-[10px] ml-1">(Optional for Sem 1)</span>}
                   </label>
                   <input
                     type="text"
-                    required
-                    placeholder="e.g. 24BEIT54026"
+                    required={leader.semester !== '1'}
+                    placeholder={leader.semester === '1' ? 'Not required for Sem 1' : 'e.g. 24BEIT54026'}
                     value={leader.enrollmentNo}
                     onChange={(e) => setLeader({ ...leader, enrollmentNo: e.target.value })}
                     className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-[#1B3F8B] outline-none font-mono"
@@ -581,12 +583,13 @@ export const RegistrationPage: React.FC = () => {
                       {/* Enrollment No */}
                       <div className="md:col-span-4">
                         <label className="block text-[11px] font-bold text-slate-700 mb-1">
-                          Enrollment No <span className="text-red-600">*</span>
+                          Enrollment No {member.semester !== '1' && <span className="text-red-600">*</span>}
+                          {member.semester === '1' && <span className="text-slate-400 text-[9px] ml-1">(Optional for Sem 1)</span>}
                         </label>
                         <input
                           type="text"
-                          required
-                          placeholder="e.g. 24BEIT54026"
+                          required={member.semester !== '1'}
+                          placeholder={member.semester === '1' ? 'Not required for Sem 1' : 'e.g. 24BEIT54026'}
                           value={member.enrollmentNo}
                           onChange={(e) => updateMember(idx, 'enrollmentNo', e.target.value)}
                           className="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-xs font-mono focus:ring-2 focus:ring-[#1B3F8B] outline-none font-bold bg-slate-50/50 focus:bg-white"
