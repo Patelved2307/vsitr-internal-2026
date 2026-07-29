@@ -329,9 +329,11 @@ app.post('/api/register', async (req: Request, res: Response) => {
 
     // EMAIL DISPATCH: Send confirmation email to ALL 6 TEAM MEMBERS
     const appUrl = getAppUrl(req);
-    dispatchTeamRegistrationEmails(newTeam, appUrl).catch((e) =>
-      console.error('Background email dispatch error:', e)
-    );
+    try {
+      await dispatchTeamRegistrationEmails(newTeam, appUrl);
+    } catch (e) {
+      console.error('Email dispatch error:', e);
+    }
 
     res.json({
       success: true,

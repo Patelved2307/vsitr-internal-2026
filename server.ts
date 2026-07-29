@@ -337,9 +337,11 @@ async function startServer() {
 
       // EMAIL DISPATCH: Send confirmation email to ALL 6 TEAM MEMBERS
       const appUrl = getAppUrl(req);
-      dispatchTeamRegistrationEmails(newTeam, appUrl).catch((e) =>
-        console.error('Background email dispatch error:', e)
-      );
+      try {
+        await dispatchTeamRegistrationEmails(newTeam, appUrl);
+      } catch (e) {
+        console.error('Email dispatch error:', e);
+      }
 
       res.json({
         success: true,
@@ -853,5 +855,3 @@ async function startServer() {
 }
 
 startServer();
-/ /   T r i g g e r   V e r c e l   d e p l o y  
- 
