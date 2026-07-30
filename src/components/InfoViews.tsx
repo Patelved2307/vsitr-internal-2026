@@ -1,6 +1,12 @@
 import React from 'react';
 import { useAuth } from '../context/AuthContext';
 import { HelpCircle, Users, Mail, Phone } from 'lucide-react';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion';
 
 export const FAQView: React.FC = () => {
   const { faqs } = useAuth();
@@ -13,101 +19,173 @@ export const FAQView: React.FC = () => {
         <h1 className="text-3xl font-black text-slate-900">Frequently Asked Questions</h1>
         <p className="text-slate-500 mt-2">Find answers to common queries regarding Internal SIH 2026 registration.</p>
       </div>
-      <div className="space-y-4">
-        {faqs.map((faq, i) => (
-          <div key={faq.id} className="p-6 bg-white rounded-2xl border border-slate-200 shadow-sm">
-            <h3 className="text-sm font-bold text-slate-800 flex gap-3">
-              <span className="text-[#C1272D]">Q{i + 1}.</span>
-              {faq.question}
-            </h3>
-            <div className="mt-3 pl-7 text-xs text-slate-600 leading-relaxed whitespace-pre-wrap">
-              {faq.answer}
-            </div>
-          </div>
-        ))}
+
+      <div className="w-full max-w-3xl mx-auto">
+        <Accordion type="single" defaultValue={faqs[0]?.id} collapsible className="w-full">
+          {faqs.map((faq, i) => (
+            <AccordionItem value={faq.id} key={faq.id} className="border-b border-slate-200 last:border-b">
+              <AccordionTrigger className="text-left pl-4 md:pl-8 overflow-hidden text-slate-400/80 duration-200 hover:text-slate-700 hover:no-underline cursor-pointer -space-y-6 data-[state=open]:space-y-0 data-[state=open]:text-[#1B3F8B] [&>svg]:hidden w-full py-6">
+                <div className="flex flex-1 items-start gap-4">
+                  <p className="text-xs font-semibold pt-1">{String(i + 1).padStart(2, '0')}</p>
+                  <h3 className="uppercase text-lg sm:text-xl md:text-2xl font-black tracking-tight leading-tight select-none">
+                    {faq.question}
+                  </h3>
+                </div>
+              </AccordionTrigger>
+
+              <AccordionContent className="text-slate-600 pb-6 pl-4 md:pl-14 text-sm leading-relaxed whitespace-pre-wrap">
+                {faq.answer}
+              </AccordionContent>
+            </AccordionItem>
+          ))}
+        </Accordion>
       </div>
     </div>
   );
 };
 
 export const SupportView: React.FC = () => {
-  const { clubCoordinators } = useAuth();
-  const [expandedClub, setExpandedClub] = React.useState<string | null>(null);
+  const { clubCoordinators, settings } = useAuth();
+  const [activeIndex, setActiveIndex] = React.useState<number>(0);
 
-  const toggleClub = (clubName: string) => {
-    if (expandedClub === clubName) setExpandedClub(null);
-    else setExpandedClub(clubName);
+  const getClubImageUrl = (clubName: string) => {
+    const images: Record<string, string> = {
+      'Research Club': 'https://images.unsplash.com/photo-1544377193-33dcf4d68fb5?q=80&w=800&auto=format&fit=crop',
+      'Coding Club': 'https://images.unsplash.com/photo-1628258334105-2a0b3d6efee1?q=80&w=800&auto=format&fit=crop',
+      'Soft Skills Club': 'https://images.unsplash.com/photo-1554415707-6e8cfc93fe23?q=80&w=800&auto=format&fit=crop',
+      'Design Club': 'https://images.unsplash.com/photo-1586717791821-3f44a563fa4c?q=80&w=800&auto=format&fit=crop'
+    };
+    return images[clubName] || 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=800&auto=format&fit=crop';
   };
 
   return (
-    <div className="max-w-3xl mx-auto py-10 px-4 animate-in fade-in duration-300">
-      <div className="text-center mb-10">
-        <div className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-50 text-amber-600 mb-4">
-          <Users className="h-6 w-6" />
-        </div>
-        <h1 className="text-3xl font-black text-slate-900">Support & Club Coordinators</h1>
-        <p className="text-slate-500 mt-2">Contact your respective club coordinators for any technical or registration assistance.</p>
-      </div>
-      <div className="space-y-4">
-        {clubCoordinators.map((club, idx) => (
-          <div key={idx} className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden transition-all duration-300">
-            <button
-              onClick={() => toggleClub(club.clubName)}
-              className="w-full flex items-center justify-between p-5 text-left focus:outline-none hover:bg-slate-50"
-            >
-              <div className="flex items-center gap-4">
-                <div className="h-10 w-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold text-lg">
-                  {club.clubName.charAt(0)}
-                </div>
-                <h3 className="text-lg font-black text-slate-900">{club.clubName}</h3>
-              </div>
-              <span className={`transform transition-transform duration-300 ${expandedClub === club.clubName ? 'rotate-180' : ''}`}>
-                ▼
-              </span>
-            </button>
-            
-            {expandedClub === club.clubName && (
-              <div className="p-6 border-t border-slate-100 bg-slate-50/50">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  
-                  {/* Faculty Coordinators */}
-                  <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs">
-                    <h4 className="text-xs font-bold text-[#C1272D] uppercase tracking-wider mb-3 flex items-center gap-2">
-                      Faculty Coordinators
-                    </h4>
-                    <ul className="space-y-2">
-                      {club.facultyCoordinators.map((faculty, fIdx) => (
-                        <li key={fIdx} className="flex items-center gap-2 text-sm font-semibold text-slate-700">
-                          <div className="h-1.5 w-1.5 rounded-full bg-slate-400" />
-                          {faculty}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  {/* Student Coordinators */}
-                  <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs">
-                    <h4 className="text-xs font-bold text-[#1B3F8B] uppercase tracking-wider mb-3 flex items-center gap-2">
-                      Student Coordinators
-                    </h4>
-                    <ul className="space-y-3">
-                      {club.studentCoordinators.map((student, sIdx) => (
-                        <li key={sIdx} className="flex justify-between items-center text-sm border-b border-slate-50 pb-2 last:border-0 last:pb-0">
-                          <span className="font-bold text-slate-800">{student.name}</span>
-                          <span className="text-[10px] font-bold px-2 py-1 bg-slate-100 text-slate-500 rounded-lg whitespace-nowrap">
-                            {student.sem}
-                          </span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-
-                </div>
+    <div className="bg-[#F7F8FB] font-sans">
+      <section className="container mx-auto px-4 py-12 md:py-20 animate-in fade-in duration-300">
+        <div className="flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-8">
+          
+          {/* Left Side: Header & Text Content */}
+          <div className="w-full lg:w-5/12 text-center lg:text-left">
+            <div className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-50 text-amber-600 mb-6 mx-auto lg:mx-0 shadow-2xs">
+              <Users className="h-6 w-6" />
+            </div>
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-slate-900 leading-tight tracking-tight uppercase">
+              Support &amp; Club Coordinators
+            </h1>
+            <p className="mt-6 text-base md:text-lg text-slate-500 max-w-xl mx-auto lg:mx-0 leading-relaxed">
+              Have questions or need technical assistance with your registration? Contact your respective club coordinators. Hover over the cards on the right to reveal coordinator contact details.
+            </p>
+            {settings.whatsappGroupLink && (
+              <div className="mt-8">
+                <a
+                  href={settings.whatsappGroupLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2.5 bg-gradient-to-r from-[#C1272D] via-[#8B235E] to-[#1B3F8B] text-white font-extrabold px-8 py-4 rounded-xl shadow-md hover:shadow-lg hover:opacity-95 transition-all duration-300 text-sm tracking-wide uppercase"
+                >
+                  <Phone className="h-4 w-4" />
+                  Join WhatsApp Support Group
+                </a>
               </div>
             )}
           </div>
-        ))}
-      </div>
+
+          {/* Right Side: Visual Hover Accordion */}
+          <div className="w-full lg:w-7/12">
+            <div className="flex flex-row items-center justify-center gap-3 sm:gap-4 overflow-x-auto p-4 select-none scrollbar-none">
+              {clubCoordinators.map((club, idx) => {
+                const isActive = idx === activeIndex;
+                const imageUrl = getClubImageUrl(club.clubName);
+                
+                return (
+                  <div
+                    key={idx}
+                    className={`
+                      relative h-[480px] rounded-3xl overflow-hidden cursor-pointer
+                      transition-all duration-500 ease-out border border-white/10 shadow-md
+                      ${isActive ? 'w-[280px] sm:w-[350px] md:w-[380px] flex-grow' : 'w-[55px] sm:w-[60px] md:w-[70px] shrink-0'}
+                    `}
+                    onMouseEnter={() => setActiveIndex(idx)}
+                  >
+                    {/* Background Image */}
+                    <img
+                      src={imageUrl}
+                      alt={club.clubName}
+                      className="absolute inset-0 w-full h-full object-cover"
+                      onError={(e) => { 
+                        (e.target as HTMLImageElement).onerror = null; 
+                        (e.target as HTMLImageElement).src = 'https://placehold.co/400x480/1b3f8b/ffffff?text=' + encodeURIComponent(club.clubName); 
+                      }}
+                    />
+                    
+                    {/* Dark gradient overlay */}
+                    <div className={`absolute inset-0 bg-gradient-to-t from-black via-black/70 to-black/35 transition-opacity duration-300 ${isActive ? 'opacity-90' : 'opacity-70'}`} />
+
+                    {/* Vertical rotated text (when inactive) or Top banner (when active) */}
+                    <span
+                      className={`
+                        absolute text-white font-black tracking-wider whitespace-nowrap uppercase select-none transition-all duration-300 ease-in-out
+                        ${
+                          isActive
+                            ? 'top-6 left-6 text-xl sm:text-2xl border-l-3 border-[#C1272D] pl-3'
+                            : 'bottom-20 left-1/2 -translate-x-1/2 rotate-270 origin-center text-sm md:text-base opacity-75 hover:opacity-100'
+                        }
+                      `}
+                    >
+                      {club.clubName}
+                    </span>
+
+                    {/* Coordinator listings (fade in when active) */}
+                    {isActive && (
+                      <div className="absolute inset-0 p-6 pt-20 flex flex-col justify-between text-white animate-in fade-in duration-500 delay-75">
+                        <div className="mt-4 space-y-5">
+                          {/* Faculty section */}
+                          <div className="space-y-2">
+                            <h4 className="text-[10px] font-black uppercase tracking-widest text-[#C1272D] flex items-center gap-1.5">
+                              <span className="w-1.5 h-1.5 rounded-full bg-[#C1272D]" />
+                              Faculty Coordinators
+                            </h4>
+                            <ul className="space-y-1.5 pl-3 border-l border-white/10">
+                              {club.facultyCoordinators.map((faculty, fIdx) => (
+                                <li key={fIdx} className="text-xs sm:text-sm font-semibold text-slate-200">
+                                  {faculty}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+
+                          {/* Student section */}
+                          <div className="space-y-2">
+                            <h4 className="text-[10px] font-black uppercase tracking-widest text-sky-400 flex items-center gap-1.5">
+                              <span className="w-1.5 h-1.5 rounded-full bg-sky-400" />
+                              Student Coordinators
+                            </h4>
+                            <ul className="space-y-2 pl-3 border-l border-white/10">
+                              {club.studentCoordinators.map((student, sIdx) => (
+                                <li key={sIdx} className="text-xs sm:text-sm font-semibold text-slate-200 flex items-center justify-between gap-3 border-b border-white/5 pb-1.5 last:border-0 last:pb-0">
+                                  <span className="truncate">{student.name}</span>
+                                  <span className="text-[9px] bg-white/10 px-2 py-0.5 rounded-sm text-slate-300 font-bold shrink-0">
+                                    {student.sem}
+                                  </span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        </div>
+
+                        {/* Branding Watermark */}
+                        <div className="text-[8px] font-black text-white/35 uppercase tracking-widest text-right">
+                          VSITR • INTERNAL SIH 2026
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+        </div>
+      </section>
     </div>
   );
 };

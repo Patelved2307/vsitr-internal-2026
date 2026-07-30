@@ -34,3 +34,7 @@ Thumbs.db
 # TypeScript compiled output (keep source only)
 *.js.map
 *.d.ts.map
+
+# Local Backups
+backup/
+
