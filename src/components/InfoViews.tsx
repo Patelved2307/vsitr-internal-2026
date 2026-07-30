@@ -91,7 +91,7 @@ export const SupportView: React.FC = () => {
 
           {/* Right Side: Visual Hover Accordion */}
           <div className="w-full lg:w-7/12">
-            <div className="flex flex-row items-center justify-center gap-3 sm:gap-4 overflow-x-auto p-4 select-none scrollbar-none">
+            <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-center gap-3 lg:gap-4 w-full p-2 lg:p-4 select-none">
               {clubCoordinators.map((club, idx) => {
                 const isActive = idx === activeIndex;
                 const imageUrl = getClubImageUrl(club.clubName);
@@ -100,11 +100,19 @@ export const SupportView: React.FC = () => {
                   <div
                     key={idx}
                     className={`
-                      relative h-[480px] rounded-3xl overflow-hidden cursor-pointer
+                      relative rounded-3xl overflow-hidden cursor-pointer
                       transition-all duration-500 ease-out border border-white/10 shadow-md
-                      ${isActive ? 'w-[280px] sm:w-[350px] md:w-[380px] flex-grow' : 'w-[55px] sm:w-[60px] md:w-[70px] shrink-0'}
+                      
+                      /* Mobile: vertical stack - active is tall, inactive is short */
+                      w-full
+                      ${isActive ? 'h-[320px]' : 'h-[65px]'}
+                      
+                      /* Desktop: horizontal row - active is wide, inactive is narrow */
+                      lg:h-[480px]
+                      ${isActive ? 'lg:w-[380px] lg:h-[480px] lg:flex-grow' : 'lg:w-[70px] lg:h-[480px] lg:shrink-0'}
                     `}
                     onMouseEnter={() => setActiveIndex(idx)}
+                    onClick={() => setActiveIndex(idx)}
                   >
                     {/* Background Image */}
                     <img
@@ -124,10 +132,19 @@ export const SupportView: React.FC = () => {
                     <span
                       className={`
                         absolute text-white font-black tracking-wider whitespace-nowrap uppercase select-none transition-all duration-300 ease-in-out
+                        
+                        /* Mobile active vs inactive */
                         ${
                           isActive
-                            ? 'top-6 left-6 text-xl sm:text-2xl border-l-3 border-[#C1272D] pl-3'
-                            : 'bottom-20 left-1/2 -translate-x-1/2 rotate-270 origin-center text-sm md:text-base opacity-75 hover:opacity-100'
+                            ? 'top-6 left-6 text-lg border-l-3 border-[#C1272D] pl-3'
+                            : 'top-1/2 left-6 -translate-y-1/2 text-sm opacity-80'
+                        }
+                        
+                        /* Desktop override */
+                        ${
+                          isActive
+                            ? 'lg:top-6 lg:left-6 lg:translate-y-0 lg:text-xl lg:border-l-3 lg:border-[#C1272D] lg:pl-3'
+                            : 'lg:bottom-20 lg:left-1/2 lg:-translate-x-1/2 lg:translate-y-0 lg:rotate-270 lg:origin-center lg:text-sm md:lg:text-base lg:opacity-75 lg:hover:opacity-100'
                         }
                       `}
                     >
@@ -136,8 +153,8 @@ export const SupportView: React.FC = () => {
 
                     {/* Coordinator listings (fade in when active) */}
                     {isActive && (
-                      <div className="absolute inset-0 p-6 pt-20 flex flex-col justify-between text-white animate-in fade-in duration-500 delay-75">
-                        <div className="mt-4 space-y-5">
+                      <div className="absolute inset-0 p-6 pt-14 sm:pt-16 lg:pt-20 flex flex-col justify-between text-white animate-in fade-in duration-500 delay-75">
+                        <div className="mt-4 space-y-4 lg:space-y-5">
                           {/* Faculty section */}
                           <div className="space-y-2">
                             <h4 className="text-[10px] font-black uppercase tracking-widest text-[#C1272D] flex items-center gap-1.5">
