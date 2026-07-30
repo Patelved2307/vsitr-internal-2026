@@ -91,7 +91,7 @@ export const SupportView: React.FC = () => {
 
           {/* Right Side: Visual Hover Accordion */}
           <div className="w-full lg:w-7/12">
-            <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-center gap-3 lg:gap-4 w-full p-2 lg:p-4 select-none">
+            <div className="flex flex-row items-stretch justify-center gap-2 sm:gap-4 w-full p-1 sm:p-4 select-none">
               {clubCoordinators.map((club, idx) => {
                 const isActive = idx === activeIndex;
                 const imageUrl = getClubImageUrl(club.clubName);
@@ -100,16 +100,11 @@ export const SupportView: React.FC = () => {
                   <div
                     key={idx}
                     className={`
-                      relative rounded-3xl overflow-hidden cursor-pointer
-                      transition-all duration-500 ease-out border border-white/10 shadow-md
+                      relative h-[420px] sm:h-[450px] lg:h-[480px] rounded-3xl overflow-hidden cursor-pointer
+                      transition-all duration-500 ease-out border border-white/10 shadow-md min-w-0
                       
-                      /* Mobile: vertical stack - active is tall, inactive is short */
-                      w-full
-                      ${isActive ? 'h-[320px]' : 'h-[65px]'}
-                      
-                      /* Desktop: horizontal row - active is wide, inactive is narrow */
-                      lg:h-[480px]
-                      ${isActive ? 'lg:w-[380px] lg:h-[480px] lg:flex-grow' : 'lg:w-[70px] lg:h-[480px] lg:shrink-0'}
+                      /* Fluid proportional flex sizing to prevent overflow on any screen */
+                      ${isActive ? 'flex-[4] sm:flex-[5] lg:flex-[6]' : 'flex-[1]'}
                     `}
                     onMouseEnter={() => setActiveIndex(idx)}
                     onClick={() => setActiveIndex(idx)}
@@ -126,25 +121,16 @@ export const SupportView: React.FC = () => {
                     />
                     
                     {/* Dark gradient overlay */}
-                    <div className={`absolute inset-0 bg-gradient-to-t from-black via-black/70 to-black/35 transition-opacity duration-300 ${isActive ? 'opacity-90' : 'opacity-70'}`} />
+                    <div className={`absolute inset-0 bg-gradient-to-t from-black via-black/75 to-black/35 transition-opacity duration-300 ${isActive ? 'opacity-90' : 'opacity-70'}`} />
 
                     {/* Vertical rotated text (when inactive) or Top banner (when active) */}
                     <span
                       className={`
                         absolute text-white font-black tracking-wider whitespace-nowrap uppercase select-none transition-all duration-300 ease-in-out
-                        
-                        /* Mobile active vs inactive */
                         ${
                           isActive
-                            ? 'top-6 left-6 text-lg border-l-3 border-[#C1272D] pl-3'
-                            : 'top-1/2 left-6 -translate-y-1/2 text-sm opacity-80'
-                        }
-                        
-                        /* Desktop override */
-                        ${
-                          isActive
-                            ? 'lg:top-6 lg:left-6 lg:translate-y-0 lg:text-xl lg:border-l-3 lg:border-[#C1272D] lg:pl-3'
-                            : 'lg:bottom-20 lg:left-1/2 lg:-translate-x-1/2 lg:translate-y-0 lg:rotate-270 lg:origin-center lg:text-sm md:lg:text-base lg:opacity-75 lg:hover:opacity-100'
+                            ? 'top-4 sm:top-6 left-4 sm:left-6 text-sm sm:text-lg lg:text-xl border-l-3 border-[#C1272D] pl-2 sm:pl-3'
+                            : 'bottom-20 left-1/2 -translate-x-1/2 rotate-270 origin-center text-[10px] sm:text-xs md:text-sm lg:text-base opacity-75 hover:opacity-100'
                         }
                       `}
                     >
@@ -153,17 +139,17 @@ export const SupportView: React.FC = () => {
 
                     {/* Coordinator listings (fade in when active) */}
                     {isActive && (
-                      <div className="absolute inset-0 p-6 pt-14 sm:pt-16 lg:pt-20 flex flex-col justify-between text-white animate-in fade-in duration-500 delay-75">
+                      <div className="absolute inset-0 p-4 sm:p-6 pt-12 sm:pt-16 lg:pt-20 flex flex-col justify-between text-white animate-in fade-in duration-500 delay-75">
                         <div className="mt-4 space-y-4 lg:space-y-5">
                           {/* Faculty section */}
-                          <div className="space-y-2">
-                            <h4 className="text-[10px] font-black uppercase tracking-widest text-[#C1272D] flex items-center gap-1.5">
-                              <span className="w-1.5 h-1.5 rounded-full bg-[#C1272D]" />
-                              Faculty Coordinators
+                          <div className="space-y-1.5">
+                            <h4 className="text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-[#C1272D] flex items-center gap-1">
+                              <span className="w-1 h-1 rounded-full bg-[#C1272D]" />
+                              Faculty
                             </h4>
-                            <ul className="space-y-1.5 pl-3 border-l border-white/10">
+                            <ul className="space-y-1 pl-2 border-l border-white/10">
                               {club.facultyCoordinators.map((faculty, fIdx) => (
-                                <li key={fIdx} className="text-xs sm:text-sm font-semibold text-slate-200">
+                                <li key={fIdx} className="text-[11px] sm:text-xs lg:text-sm font-bold text-slate-250 truncate">
                                   {faculty}
                                 </li>
                               ))}
@@ -171,18 +157,20 @@ export const SupportView: React.FC = () => {
                           </div>
 
                           {/* Student section */}
-                          <div className="space-y-2">
-                            <h4 className="text-[10px] font-black uppercase tracking-widest text-sky-400 flex items-center gap-1.5">
-                              <span className="w-1.5 h-1.5 rounded-full bg-sky-400" />
-                              Student Coordinators
+                          <div className="space-y-1.5">
+                            <h4 className="text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-sky-400 flex items-center gap-1">
+                              <span className="w-1 h-1 rounded-full bg-sky-400" />
+                              Students
                             </h4>
-                            <ul className="space-y-2 pl-3 border-l border-white/10">
+                            <ul className="space-y-1.5 pl-2 border-l border-white/10">
                               {club.studentCoordinators.map((student, sIdx) => (
-                                <li key={sIdx} className="text-xs sm:text-sm font-semibold text-slate-200 flex items-center justify-between gap-3 border-b border-white/5 pb-1.5 last:border-0 last:pb-0">
-                                  <span className="truncate">{student.name}</span>
-                                  <span className="text-[9px] bg-white/10 px-2 py-0.5 rounded-sm text-slate-300 font-bold shrink-0">
-                                    {student.sem}
-                                  </span>
+                                <li key={sIdx} className="text-[11px] sm:text-xs lg:text-sm font-semibold text-slate-200 border-b border-white/5 pb-1 last:border-0 last:pb-0">
+                                  <div className="flex items-center justify-between gap-1">
+                                    <span className="truncate">{student.name}</span>
+                                    <span className="text-[8px] bg-white/10 px-1.5 py-0.5 rounded-sm text-slate-300 font-bold shrink-0">
+                                      {student.sem.replace('th Sem', '')}
+                                    </span>
+                                  </div>
                                 </li>
                               ))}
                             </ul>
@@ -190,8 +178,8 @@ export const SupportView: React.FC = () => {
                         </div>
 
                         {/* Branding Watermark */}
-                        <div className="text-[8px] font-black text-white/35 uppercase tracking-widest text-right">
-                          VSITR • INTERNAL SIH 2026
+                        <div className="text-[7px] sm:text-[8px] font-black text-white/35 uppercase tracking-widest text-right">
+                          VSITR • 2026
                         </div>
                       </div>
                     )}
