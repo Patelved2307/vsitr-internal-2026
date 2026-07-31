@@ -13,6 +13,7 @@ import { TeamPortalPage } from './pages/TeamPortalPage';
 import { MentorSubmissionPage } from './pages/MentorSubmissionPage';
 import { AdminPage } from './pages/AdminPage';
 import { PptSubmissionPage } from './pages/PptSubmissionPage';
+import { TimelineSection } from './components/TimelineSection';
 
 const MainLayout: React.FC = () => {
   const { activeTab, settings } = useAuth();
@@ -60,6 +61,8 @@ const MainLayout: React.FC = () => {
         {activeTab === 'ppt-submit' && <PptSubmissionPage />}
 
         {activeTab === 'admin' && <AdminPage />}
+
+        {activeTab === 'timeline' && <TimelineSection />}
       </main>
 
       {/* Footer */}

@@ -1,16 +1,17 @@
 import React from 'react';
 import { useAuth } from '../context/AuthContext';
 import { Mail, MapPin, ExternalLink, ShieldCheck } from 'lucide-react';
+import { FooterBackgroundGradient, TextHoverEffect } from './ui/hover-footer';
 
 export const Footer: React.FC = () => {
-  const { setActiveTab, isTeamLoggedIn, settings } = useAuth();
+  const { setActiveTab, isTeamLoggedIn } = useAuth();
 
   return (
     <footer className="w-full bg-slate-900 text-slate-300 pt-12 pb-8 relative overflow-hidden border-t border-slate-800">
       {/* Top Gradient Border Line */}
-      <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#C1272D] via-amber-500 to-[#1B3F8B]" />
+      <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#C1272D] via-amber-500 to-[#1B3F8B] z-10" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-10 relative">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 pb-10 border-b border-slate-800/80">
 
           {/* Col 1: Brand & Logos */}
@@ -151,13 +152,20 @@ export const Footer: React.FC = () => {
           <p>© 2026 Internal SIH Hackathon — Vidush Somany Institute of Technology &amp; Research (KSV)</p>
           <button
             onClick={() => setActiveTab('admin')}
-            className="inline-flex items-center gap-1.5 text-slate-400 hover:text-white font-bold transition"
+            className="inline-flex items-center gap-1.5 text-slate-400 hover:text-white font-bold transition z-20"
           >
             <ShieldCheck className="h-3.5 w-3.5 text-red-400" />
             Admin Portal Access
           </button>
         </div>
       </div>
+
+      {/* Text hover effect */}
+      <div className="flex h-[8rem] sm:h-[14rem] lg:h-[22rem] -mt-8 sm:-mt-16 lg:-mt-24 -mb-8 sm:-mb-16 lg:-mb-24 relative z-10">
+        <TextHoverEffect text="VSITR" className="z-20" />
+      </div>
+
+      <FooterBackgroundGradient />
     </footer>
   );
 };

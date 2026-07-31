@@ -88,6 +88,19 @@ export const Navbar: React.FC = () => {
             </button>
 
             <button
+              onClick={() => setActiveTab('timeline')}
+              className={`relative py-1 text-sm font-semibold transition ${activeTab === 'timeline'
+                  ? 'text-[#1B3F8B]'
+                  : 'text-slate-600 hover:text-slate-900'
+                }`}
+            >
+              Event Timeline
+              {activeTab === 'timeline' && (
+                <span className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-[#C1272D] to-[#1B3F8B] rounded-full" />
+              )}
+            </button>
+
+            <button
               onClick={() => setActiveTab('admin')}
               className={`relative py-1 text-sm font-semibold transition flex items-center gap-1.5 ${activeTab === 'admin'
                   ? 'text-[#1B3F8B]'
@@ -173,6 +186,16 @@ export const Navbar: React.FC = () => {
                 }`}
             >
               Register &amp; Rules
+            </button>
+            <button
+              onClick={() => {
+                setActiveTab('timeline');
+                setMobileMenuOpen(false);
+              }}
+              className={`text-left px-3 py-2 rounded-lg font-medium text-sm ${activeTab === 'timeline' ? 'bg-blue-50 text-[#1B3F8B] font-bold' : 'text-slate-700'
+                }`}
+            >
+              Event Timeline
             </button>
             <button
               onClick={() => {
