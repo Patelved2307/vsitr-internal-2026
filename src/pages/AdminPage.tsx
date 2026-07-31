@@ -918,16 +918,16 @@ export const AdminPage: React.FC = () => {
 
                 {/* Teams List Table (Styled like Bringova Order History table in reference) */}
                 <div className="bg-white rounded-3xl border border-slate-200/80 shadow-xs overflow-hidden">
-                  <div className="overflow-x-auto">
-                    <table className="w-full text-left text-xs">
-                      <thead>
-                        <tr className="bg-slate-50/70 text-slate-400 font-extrabold uppercase text-[10px] tracking-wider border-b border-slate-100">
-                          <th className="py-3.5 px-4">Team ID</th>
-                          <th className="py-3.5 px-4">Team Name</th>
-                          <th className="py-3.5 px-4">Leader &amp; Contact</th>
-                          <th className="py-3.5 px-4">Dept</th>
-                          <th className="py-3.5 px-4">Status</th>
-                          <th className="py-3.5 px-4 text-right">Action</th>
+                  <div className="overflow-auto max-h-[550px]">
+                    <table className="w-full text-left text-xs border-collapse">
+                      <thead className="sticky top-0 bg-slate-50 z-10 border-b border-slate-200">
+                        <tr className="text-slate-400 font-extrabold uppercase text-[10px] tracking-wider">
+                          <th className="py-3.5 px-4 bg-slate-50">Team ID</th>
+                          <th className="py-3.5 px-4 bg-slate-50">Team Name</th>
+                          <th className="py-3.5 px-4 bg-slate-50">Leader &amp; Contact</th>
+                          <th className="py-3.5 px-4 bg-slate-50">Dept</th>
+                          <th className="py-3.5 px-4 bg-slate-50">Status</th>
+                          <th className="py-3.5 px-4 text-right bg-slate-50">Action</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-slate-100 font-medium text-slate-800">
@@ -1493,16 +1493,16 @@ export const AdminPage: React.FC = () => {
                     <p className="text-xs mt-1">Submissions will appear here once teams submit their presentations.</p>
                   </div>
                 ) : (
-                  <div className="rounded-3xl bg-white border border-slate-200 overflow-hidden shadow-xs">
-                    <table className="w-full text-xs">
-                      <thead>
-                        <tr className="border-b border-slate-100 bg-slate-50">
-                          <th className="py-3 px-4 text-left font-extrabold text-slate-500 uppercase tracking-wider">Team ID</th>
-                          <th className="py-3 px-4 text-left font-extrabold text-slate-500 uppercase tracking-wider">Team Name</th>
-                          <th className="py-3 px-4 text-left font-extrabold text-slate-500 uppercase tracking-wider">Leader</th>
-                          <th className="py-3 px-4 text-left font-extrabold text-slate-500 uppercase tracking-wider">PPT Link</th>
-                          <th className="py-3 px-4 text-left font-extrabold text-slate-500 uppercase tracking-wider">Submitted</th>
-                          <th className="py-3 px-4 text-left font-extrabold text-slate-500 uppercase tracking-wider">Action</th>
+                  <div className="rounded-3xl bg-white border border-slate-200 overflow-auto max-h-[500px] shadow-xs">
+                    <table className="w-full text-xs border-collapse">
+                      <thead className="sticky top-0 bg-slate-50 z-10 border-b border-slate-100">
+                        <tr className="text-left font-extrabold text-slate-500 uppercase tracking-wider">
+                          <th className="py-3 px-4 bg-slate-50">Team ID</th>
+                          <th className="py-3 px-4 bg-slate-50">Team Name</th>
+                          <th className="py-3 px-4 bg-slate-50">Leader</th>
+                          <th className="py-3 px-4 bg-slate-50">PPT Link</th>
+                          <th className="py-3 px-4 bg-slate-50">Submitted</th>
+                          <th className="py-3 px-4 bg-slate-50 text-right">Action</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-slate-50">
@@ -1698,17 +1698,17 @@ export const AdminPage: React.FC = () => {
                       No emails logged yet. Register a team or click "Send Registration Deadline Edit Reminder" above to test automated email dispatching.
                     </div>
                   ) : (
-                    <div className="overflow-x-auto">
+                    <div className="overflow-auto max-h-[500px] border border-slate-200/60 rounded-2xl shadow-xs">
                       <table className="w-full text-left text-xs border-collapse">
-                        <thead>
-                          <tr className="border-b border-slate-200 text-slate-500 font-bold uppercase tracking-wider text-[10px] bg-slate-50">
-                            <th className="py-3 px-4 rounded-l-xl">Recipient</th>
-                            <th className="py-3 px-4">Team ID</th>
-                            <th className="py-3 px-4">Type</th>
-                            <th className="py-3 px-4">Subject</th>
-                            <th className="py-3 px-4">Status</th>
-                            <th className="py-3 px-4">Timestamp</th>
-                            <th className="py-3 px-4 text-right rounded-r-xl">Action</th>
+                        <thead className="sticky top-0 bg-slate-50 z-10 border-b border-slate-200">
+                          <tr className="text-slate-500 font-bold uppercase tracking-wider text-[10px]">
+                            <th className="py-3.5 px-4 bg-slate-50">Recipient</th>
+                            <th className="py-3.5 px-4 bg-slate-50">Team ID</th>
+                            <th className="py-3.5 px-4 bg-slate-50">Type</th>
+                            <th className="py-3.5 px-4 bg-slate-50">Subject</th>
+                            <th className="py-3.5 px-4 bg-slate-50">Status</th>
+                            <th className="py-3.5 px-4 bg-slate-50">Timestamp</th>
+                            <th className="py-3.5 px-4 text-right bg-slate-50">Action</th>
                           </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-100 font-medium text-slate-700">
@@ -1732,7 +1732,7 @@ export const AdminPage: React.FC = () => {
                                   {log.type === 'registration_confirmation' ? 'Member Confirmation' : 'Deadline Edit Reminder'}
                                 </span>
                               </td>
-                              <td className="py-3.5 px-4 text-slate-800 font-semibold max-w-xs truncate" title={log.subject}>
+                              <td className="py-3.5 px-4 text-slate-800 font-semibold max-w-[180px] truncate" title={log.subject}>
                                 {log.subject}
                               </td>
                               <td className="py-3.5 px-4">
