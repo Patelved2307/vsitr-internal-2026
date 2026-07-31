@@ -125,8 +125,8 @@ export const Footer: React.FC = () => {
               </p>
               <p className="flex items-center gap-2">
                 <Mail className="h-4 w-4 text-blue-400 shrink-0" />
-                <a href="mailto:internalsih2026@googlegroups.com" className="hover:text-blue-400 hover:underline transition">
-                  internalsih2026@googlegroups.com
+                <a href="mailto:sihinternal.vsitr@gmail.com" className="hover:text-blue-400 hover:underline transition">
+                  sihinternal.vsitr@gmail.com
                 </a>
               </p>
             </div>

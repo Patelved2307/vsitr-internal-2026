@@ -281,7 +281,7 @@ export async function dispatchTeamRegistrationEmails(team: Team, appUrl: string 
             <p style="font-size: 13px; color: #475569; margin: 0; line-height: 1.6;">
               For any queries related to registration, team details, mentor submission, or technical support, please contact to Clubs Faculty coordinator or Student Coordinators or you can mail in our Official Support Email:
               <br/>
-              <strong>Email:</strong> <a href="mailto:internalsih2026@googlegroups.com" style="color: #1B3F8B; text-decoration: none; font-weight: 600;">internalsih2026@googlegroups.com</a>
+              <strong>Email:</strong> <a href="mailto:sihinternal.vsitr@gmail.com" style="color: #1B3F8B; text-decoration: none; font-weight: 600;">sihinternal.vsitr@gmail.com</a>
             </p>
           </div>
 
@@ -358,7 +358,7 @@ Kindly share the above link with all your team members.
 
 📞 Need Assistance?
 
-For any queries related to registration, team details, mentor submission, or technical support, please contact to Clubs Faculty coordinator or Student Coordinators or you can mail in our Official Support Email: internalsih2026@googlegroups.com
+For any queries related to registration, team details, mentor submission, or technical support, please contact to Clubs Faculty coordinator or Student Coordinators or you can mail in our Official Support Email: sihinternal.vsitr@gmail.com
 
 Thank you for registering for Internal Smart India Hackathon (SIH) 2026.
 
