@@ -1744,7 +1744,7 @@ export const AdminPage: React.FC = () => {
                                     : 'bg-red-100 text-red-800'
                                 }`}>
                                   <CheckCircle2 className="h-3 w-3" />
-                                  {log.status === 'simulated' ? 'Logged / Sent' : log.status}
+                                  {log.status === 'simulated' ? 'Simulated (No SMTP)' : log.status}
                                 </span>
                               </td>
                               <td className="py-3.5 px-4 text-[11px] text-slate-500">
