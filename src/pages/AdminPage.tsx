@@ -584,13 +584,10 @@ export const AdminPage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#F4F6F9] py-6 px-4 lg:px-8">
+    <div className="min-h-screen bg-[#FAFAFC] flex flex-col md:flex-row">
       
-      {/* MAIN CONTAINER (MIRRORING THE BRINGOVA DEDICATED ADMIN DASHBOARD IMAGE LAYOUT) */}
-      <div className="max-w-7xl mx-auto rounded-3xl bg-white shadow-xl border border-slate-200 overflow-hidden flex flex-col md:flex-row min-h-[820px]">
-        
-        {/* LEFT SIDEBAR NAVIGATION (Matching image layout) */}
-        <div className="w-full md:w-64 bg-white border-r border-slate-100 p-5 flex flex-col justify-between shrink-0">
+      {/* LEFT SIDEBAR NAVIGATION (Matching image layout) */}
+      <div className="w-full md:w-64 bg-white border-r border-slate-200 p-5 flex flex-col justify-between shrink-0">
           <div className="space-y-6">
             
             {/* Logo / Brand Header */}
@@ -1873,8 +1870,6 @@ export const AdminPage: React.FC = () => {
           </div>
 
         </div>
-
-      </div>
 
       {/* INSPECT TEAM MODAL */}
       {selectedTeam && (
