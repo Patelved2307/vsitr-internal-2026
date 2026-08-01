@@ -174,8 +174,9 @@ async function startServer() {
 
       // Check registration deadline & switch
       const now = new Date();
-      const deadline = new Date(config.settings.registrationDeadline);
-      if (!config.settings.isRegistrationOpen || (now > deadline && !config.settings.isExtended)) {
+      const effectiveDeadline = config.settings.isExtended && config.settings.extendedDeadline ? config.settings.extendedDeadline : config.settings.registrationDeadline;
+      const deadline = new Date(effectiveDeadline);
+      if (!config.settings.isRegistrationOpen || now > deadline) {
         return res.status(400).json({
           success: false,
           message: 'Registrations are currently closed for Internal SIH 2026.',

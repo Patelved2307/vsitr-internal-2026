@@ -16,7 +16,8 @@ export const CountdownTimer: React.FC = () => {
 
   useEffect(() => {
     const calculateTimeLeft = () => {
-      const deadline = new Date(settings.registrationDeadline).getTime();
+      const effectiveDeadline = settings.isExtended && settings.extendedDeadline ? settings.extendedDeadline : settings.registrationDeadline;
+      const deadline = new Date(effectiveDeadline).getTime();
       const now = new Date().getTime();
       const difference = deadline - now;
 
@@ -36,9 +37,10 @@ export const CountdownTimer: React.FC = () => {
     calculateTimeLeft();
     const interval = setInterval(calculateTimeLeft, 1000);
     return () => clearInterval(interval);
-  }, [settings.registrationDeadline, settings.isRegistrationOpen]);
+  }, [settings.registrationDeadline, settings.extendedDeadline, settings.isExtended, settings.isRegistrationOpen]);
 
-  const formattedDeadline = new Date(settings.registrationDeadline).toLocaleString('en-IN', {
+  const effectiveDeadline = settings.isExtended && settings.extendedDeadline ? settings.extendedDeadline : settings.registrationDeadline;
+  const formattedDeadline = new Date(effectiveDeadline).toLocaleString('en-IN', {
     dateStyle: 'full',
     timeStyle: 'short',
   });

@@ -108,7 +108,8 @@ export const RegistrationRulesView: React.FC = () => {
 
   useEffect(() => {
     const calculateTimeLeft = () => {
-      const deadlineVal = new Date(settings.registrationDeadline).getTime();
+      const effectiveDeadline = settings.isExtended && settings.extendedDeadline ? settings.extendedDeadline : settings.registrationDeadline;
+      const deadlineVal = new Date(effectiveDeadline).getTime();
       const nowVal = new Date().getTime();
       const difference = deadlineVal - nowVal;
 
@@ -129,7 +130,7 @@ export const RegistrationRulesView: React.FC = () => {
     calculateTimeLeft();
     const timer = setInterval(calculateTimeLeft, 1000);
     return () => clearInterval(timer);
-  }, [settings.registrationDeadline]);
+  }, [settings.registrationDeadline, settings.extendedDeadline, settings.isExtended]);
 
   const eligibilityRules = rules.filter(r => r.categoryId === 'official');
   const processRules = rules.filter(r => r.categoryId === 'phases');
@@ -391,8 +392,8 @@ export const RegistrationRulesView: React.FC = () => {
 
 
   const now = new Date();
-  const deadline = new Date(settings.registrationDeadline);
-  const isDeadlinePassed = !settings.isRegistrationOpen || (!settings.isExtended && now > deadline);
+  const deadline = new Date(settings.isExtended && settings.extendedDeadline ? settings.extendedDeadline : settings.registrationDeadline);
+  const isDeadlinePassed = !settings.isRegistrationOpen || now > deadline;
 
   if (activeTab === 'rules') {
     const accordionItems = [

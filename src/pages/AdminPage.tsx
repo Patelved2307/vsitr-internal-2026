@@ -105,6 +105,7 @@ export const AdminPage: React.FC = () => {
   const [editPptSubmissionDeadline, setEditPptSubmissionDeadline] = useState(settings.pptSubmissionDeadline || '');
   // Extension & custom closed message
   const [editIsExtended, setEditIsExtended] = useState(settings.isExtended ?? false);
+  const [editExtendedDeadline, setEditExtendedDeadline] = useState(settings.extendedDeadline || '');
   const [editCustomQuote, setEditCustomQuote] = useState(settings.customQuote || '');
   const [editCustomQuoteAuthor, setEditCustomQuoteAuthor] = useState(settings.customQuoteAuthor || '');
   // PPT Submissions list
@@ -221,6 +222,7 @@ export const AdminPage: React.FC = () => {
     setEditPptSubmissionStatus(settings.pptSubmissionStatus || '');
     setEditPptSubmissionDeadline(settings.pptSubmissionDeadline || '');
     setEditIsExtended(settings.isExtended ?? false);
+    setEditExtendedDeadline(settings.extendedDeadline || '');
     setEditCustomQuote(settings.customQuote || '');
     setEditCustomQuoteAuthor(settings.customQuoteAuthor || '');
     setEditTimeline(timeline);
@@ -1360,6 +1362,24 @@ export const AdminPage: React.FC = () => {
                       <option value="true">EXTENDED — Allow registrations post-deadline (Extension Active)</option>
                     </select>
                   </div>
+
+                  {editIsExtended && (
+                    <div className="animate-in fade-in duration-200">
+                      <label className="block font-bold text-slate-800 mb-1">
+                        Extended Deadline Date &amp; Time
+                      </label>
+                      <input
+                        type="datetime-local"
+                        required
+                        value={(editExtendedDeadline || '').slice(0, 16)}
+                        onChange={(e) => setEditExtendedDeadline(new Date(e.target.value).toISOString())}
+                        className="w-full px-4 py-2.5 rounded-xl border border-slate-300 font-bold focus:border-[#C1272D] outline-none"
+                      />
+                      <p className="text-[11px] text-slate-500 mt-1">
+                        The countdown timer will automatically switch to count down to this new date.
+                      </p>
+                    </div>
+                  )}
 
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div className="sm:col-span-2">

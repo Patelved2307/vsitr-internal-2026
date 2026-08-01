@@ -78,6 +78,7 @@ export interface EventSettings {
   pptSubmissionDeadline?: string;
   // Extension & custom closed message
   isExtended?: boolean;
+  extendedDeadline?: string;
   customQuote?: string;
   customQuoteAuthor?: string;
 }
