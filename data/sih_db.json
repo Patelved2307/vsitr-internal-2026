@@ -1,13 +1,19 @@
 {
   "settings": {
     "registrationDeadline": "2026-08-02T23:59:59.000Z",
-    "isRegistrationOpen": true,
+    "isRegistrationOpen": false,
     "whatsappGroupLink": "https://chat.whatsapp.com/SIH2026InternalVSITR",
     "announcementBanner": "Internal SIH 2026 Registrations are now OPEN! Deadline: 02 August 2026, 11:59 PM.",
-    "problemStatementLink": "",
-    "problemStatementStatus": "",
-    "pptTemplateLink": "",
-    "pptTemplateStatus": ""
+    "problemStatementLink": "https://www.sih.gov.in/sih2025PS",
+    "problemStatementStatus": "The problem statements will be released soon at the link below, and team leaders will receive an email notification as soon as they go live. You can access them directly through that link or by navigating to the website in your browser.",
+    "pptTemplateLink": "https://drive.google.com/drive/folders/14N_F8cFzbaVpoGANSUDBqnBTJ8OJlinB?usp=sharing",
+    "pptTemplateStatus": "Download the official SIH PPT template and prepare your presentation as per the prescribed format before submission.",
+    "isExtended": false,
+    "customQuote": "Innovation distinguishes between a leader and a follower.",
+    "customQuoteAuthor": "Steve Jobs",
+    "pptSubmissionOpen": false,
+    "pptSubmissionStatus": "PPT submission portal will open after the registration deadline. Stay tuned.",
+    "pptSubmissionDeadline": ""
   },
   "timeline": [
     {
@@ -30,13 +36,6 @@
       "title": "Internal Screening & Presentation Round",
       "active": false,
       "description": "In-person pitch deck presentation & technical evaluation before faculty panel."
-    },
-    {
-      "id": "t4",
-      "date": "TBC",
-      "title": "Final Selected Teams Announcement",
-      "active": false,
-      "description": "Official nomination of top teams representing VSITR at National SIH 2026."
     }
   ],
   "faqs": [
@@ -94,73 +93,73 @@
   "rules": [
     {
       "id": "r1",
-      "categoryId": "official",
-      "text": "Each team must consist of exactly 6 members, including the Team Leader."
+      "text": "Each team must consist of exactly 6 members, including the Team Leader.",
+      "categoryId": "official"
     },
     {
       "id": "r2",
-      "categoryId": "official",
-      "text": "Each team must include at least 1 female participant. All-girls teams are welcome and eligible."
+      "text": "Each team must include at least 1 female participant. All-girls teams are welcome and eligible.",
+      "categoryId": "official"
     },
     {
       "id": "r3",
-      "categoryId": "official",
-      "text": "All participants must be from the same college (VSITR) — inter-college teams are not permitted."
+      "text": "All participants must be from the same college (VSITR) — inter-college teams are not permitted.",
+      "categoryId": "official"
     },
     {
       "id": "r4",
-      "categoryId": "official",
-      "text": "Members may belong to different years, branches, or disciplines within the same college (IT, CSE, CE)."
+      "text": "Members may belong to different years, branches, or disciplines within the same college (IT, CSE, CE).",
+      "categoryId": "official"
     },
     {
       "id": "r5",
-      "categoryId": "official",
-      "text": "Each team must use a unique team name that does NOT include the institute's name (e.g. VSITR, Vidush Somany)."
+      "text": "Each team must use a unique team name that does NOT include the institute's name (e.g. VSITR, Vidush Somany).",
+      "categoryId": "official"
     },
     {
       "id": "r6",
-      "categoryId": "official",
-      "text": "Each participant (by enrollment number) may be part of only one team."
+      "text": "Each participant (by enrollment number) may be part of only one team.",
+      "categoryId": "official"
     },
     {
       "id": "r7",
-      "categoryId": "official",
-      "text": "A team once registered cannot add/replace members after the registration deadline without admin approval."
+      "text": "A team once registered cannot add/replace members after the registration deadline without admin approval.",
+      "categoryId": "official"
     },
     {
       "id": "r8",
-      "categoryId": "phases",
-      "text": "Registration is split into two independent phases: (a) Team Registration and (b) Mentor Details Submission. Phase (a) must be completed by deadline; Phase (b) is mandatory for final confirmation."
+      "text": "Registration is split into two independent phases: (a) Team Registration and (b) Mentor Details Submission. Phase (a) must be completed by deadline; Phase (b) is mandatory for final confirmation.",
+      "categoryId": "phases"
     },
     {
       "id": "r9",
-      "categoryId": "phases",
-      "text": "Only the Team Leader may register the team and will be the sole point of contact for all official communication."
+      "text": "Only the Team Leader may register the team and will be the sole point of contact for all official communication.",
+      "categoryId": "phases"
     },
     {
       "id": "r10",
-      "categoryId": "phases",
-      "text": "All communication (screening schedules, problem statements, presentation dates, selection updates) will be sent only to the Team Leader's registered college email."
+      "text": "All communication (screening schedules, problem statements, presentation dates, selection updates) will be sent only to the Team Leader's registered college email.",
+      "categoryId": "phases"
     },
     {
       "id": "r11",
-      "categoryId": "conduct",
-      "text": "Teams must report on time for screening rounds/presentations as per the schedule communicated via email."
+      "text": "Teams must report on time for screening rounds/presentations as per the schedule communicated via email.",
+      "categoryId": "conduct"
     },
     {
       "id": "r12",
-      "categoryId": "conduct",
-      "text": "Plagiarism, misrepresentation of information, or providing false enrollment/contact details will lead to disqualification."
+      "text": "Plagiarism, misrepresentation of information, or providing false enrollment/contact details will lead to disqualification.",
+      "categoryId": "conduct"
     },
     {
       "id": "r13",
-      "categoryId": "conduct",
-      "text": "Decisions of the organizing committee (Research, Coding, Design, Soft Skills clubs) and faculty coordinators are final and binding."
+      "text": "Decisions of the organizing committee (Research, Coding, Design, Soft Skills clubs) and faculty coordinators are final and binding.",
+      "categoryId": "conduct"
     },
     {
       "id": "r14",
-      "categoryId": "conduct",
-      "text": "Any change in team composition or mentor after submission must be communicated to the organizing committee in writing/email — not self-editable post-deadline."
+      "text": "Any change in team composition or mentor after submission must be communicated to the organizing committee in writing/email — not self-editable post-deadline.",
+      "categoryId": "conduct"
     }
   ],
   "teams": [

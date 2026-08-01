@@ -54,6 +54,11 @@ export const CountdownTimer: React.FC = () => {
             <h2 className="text-xs sm:text-sm font-extrabold uppercase tracking-widest text-slate-500">
               Registration Countdown
             </h2>
+            {settings.isExtended && (
+              <span className="ml-1.5 px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 text-[9px] font-extrabold uppercase tracking-wider animate-pulse">
+                Extended
+              </span>
+            )}
           </div>
 
           <p className="text-sm sm:text-base font-semibold text-slate-700 mb-6">

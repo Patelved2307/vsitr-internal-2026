@@ -30,6 +30,9 @@ export const INITIAL_SETTINGS: EventSettings = {
   pptSubmissionOpen: false,
   pptSubmissionStatus: 'PPT submission portal will open after the registration deadline. Stay tuned.',
   pptSubmissionDeadline: '',
+  isExtended: false,
+  customQuote: 'Innovation distinguishes between a leader and a follower.',
+  customQuoteAuthor: 'Steve Jobs',
 };
 
 export const INITIAL_TIMELINE_EVENTS: TimelineEvent[] = [

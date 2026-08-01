@@ -103,6 +103,10 @@ export const AdminPage: React.FC = () => {
   const [editPptSubmissionOpen, setEditPptSubmissionOpen] = useState(settings.pptSubmissionOpen ?? false);
   const [editPptSubmissionStatus, setEditPptSubmissionStatus] = useState(settings.pptSubmissionStatus || '');
   const [editPptSubmissionDeadline, setEditPptSubmissionDeadline] = useState(settings.pptSubmissionDeadline || '');
+  // Extension & custom closed message
+  const [editIsExtended, setEditIsExtended] = useState(settings.isExtended ?? false);
+  const [editCustomQuote, setEditCustomQuote] = useState(settings.customQuote || '');
+  const [editCustomQuoteAuthor, setEditCustomQuoteAuthor] = useState(settings.customQuoteAuthor || '');
   // PPT Submissions list
   const [pptSubmissions, setPptSubmissions] = useState<PptSubmission[]>([]);
   const [isLoadingPptSubmissions, setIsLoadingPptSubmissions] = useState(false);
@@ -216,6 +220,9 @@ export const AdminPage: React.FC = () => {
     setEditPptSubmissionOpen(settings.pptSubmissionOpen ?? false);
     setEditPptSubmissionStatus(settings.pptSubmissionStatus || '');
     setEditPptSubmissionDeadline(settings.pptSubmissionDeadline || '');
+    setEditIsExtended(settings.isExtended ?? false);
+    setEditCustomQuote(settings.customQuote || '');
+    setEditCustomQuoteAuthor(settings.customQuoteAuthor || '');
     setEditTimeline(timeline);
     setEditFaqs(faqs);
     setEditRules(rules);
@@ -329,6 +336,9 @@ export const AdminPage: React.FC = () => {
           pptSubmissionOpen: editPptSubmissionOpen,
           pptSubmissionStatus: editPptSubmissionStatus,
           pptSubmissionDeadline: editPptSubmissionDeadline,
+          isExtended: editIsExtended,
+          customQuote: editCustomQuote,
+          customQuoteAuthor: editCustomQuoteAuthor,
         },
         timeline: editTimeline,
         faqs: editFaqs,
@@ -1335,6 +1345,47 @@ export const AdminPage: React.FC = () => {
                       <option value="true">OPEN — Allow Student Registration</option>
                       <option value="false">CLOSED — Lock Registration Site-Wide</option>
                     </select>
+                  </div>
+
+                  <div>
+                    <label className="block font-bold text-slate-800 mb-1">
+                      Deadline Extension Status
+                    </label>
+                    <select
+                      value={editIsExtended ? 'true' : 'false'}
+                      onChange={(e) => setEditIsExtended(e.target.value === 'true')}
+                      className="w-full px-4 py-2.5 rounded-xl border border-slate-300 font-bold outline-none"
+                    >
+                      <option value="false">REGULAR — Close exactly at deadline</option>
+                      <option value="true">EXTENDED — Allow registrations post-deadline (Extension Active)</option>
+                    </select>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div className="sm:col-span-2">
+                      <label className="block font-bold text-slate-800 mb-1">
+                        Closed Registration Custom Quote
+                      </label>
+                      <input
+                        type="text"
+                        value={editCustomQuote || ''}
+                        onChange={(e) => setEditCustomQuote(e.target.value)}
+                        className="w-full px-4 py-2.5 rounded-xl border border-slate-300 font-medium focus:border-[#1B3F8B] outline-none"
+                        placeholder="e.g. Innovation distinguishes between a leader and a follower."
+                      />
+                    </div>
+                    <div>
+                      <label className="block font-bold text-slate-800 mb-1">
+                        Quote Author
+                      </label>
+                      <input
+                        type="text"
+                        value={editCustomQuoteAuthor || ''}
+                        onChange={(e) => setEditCustomQuoteAuthor(e.target.value)}
+                        className="w-full px-4 py-2.5 rounded-xl border border-slate-300 font-medium focus:border-[#1B3F8B] outline-none"
+                        placeholder="e.g. Steve Jobs"
+                      />
+                    </div>
                   </div>
 
                   <div>

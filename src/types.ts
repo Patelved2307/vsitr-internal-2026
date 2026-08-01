@@ -76,6 +76,10 @@ export interface EventSettings {
   pptSubmissionOpen?: boolean;
   pptSubmissionStatus?: string;
   pptSubmissionDeadline?: string;
+  // Extension & custom closed message
+  isExtended?: boolean;
+  customQuote?: string;
+  customQuoteAuthor?: string;
 }
 
 export interface AdminStats {

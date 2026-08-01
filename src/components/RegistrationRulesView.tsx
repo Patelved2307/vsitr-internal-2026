@@ -392,7 +392,7 @@ export const RegistrationRulesView: React.FC = () => {
 
   const now = new Date();
   const deadline = new Date(settings.registrationDeadline);
-  const isDeadlinePassed = !settings.isRegistrationOpen || now > deadline;
+  const isDeadlinePassed = !settings.isRegistrationOpen || (!settings.isExtended && now > deadline);
 
   if (activeTab === 'rules') {
     const accordionItems = [
@@ -866,7 +866,7 @@ export const RegistrationRulesView: React.FC = () => {
                 <div className="rounded-3xl bg-white border border-slate-200 p-6 sm:p-8 shadow-md">
 
                   {/* Progress Steps Header */}
-                  {regStep <= 3 && (
+                  {regStep <= 3 && !isDeadlinePassed && (
                     <div className="mb-6 max-w-md mx-auto">
                       <div className="relative flex items-center justify-between">
                         <div className="absolute top-5 left-10 right-10 h-0.5 bg-slate-100 -translate-y-1/2 z-0 overflow-hidden">
@@ -915,17 +915,46 @@ export const RegistrationRulesView: React.FC = () => {
                   )}
 
                   {isDeadlinePassed && regStep <= 3 ? (
-                    <div className="text-center py-10 space-y-4">
-                      <div className="inline-flex p-3 rounded-full bg-red-50 text-red-600">
-                        <Lock className="h-8 w-8" />
+                    <div className="text-center py-4 space-y-5 max-w-sm mx-auto animate-in fade-in duration-200">
+                      {/* Premium Vector Illustration */}
+                      <div className="flex justify-center mb-1">
+                        <img 
+                          src="/registration_closed_vector.png" 
+                          alt="Registrations Closed" 
+                          className="h-32 w-auto object-contain select-none pointer-events-none filter drop-shadow-sm" 
+                        />
                       </div>
-                      <h3 className="text-lg font-bold text-slate-900">Registrations are Closed</h3>
-                      <p className="text-xs text-slate-500 max-w-sm mx-auto">
-                        The Phase 1 Team Registration deadline has passed. If you already registered, use the "Add Mentor / Resume Flow" mode to complete your registration.
-                      </p>
+                      <div className="space-y-1.5">
+                        <h3 className="text-lg font-black text-slate-900">Registrations are Closed</h3>
+                        <p className="text-xs text-slate-500 font-semibold leading-relaxed">
+                          The official Team Registration cutoff deadline has passed. Please contact support & help via email or get in touch with the club coordinators. Stay tuned if any extension happens.
+                        </p>
+                      </div>
+
+                      {/* Best inspiring quote */}
+                      <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-left relative overflow-hidden">
+                        <span className="absolute -top-1.5 -left-1 text-slate-200/80 text-6xl font-serif select-none pointer-events-none">
+                          “
+                        </span>
+                        <p className="text-xs italic font-medium text-slate-600 relative z-10 pl-6 leading-relaxed">
+                          {settings.customQuote || "Innovation distinguishes between a leader and a follower."}
+                        </p>
+                        <p className="text-[10px] font-bold text-slate-400 text-right mt-2 uppercase tracking-wider">
+                          — {settings.customQuoteAuthor || "Steve Jobs"}
+                        </p>
+                      </div>
                     </div>
                   ) : (
                     <form onSubmit={(e) => { e.preventDefault(); if (regStep === 3) handleRegisterSubmit(e); }}>
+                      {settings.isExtended && regStep <= 3 && (
+                        <div className="mb-4 p-3.5 rounded-2xl bg-amber-50/65 border border-amber-100/80 text-xs text-amber-800 flex items-start gap-2 shadow-2xs animate-in slide-in-from-top duration-250">
+                          <span className="font-extrabold px-1.5 py-0.5 rounded bg-amber-200/80 text-amber-900 text-[9px] uppercase shrink-0 mt-0.5 tracking-wider">Extended</span>
+                          <div>
+                            <p className="font-black text-[11px] text-amber-950">Registration Deadline Extended!</p>
+                            <p className="mt-0.5 text-[10px] text-amber-700 leading-relaxed">The organizing coordinators have extended registrations. You can register your team regularly now.</p>
+                          </div>
+                        </div>
+                      )}
 
                       {/* STEP 1: TEAM NAME */}
                       {regStep === 1 && (
