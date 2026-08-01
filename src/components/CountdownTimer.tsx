@@ -43,6 +43,7 @@ export const CountdownTimer: React.FC = () => {
   const formattedDeadline = new Date(effectiveDeadline).toLocaleString('en-IN', {
     dateStyle: 'full',
     timeStyle: 'short',
+    timeZone: 'Asia/Kolkata',
   });
 
   return (

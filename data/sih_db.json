@@ -1,7 +1,7 @@
 {
   "settings": {
-    "registrationDeadline": "2026-08-02T23:59:59.000Z",
-    "isRegistrationOpen": false,
+    "registrationDeadline": "2026-08-02T18:29:59.000Z",
+    "isRegistrationOpen": true,
     "whatsappGroupLink": "https://chat.whatsapp.com/SIH2026InternalVSITR",
     "announcementBanner": "Internal SIH 2026 Registrations are now OPEN! Deadline: 02 August 2026, 11:59 PM.",
     "problemStatementLink": "https://www.sih.gov.in/sih2025PS",
@@ -9,7 +9,7 @@
     "pptTemplateLink": "https://drive.google.com/drive/folders/14N_F8cFzbaVpoGANSUDBqnBTJ8OJlinB?usp=sharing",
     "pptTemplateStatus": "Download the official SIH PPT template and prepare your presentation as per the prescribed format before submission.",
     "isExtended": false,
-    "extendedDeadline": "2026-08-05T23:59:59.000Z",
+    "extendedDeadline": "2026-08-05T18:29:59.000Z",
     "customQuote": "Innovation distinguishes between a leader and a follower.",
     "customQuoteAuthor": "Steve Jobs",
     "pptSubmissionOpen": false,

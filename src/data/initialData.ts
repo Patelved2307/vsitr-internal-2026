@@ -18,7 +18,7 @@ export const INITIAL_RULES: Rule[] = [
 ];
 
 export const INITIAL_SETTINGS: EventSettings = {
-  registrationDeadline: '2026-08-02T23:59:59.000Z',
+  registrationDeadline: '2026-08-02T18:29:59.000Z',
   isRegistrationOpen: true,
   whatsappGroupLink: 'https://chat.whatsapp.com/EfS0SSUc9aX4DJUhfrpD2U',
   announcementBanner: 'Internal SIH 2026 Registrations are now OPEN! Deadline: 02 August 2026, 11:59 PM.',
@@ -31,7 +31,7 @@ export const INITIAL_SETTINGS: EventSettings = {
   pptSubmissionStatus: 'PPT submission portal will open after the registration deadline. Stay tuned.',
   pptSubmissionDeadline: '',
   isExtended: false,
-  extendedDeadline: '2026-08-05T23:59:59.000Z',
+  extendedDeadline: '2026-08-05T18:29:59.000Z',
   customQuote: 'Innovation distinguishes between a leader and a follower.',
   customQuoteAuthor: 'Steve Jobs',
 };

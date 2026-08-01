@@ -258,6 +258,26 @@ export async function initDatabase(): Promise<void> {
           'INSERT INTO app_config (key, value) VALUES ($1, $2)',
           ['global_settings', JSON.stringify(initialConfig)]
         );
+      } else {
+        const currentDbConfig = configRes.rows[0].value;
+        if (currentDbConfig && currentDbConfig.settings && fileDb.settings) {
+          let needsUpdate = false;
+          if (currentDbConfig.settings.registrationDeadline !== fileDb.settings.registrationDeadline) {
+            currentDbConfig.settings.registrationDeadline = fileDb.settings.registrationDeadline;
+            needsUpdate = true;
+          }
+          if (currentDbConfig.settings.extendedDeadline !== fileDb.settings.extendedDeadline) {
+            currentDbConfig.settings.extendedDeadline = fileDb.settings.extendedDeadline;
+            needsUpdate = true;
+          }
+          if (needsUpdate) {
+            console.log('Updating Neon database config with updated local deadline settings...');
+            await runQuery(
+              'UPDATE app_config SET value = $1 WHERE key = $2',
+              [JSON.stringify(currentDbConfig), 'global_settings']
+            );
+          }
+        }
       }
 
       // Sync any local teams from sih_db.json into Neon teams, members, and mentors tables

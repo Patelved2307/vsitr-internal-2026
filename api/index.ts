@@ -656,6 +656,7 @@ app.post('/api/admin/trigger-deadline-reminders', async (req: Request, res: Resp
     const deadlineFormatted = new Date(config.settings.registrationDeadline).toLocaleString('en-IN', {
       dateStyle: 'full',
       timeStyle: 'short',
+      timeZone: 'Asia/Kolkata',
     });
 
     let sentCount = 0;

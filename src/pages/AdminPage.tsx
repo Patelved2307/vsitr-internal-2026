@@ -39,6 +39,16 @@ import {
   ChevronDown
 } from 'lucide-react';
 
+// Helper to convert UTC ISO string from server to local YYYY-MM-DDTHH:mm for datetime-local inputs
+const toLocalISOString = (isoString: string): string => {
+  if (!isoString) return '';
+  const date = new Date(isoString);
+  if (isNaN(date.getTime())) return '';
+  const offset = date.getTimezoneOffset();
+  const localDate = new Date(date.getTime() - offset * 60 * 1000);
+  return localDate.toISOString().slice(0, 16);
+};
+
 export const AdminPage: React.FC = () => {
   const {
     isAdminLoggedIn,
@@ -1326,7 +1336,7 @@ export const AdminPage: React.FC = () => {
                     <input
                       type="datetime-local"
                       required
-                      value={(editDeadline || '').slice(0, 16)}
+                      value={toLocalISOString(editDeadline)}
                       onChange={(e) => setEditDeadline(new Date(e.target.value).toISOString())}
                       className="w-full px-4 py-2.5 rounded-xl border border-slate-300 font-bold focus:border-[#C1272D] outline-none"
                     />
@@ -1371,7 +1381,7 @@ export const AdminPage: React.FC = () => {
                       <input
                         type="datetime-local"
                         required
-                        value={(editExtendedDeadline || '').slice(0, 16)}
+                        value={toLocalISOString(editExtendedDeadline)}
                         onChange={(e) => setEditExtendedDeadline(new Date(e.target.value).toISOString())}
                         className="w-full px-4 py-2.5 rounded-xl border border-slate-300 font-bold focus:border-[#C1272D] outline-none"
                       />

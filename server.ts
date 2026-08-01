@@ -664,6 +664,7 @@ async function startServer() {
       const deadlineFormatted = new Date(config.settings.registrationDeadline).toLocaleString('en-IN', {
         dateStyle: 'full',
         timeStyle: 'short',
+        timeZone: 'Asia/Kolkata',
       });
 
       let sentCount = 0;
