@@ -932,14 +932,14 @@ export const RegistrationRulesView: React.FC = () => {
                       </div>
 
                       {/* Best inspiring quote */}
-                      <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-left relative overflow-hidden">
-                        <span className="absolute -top-1.5 -left-1 text-slate-200/80 text-6xl font-serif select-none pointer-events-none">
+                      <div className="p-4 rounded-2xl bg-gradient-to-r from-red-50/40 to-slate-50 border border-slate-200 border-l-4 border-l-[#C1272D] text-left relative overflow-hidden shadow-2xs">
+                        <span className="absolute -top-1.5 -left-1 text-[#C1272D]/10 text-6xl font-serif select-none pointer-events-none">
                           “
                         </span>
-                        <p className="text-xs italic font-medium text-slate-600 relative z-10 pl-6 leading-relaxed">
+                        <p className="text-xs italic font-bold text-slate-800 relative z-10 pl-6 leading-relaxed">
                           {settings.customQuote || "Innovation distinguishes between a leader and a follower."}
                         </p>
-                        <p className="text-[10px] font-bold text-slate-400 text-right mt-2 uppercase tracking-wider">
+                        <p className="text-[10px] font-extrabold text-[#C1272D] text-right mt-2 uppercase tracking-wider">
                           — {settings.customQuoteAuthor || "Steve Jobs"}
                         </p>
                       </div>
