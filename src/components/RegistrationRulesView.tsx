@@ -863,12 +863,9 @@ export const RegistrationRulesView: React.FC = () => {
           ) : (
             <>
               {mode === 'register' && regStep <= 3 && (
-                <div className={isDeadlinePassed ? "rounded-3xl border border-white/60 bg-gradient-to-br from-white/95 via-white/85 to-[#1B3F8B]/10 p-8 sm:p-10 shadow-[0_8px_32px_0_rgba(148,163,184,0.12)] backdrop-blur-md relative overflow-hidden" : "rounded-3xl bg-white border border-slate-200 p-6 sm:p-8 shadow-md"}>
+                <div className="rounded-3xl bg-white border border-slate-200 p-6 sm:p-8 shadow-sm relative overflow-hidden">
                   {isDeadlinePassed && (
-                    <>
-                      <div className="absolute -top-10 -right-10 h-32 w-32 rounded-full bg-[#C1272D]/5 blur-2xl pointer-events-none" />
-                      <div className="absolute -bottom-10 -left-10 h-32 w-32 rounded-full bg-[#1B3F8B]/10 blur-2xl pointer-events-none" />
-                    </>
+                    <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#C1272D] via-amber-500 to-[#1B3F8B]" />
                   )}
 
                   {/* Progress Steps Header */}
@@ -921,25 +918,25 @@ export const RegistrationRulesView: React.FC = () => {
                   )}
 
                   {isDeadlinePassed && regStep <= 3 ? (
-                    <div className="relative z-10 text-center py-4 space-y-6 max-w-md mx-auto animate-in fade-in duration-250">
-                      {/* Premium Vector Illustration with Blend Mode */}
-                      <div className="flex justify-center mb-2">
+                    <div className="relative z-10 text-center py-4 space-y-6 max-w-sm mx-auto animate-in fade-in duration-200">
+                      {/* Premium Vector Illustration */}
+                      <div className="flex justify-center mb-1">
                         <img 
                           src="/registration_closed_vector.png" 
                           alt="Registrations Closed" 
-                          className="h-32 w-auto object-contain select-none pointer-events-none mix-blend-multiply filter drop-shadow-sm" 
+                          className="h-28 w-auto object-contain select-none pointer-events-none filter drop-shadow-sm" 
                         />
                       </div>
-                      <div className="space-y-2">
-                        <h3 className="text-xl font-black text-slate-900 tracking-tight">Registrations are Closed</h3>
+                      <div className="space-y-1.5">
+                        <h3 className="text-lg font-black text-slate-900">Registrations are Closed</h3>
                         <p className="text-xs text-slate-500 font-semibold leading-relaxed">
                           The official Team Registration cutoff deadline has passed. Please contact support & help via email or get in touch with the club coordinators. Stay tuned if any extension happens.
                         </p>
                       </div>
 
                       {/* Best inspiring quote */}
-                      <div className="p-4 rounded-2xl bg-white/70 border border-white/80 border-l-4 border-l-[#C1272D]/80 text-left relative overflow-hidden shadow-xs backdrop-blur-xs">
-                        <span className="absolute -top-1.5 -left-1 text-[#C1272D]/10 text-6xl font-serif select-none pointer-events-none">
+                      <div className="p-4.5 rounded-2xl bg-slate-50 border border-slate-200 border-l-4 border-l-[#C1272D] text-left relative overflow-hidden shadow-2xs">
+                        <span className="absolute -top-1.5 -left-1 text-slate-200/80 text-6xl font-serif select-none pointer-events-none">
                           “
                         </span>
                         <p className="text-xs italic font-bold text-slate-800 relative z-10 pl-6 leading-relaxed">
