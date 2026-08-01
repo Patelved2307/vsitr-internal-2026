@@ -18,13 +18,7 @@ export const TimelineSection: React.FC = () => {
               Active - Registration Live
             </span>
           </div>
-          <div className="mt-4 max-w-lg md:max-w-2xl">
-            <img
-              src="/timeline/team-celebrate.png"
-              alt="Team Collaboration"
-              className="rounded-lg object-cover h-20 md:h-44 lg:h-60 w-full shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset]"
-            />
-          </div>
+
         </div>
       ),
     },
@@ -42,13 +36,7 @@ export const TimelineSection: React.FC = () => {
               Active - Mentor Submissions Open
             </span>
           </div>
-          <div className="mt-4 max-w-lg md:max-w-2xl">
-            <img
-              src="/timeline/mentor.png"
-              alt="Do you have a Mentor?"
-              className="rounded-lg object-cover h-20 md:h-44 lg:h-60 w-full shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset]"
-            />
-          </div>
+
         </div>
       ),
     },
@@ -65,13 +53,7 @@ export const TimelineSection: React.FC = () => {
               To Be Confirmed (TBC)
             </span>
           </div>
-          <div className="mt-4 max-w-lg md:max-w-2xl">
-            <img
-              src="/timeline/stick-figures.png"
-              alt="Stick Figures Brainstorming"
-              className="rounded-lg object-cover h-20 md:h-44 lg:h-60 w-full shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset]"
-            />
-          </div>
+
         </div>
       ),
     },
@@ -88,13 +70,7 @@ export const TimelineSection: React.FC = () => {
               To Be Announced
             </span>
           </div>
-          <div className="mt-4 max-w-lg md:max-w-2xl">
-            <img
-              src="/timeline/design-process.png"
-              alt="Design Thinking Process"
-              className="rounded-lg object-cover h-20 md:h-44 lg:h-60 w-full shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset]"
-            />
-          </div>
+
         </div>
       ),
     },
@@ -111,13 +87,7 @@ export const TimelineSection: React.FC = () => {
               To Be Announced Soon
             </span>
           </div>
-          <div className="mt-4 max-w-lg md:max-w-2xl">
-            <img
-              src="/timeline/team-computer.png"
-              alt="PPT Designing"
-              className="rounded-lg object-cover h-20 md:h-44 lg:h-60 w-full shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset]"
-            />
-          </div>
+
         </div>
       ),
     },
@@ -181,13 +151,7 @@ export const TimelineSection: React.FC = () => {
             </div>
           </div>
 
-          <div className="mt-5 max-w-lg md:max-w-2xl">
-            <img
-              src="/timeline/presentation.png"
-              alt="Final Presentation Round"
-              className="rounded-lg object-cover h-20 md:h-44 lg:h-60 w-full shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset]"
-            />
-          </div>
+
         </div>
       ),
     },

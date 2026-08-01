@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { Clock, AlertCircle, CalendarCheck2 } from 'lucide-react';
+import { Button } from '@/components/ui/rainbow-borders-button';
 
 export const CountdownTimer: React.FC = () => {
   const { settings, setActiveTab, isTeamLoggedIn } = useAuth();
@@ -118,13 +119,13 @@ export const CountdownTimer: React.FC = () => {
               {/* Call to Action Button below countdown (Only for logged out visitors) */}
               {!isTeamLoggedIn && (
                 <div className="mt-6 flex flex-col items-center gap-2">
-                  <button
+                  <Button
                     onClick={() => setActiveTab('register')}
-                    className="inline-flex items-center gap-2 px-8 py-3.5 rounded-2xl font-black text-base text-white bg-gradient-to-r from-[#C1272D] via-[#8B235E] to-[#1B3F8B] shadow-lg shadow-red-900/20 hover:opacity-95 transform active:scale-95 transition"
+                    className="inline-flex items-center gap-2 px-8 py-3.5"
                   >
                     <CalendarCheck2 className="h-5 w-5" />
                     Register Your Team Now
-                  </button>
+                  </Button>
                   <p className="text-xs text-slate-500 font-medium">
                     Registration closes on 02 August 2026, 11:59 PM
                   </p>

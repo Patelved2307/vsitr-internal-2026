@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { LogOut, UserCheck, LayoutDashboard, Menu, X, ShieldAlert } from 'lucide-react';
+import { Button } from '@/components/ui/rainbow-borders-button';
 
 export const Navbar: React.FC = () => {
   const {
@@ -42,28 +43,28 @@ export const Navbar: React.FC = () => {
           {/* Left: 3 Logos + Title */}
           <div
             onClick={() => setActiveTab('home')}
-            className="flex items-center gap-2 sm:gap-3 cursor-pointer group"
+            className="flex items-center gap-1.5 sm:gap-3 cursor-pointer group min-w-0"
           >
-            <div className="flex items-center gap-2 sm:gap-3">
+            <div className="flex items-center gap-1 sm:gap-2 shrink-0">
               <img
                 src="/logos/sih-logo.png"
                 alt="SIH Official Logo"
-                className="h-9 w-9 sm:h-11 sm:w-11 object-contain"
+                className="h-7 w-7 sm:h-9 md:h-11 object-contain"
               />
               <img
                 src="/logos/ksv-logo.png"
                 alt="KSV Logo"
-                className="h-9 w-9 sm:h-11 sm:w-11 object-contain"
+                className="h-7 w-7 sm:h-9 md:h-11 object-contain"
               />
               <img
                 src="/logos/vsitr-logo.png"
                 alt="VSITR Logo"
-                className="h-9 w-9 sm:h-11 sm:w-11 object-contain"
+                className="h-7 w-7 sm:h-9 md:h-11 object-contain"
               />
             </div>
 
-            <div className="flex flex-col">
-              <span className="text-lg sm:text-xl font-extrabold tracking-tight bg-gradient-to-r from-[#C1272D] via-[#8B235E] to-[#1B3F8B] bg-clip-text text-transparent">
+            <div className="flex flex-col min-w-0 shrink-0">
+              <span className="text-sm sm:text-lg md:text-xl font-black tracking-tight whitespace-nowrap bg-gradient-to-r from-[#C1272D] via-[#8B235E] to-[#1B3F8B] bg-clip-text text-transparent">
                 Internal SIH 2026
               </span>
               <span className="text-[10px] sm:text-xs font-semibold text-slate-500 uppercase tracking-wider hidden sm:inline">
@@ -81,8 +82,21 @@ export const Navbar: React.FC = () => {
                   : 'text-slate-600 hover:text-slate-900'
                 }`}
             >
-              Register &amp; Rules
+              Register Team
               {activeTab === 'home' && (
+                <span className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-[#C1272D] to-[#1B3F8B] rounded-full" />
+              )}
+            </button>
+
+            <button
+              onClick={() => setActiveTab('rules')}
+              className={`relative py-1 text-sm font-semibold transition ${activeTab === 'rules'
+                  ? 'text-[#1B3F8B]'
+                  : 'text-slate-600 hover:text-slate-900'
+                }`}
+            >
+              Rules &amp; Guidelines
+              {activeTab === 'rules' && (
                 <span className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-[#C1272D] to-[#1B3F8B] rounded-full" />
               )}
             </button>
@@ -150,12 +164,12 @@ export const Navbar: React.FC = () => {
                   Team Login
                 </button>
 
-                <button
+                <Button
                   onClick={() => setActiveTab('home')}
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold text-white shadow-md transition transform active:scale-95 bg-gradient-to-r from-[#C1272D] via-[#9B234B] to-[#1B3F8B] hover:opacity-95 shadow-red-900/20"
+                  className="px-4 py-2 text-sm font-bold"
                 >
                   Register Your Team
-                </button>
+                </Button>
               </>
             )}
           </div>
@@ -185,7 +199,17 @@ export const Navbar: React.FC = () => {
               className={`text-left px-3 py-2 rounded-lg font-medium text-sm ${activeTab === 'home' ? 'bg-blue-50 text-[#1B3F8B] font-bold' : 'text-slate-700'
                 }`}
             >
-              Register &amp; Rules
+              Register Team
+            </button>
+            <button
+              onClick={() => {
+                setActiveTab('rules');
+                setMobileMenuOpen(false);
+              }}
+              className={`text-left px-3 py-2 rounded-lg font-medium text-sm ${activeTab === 'rules' ? 'bg-blue-50 text-[#1B3F8B] font-bold' : 'text-slate-700'
+                }`}
+            >
+              Rules &amp; Guidelines
             </button>
             <button
               onClick={() => {
@@ -243,15 +267,15 @@ export const Navbar: React.FC = () => {
                 >
                   Team Login
                 </button>
-                <button
+                <Button
                   onClick={() => {
                     setActiveTab('home');
                     setMobileMenuOpen(false);
                   }}
-                  className="w-full text-center py-2.5 rounded-xl font-bold text-white bg-gradient-to-r from-[#C1272D] to-[#1B3F8B]"
+                  className="w-full text-center py-2.5 font-bold"
                 >
                   Register Your Team
-                </button>
+                </Button>
               </>
             )}
           </div>

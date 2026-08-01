@@ -3,6 +3,8 @@ import { useAuth } from '../context/AuthContext';
 import { api } from '../services/api';
 import { TeamMember, Department, Gender } from '../types';
 import { Users, User, Plus, Trash2, ArrowRight, ArrowLeft, CheckCircle2, ShieldAlert, Mail, AlertTriangle } from 'lucide-react';
+import { Button } from '@/components/ui/rainbow-borders-button';
+
 
 export const RegistrationPage: React.FC = () => {
   const { loginTeamSession, setActiveTab, showAlert, settings } = useAuth();
@@ -693,10 +695,10 @@ export const RegistrationPage: React.FC = () => {
                   Back
                 </button>
 
-                <button
+                <Button
                   type="submit"
                   disabled={isSubmitting}
-                  className="inline-flex items-center gap-2 px-8 py-3 rounded-xl font-extrabold text-base text-white bg-gradient-to-r from-[#C1272D] via-[#8B235E] to-[#1B3F8B] shadow-lg shadow-red-900/20 hover:opacity-95 transition transform active:scale-95 disabled:opacity-50"
+                  className="px-8 py-3 font-extrabold text-base"
                 >
                   {isSubmitting ? (
                     <span className="flex items-center gap-2">
@@ -709,7 +711,7 @@ export const RegistrationPage: React.FC = () => {
                       <CheckCircle2 className="h-5 w-5" />
                     </>
                   )}
-                </button>
+                </Button>
               </div>
             </div>
           )}
