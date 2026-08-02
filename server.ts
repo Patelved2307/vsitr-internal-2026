@@ -661,7 +661,8 @@ async function startServer() {
       const teams = await getAllTeams();
       const appUrl = getAppUrl(req);
 
-      const deadlineFormatted = new Date(config.settings.registrationDeadline).toLocaleString('en-IN', {
+      const effectiveDeadline = config.settings.isExtended && config.settings.extendedDeadline ? config.settings.extendedDeadline : config.settings.registrationDeadline;
+      const deadlineFormatted = new Date(effectiveDeadline).toLocaleString('en-IN', {
         dateStyle: 'full',
         timeStyle: 'short',
         timeZone: 'Asia/Kolkata',

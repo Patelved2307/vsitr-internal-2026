@@ -4,7 +4,25 @@ import { Mail, MapPin, ExternalLink, ShieldCheck } from 'lucide-react';
 import { FooterBackgroundGradient, TextHoverEffect } from './ui/hover-footer';
 
 export const Footer: React.FC = () => {
-  const { setActiveTab, isTeamLoggedIn } = useAuth();
+  const { settings, setActiveTab, isTeamLoggedIn } = useAuth();
+
+  const effectiveDeadline = settings?.isExtended && settings?.extendedDeadline ? settings.extendedDeadline : settings?.registrationDeadline;
+  const formattedDeadline = React.useMemo(() => {
+    if (!effectiveDeadline) return "02 August 2026, 11:59 PM";
+    try {
+      return new Date(effectiveDeadline).toLocaleString('en-IN', {
+        day: '2-digit',
+        month: 'long',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true,
+        timeZone: 'Asia/Kolkata',
+      }).replace(' at ', ', ').replace(/\s*[pP][mM]\s*$/, ' PM').replace(/\s*[aA][mM]\s*$/, ' AM');
+    } catch {
+      return "02 August 2026, 11:59 PM";
+    }
+  }, [effectiveDeadline]);
 
   return (
     <footer className="w-full bg-slate-900 text-slate-300 pt-12 pb-8 relative overflow-hidden border-t border-slate-800">
@@ -101,7 +119,7 @@ export const Footer: React.FC = () => {
             <ul className="space-y-2.5 text-xs text-slate-300">
               <li className="flex flex-col">
                 <span className="text-slate-400 text-[10px] uppercase font-bold">Phase 1 Registration</span>
-                <span className="font-bold text-white">02 August 2026, 11:59 PM</span>
+                <span className="font-bold text-white">{formattedDeadline}</span>
               </li>
               <li className="flex flex-col">
                 <span className="text-slate-400 text-[10px] uppercase font-bold">Phase 2 Mentor Details</span>

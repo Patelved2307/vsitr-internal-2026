@@ -45,6 +45,15 @@ export const CountdownTimer: React.FC = () => {
     timeStyle: 'short',
     timeZone: 'Asia/Kolkata',
   });
+  const formattedDeadlineText = new Date(effectiveDeadline).toLocaleString('en-IN', {
+    day: '2-digit',
+    month: 'long',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: true,
+    timeZone: 'Asia/Kolkata',
+  }).replace(' at ', ', ').replace(/\s*[pP][mM]\s*$/, ' PM').replace(/\s*[aA][mM]\s*$/, ' AM');
 
   return (
     <section className="my-8 max-w-4xl mx-auto px-4">
@@ -135,7 +144,7 @@ export const CountdownTimer: React.FC = () => {
                     Register Your Team Now
                   </Button>
                   <p className="text-xs text-slate-500 font-medium">
-                    Registration closes on 02 August 2026, 11:59 PM
+                    Registration closes on {formattedDeadlineText}
                   </p>
                 </div>
               )}

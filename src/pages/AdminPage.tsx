@@ -335,6 +335,44 @@ export const AdminPage: React.FC = () => {
   const handleSaveSettings = async () => {
     try {
       setIsSavingSettings(true);
+
+      const formatToTimelineDate = (isoString: string) => {
+        if (!isoString) return '';
+        const date = new Date(isoString);
+        if (isNaN(date.getTime())) return '';
+        return date.toLocaleString('en-IN', {
+          day: '2-digit',
+          month: 'long',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: true,
+          timeZone: 'Asia/Kolkata'
+        }).replace(' at ', ', ').replace(' pm', ' PM').replace(' am', ' AM');
+      };
+
+      const finalDeadline = editIsExtended && editExtendedDeadline ? editExtendedDeadline : editDeadline;
+      const formattedTimelineDate = formatToTimelineDate(finalDeadline);
+
+      // Auto update timeline first event
+      const updatedTimeline = editTimeline.map(item => {
+        if (item.id === 't1' || item.title.toLowerCase().includes('phase 1') || item.title.toLowerCase().includes('registration deadline')) {
+          return { ...item, date: formattedTimelineDate };
+        }
+        return item;
+      });
+
+      // Auto update FAQ f6 (What if I miss the registration deadline?)
+      const updatedFaqs = editFaqs.map(item => {
+        if (item.id === 'f6' || item.question.toLowerCase().includes('miss the registration deadline')) {
+          return {
+            ...item,
+            answer: `Registrations automatically close on ${formattedTimelineDate}. Late entries will not be entertained under any circumstances.`
+          };
+        }
+        return item;
+      });
+
       const res = await api.updateSettings({
         settings: {
           registrationDeadline: new Date(editDeadline).toISOString(),
@@ -349,15 +387,18 @@ export const AdminPage: React.FC = () => {
           pptSubmissionStatus: editPptSubmissionStatus,
           pptSubmissionDeadline: editPptSubmissionDeadline,
           isExtended: editIsExtended,
+          extendedDeadline: editExtendedDeadline,
           customQuote: editCustomQuote,
           customQuoteAuthor: editCustomQuoteAuthor,
         },
-        timeline: editTimeline,
-        faqs: editFaqs,
+        timeline: updatedTimeline,
+        faqs: updatedFaqs,
         rules: editRules,
       });
 
       if (res.success) {
+        setEditTimeline(updatedTimeline);
+        setEditFaqs(updatedFaqs);
         showAlert('Settings Updated', 'Event settings, timelines, FAQs & rules saved successfully!', 'success');
         await reloadPortalData();
       }

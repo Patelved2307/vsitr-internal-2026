@@ -1,16 +1,47 @@
 import React from 'react';
 import { Timeline } from './ui/timeline';
 import { MapPin, Calendar, ShieldAlert } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 
 export const TimelineSection: React.FC = () => {
+  const { settings } = useAuth();
+  const effectiveDeadline = settings?.isExtended && settings?.extendedDeadline ? settings.extendedDeadline : settings?.registrationDeadline;
+
+  const formattedDeadlineDate = React.useMemo(() => {
+    if (!effectiveDeadline) return "02 August 2026";
+    try {
+      return new Date(effectiveDeadline).toLocaleString('en-IN', {
+        day: '2-digit',
+        month: 'long',
+        year: 'numeric',
+        timeZone: 'Asia/Kolkata',
+      });
+    } catch {
+      return "02 August 2026";
+    }
+  }, [effectiveDeadline]);
+
+  const formattedDeadlineTime = React.useMemo(() => {
+    if (!effectiveDeadline) return "11:59 PM";
+    try {
+      return new Date(effectiveDeadline).toLocaleString('en-IN', {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true,
+        timeZone: 'Asia/Kolkata',
+      }).toUpperCase();
+    } catch {
+      return "11:59 PM";
+    }
+  }, [effectiveDeadline]);
   const data = [
     {
-      title: "02 August 2026",
+      title: formattedDeadlineDate,
       content: (
         <div>
           <h4 className="text-lg font-black text-[#C1272D] mb-2">Team Registration Closes</h4>
           <p className="text-neutral-800 text-xs md:text-sm font-medium mb-4 leading-relaxed">
-            Deadline to submit your team details (1 Leader + 5 Members, including at least 1 female participant) via the registration portal. Form closes strictly at <strong>11:59 PM</strong>.
+            Deadline to submit your team details (1 Leader + 5 Members, including at least 1 female participant) via the registration portal. Form closes strictly at <strong>{formattedDeadlineTime}</strong>.
           </p>
           <div className="flex gap-2">
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-extrabold uppercase bg-emerald-50 text-emerald-700 border border-emerald-200">

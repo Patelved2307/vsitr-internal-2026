@@ -395,6 +395,24 @@ export const RegistrationRulesView: React.FC = () => {
   const deadline = new Date(settings.isExtended && settings.extendedDeadline ? settings.extendedDeadline : settings.registrationDeadline);
   const isDeadlinePassed = !settings.isRegistrationOpen || now > deadline;
 
+  const formattedExtendedDeadline = React.useMemo(() => {
+    const target = settings.isExtended && settings.extendedDeadline ? settings.extendedDeadline : settings.registrationDeadline;
+    if (!target) return '';
+    try {
+      return new Date(target).toLocaleString('en-IN', {
+        day: '2-digit',
+        month: 'long',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true,
+        timeZone: 'Asia/Kolkata',
+      }).replace(' at ', ', ').replace(/\s*[pP][mM]\s*$/, ' PM').replace(/\s*[aA][mM]\s*$/, ' AM');
+    } catch {
+      return '';
+    }
+  }, [settings.extendedDeadline, settings.registrationDeadline, settings.isExtended]);
+
   if (activeTab === 'rules') {
     const accordionItems = [
       {
@@ -653,8 +671,19 @@ export const RegistrationRulesView: React.FC = () => {
           </>
         )}
 
-        {/* Mode Toggle & Lookup banner removed - Phase 2 Mentor Submission now accessed strictly post-registration or via Team Portal login */}
       </div>
+
+      {settings.isExtended && (
+        <div className="mb-6 p-4 sm:p-5 rounded-3xl bg-amber-50/75 border border-amber-200/80 text-amber-900 flex items-start gap-3 shadow-xs animate-in slide-in-from-top duration-300">
+          <span className="font-extrabold px-2.5 py-1 rounded-xl bg-amber-200/90 text-amber-950 text-[10px] sm:text-xs uppercase shrink-0 mt-0.5 tracking-wider border border-amber-300/80">Extended</span>
+          <div>
+            <p className="font-black text-sm sm:text-base text-amber-950">Registration Deadline Extended!</p>
+            <p className="mt-1 text-slate-700 text-xs sm:text-sm leading-relaxed font-semibold">
+              The organizing coordinators have extended registrations. You can register your team regularly until <strong className="text-[#1B3F8B] font-extrabold">{formattedExtendedDeadline}</strong>.
+            </p>
+          </div>
+        </div>
+      )}
 
       {/* Main Grid: Left (Deadlines), Right (Form Wizard) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
@@ -950,15 +979,6 @@ export const RegistrationRulesView: React.FC = () => {
                     </div>
                   ) : (
                     <form onSubmit={(e) => { e.preventDefault(); if (regStep === 3) handleRegisterSubmit(e); }}>
-                      {settings.isExtended && regStep <= 3 && (
-                        <div className="mb-4 p-3.5 rounded-2xl bg-amber-50/65 border border-amber-100/80 text-xs text-amber-800 flex items-start gap-2 shadow-2xs animate-in slide-in-from-top duration-250">
-                          <span className="font-extrabold px-1.5 py-0.5 rounded bg-amber-200/80 text-amber-900 text-[9px] uppercase shrink-0 mt-0.5 tracking-wider">Extended</span>
-                          <div>
-                            <p className="font-black text-[11px] text-amber-950">Registration Deadline Extended!</p>
-                            <p className="mt-0.5 text-[10px] text-amber-700 leading-relaxed">The organizing coordinators have extended registrations. You can register your team regularly now.</p>
-                          </div>
-                        </div>
-                      )}
 
                       {/* STEP 1: TEAM NAME */}
                       {regStep === 1 && (
