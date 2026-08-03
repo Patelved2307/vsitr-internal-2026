@@ -8,6 +8,8 @@ import { BorderBeamPanel } from '@/components/ui/border-beam-panel';
 import { GlowingShadow } from '@/components/ui/glowing-shadow';
 import { GradientBlobCard } from '@/components/ui/gradient-blob-card';
 import { LiquidGradientCard } from '@/components/ui/liquid-gradient-card';
+import RotatingText from '@/components/ui/RotatingText';
+import FloatingLines from '@/components/ui/FloatingLines';
 import {
   Shield,
   ChevronDown,
@@ -31,6 +33,12 @@ import {
   Lock,
   Clock
 } from 'lucide-react';
+
+const FLOATING_LINES_WAVES = ['top', 'middle', 'bottom'] as Array<'top' | 'middle' | 'bottom'>;
+const FLOATING_LINES_COUNT = [10, 15, 20];
+const FLOATING_LINES_DISTANCE = [8, 6, 4];
+const FLOATING_LINES_GRADIENT = ['#C1272D', '#8B235E', '#1B3F8B'];
+const FLOATING_LINES_BOTTOM_POS = { x: 2.0, y: -0.7, rotate: -1 };
 
 export const RegistrationRulesView: React.FC = () => {
   const { loginTeamSession, setActiveTab, showAlert, settings, rules, timeline, team, isTeamLoggedIn, activeTab } = useAuth();
@@ -643,34 +651,87 @@ export const RegistrationRulesView: React.FC = () => {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Top Banner Area */}
-      <div className="text-center mb-8 relative">
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-red-50 text-[#C1272D] border border-red-100 text-xs font-extrabold uppercase tracking-wider mb-3">
-          <span className="h-2 w-2 rounded-full bg-[#C1272D] animate-pulse" />
-          Internal SIH 2026 Registration Portal
+      <div className="relative text-center mb-8 p-6 sm:p-10 rounded-3xl bg-slate-950 text-white overflow-hidden shadow-2xl border border-slate-800/80">
+        {/* FloatingLines Background */}
+        <div className="absolute inset-0 z-0 rounded-3xl overflow-hidden opacity-90 pointer-events-none">
+          <FloatingLines
+            linesGradient={FLOATING_LINES_GRADIENT}
+            enabledWaves={FLOATING_LINES_WAVES}
+            lineCount={FLOATING_LINES_COUNT}
+            lineDistance={FLOATING_LINES_DISTANCE}
+            bottomWavePosition={FLOATING_LINES_BOTTOM_POS}
+            bendRadius={5.0}
+            bendStrength={-0.6}
+            interactive={true}
+            parallax={true}
+            animationSpeed={0.6}
+            mixBlendMode="screen"
+          />
         </div>
 
-        {isTeamLoggedIn && team ? (
-          <>
-            <h1 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
-              {team.status === 'completed' ? 'You are all set!' : 'Complete Your Registration'}
-            </h1>
-            <p className="text-xs sm:text-sm text-slate-600 max-w-xl mx-auto mt-2 font-medium">
-              {team.status === 'completed'
-                ? 'Your team and mentor details are successfully registered. Keep an eye out for further announcements and prepare your pitch!'
-                : 'Please complete the remaining steps to finalize your team registration.'}
-            </p>
-          </>
-        ) : (
-          <>
-            <h1 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
-              Streamlined Registration
-            </h1>
-            <p className="text-xs sm:text-sm text-slate-600 max-w-xl mx-auto mt-2 font-medium">
-              Register your team and submit mentor details in one continuous, simplified workflow.
-            </p>
-          </>
-        )}
+        {/* Dark overlay backdrop to shield the text and maximize contrast */}
+        <div className="absolute inset-0 z-0 bg-slate-950/20 rounded-3xl pointer-events-none" />
 
+        {/* Content Container */}
+        <div className="relative z-10 flex flex-col items-center">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-900/90 text-red-400 border border-slate-800 text-[10px] sm:text-xs font-extrabold uppercase tracking-wider mb-4 backdrop-blur-md">
+            <span className="h-2 w-2 rounded-full bg-[#C1272D] animate-pulse" />
+            Internal SIH 2026 Registration Portal
+          </div>
+
+          {isTeamLoggedIn && team ? (
+            <>
+              <h1 className="text-2xl sm:text-4xl font-black text-white tracking-tight">
+                {team.status === 'completed' ? 'You are all set!' : 'Complete Your Registration'}
+              </h1>
+              <p className="text-xs sm:text-sm text-slate-300 max-w-xl mx-auto mt-2 font-medium">
+                {team.status === 'completed'
+                  ? 'Your team and mentor details are successfully registered. Keep an eye out for further announcements and prepare your pitch!'
+                  : 'Please complete the remaining steps to finalize your team registration.'}
+              </p>
+            </>
+          ) : (
+            <>
+              <div className="flex flex-wrap justify-center items-center gap-1.5 mb-3 text-[10px] sm:text-xs font-black tracking-widest text-slate-400 uppercase">
+                <span>Let's</span>
+                <RotatingText
+                  texts={['Innovate', 'Build', 'Compete', 'Succeed']}
+                  mainClassName="px-2 py-0.5 bg-red-600 text-white rounded-md font-black overflow-hidden shadow-md shadow-red-900/30 border border-red-500/20 whitespace-nowrap"
+                  staggerFrom="first"
+                  initial={{ y: "100%", opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  exit={{ y: "-120%", opacity: 0 }}
+                  staggerDuration={0.025}
+                  splitLevelClassName="overflow-hidden pb-0.5"
+                  transition={{ type: "spring", damping: 30, stiffness: 400 }}
+                  rotationInterval={3500}
+                />
+                <span>for SIH 2026</span>
+              </div>
+              <h1 className="text-2xl sm:text-4xl font-black text-white tracking-tight">
+                Streamlined Registration
+              </h1>
+              <p className="text-xs sm:text-sm text-slate-300 max-w-md sm:max-w-xl mx-auto mt-3 font-medium leading-relaxed">
+                Register your team and submit mentor details in one continuous, simplified workflow.
+              </p>
+              <div className="mt-5 flex flex-col sm:flex-row items-center justify-center gap-2 text-xs sm:text-sm w-full">
+                <span className="text-slate-400">Ready to</span>
+                <RotatingText
+                  texts={['pitch your innovative ideas?', 'complete your team setup?', 'take the lead?']}
+                  mainClassName="px-3.5 py-1.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-full font-bold shadow-md shadow-blue-900/30 overflow-hidden border border-blue-500/30 text-center whitespace-nowrap inline-flex items-center justify-center"
+                  staggerFrom="first"
+                  initial={{ y: "100%", opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  exit={{ y: "-120%", opacity: 0 }}
+                  staggerDuration={0.02}
+                  splitLevelClassName="overflow-hidden pb-0.5"
+                  transition={{ type: "spring", damping: 25, stiffness: 350 }}
+                  rotationInterval={5000}
+                />
+              </div>
+            </>
+          )}
+        </div>
       </div>
 
       {settings.isExtended && (
@@ -692,16 +753,17 @@ export const RegistrationRulesView: React.FC = () => {
         <div className="lg:col-span-4 space-y-6">
 
           {/* Key Dates Badge Card */}
-          <div className="rounded-3xl bg-white border border-slate-200 p-6 shadow-sm relative overflow-hidden">
-            <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2 mb-3">
-              <Calendar className="h-4 w-4 text-[#C1272D]" />
+          <div className="relative overflow-hidden rounded-3xl bg-white border border-slate-200/80 p-6 shadow-md hover:shadow-lg transition duration-200">
+            <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-gradient-to-b from-[#C1272D] to-red-500" />
+            <h3 className="text-sm font-extrabold text-slate-950 flex items-center gap-2 mb-4">
+              <Calendar className="h-4.5 w-4.5 text-[#C1272D]" />
               Important Registration Deadlines
             </h3>
-            <div className="space-y-3.5">
+            <div className="space-y-3">
               {timeline && timeline.map((event, idx) => (
-                <div key={event.id || idx} className="flex justify-between items-center text-xs">
-                  <span className="text-slate-500 font-medium pr-2 truncate" title={event.title}>{event.title}</span>
-                  <span className={`font-extrabold shrink-0 ${event.date.includes('Mandatory') || idx === 1 ? 'text-red-600' : 'text-slate-800'}`}>
+                <div key={event.id || idx} className="flex justify-between items-center text-xs p-2 rounded-xl bg-slate-50 border border-slate-100/50 hover:bg-slate-100/30 transition">
+                  <span className="text-slate-500 font-semibold pr-2 truncate" title={event.title}>{event.title}</span>
+                  <span className={`font-black shrink-0 ${event.date.includes('Mandatory') || idx === 1 ? 'text-[#C1272D] bg-red-50 px-2 py-0.5 rounded-md border border-red-100/60' : 'text-slate-900 bg-slate-100 px-2 py-0.5 rounded-md border border-slate-200/30'}`}>
                     {event.date}
                   </span>
                 </div>
@@ -713,56 +775,59 @@ export const RegistrationRulesView: React.FC = () => {
           </div>
 
           {/* Countdown Card */}
-          <div className="rounded-3xl bg-white border border-slate-200 p-6 shadow-sm relative overflow-hidden">
-            <div className="flex items-center gap-2 mb-3.5 pb-2 border-b border-slate-100">
-              <Clock className="h-4 w-4 text-[#C1272D] animate-pulse" />
-              <span className="text-xs font-black uppercase tracking-wider text-slate-500">
+          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 to-slate-950 border border-slate-800 p-6 shadow-lg text-white">
+            {/* Soft decorative radial glow */}
+            <div className="absolute -right-8 -top-8 w-20 h-20 bg-red-500/10 rounded-full blur-xl pointer-events-none" />
+
+            <div className="flex items-center gap-2 mb-4 pb-2.5 border-b border-slate-800">
+              <Clock className="h-4 w-4 text-red-500 animate-pulse" />
+              <span className="text-xs font-black uppercase tracking-widest text-slate-400">
                 Registration Closes In
               </span>
             </div>
 
             {timeLeft.isExpired ? (
-              <div className="text-center py-2">
-                <span className="text-sm font-black text-red-600 block uppercase">Registration Closed</span>
+              <div className="text-center py-3 bg-red-950/30 rounded-2xl border border-red-900/40">
+                <span className="text-sm font-black text-red-400 block uppercase tracking-wider">Registration Closed</span>
               </div>
             ) : (
               <div className="grid grid-cols-4 gap-2">
                 {/* Days */}
-                <div className="flex flex-col items-center bg-slate-50 rounded-2xl p-2.5">
-                  <span className="text-lg font-black text-slate-900 font-mono leading-none">
+                <div className="flex flex-col items-center bg-slate-900/90 border border-slate-800/80 rounded-2xl p-2.5 shadow-inner">
+                  <span className="text-xl font-black text-white font-mono leading-none">
                     {String(timeLeft.days).padStart(2, '0')}
                   </span>
-                  <span className="text-[9px] font-bold text-slate-400 uppercase mt-1">
+                  <span className="text-[9px] font-black text-slate-500 uppercase mt-1 tracking-wider">
                     Days
                   </span>
                 </div>
 
                 {/* Hours */}
-                <div className="flex flex-col items-center bg-slate-50 rounded-2xl p-2.5">
-                  <span className="text-lg font-black text-slate-900 font-mono leading-none">
+                <div className="flex flex-col items-center bg-slate-900/90 border border-slate-800/80 rounded-2xl p-2.5 shadow-inner">
+                  <span className="text-xl font-black text-white font-mono leading-none">
                     {String(timeLeft.hours).padStart(2, '0')}
                   </span>
-                  <span className="text-[9px] font-bold text-slate-400 uppercase mt-1">
+                  <span className="text-[9px] font-black text-slate-500 uppercase mt-1 tracking-wider">
                     Hrs
                   </span>
                 </div>
 
                 {/* Minutes */}
-                <div className="flex flex-col items-center bg-slate-50 rounded-2xl p-2.5">
-                  <span className="text-lg font-black text-slate-900 font-mono leading-none">
+                <div className="flex flex-col items-center bg-slate-900/90 border border-slate-800/80 rounded-2xl p-2.5 shadow-inner">
+                  <span className="text-xl font-black text-white font-mono leading-none">
                     {String(timeLeft.minutes).padStart(2, '0')}
                   </span>
-                  <span className="text-[9px] font-bold text-slate-400 uppercase mt-1">
+                  <span className="text-[9px] font-black text-slate-500 uppercase mt-1 tracking-wider">
                     Mins
                   </span>
                 </div>
 
                 {/* Seconds */}
-                <div className="flex flex-col items-center bg-slate-50 rounded-2xl p-2.5">
-                  <span className="text-lg font-black text-[#C1272D] font-mono leading-none">
+                <div className="flex flex-col items-center bg-[#C1272D]/15 border border-[#C1272D]/35 rounded-2xl p-2.5 shadow-inner">
+                  <span className="text-xl font-black text-red-400 font-mono leading-none animate-pulse">
                     {String(timeLeft.seconds).padStart(2, '0')}
                   </span>
-                  <span className="text-[9px] font-bold text-slate-400 uppercase mt-1">
+                  <span className="text-[9px] font-black text-red-500 uppercase mt-1 tracking-wider">
                     Secs
                   </span>
                 </div>
@@ -776,24 +841,24 @@ export const RegistrationRulesView: React.FC = () => {
           {isTeamLoggedIn ? (
             <div className="space-y-6 animate-in fade-in duration-300">
               {/* Problem Statement Container */}
-              <div className="rounded-3xl bg-white border border-slate-200 p-6 sm:p-8 shadow-md relative overflow-hidden">
-                <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#C1272D] to-[#1B3F8B]" />
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="p-2 rounded-xl bg-red-50 text-[#C1272D]">
-                    <FileText className="h-6 w-6" />
+              <div className="relative overflow-hidden rounded-3xl bg-white border border-slate-200/80 p-6 sm:p-8 shadow-md hover:shadow-xl hover:border-slate-300 transition duration-300">
+                <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-gradient-to-b from-[#C1272D] to-red-500" />
+                <div className="flex items-center gap-3.5 mb-4 pl-1">
+                  <div className="p-2.5 rounded-2xl bg-red-500/10 text-[#C1272D] border border-red-500/15">
+                    <FileText className="h-5.5 w-5.5" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-black text-slate-900 tracking-tight">
+                    <h3 className="text-lg font-black text-slate-950 tracking-tight">
                       SIH 2026 Problem Statements
                     </h3>
-                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block">
                       Official Announcement
                     </span>
                   </div>
                 </div>
 
-                <div className="space-y-4">
-                  <p className="text-xs text-slate-600 leading-relaxed font-semibold">
+                <div className="space-y-4 pl-1">
+                  <p className="text-xs text-slate-650 leading-relaxed font-semibold">
                     {settings.problemStatementStatus || 'Problem statement announcements will be announced once we get update from the official SIH website.'}
                   </p>
 
@@ -802,34 +867,34 @@ export const RegistrationRulesView: React.FC = () => {
                       href={settings.problemStatementLink}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-[#C1272D] to-red-600 hover:opacity-95 transition shadow-xs"
+                      className="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl text-xs font-black text-white bg-gradient-to-r from-[#C1272D] to-red-600 hover:from-red-655 hover:to-red-500 transition shadow-md shadow-red-500/10 transform active:scale-95 duration-200"
                     >
                       Visit Official SIH Problem Statements
-                      <ArrowRight className="h-3.5 w-3.5" />
+                      <ArrowRight className="h-4 w-4" />
                     </a>
                   )}
                 </div>
               </div>
 
               {/* PPT Template Container */}
-              <div className="rounded-3xl bg-white border border-slate-200 p-6 sm:p-8 shadow-md relative overflow-hidden">
-                <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#1B3F8B] to-[#C1272D]" />
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="p-2 rounded-xl bg-blue-50 text-[#1B3F8B]">
-                    <GraduationCap className="h-6 w-6" />
+              <div className="relative overflow-hidden rounded-3xl bg-white border border-slate-200/80 p-6 sm:p-8 shadow-md hover:shadow-xl hover:border-slate-300 transition duration-300">
+                <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-gradient-to-b from-[#1B3F8B] to-indigo-600" />
+                <div className="flex items-center gap-3.5 mb-4 pl-1">
+                  <div className="p-2.5 rounded-2xl bg-blue-500/10 text-[#1B3F8B] border border-blue-500/15">
+                    <GraduationCap className="h-5.5 w-5.5" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-black text-slate-900 tracking-tight">
+                    <h3 className="text-lg font-black text-slate-950 tracking-tight">
                       Download SIH PPT Template
                     </h3>
-                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block">
                       Presentation Deck Template
                     </span>
                   </div>
                 </div>
 
-                <div className="space-y-4">
-                  <p className="text-xs text-slate-600 leading-relaxed font-semibold">
+                <div className="space-y-4 pl-1">
+                  <p className="text-xs text-slate-650 leading-relaxed font-semibold">
                     {settings.pptTemplateStatus || 'The template will be released soon. Download it from here.'}
                   </p>
 
@@ -838,38 +903,38 @@ export const RegistrationRulesView: React.FC = () => {
                       href={settings.pptTemplateLink}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-[#1B3F8B] to-blue-800 hover:opacity-95 transition shadow-xs"
+                      className="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl text-xs font-black text-white bg-gradient-to-r from-[#1B3F8B] to-blue-800 hover:from-blue-700 hover:to-indigo-800 transition shadow-md shadow-blue-500/10 transform active:scale-95 duration-200"
                     >
                       Download Template PPT
-                      <ArrowRight className="h-3.5 w-3.5" />
+                      <ArrowRight className="h-4 w-4" />
                     </a>
                   )}
                 </div>
               </div>
 
               {/* PPT Submission Card */}
-              <div className="rounded-3xl bg-white border border-slate-200 p-6 sm:p-8 shadow-md relative overflow-hidden">
-                <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#C1272D] to-[#1B3F8B]" />
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="p-2 rounded-xl bg-red-50 text-[#C1272D]">
-                    <FileText className="h-6 w-6" />
+              <div className="relative overflow-hidden rounded-3xl bg-white border border-slate-200/80 p-6 sm:p-8 shadow-md hover:shadow-xl hover:border-slate-300 transition duration-300">
+                <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-gradient-to-b from-slate-405 to-slate-505" />
+                <div className="flex items-center gap-3.5 mb-4 pl-1">
+                  <div className="p-2.5 rounded-2xl bg-slate-500/10 text-slate-600 border border-slate-500/15">
+                    <FileText className="h-5.5 w-5.5" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-black text-slate-900 tracking-tight">
+                    <h3 className="text-lg font-black text-slate-950 tracking-tight">
                       Submit Your PPT
                     </h3>
-                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block">
                       Pitch Deck Submission Portal
                     </span>
                   </div>
                 </div>
 
-                <div className="space-y-4">
-                  <p className="text-xs text-slate-600 leading-relaxed font-semibold">
+                <div className="space-y-4 pl-1">
+                  <p className="text-xs text-slate-650 leading-relaxed font-semibold">
                     {settings.pptSubmissionStatus || 'PPT submission portal will open after the registration deadline. Stay tuned.'}
                   </p>
                   {settings.pptSubmissionDeadline && (
-                    <div className="flex items-center gap-2 text-xs font-bold text-[#C1272D]">
+                    <div className="flex items-center gap-2 text-xs font-bold text-[#C1272D] bg-red-50 px-2.5 py-1 rounded-lg border border-red-100/55 inline-flex w-auto">
                       <Calendar className="h-3.5 w-3.5" />
                       Submission Deadline: {settings.pptSubmissionDeadline}
                     </div>
@@ -877,13 +942,13 @@ export const RegistrationRulesView: React.FC = () => {
                   {settings.pptSubmissionOpen ? (
                     <button
                       onClick={() => setActiveTab('ppt-submit')}
-                      className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-[#C1272D] to-red-700 hover:opacity-95 transition shadow-xs"
+                      className="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl text-xs font-black text-white bg-gradient-to-r from-[#C1272D] to-red-650 hover:from-red-650 hover:to-red-550 transition shadow-md shadow-red-500/10 transform active:scale-95 duration-200"
                     >
                       Submit Your PPT
-                      <ArrowRight className="h-3.5 w-3.5" />
+                      <ArrowRight className="h-4 w-4" />
                     </button>
                   ) : (
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-extrabold bg-slate-100 text-slate-500">
+                    <span className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-black text-slate-500 bg-slate-100 border border-slate-200 cursor-not-allowed">
                       Submissions Not Yet Open
                     </span>
                   )}
@@ -1540,7 +1605,7 @@ export const RegistrationRulesView: React.FC = () => {
         </div>
       </div>
 
-      {/* REGISTRATION SUCCESS MODAL OVERLAY */}
+        {/* REGISTRATION SUCCESS MODAL OVERLAY */}
       {successData && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4 animate-in fade-in zoom-in duration-200">
           <div className="relative w-full max-w-md rounded-3xl bg-white p-6 shadow-2xl border border-slate-100 text-slate-800 space-y-4">
