@@ -425,6 +425,10 @@ async function startServer() {
           if (!/^\d{10}$/.test(m.mobile.trim())) {
             return res.status(400).json({ success: false, message: `Invalid 10-digit mobile for ${m.fullName}` });
           }
+          const enrollmentRequired = m.semester !== '1';
+          if (enrollmentRequired && (!m.enrollmentNo || !m.enrollmentNo.trim())) {
+            return res.status(400).json({ success: false, message: `Enrollment number is required for ${m.fullName}.` });
+          }
         }
 
         const femaleCount = allMembers.filter((m) => m.gender === 'Female').length;
@@ -442,6 +446,39 @@ async function startServer() {
             success: false,
             message: 'Each team member must have a unique name. Duplicate names are not allowed.',
           });
+        }
+
+        // Duplicate enrollment check WITHIN team
+        const enrollmentsInTeam = allMembers
+          .map((m) => m.enrollmentNo?.trim().toUpperCase())
+          .filter((e) => e && e.length > 0);
+        const uniqueInTeam = new Set(enrollmentsInTeam);
+        if (uniqueInTeam.size !== enrollmentsInTeam.length) {
+          return res.status(400).json({
+            success: false,
+            message: 'Duplicate enrollment number entered in your team.',
+          });
+        }
+
+        // Duplicate enrollment check ACROSS other teams
+        const existingTeams = await getAllTeams();
+        const registeredEnrollments = new Map<string, string>();
+        existingTeams.forEach((t) => {
+          if (t.id.toUpperCase() === teamId.toUpperCase()) return; // skip current team
+          [t.leader, ...t.members].forEach((m) => {
+            if (m.enrollmentNo) {
+              registeredEnrollments.set(m.enrollmentNo.trim().toUpperCase(), t.teamName);
+            }
+          });
+        });
+
+        for (const enr of enrollmentsInTeam) {
+          if (registeredEnrollments.has(enr)) {
+            return res.status(400).json({
+              success: false,
+              message: `The enrollment number ${enr} has already been registered with team "${registeredEnrollments.get(enr)}".`,
+            });
+          }
         }
 
         updatePayload.leader = { ...leader, isLeader: true };

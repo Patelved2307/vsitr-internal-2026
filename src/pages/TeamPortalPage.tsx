@@ -91,6 +91,32 @@ export const TeamPortalPage: React.FC = () => {
         return;
       }
     }
+
+    const leaderEnrollmentRequired = editLeader.semester !== '1';
+    if (leaderEnrollmentRequired && !editLeader.enrollmentNo?.trim()) {
+      showAlert('Enrollment Number Required', 'Enrollment Number is required for the Team Leader.');
+      return;
+    }
+
+    for (let i = 0; i < editMembers.length; i++) {
+      const m = editMembers[i];
+      const memberEnrollmentRequired = m.semester !== '1';
+      if (memberEnrollmentRequired && !m.enrollmentNo?.trim()) {
+        showAlert('Enrollment Number Required', `Enrollment Number is required for Member #${i + 1} (${m.fullName || 'Member'}).`);
+        return;
+      }
+    }
+
+    const allMembers = [editLeader, ...editMembers];
+    const enrollments = allMembers
+      .map((m) => m.enrollmentNo?.trim().toUpperCase())
+      .filter((e) => e && e.length > 0);
+    const uniqueEnrollments = new Set(enrollments);
+    if (uniqueEnrollments.size !== enrollments.length) {
+      showAlert('Duplicate Enrollment Number', 'An enrollment number has been entered more than once in your team.');
+      return;
+    }
+
     setIsSaving(true);
     try {
       const res = await api.updateTeamSelf({
@@ -541,6 +567,19 @@ export const TeamPortalPage: React.FC = () => {
                     )}
                   </div>
                   <div>
+                    <label className="font-bold text-slate-700 block mb-1">
+                      Enrollment Number {editLeader.semester !== '1' && <span className="text-red-600">*</span>}
+                    </label>
+                    <input
+                      type="text"
+                      placeholder={editLeader.semester === '1' ? 'Not required for Sem 1' : 'e.g. 24BEIT54026'}
+                      required={editLeader.semester !== '1'}
+                      value={editLeader.enrollmentNo || ''}
+                      onChange={(e) => setEditLeader({ ...editLeader, enrollmentNo: e.target.value })}
+                      className="w-full px-3 py-2 rounded-xl border border-slate-300 focus:outline-none focus:border-[#1B3F8B]"
+                    />
+                  </div>
+                  <div>
                     <label className="font-bold text-slate-700 block mb-1">Department</label>
                     <select
                       value={editLeader.department}
@@ -646,6 +685,23 @@ export const TeamPortalPage: React.FC = () => {
                           Invalid email address.
                         </p>
                       )}
+                    </div>
+                    <div>
+                      <label className="font-bold text-slate-700 block mb-1">
+                        Enrollment No {m.semester !== '1' && <span className="text-red-600">*</span>}
+                      </label>
+                      <input
+                        type="text"
+                        placeholder={m.semester === '1' ? 'Not required for Sem 1' : 'e.g. 24BEIT54026'}
+                        required={m.semester !== '1'}
+                        value={m.enrollmentNo || ''}
+                        onChange={(e) => {
+                          const updated = [...editMembers];
+                          updated[idx].enrollmentNo = e.target.value;
+                          setEditMembers(updated);
+                        }}
+                        className="w-full px-3 py-2 rounded-xl border border-slate-300 focus:outline-none focus:border-[#1B3F8B]"
+                      />
                     </div>
                     <div>
                       <label className="font-bold text-slate-700 block mb-1">Dept</label>

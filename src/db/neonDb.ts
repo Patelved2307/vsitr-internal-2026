@@ -514,7 +514,7 @@ export async function saveGlobalConfig(data: { settings?: EventSettings; timelin
 export async function getAllTeams(): Promise<Team[]> {
   if (isNeonConnected) {
     try {
-      const res = await runQuery('SELECT * FROM teams ORDER BY created_at DESC');
+      const res = await runQuery("SELECT * FROM teams WHERE UPPER(id) != 'SIH2026-000' ORDER BY created_at DESC");
       
       const parsedTeams = res.rows.map((row: any) => {
         let leaderData: any = {};
@@ -552,10 +552,11 @@ export async function getAllTeams(): Promise<Team[]> {
     }
   }
   const db = ensureFileDb();
-  return db.teams;
+  return db.teams.filter((t) => t.id.toUpperCase() !== 'SIH2026-000');
 }
 
 export async function getTeamById(id: string): Promise<Team | null> {
+  if (id.toUpperCase() === 'SIH2026-000') return null;
   if (isNeonConnected) {
     try {
       const res = await runQuery('SELECT * FROM teams WHERE UPPER(id) = UPPER($1)', [id.trim()]);
@@ -577,7 +578,7 @@ export async function getTeamById(id: string): Promise<Team | null> {
     }
   }
   const db = ensureFileDb();
-  return db.teams.find((t) => t.id.toUpperCase() === id.trim().toUpperCase()) || null;
+  return db.teams.find((t) => t.id.toUpperCase() === id.trim().toUpperCase() && t.id.toUpperCase() !== 'SIH2026-000') || null;
 }
 
 export async function createTeam(team: Team): Promise<Team> {
