@@ -4,7 +4,7 @@ import { MapPin, Calendar, ShieldAlert } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 export const TimelineSection: React.FC = () => {
-  const { settings } = useAuth();
+  const { settings, timeline } = useAuth();
   const effectiveDeadline = settings?.isExtended && settings?.extendedDeadline ? settings.extendedDeadline : settings?.registrationDeadline;
 
   const formattedDeadlineDate = React.useMemo(() => {
@@ -34,6 +34,11 @@ export const TimelineSection: React.FC = () => {
       return "11:59 PM";
     }
   }, [effectiveDeadline]);
+
+  const mentorDeadlineDate = React.useMemo(() => {
+    const mentorEvent = timeline?.find((t) => t.id === 't2');
+    return mentorEvent ? mentorEvent.date : "05 August 2026";
+  }, [timeline]);
   const data = [
     {
       title: formattedDeadlineDate,
@@ -54,7 +59,7 @@ export const TimelineSection: React.FC = () => {
       ),
     },
     {
-      title: "05 August 2026",
+      title: mentorDeadlineDate,
       content: (
         <div>
           <h4 className="text-lg font-black text-[#1B3F8B] mb-2">Mentor Registration Deadline</h4>

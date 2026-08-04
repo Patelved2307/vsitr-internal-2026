@@ -4,7 +4,7 @@ import { Mail, MapPin, ExternalLink, ShieldCheck } from 'lucide-react';
 import { FooterBackgroundGradient, TextHoverEffect } from './ui/hover-footer';
 
 export const Footer: React.FC = () => {
-  const { settings, setActiveTab, isTeamLoggedIn } = useAuth();
+  const { settings, timeline, setActiveTab, isTeamLoggedIn } = useAuth();
 
   const effectiveDeadline = settings?.isExtended && settings?.extendedDeadline ? settings.extendedDeadline : settings?.registrationDeadline;
   const formattedDeadline = React.useMemo(() => {
@@ -23,6 +23,11 @@ export const Footer: React.FC = () => {
       return "02 August 2026, 11:59 PM";
     }
   }, [effectiveDeadline]);
+
+  const mentorDeadline = React.useMemo(() => {
+    const mentorEvent = timeline?.find((t) => t.id === 't2');
+    return mentorEvent ? mentorEvent.date : "05 August 2026, 11:59 PM";
+  }, [timeline]);
 
   return (
     <footer className="w-full bg-slate-900 text-slate-300 pt-12 pb-8 relative overflow-hidden border-t border-slate-800">
@@ -123,7 +128,7 @@ export const Footer: React.FC = () => {
               </li>
               <li className="flex flex-col">
                 <span className="text-slate-400 text-[10px] uppercase font-bold">Phase 2 Mentor Details</span>
-                <span className="font-bold text-red-400">05 August 2026</span>
+                <span className="font-bold text-red-400">{mentorDeadline}</span>
               </li>
               <li className="flex flex-col">
                 <span className="text-slate-400 text-[10px] uppercase font-bold">Internal Pitching Round</span>
