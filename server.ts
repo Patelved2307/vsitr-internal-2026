@@ -102,24 +102,6 @@ async function startServer() {
     }
   });
 
-  // 1.5 Update Settings & Event Info (Admin)
-  app.put('/api/settings', async (req: Request, res: Response) => {
-    try {
-      const { settings, timeline, faqs, rules } = req.body;
-      
-      const payload: any = {};
-      if (settings) payload.settings = settings;
-      if (timeline) payload.timeline = timeline;
-      if (faqs) payload.faqs = faqs;
-      if (rules) payload.rules = rules;
-
-      await saveGlobalConfig(payload);
-
-      res.json({ success: true, message: 'Settings updated successfully' });
-    } catch (err: any) {
-      res.status(500).json({ success: false, message: err.message });
-    }
-  });
 
   // 2. Admin Login
   app.post('/api/admin/login', (req: Request, res: Response) => {

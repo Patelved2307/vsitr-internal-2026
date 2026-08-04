@@ -258,42 +258,16 @@ export async function initDatabase(): Promise<void> {
           'INSERT INTO app_config (key, value) VALUES ($1, $2)',
           ['global_settings', JSON.stringify(initialConfig)]
         );
-      } else {
-        const currentDbConfig = configRes.rows[0].value;
-        if (currentDbConfig && currentDbConfig.settings && fileDb.settings) {
-          let needsUpdate = false;
-          if (currentDbConfig.settings.registrationDeadline !== fileDb.settings.registrationDeadline) {
-            currentDbConfig.settings.registrationDeadline = fileDb.settings.registrationDeadline;
-            needsUpdate = true;
-          }
-          if (currentDbConfig.settings.extendedDeadline !== fileDb.settings.extendedDeadline) {
-            currentDbConfig.settings.extendedDeadline = fileDb.settings.extendedDeadline;
-            needsUpdate = true;
-          }
-          if (needsUpdate) {
-            console.log('Updating Neon database config with updated local deadline settings...');
-            await runQuery(
-              'UPDATE app_config SET value = $1 WHERE key = $2',
-              [JSON.stringify(currentDbConfig), 'global_settings']
-            );
-          }
-        }
       }
 
-      // Sync any local teams from sih_db.json into Neon teams, members, and mentors tables
+      // Sync any local teams from sih_db.json into Neon teams, members, and mentors tables (only if they do not exist in Neon)
       if (fileDb.teams && fileDb.teams.length > 0) {
         console.log(`Syncing ${fileDb.teams.length} local teams into Neon PostgreSQL...`);
         for (const t of fileDb.teams) {
-          await runQuery(
+          const res = await runQuery(
             `INSERT INTO teams (id, team_name, leader, members, mentor, status, created_at, updated_at)
              VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
-             ON CONFLICT (id) DO UPDATE SET
-               team_name = EXCLUDED.team_name,
-               leader = EXCLUDED.leader,
-               members = EXCLUDED.members,
-               mentor = EXCLUDED.mentor,
-               status = EXCLUDED.status,
-               updated_at = EXCLUDED.updated_at`,
+             ON CONFLICT (id) DO NOTHING`,
             [
               t.id,
               t.teamName,
@@ -305,7 +279,9 @@ export async function initDatabase(): Promise<void> {
               t.updatedAt || new Date().toISOString(),
             ]
           );
-          await syncNormalizedMembersAndMentors(t);
+          if (res.rowCount > 0) {
+            await syncNormalizedMembersAndMentors(t);
+          }
         }
 
         // Also sync email logs if any exist locally
