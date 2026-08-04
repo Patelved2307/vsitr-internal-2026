@@ -315,9 +315,9 @@ export const RegistrationRulesView: React.FC = () => {
   const handleMentorSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const targetTeamId = successData?.teamId || verifiedTeam?.id;
+    const targetTeamId = successData?.teamId || verifiedTeam?.id || teamIdInput.trim();
     if (!targetTeamId) {
-      showAlert('Team Verification Required', 'Please register a team or verify your Team ID first.');
+      showAlert('Team ID Required', 'Please enter your Team Registration ID.');
       return;
     }
 
@@ -1393,33 +1393,6 @@ export const RegistrationRulesView: React.FC = () => {
               {(mode === 'mentor_lookup' || regStep === 4) && (
                 <div className="rounded-3xl bg-white border border-slate-200 p-6 sm:p-8 shadow-md space-y-6">
 
-                  {/* Lookup input if not verified yet */}
-                  {!verifiedTeam && (
-                    <div className="space-y-3 animate-in fade-in duration-200">
-                      <h3 className="text-base font-extrabold text-slate-900 flex items-center gap-2 pb-2 border-b border-slate-100">
-                        <Search className="h-5 w-5 text-[#1B3F8B]" />
-                        Find Registered Team
-                      </h3>
-                      <form onSubmit={handleVerifyId} className="flex gap-2">
-                        <input
-                          type="text"
-                          required
-                          placeholder="Registration ID (e.g. SIH2026-001)"
-                          value={teamIdInput}
-                          onChange={(e) => setTeamIdInput(e.target.value)}
-                          className="flex-1 px-4 py-2.5 rounded-xl border border-slate-300 text-sm font-mono uppercase focus:ring-2 focus:ring-[#1B3F8B] outline-none"
-                        />
-                        <button
-                          type="submit"
-                          disabled={isVerifying}
-                          className="px-5 py-2.5 rounded-xl font-bold text-xs text-white bg-gradient-to-r from-[#1B3F8B] to-indigo-800 hover:opacity-95 transition disabled:opacity-50"
-                        >
-                          {isVerifying ? 'Verifying...' : 'Verify'}
-                        </button>
-                      </form>
-                    </div>
-                  )}
-
                   {/* SUCCESS / WARNING REMINDER DETAILS */}
                   {verifiedTeam && (
                     <div className="space-y-4">
@@ -1443,15 +1416,30 @@ export const RegistrationRulesView: React.FC = () => {
                           Per hackathon rules, you must assign a Faculty Mentor from their respective branch immediately to complete your registration.
                         </p>
                       </div>
+                    </div>
+                  )}
 
-                      {/* Mentor Form */}
-                      <form onSubmit={handleMentorSubmit} className="space-y-4 animate-in fade-in duration-200 border-t border-slate-100 pt-4">
-                        <h3 className="text-base font-extrabold text-slate-900 flex items-center gap-2">
-                          <GraduationCap className="h-5 w-5 text-amber-600" />
-                          Faculty Mentor Details (from Branch/Department)
-                        </h3>
+                  {/* Mentor Form */}
+                  <form onSubmit={handleMentorSubmit} className="space-y-4 animate-in fade-in duration-200 border-t border-slate-100 pt-4">
+                    <h3 className="text-base font-extrabold text-slate-900 flex items-center gap-2">
+                      <GraduationCap className="h-5 w-5 text-amber-600" />
+                      Faculty Mentor Details (from Branch/Department)
+                    </h3>
 
-                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                      {!verifiedTeam && (
+                        <div className="sm:col-span-3">
+                          <label className="block text-[10px] font-bold text-slate-700 mb-1">Team Registration ID *</label>
+                          <input
+                            type="text"
+                            required
+                            placeholder="Registration ID (e.g. SIH2026-001)"
+                            value={teamIdInput}
+                            onChange={(e) => setTeamIdInput(e.target.value)}
+                            className="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs font-mono uppercase outline-none font-semibold"
+                          />
+                        </div>
+                      )}
                           <div>
                             <label className="block text-[10px] font-bold text-slate-700 mb-1">Title *</label>
                             <select
@@ -1541,8 +1529,6 @@ export const RegistrationRulesView: React.FC = () => {
                           {isMentorSubmitting ? 'Submitting...' : 'Submit Mentor Details & Complete Registration'}
                         </button>
                       </form>
-                    </div>
-                  )}
                 </div>
               )}
 
