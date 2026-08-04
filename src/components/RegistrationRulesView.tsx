@@ -68,7 +68,7 @@ export const RegistrationRulesView: React.FC = () => {
   const [mentorMobile, setMentorMobile] = useState('');
   const [mentorEmail, setMentorEmail] = useState('');
   const [mentorDept, setMentorDept] = useState<Department>('IT');
-  const [mentorInst, setMentorInst] = useState('KSV Kadi');
+  const [mentorInst, setMentorInst] = useState('VSITR Kadi');
   const [isMentorSubmitting, setIsMentorSubmitting] = useState(false);
 
   // Step 1: Team Name
@@ -1436,11 +1436,11 @@ export const RegistrationRulesView: React.FC = () => {
                       <div className="p-4 rounded-2xl bg-amber-50 border border-amber-200 text-amber-900 space-y-2">
                         <div className="flex items-center gap-2 text-amber-800 font-extrabold text-xs uppercase">
                           <AlertTriangle className="h-4 w-4 shrink-0 text-amber-600" />
-                          <span>Action Required: Add Faculty Mentor</span>
+                          <span>Action Required: Add Faculty Mentor (Branch-specific)</span>
                         </div>
                         <p className="text-xs leading-relaxed text-slate-700">
                           Hi <strong className="font-bold text-slate-900">{verifiedTeam.leader?.fullName}</strong> (Team Leader of "{verifiedTeam.teamName}").
-                          Per hackathon rules, you must assign a Faculty Mentor immediately to complete your registration.
+                          Per hackathon rules, you must assign a Faculty Mentor from their respective branch immediately to complete your registration.
                         </p>
                       </div>
 
@@ -1448,7 +1448,7 @@ export const RegistrationRulesView: React.FC = () => {
                       <form onSubmit={handleMentorSubmit} className="space-y-4 animate-in fade-in duration-200 border-t border-slate-100 pt-4">
                         <h3 className="text-base font-extrabold text-slate-900 flex items-center gap-2">
                           <GraduationCap className="h-5 w-5 text-amber-600" />
-                          Faculty Mentor details
+                          Faculty Mentor Details (from Branch/Department)
                         </h3>
 
                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -1506,7 +1506,7 @@ export const RegistrationRulesView: React.FC = () => {
                           </div>
 
                           <div>
-                            <label className="block text-[10px] font-bold text-slate-700 mb-1">Department *</label>
+                            <label className="block text-[10px] font-bold text-slate-700 mb-1">Mentor's Branch / Department *</label>
                             <select
                               value={mentorDept}
                               onChange={(e) => setMentorDept(e.target.value as Department)}
@@ -1525,8 +1525,8 @@ export const RegistrationRulesView: React.FC = () => {
                               onChange={(e) => setMentorInst(e.target.value)}
                               className="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs font-semibold bg-white outline-none"
                             >
-                              <option value="KSV Kadi">KSV Kadi (VSITR)</option>
-                              <option value="KSV Gandhinagar">KSV Gandhinagar</option>
+                              <option value="VSITR Kadi">VSITR Kadi</option>
+                              <option value="VSITR Gandhinagar">VSITR Gandhinagar</option>
                             </select>
                           </div>
 

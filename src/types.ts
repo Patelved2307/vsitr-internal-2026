@@ -22,7 +22,7 @@ export interface MentorDetails {
   contactNumber: string;
   email: string;
   department: Department;
-  institute: 'KSV Kadi' | 'KSV Gandhinagar' | string;
+  institute: 'VSITR Kadi' | 'VSITR Gandhinagar' | string;
   officeAddress?: string;
   submittedAt?: string;
 }

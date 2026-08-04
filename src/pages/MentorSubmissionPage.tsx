@@ -16,7 +16,7 @@ export const MentorSubmissionPage: React.FC = () => {
   const [contactNumber, setContactNumber] = useState('');
   const [email, setEmail] = useState('');
   const [department, setDepartment] = useState<Department>('IT');
-  const [institute, setInstitute] = useState('KSV Kadi');
+  const [institute, setInstitute] = useState('VSITR Kadi');
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmittedSuccess, setIsSubmittedSuccess] = useState(false);
@@ -103,10 +103,10 @@ export const MentorSubmissionPage: React.FC = () => {
           Phase 2: Mentor Details Submission
         </div>
         <h1 className="text-3xl font-black text-slate-900">
-          Faculty Mentor Registration
+          Faculty Mentor Registration (by Branch)
         </h1>
         <p className="text-xs sm:text-sm text-slate-500 max-w-md mx-auto mt-1">
-          Link your official faculty mentor to confirm your Internal SIH 2026 team registration.
+          Link your official faculty mentor from their respective branch to confirm your Internal SIH 2026 team registration.
         </p>
       </div>
 
@@ -188,7 +188,7 @@ export const MentorSubmissionPage: React.FC = () => {
             <form onSubmit={handleSubmitMentor} className="space-y-4 animate-in fade-in duration-300">
               <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
                 <GraduationCap className="h-5 w-5 text-amber-600" />
-                2. Enter Faculty Mentor Information
+                2. Enter Faculty Mentor Details (from Branch/Department)
               </h2>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -260,7 +260,7 @@ export const MentorSubmissionPage: React.FC = () => {
                 {/* Department */}
                 <div>
                   <label className="block text-xs font-bold text-slate-700 mb-1">
-                    Department *
+                    Mentor's Branch / Department *
                   </label>
                   <select
                     value={department}
@@ -283,8 +283,8 @@ export const MentorSubmissionPage: React.FC = () => {
                     onChange={(e) => setInstitute(e.target.value)}
                     className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm font-semibold outline-none bg-white"
                   >
-                    <option value="KSV Kadi">KSV Kadi (VSITR)</option>
-                    <option value="KSV Gandhinagar">KSV Gandhinagar</option>
+                    <option value="VSITR Kadi">VSITR Kadi</option>
+                    <option value="VSITR Gandhinagar">VSITR Gandhinagar</option>
                   </select>
                 </div>
 

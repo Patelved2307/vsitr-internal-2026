@@ -394,7 +394,7 @@ export const TeamPortalPage: React.FC = () => {
                 </span>
               </div>
               <div>
-                <span className="text-slate-400 font-bold block uppercase tracking-wider text-[9px]">Department &amp; Institute</span>
+                <span className="text-slate-400 font-bold block uppercase tracking-wider text-[9px]">Mentor's Branch/Department &amp; Institute</span>
                 <span className="text-sm font-black text-slate-900 block mt-0.5">
                   {team.mentor.department} • {team.mentor.institute}
                 </span>
@@ -808,7 +808,7 @@ export const TeamPortalPage: React.FC = () => {
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="font-bold text-slate-700 block mb-1">Department</label>
+                  <label className="font-bold text-slate-700 block mb-1">Mentor's Branch / Department</label>
                   <input
                     type="text"
                     required
