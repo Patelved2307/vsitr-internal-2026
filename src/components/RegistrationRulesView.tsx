@@ -69,7 +69,6 @@ export const RegistrationRulesView: React.FC = () => {
   const [mentorEmail, setMentorEmail] = useState('');
   const [mentorDept, setMentorDept] = useState<Department>('IT');
   const [mentorInst, setMentorInst] = useState('KSV Kadi');
-  const [mentorAddress, setMentorAddress] = useState('');
   const [isMentorSubmitting, setIsMentorSubmitting] = useState(false);
 
   // Step 1: Team Name
@@ -322,8 +321,8 @@ export const RegistrationRulesView: React.FC = () => {
       return;
     }
 
-    if (!mentorName.trim() || !mentorMobile.trim() || !mentorEmail.trim() || !mentorAddress.trim()) {
-      showAlert('Fields Required', 'Please fill in all mentor contact and office details.');
+    if (!mentorName.trim() || !mentorMobile.trim() || !mentorEmail.trim()) {
+      showAlert('Fields Required', 'Please fill in all mentor contact details.');
       return;
     }
 
@@ -343,7 +342,6 @@ export const RegistrationRulesView: React.FC = () => {
           email: mentorEmail.trim(),
           department: mentorDept,
           institute: mentorInst,
-          officeAddress: mentorAddress.trim(),
         },
       });
 
@@ -380,7 +378,6 @@ export const RegistrationRulesView: React.FC = () => {
           setMentorEmail(res.team.mentor.email);
           setMentorDept(res.team.mentor.department);
           setMentorInst(res.team.mentor.institute);
-          setMentorAddress(res.team.mentor.officeAddress);
         }
         // If team is already completed, go straight to final step
         if (res.team.status === 'completed') {
@@ -1533,17 +1530,7 @@ export const RegistrationRulesView: React.FC = () => {
                             </select>
                           </div>
 
-                          <div className="sm:col-span-3">
-                            <label className="block text-[10px] font-bold text-slate-700 mb-1">Office / Cabin Address *</label>
-                            <textarea
-                              required
-                              rows={2}
-                              placeholder="e.g. Cabin 204, IT Department, Block A"
-                              value={mentorAddress}
-                              onChange={(e) => setMentorAddress(e.target.value)}
-                              className="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs outline-none"
-                            />
-                          </div>
+
                         </div>
 
                         <button

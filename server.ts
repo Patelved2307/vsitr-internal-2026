@@ -493,7 +493,7 @@ async function startServer() {
         return res.status(404).json({ success: false, message: 'Registration ID not found.' });
       }
 
-      if (!mentor.fullName || !mentor.contactNumber || !mentor.email || !mentor.department || !mentor.officeAddress) {
+      if (!mentor.fullName || !mentor.contactNumber || !mentor.email || !mentor.department) {
         return res.status(400).json({ success: false, message: 'All mentor fields are required.' });
       }
 

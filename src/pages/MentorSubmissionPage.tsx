@@ -17,7 +17,6 @@ export const MentorSubmissionPage: React.FC = () => {
   const [email, setEmail] = useState('');
   const [department, setDepartment] = useState<Department>('IT');
   const [institute, setInstitute] = useState('KSV Kadi');
-  const [officeAddress, setOfficeAddress] = useState('');
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmittedSuccess, setIsSubmittedSuccess] = useState(false);
@@ -58,8 +57,8 @@ export const MentorSubmissionPage: React.FC = () => {
       return;
     }
 
-    if (!fullName.trim() || !contactNumber.trim() || !email.trim() || !officeAddress.trim()) {
-      showAlert('All Fields Required', 'Please fill in all mentor contact and office details.');
+    if (!fullName.trim() || !contactNumber.trim() || !email.trim()) {
+      showAlert('All Fields Required', 'Please fill in all mentor contact details.');
       return;
     }
 
@@ -79,7 +78,6 @@ export const MentorSubmissionPage: React.FC = () => {
           email: email.trim(),
           department,
           institute,
-          officeAddress: officeAddress.trim(),
         },
       });
 
@@ -290,20 +288,7 @@ export const MentorSubmissionPage: React.FC = () => {
                   </select>
                 </div>
 
-                {/* Office Address */}
-                <div className="sm:col-span-3">
-                  <label className="block text-xs font-bold text-slate-700 mb-1">
-                    Office / Cabin Address *
-                  </label>
-                  <textarea
-                    required
-                    rows={2}
-                    placeholder="e.g. Cabin 204, IT Department, VSITR Block A, Kadi Campus"
-                    value={officeAddress}
-                    onChange={(e) => setOfficeAddress(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm outline-none"
-                  />
-                </div>
+
               </div>
 
               <div className="pt-4">

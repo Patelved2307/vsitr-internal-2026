@@ -29,7 +29,6 @@ export const TeamPortalPage: React.FC = () => {
     email: '',
     department: 'IT',
     institute: 'VSITR',
-    officeAddress: '',
   });
 
   if (!isTeamLoggedIn || !team) {
@@ -76,7 +75,6 @@ export const TeamPortalPage: React.FC = () => {
         email: '',
         department: team.leader.department || 'IT',
         institute: 'VSITR',
-        officeAddress: 'VSITR Campus',
       });
     }
     setIsEditingMentor(true);
@@ -401,12 +399,7 @@ export const TeamPortalPage: React.FC = () => {
                   {team.mentor.department} • {team.mentor.institute}
                 </span>
               </div>
-              <div className="sm:col-span-2">
-                <span className="text-slate-400 font-bold block uppercase tracking-wider text-[9px]">Office Address</span>
-                <span className="text-sm font-black text-slate-900 block mt-0.5">
-                  {team.mentor.officeAddress}
-                </span>
-              </div>
+
             </div>
           </div>
         ) : (
@@ -836,16 +829,7 @@ export const TeamPortalPage: React.FC = () => {
                 </div>
               </div>
 
-              <div>
-                <label className="font-bold text-slate-700 block mb-1">Office Address / Cabin</label>
-                <input
-                  type="text"
-                  required
-                  value={editMentor.officeAddress}
-                  onChange={(e) => setEditMentor({ ...editMentor, officeAddress: e.target.value })}
-                  className="w-full px-3 py-2 rounded-xl border border-slate-300"
-                />
-              </div>
+
 
               <div className="flex items-center justify-end gap-3 pt-3">
                 <button

@@ -23,7 +23,7 @@ export interface MentorDetails {
   email: string;
   department: Department;
   institute: 'KSV Kadi' | 'KSV Gandhinagar' | string;
-  officeAddress: string;
+  officeAddress?: string;
   submittedAt?: string;
 }
 
