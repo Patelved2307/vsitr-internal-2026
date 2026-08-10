@@ -7,6 +7,13 @@ export const TimelineSection: React.FC = () => {
   const { settings, timeline } = useAuth();
   const effectiveDeadline = settings?.isExtended && settings?.extendedDeadline ? settings.extendedDeadline : settings?.registrationDeadline;
 
+  const isDeadlinePassed = React.useMemo(() => {
+    if (!settings) return false;
+    const now = new Date();
+    const deadlineVal = new Date(settings.isExtended && settings.extendedDeadline ? settings.extendedDeadline : settings.registrationDeadline).getTime();
+    return !settings.isRegistrationOpen || now.getTime() > deadlineVal;
+  }, [settings]);
+
   const formattedDeadlineDate = React.useMemo(() => {
     if (!effectiveDeadline) return "02 August 2026";
     try {
@@ -49,10 +56,16 @@ export const TimelineSection: React.FC = () => {
             Deadline to submit your team details (1 Leader + 5 Members, including at least 1 female participant) via the registration portal. Form closes strictly at <strong>{formattedDeadlineTime}</strong>.
           </p>
           <div className="flex gap-2">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-extrabold uppercase bg-emerald-50 text-emerald-700 border border-emerald-200">
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-ping" />
-              Active - Registration Live
-            </span>
+            {isDeadlinePassed ? (
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-extrabold uppercase bg-red-50 text-red-750 border border-red-200">
+                Closed
+              </span>
+            ) : (
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-extrabold uppercase bg-emerald-50 text-emerald-700 border border-emerald-200">
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-ping" />
+                Active - Registration Live
+              </span>
+            )}
           </div>
 
         </div>
@@ -67,10 +80,16 @@ export const TimelineSection: React.FC = () => {
             Registered teams must submit their industry or faculty mentor details through their Team Portals. Form closes strictly at <strong>11:59 PM</strong>.
           </p>
           <div className="flex gap-2">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-extrabold uppercase bg-emerald-50 text-emerald-700 border border-emerald-200">
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-ping" />
-              Active - Mentor Submissions Open
-            </span>
+            {isDeadlinePassed ? (
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-extrabold uppercase bg-red-50 text-red-750 border border-red-200">
+                Closed
+              </span>
+            ) : (
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-extrabold uppercase bg-emerald-50 text-emerald-700 border border-emerald-200">
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-ping" />
+                Active - Mentor Submissions Open
+              </span>
+            )}
           </div>
 
         </div>

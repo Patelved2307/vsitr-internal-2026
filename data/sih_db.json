@@ -164,6 +164,29 @@
     }
   ],
   "teams": [],
-  "emailLogs": [],
+  "emailLogs": [
+    {
+      "id": "EMAIL-1786027158237-886",
+      "recipientEmail": "paved2307@gmail.com",
+      "recipientName": "Ved Patel",
+      "teamId": "SIH2026-042",
+      "subject": "📢 Internal SIH 2026 – Action Required: Mentor Selection & Team Details Update",
+      "body": "Dear Ved Patel,\n\nGreetings from the Internal Smart India Hackathon (SIH) 2026 Organizing Committee.\n\nThis is an important reminder regarding your team's Faculty Mentor selection and Team Details Update.\n\nTeam Information:\nTeam ID: SIH2026-042\nTeam Name: Cyber Knights\nTeam Leader: Ved Patel\n\nFaculty Mentor Details:\nMentor Status: ✅ Completed / Selected\nFaculty Mentor: Dr. Ramesh Shah\nMentor Email: paved2307@gmail.com\n\nStatus Update: Your team has successfully selected a Faculty Mentor. The mentor has been copied (CC'd) on this communication.\n\nTeam Details Modification:\nBefore the deadline, you may update your team information through the Team Portal, including:\n- Selecting or changing your Faculty Mentor.\n- Replacing a team member (if required).\n- Updating team member details.\n- Correcting any incorrect information submitted during registration.\n\nPlease note: No changes will be accepted after the registration deadline.\n\nImportant:\n- The Team Leader is requested to coordinate with all team members and ensure that the required updates are completed within the specified timeline.\n- Please check the Team Portal and your registered email regularly for further announcements regarding the Internal Smart India Hackathon (SIH) 2026.\n- If you require any assistance, please contact the organizing committee at internalsih2026@googlegroups.com.\n\nThank you for your cooperation.\n\nWarm Regards,\nInternal Smart India Hackathon (SIH) 2026 Organizing Committee\nResearch Club | Coding Club | Design Club | Soft Skills Club\nVidush Somany Institute of Technology & Research (VSITR)\nKadi Sarva Vishwavidyalaya",
+      "type": "deadline_reminder",
+      "status": "sent",
+      "sentAt": "2026-08-06T14:39:18.238Z"
+    },
+    {
+      "id": "EMAIL-1786027064163-175",
+      "recipientEmail": "paved2307@gmail.com",
+      "recipientName": "Ved Patel",
+      "teamId": "SIH2026-042",
+      "subject": "📢 Internal SIH 2026 – Action Required: Mentor Selection & Team Details Update",
+      "body": "Dear Ved Patel,\n\nGreetings from the Internal Smart India Hackathon (SIH) 2026 Organizing Committee.\n\nThis is an important reminder regarding your team's Faculty Mentor selection and Team Details Update.\n\nTeam Information:\nTeam ID: SIH2026-042\nTeam Name: Cyber Knights\nTeam Leader: Ved Patel\n\nFaculty Mentor Details:\nMentor Status: ❌ Pending (Action Required)\nFaculty Mentor: Not Assigned\nMentor Email: N/A\n\n⚠️ Action Required: Your team has not yet selected a Faculty Mentor. Please assign your Faculty Mentor in the Team Portal by August 8, 2026.\n\nTeam Details Modification:\nBefore the deadline, you may update your team information through the Team Portal, including:\n- Selecting or changing your Faculty Mentor.\n- Replacing a team member (if required).\n- Updating team member details.\n- Correcting any incorrect information submitted during registration.\n\nPlease note: No changes will be accepted after the registration deadline.\n\nImportant:\n- The Team Leader is requested to coordinate with all team members and ensure that the required updates are completed within the specified timeline.\n- Please check the Team Portal and your registered email regularly for further announcements regarding the Internal Smart India Hackathon (SIH) 2026.\n- If you require any assistance, please contact the organizing committee at internalsih2026@googlegroups.com.\n\nThank you for your cooperation.\n\nWarm Regards,\nInternal Smart India Hackathon (SIH) 2026 Organizing Committee\nResearch Club | Coding Club | Design Club | Soft Skills Club\nVidush Somany Institute of Technology & Research (VSITR)\nKadi Sarva Vishwavidyalaya",
+      "type": "deadline_reminder",
+      "status": "sent",
+      "sentAt": "2026-08-06T14:37:44.163Z"
+    }
+  ],
   "nextTeamNumber": 1
 }

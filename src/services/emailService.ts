@@ -40,6 +40,7 @@ export async function sendEmail({
   bodyHtml,
   bodyText,
   type,
+  cc,
 }: {
   recipientEmail: string;
   recipientName: string;
@@ -48,6 +49,7 @@ export async function sendEmail({
   bodyHtml: string;
   bodyText: string;
   type: 'registration_confirmation' | 'deadline_reminder' | 'admin_announcement';
+  cc?: string;
 }): Promise<EmailLog> {
   const mailTransporter = getTransporter();
   const fromAddress = process.env.SMTP_FROM || '"Internal SIH 2026 Committee" <sih.vsitr@ksv.ac.in>';
@@ -59,6 +61,7 @@ export async function sendEmail({
       await mailTransporter.sendMail({
         from: fromAddress,
         to: recipientEmail,
+        cc: cc,
         subject: subject,
         html: bodyHtml,
         text: bodyText,
@@ -388,45 +391,188 @@ Kadi Sarva Vishwavidyalaya`;
 // 2. Dispatch Deadline Reminder Email to Team Leader
 export async function dispatchDeadlineReminderToLeader(team: Team, deadlineFormatted: string, appUrl: string = 'http://localhost:3000') {
   const leader = team.leader;
-  const subject = `[Internal SIH 2026] Important Reminder: Registration Editing Deadline (${team.id})`;
+  const hasMentor = !!(team.mentor && team.mentor.fullName && team.mentor.fullName.trim());
+  const mentorName = hasMentor ? `${team.mentor!.prefix || 'Prof.'} ${team.mentor!.fullName}` : 'Not Assigned';
+  const mentorEmail = hasMentor ? team.mentor!.email : 'N/A';
+  const mentorStatus = hasMentor ? '✅ Completed / Selected' : '❌ Pending (Action Required)';
+
+  // Conditional message and warning box
+  let mentorMessageHtml = '';
+  let mentorMessageText = '';
+  if (hasMentor) {
+    mentorMessageHtml = `
+      <div style="background-color: #ECFDF5; border: 1px solid #10B981; border-radius: 8px; padding: 12px 16px; color: #065F46; font-size: 13px; font-weight: 500; margin-bottom: 20px;">
+        <strong>Status Update:</strong> Your team has successfully selected a Faculty Mentor. The mentor has been copied (CC'd) on this communication.
+      </div>
+    `;
+    mentorMessageText = `Status Update: Your team has successfully selected a Faculty Mentor. The mentor has been copied (CC'd) on this communication.`;
+  } else {
+    mentorMessageHtml = `
+      <div style="background-color: #FFF1F2; border: 1px solid #F43F5E; border-radius: 8px; padding: 12px 16px; color: #9F1239; font-size: 13px; font-weight: 500; margin-bottom: 20px;">
+        <strong>⚠️ Action Required:</strong> Your team has not yet selected a Faculty Mentor. Please assign your Faculty Mentor in the Team Portal by <strong>August 8, 2026</strong>.
+      </div>
+    `;
+    mentorMessageText = `⚠️ Action Required: Your team has not yet selected a Faculty Mentor. Please assign your Faculty Mentor in the Team Portal by August 8, 2026.`;
+  }
+
+  const subject = `📢 Internal SIH 2026 – Action Required: Mentor Selection & Team Details Update`;
 
   const bodyHtml = `
-    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #E2E8F0; border-radius: 12px; overflow: hidden; background-color: #ffffff;">
-      <div style="background: linear-gradient(90deg, #1B3F8B, #C1272D); padding: 20px; text-align: center; color: #ffffff;">
-        <h2 style="margin: 0; font-size: 22px; font-weight: 800;">Internal SIH 2026 Team Update Reminder</h2>
-        <p style="margin: 5px 0 0; font-size: 13px; opacity: 0.9;">VSITR Kadi (KSV University)</p>
+    <div style="font-family: 'Inter', 'Segoe UI', Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #E2E8F0; border-radius: 16px; overflow: hidden; background-color: #ffffff; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03);">
+      <!-- Header Banner -->
+      <div style="background: linear-gradient(135deg, #1B3F8B 0%, #C1272D 100%); padding: 32px 24px; text-align: center; color: #ffffff;">
+        <span style="font-size: 32px; margin-bottom: 8px; display: inline-block;">📢</span>
+        <h2 style="margin: 0; font-size: 20px; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase;">Team Details & Mentor Update</h2>
+        <p style="margin: 6px 0 0; font-size: 13px; opacity: 0.9; font-weight: 500;">Vidush Somany Institute of Technology & Research (VSITR)</p>
       </div>
 
-      <div style="padding: 24px; color: #1E293B;">
-        <p style="font-size: 15px; font-weight: bold; margin-top: 0;">Dear Team Leader (${leader.fullName}),</p>
-        <p style="font-size: 14px; line-height: 1.6; color: #334155;">
-          This is an official reminder regarding your team registration for <strong>"${team.teamName}" (${team.id})</strong>.
+      <div style="padding: 32px 24px; color: #1E293B; line-height: 1.6;">
+        <p style="font-size: 15px; font-weight: 700; margin-top: 0; color: #0F172A;">Dear ${leader.fullName},</p>
+        <p style="font-size: 14px; color: #334155; margin-bottom: 20px;">
+          Greetings from the Internal Smart India Hackathon (SIH) 2026 Organizing Committee.
+        </p>
+        <p style="font-size: 14px; color: #334155; margin-bottom: 20px;">
+          This is an important reminder regarding your team's Faculty Mentor selection and Team Details Update.
         </p>
 
-        <p style="font-size: 14px; line-height: 1.6; color: #334155;">
-          The official registration deadline for Internal SIH 2026 is approaching: <strong>${deadlineFormatted}</strong>.
-        </p>
+        <!-- Information Cards -->
+        <div style="background-color: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 12px; padding: 20px; margin-bottom: 20px;">
+          <h3 style="margin-top: 0; margin-bottom: 12px; font-size: 14px; font-weight: 700; color: #0F172A; border-bottom: 1px solid #E2E8F0; padding-bottom: 6px;">
+            📋 Team Information
+          </h3>
+          <table style="width: 100%; border-collapse: collapse; font-size: 13px; color: #334155;">
+            <tr>
+              <td style="padding: 4px 0; color: #64748B; width: 35%;"><strong>Team ID:</strong></td>
+              <td style="padding: 4px 0; font-weight: 700; color: #C1272D;">${team.id}</td>
+            </tr>
+            <tr>
+              <td style="padding: 4px 0; color: #64748B;"><strong>Team Name:</strong></td>
+              <td style="padding: 4px 0; font-weight: 700; color: #1E293B;">${team.teamName}</td>
+            </tr>
+            <tr>
+              <td style="padding: 4px 0; color: #64748B;"><strong>Team Leader:</strong></td>
+              <td style="padding: 4px 0; color: #1E293B;">${leader.fullName}</td>
+            </tr>
+          </table>
+        </div>
 
-        <p style="font-size: 14px; line-height: 1.6; color: #334155;">
-          If you need to make any corrections to your 6 team members' details (enrollment numbers, mobile numbers, department) or submit your Phase 2 Mentor details, please log in now.
-        </p>
+        <div style="background-color: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 12px; padding: 20px; margin-bottom: 20px;">
+          <h3 style="margin-top: 0; margin-bottom: 12px; font-size: 14px; font-weight: 700; color: #0F172A; border-bottom: 1px solid #E2E8F0; padding-bottom: 6px;">
+            🎓 Faculty Mentor Details
+          </h3>
+          <table style="width: 100%; border-collapse: collapse; font-size: 13px; color: #334155; margin-bottom: 12px;">
+            <tr>
+              <td style="padding: 4px 0; color: #64748B; width: 35%;"><strong>Mentor Status:</strong></td>
+              <td style="padding: 4px 0; font-weight: 700; color: ${hasMentor ? '#10B981' : '#F43F5E'};">${mentorStatus}</td>
+            </tr>
+            <tr>
+              <td style="padding: 4px 0; color: #64748B;"><strong>Faculty Mentor:</strong></td>
+              <td style="padding: 4px 0; font-weight: 600; color: #1E293B;">${mentorName}</td>
+            </tr>
+            <tr>
+              <td style="padding: 4px 0; color: #64748B;"><strong>Mentor Email:</strong></td>
+              <td style="padding: 4px 0; color: #1E293B;">${mentorEmail}</td>
+            </tr>
+          </table>
 
+          ${mentorMessageHtml}
+        </div>
+
+        <!-- Modification details -->
+        <div style="margin-bottom: 24px;">
+          <h3 style="font-size: 14px; font-weight: 700; color: #0F172A; margin-bottom: 10px;">
+            🔄 Team Details Modification
+          </h3>
+          <p style="font-size: 13px; color: #475569; margin: 0 0 10px;">
+            Before the deadline, you may update your team information through the Team Portal, including:
+          </p>
+          <ul style="margin: 0; padding-left: 20px; font-size: 13px; color: #475569; line-height: 1.6;">
+            <li style="margin-bottom: 6px;">Selecting or changing your Faculty Mentor.</li>
+            <li style="margin-bottom: 6px;">Replacing a team member (if required).</li>
+            <li style="margin-bottom: 6px;">Updating team member details.</li>
+            <li style="margin-bottom: 6px;">Correcting any incorrect information submitted during registration.</li>
+          </ul>
+          <p style="font-size: 12px; color: #EF4444; font-weight: 600; margin-top: 10px;">
+            ⚠️ Please note: No changes will be accepted after the registration deadline.
+          </p>
+        </div>
+
+        <!-- Action Button -->
         <div style="text-align: center; margin: 24px 0;">
-          <a href="${appUrl}" style="background-color: #C1272D; color: #ffffff; text-decoration: none; padding: 12px 24px; border-radius: 8px; font-weight: bold; font-size: 14px; display: inline-block;">
-            Log In & Edit Team Details
+          <a href="${appUrl}" style="background: linear-gradient(135deg, #1B3F8B 0%, #C1272D 100%); color: #ffffff; text-decoration: none; padding: 12px 28px; border-radius: 8px; font-weight: 700; font-size: 14px; display: inline-block; box-shadow: 0 4px 6px rgba(27, 63, 139, 0.15);">
+            Go to Team Portal & Update Details
           </a>
         </div>
+
+        <!-- Important note -->
+        <div style="border-top: 1px solid #E2E8F0; padding-top: 20px; margin-bottom: 20px;">
+          <h4 style="margin-top: 0; margin-bottom: 8px; font-size: 13px; font-weight: 700; color: #0F172A;">
+            ⚠️ Important Instructions
+          </h4>
+          <ul style="margin: 0; padding-left: 20px; font-size: 13px; color: #475569; line-height: 1.6;">
+            <li style="margin-bottom: 6px;">The Team Leader is requested to coordinate with all team members and ensure that the required updates are completed within the specified timeline.</li>
+            <li style="margin-bottom: 6px;">Please check the Team Portal and your registered email regularly for further announcements regarding the Internal Smart India Hackathon (SIH) 2026.</li>
+            <li style="margin-bottom: 6px;">If you require any assistance, please contact the organizing committee at <a href="mailto:sihinternal.vsitr@gmail.com" style="color: #1B3F8B; text-decoration: none; font-weight: 600;">sihinternal.vsitr@gmail.com</a>.</li>
+          </ul>
+        </div>
+
+        <p style="font-size: 13px; color: #475569; margin-top: 24px; margin-bottom: 0;">
+          Thank you for your cooperation.
+        </p>
+      </div>
+
+      <!-- Footer -->
+      <div style="background-color: #F1F5F9; border-top: 1px solid #E2E8F0; padding: 24px; text-align: center; color: #64748B; font-size: 12px; line-height: 1.6;">
+        <p style="margin: 0 0 4px; font-weight: 700; color: #475569;">Warm Regards,</p>
+        <p style="margin: 0 0 12px; font-weight: 700; color: #1E293B; font-size: 13px;">Internal Smart India Hackathon (SIH) 2026 Organizing Committee</p>
+        <p style="margin: 0 0 6px; font-weight: 600; color: #475569;">Research Club | Coding Club | Design Club | Soft Skills Club</p>
+        <p style="margin: 0 0 2px;">Vidush Somany Institute of Technology & Research (VSITR)</p>
+        <p style="margin: 0;">Kadi Sarva Vishwavidyalaya</p>
       </div>
     </div>
   `;
 
-  const bodyText = `Dear Team Leader (${leader.fullName}),
+  const bodyText = `Dear ${leader.fullName},
 
-This is a reminder regarding your team "${team.teamName}" (${team.id}). The registration deadline is ${deadlineFormatted}.
+Greetings from the Internal Smart India Hackathon (SIH) 2026 Organizing Committee.
 
-If you wish to edit your team details or submit Phase 2 mentor details, please log in at ${appUrl}.`;
+This is an important reminder regarding your team's Faculty Mentor selection and Team Details Update.
 
-  await sendEmail({
+Team Information:
+Team ID: ${team.id}
+Team Name: ${team.teamName}
+Team Leader: ${leader.fullName}
+
+Faculty Mentor Details:
+Mentor Status: ${mentorStatus}
+Faculty Mentor: ${mentorName}
+Mentor Email: ${mentorEmail}
+
+${mentorMessageText}
+
+Team Details Modification:
+Before the deadline, you may update your team information through the Team Portal, including:
+- Selecting or changing your Faculty Mentor.
+- Replacing a team member (if required).
+- Updating team member details.
+- Correcting any incorrect information submitted during registration.
+
+Please note: No changes will be accepted after the registration deadline.
+
+Important:
+- The Team Leader is requested to coordinate with all team members and ensure that the required updates are completed within the specified timeline.
+- Please check the Team Portal and your registered email regularly for further announcements regarding the Internal Smart India Hackathon (SIH) 2026.
+- If you require any assistance, please contact the organizing committee at sihinternal.vsitr@gmail.com.
+
+Thank you for your cooperation.
+
+Warm Regards,
+Internal Smart India Hackathon (SIH) 2026 Organizing Committee
+Research Club | Coding Club | Design Club | Soft Skills Club
+Vidush Somany Institute of Technology & Research (VSITR)
+Kadi Sarva Vishwavidyalaya`;
+
+  return await sendEmail({
     recipientEmail: leader.email,
     recipientName: leader.fullName,
     teamId: team.id,
@@ -434,5 +580,6 @@ If you wish to edit your team details or submit Phase 2 mentor details, please l
     bodyHtml,
     bodyText,
     type: 'deadline_reminder',
+    cc: hasMentor ? mentorEmail : undefined,
   });
 }

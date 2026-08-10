@@ -157,6 +157,7 @@ export const AdminPage: React.FC = () => {
   const [isTestingSmtp, setIsTestingSmtp] = useState(false);
   const [resendingEmailId, setResendingEmailId] = useState<string | null>(null);
   const [smtpTestEmail, setSmtpTestEmail] = useState('');
+  const [smtpTestType, setSmtpTestType] = useState<'connection' | 'mentor_pending' | 'mentor_completed'>('connection');
 
   // Handle DB Manual Sync to Neon
   const handleSyncDb = async () => {
@@ -205,7 +206,10 @@ export const AdminPage: React.FC = () => {
     }
     try {
       setIsTestingSmtp(true);
-      const res = await api.testSmtp({ testRecipient: smtpTestEmail.trim() });
+      const res = await api.testSmtp({ 
+        testRecipient: smtpTestEmail.trim(),
+        testType: smtpTestType
+      } as any);
       if (res.success) {
         showAlert('SMTP Test Outcome', res.message, 'success');
         const emailLogsData = await api.getEmailLogs().catch(() => ({ logs: [] }));
@@ -1765,10 +1769,24 @@ export const AdminPage: React.FC = () => {
                       </span>
                     </div>
 
-                    <form onSubmit={handleTestSmtp} className="space-y-2">
+                    <form onSubmit={handleTestSmtp} className="space-y-3">
                       <p className="text-xs text-slate-300">
                         Test your mail server connection and send a sample email to verify delivery:
                       </p>
+                      
+                      <div className="space-y-1">
+                        <label className="text-[10px] text-slate-400 font-medium block">Select Test Template:</label>
+                        <select
+                          value={smtpTestType}
+                          onChange={(e) => setSmtpTestType(e.target.value as any)}
+                          className="w-full px-3 py-1.5 rounded-xl bg-slate-800 border border-slate-700 text-xs text-white focus:outline-none focus:border-emerald-400"
+                        >
+                          <option value="connection">Basic Connection Test Email</option>
+                          <option value="mentor_pending">Mentor Selection Pending (Case B - Reminder)</option>
+                          <option value="mentor_completed">Mentor Selection Completed (Case A - Confirm)</option>
+                        </select>
+                      </div>
+
                       <div className="flex gap-2">
                         <input
                           type="email"

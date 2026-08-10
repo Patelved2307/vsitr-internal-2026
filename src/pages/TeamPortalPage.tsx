@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { api } from '../services/api';
-import { UserCheck, ShieldCheck, UserPlus, ExternalLink, Headset, Users, GraduationCap, AlertTriangle, ArrowRight, Edit3, X, Save, Check, User } from 'lucide-react';
+import { UserCheck, ShieldCheck, UserPlus, ExternalLink, Headset, Users, GraduationCap, AlertTriangle, ArrowRight, Edit3, X, Save, Check, User, Lock } from 'lucide-react';
 
 export const TeamPortalPage: React.FC = () => {
   const { team, isTeamLoggedIn, setActiveTab, settings, clubCoordinators, loginTeamSession, showAlert, refreshTeamSession } = useAuth();
@@ -58,26 +58,12 @@ export const TeamPortalPage: React.FC = () => {
 
   // Open Members Edit Modal
   const openEditMembers = () => {
-    setEditLeader({ ...team.leader });
-    setEditMembers(team.members.map((m) => ({ ...m })));
-    setIsEditingMembers(true);
+    showAlert('Modifications Locked', 'Team registration compositions are locked. Self-service modifications are no longer permitted.', 'info');
   };
 
   // Open Mentor Edit Modal
   const openEditMentor = () => {
-    if (team.mentor) {
-      setEditMentor({ ...team.mentor });
-    } else {
-      setEditMentor({
-        prefix: 'Prof.',
-        fullName: '',
-        contactNumber: '',
-        email: '',
-        department: team.leader.department || 'IT',
-        institute: 'VSITR',
-      });
-    }
-    setIsEditingMentor(true);
+    showAlert('Submissions Locked', 'Faculty mentor submissions and modifications are now closed.', 'info');
   };
 
   // Save Member Edits
@@ -212,33 +198,12 @@ export const TeamPortalPage: React.FC = () => {
             </p>
           </div>
 
-          {/* Quick Action Buttons */}
+          {/* Quick Action Buttons - Locked/Disabled because deadline passed */}
           <div className="flex flex-wrap items-center gap-3">
-            <button
-              onClick={openEditMembers}
-              className="inline-flex items-center gap-2 px-4.5 py-2.5 rounded-2xl font-black text-xs text-white bg-slate-900/80 hover:bg-slate-850 border border-slate-800 hover:border-slate-700 shadow-md transition transform active:scale-95 hover:shadow-lg"
-            >
-              <Edit3 className="h-3.5 w-3.5 text-blue-400" />
-              Edit Team Members
-            </button>
-
-            {isPendingMentor ? (
-              <button
-                onClick={openEditMentor}
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl font-black text-xs text-white bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500 shadow-lg shadow-amber-950/40 transition transform active:scale-95"
-              >
-                <UserPlus className="h-4 w-4" />
-                Add Mentor Details
-              </button>
-            ) : (
-              <button
-                onClick={openEditMentor}
-                className="inline-flex items-center gap-2 px-4.5 py-2.5 rounded-2xl font-black text-xs text-white bg-slate-900/80 hover:bg-slate-850 border border-slate-800 hover:border-slate-700 shadow-md transition transform active:scale-95 hover:shadow-lg"
-              >
-                <Edit3 className="h-3.5 w-3.5 text-amber-400" />
-                Edit Mentor Info
-              </button>
-            )}
+            <span className="px-3.5 py-2 rounded-2xl text-xs font-black bg-red-500/10 text-red-450 border border-red-500/20 inline-flex items-center gap-1.5 shadow-2xs">
+              <Lock className="h-3.5 w-3.5" />
+              Modifications Locked
+            </span>
           </div>
         </div>
       </div>
@@ -286,13 +251,10 @@ export const TeamPortalPage: React.FC = () => {
               Team Composition (6 Members)
             </h2>
           </div>
-          <button
-            onClick={openEditMembers}
-            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl font-black text-xs text-[#1B3F8B] bg-blue-50 hover:bg-blue-100 hover:text-indigo-900 transition"
-          >
-            <Edit3 className="h-3.5 w-3.5" />
-            Edit Members
-          </button>
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl font-black text-[10px] uppercase tracking-wider text-slate-500 bg-slate-100 border border-slate-200 shadow-2xs">
+            <Lock className="h-3 w-3" />
+            Locked
+          </span>
         </div>
 
         {/* Desktop Table View */}
@@ -386,13 +348,10 @@ export const TeamPortalPage: React.FC = () => {
               Faculty Mentor Details (Phase 2)
             </h2>
           </div>
-          <button
-            onClick={openEditMentor}
-            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl font-black text-xs text-amber-800 bg-amber-50 hover:bg-amber-100 transition"
-          >
-            <Edit3 className="h-3.5 w-3.5" />
-            {team.mentor ? 'Edit Mentor' : 'Add Mentor'}
-          </button>
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl font-black text-[10px] uppercase tracking-wider text-slate-500 bg-slate-100 border border-slate-200 shadow-2xs">
+            <Lock className="h-3 w-3" />
+            Locked
+          </span>
         </div>
 
         {team.mentor ? (
@@ -429,22 +388,16 @@ export const TeamPortalPage: React.FC = () => {
             </div>
           </div>
         ) : (
-          <div className="p-8 rounded-2xl bg-amber-500/5 border border-amber-200/80 text-center space-y-4 shadow-sm">
-            <AlertTriangle className="h-10 w-10 text-amber-500 mx-auto animate-bounce" />
+          <div className="p-8 rounded-2xl bg-slate-50 border border-slate-200 text-center space-y-4 shadow-sm">
+            <AlertTriangle className="h-10 w-10 text-slate-400 mx-auto" />
             <div>
-              <p className="text-base font-black text-amber-950">
-                Mentor details have not been submitted yet!
+              <p className="text-base font-black text-slate-800">
+                Mentor Details Not Registered
               </p>
-              <p className="text-xs text-slate-600 mt-1 max-w-md mx-auto leading-relaxed">
-                Phase 2 is required for final entry confirmation. Click below to submit your official faculty mentor details.
+              <p className="text-xs text-slate-500 mt-1 max-w-md mx-auto leading-relaxed font-semibold">
+                Phase 2 Mentor Submissions are closed. Your team did not register a Faculty Mentor before the deadline. Please reach out to your club coordinators immediately for emergency support or allocation.
               </p>
             </div>
-            <button
-              onClick={openEditMentor}
-              className="px-6 py-3 rounded-2xl font-black text-xs text-white bg-gradient-to-r from-amber-600 to-orange-600 shadow-lg shadow-amber-600/20 hover:from-amber-500 hover:to-orange-500 transition transform active:scale-95"
-            >
-              Add Mentor Details Now
-            </button>
           </div>
         )}
       </div>

@@ -41,7 +41,7 @@ const FLOATING_LINES_GRADIENT = ['#C1272D', '#8B235E', '#1B3F8B'];
 const FLOATING_LINES_BOTTOM_POS = { x: 2.0, y: -0.7, rotate: -1 };
 
 export const RegistrationRulesView: React.FC = () => {
-  const { loginTeamSession, setActiveTab, showAlert, settings, rules, timeline, team, isTeamLoggedIn, activeTab } = useAuth();
+  const { loginTeamSession, setActiveTab, showAlert, settings, rules, timeline, team, isTeamLoggedIn, activeTab, clubCoordinators } = useAuth();
 
   // Mode state: 'register' or 'mentor_lookup'
   const [mode, setMode] = useState<'register' | 'mentor_lookup'>('register');
@@ -743,98 +743,154 @@ export const RegistrationRulesView: React.FC = () => {
         </div>
       )}
 
-      {/* Main Grid: Left (Deadlines), Right (Form Wizard) */}
+      {/* Main Grid: Left (Deadlines - wider when registration is closed), Right (Form Wizard / Info Panel) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
 
-        {/* Left 4 Columns: Deadlines */}
-        <div className="lg:col-span-4 space-y-6">
+        {/* Left Side: Deadlines & Announcements */}
+        <div className={`${isDeadlinePassed ? 'lg:col-span-5' : 'lg:col-span-4'} space-y-6`}>
 
           {/* Key Dates Badge Card */}
-          <div className="relative overflow-hidden rounded-3xl bg-white border border-slate-200/80 p-6 shadow-md hover:shadow-lg transition duration-200">
+          <div className={`relative overflow-hidden rounded-3xl bg-white border border-slate-200/80 p-6 shadow-md hover:shadow-lg transition duration-200 ${isDeadlinePassed ? 'sm:p-8 border-red-150' : ''}`}>
             <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-gradient-to-b from-[#C1272D] to-red-500" />
-            <h3 className="text-sm font-extrabold text-slate-950 flex items-center gap-2 mb-4">
-              <Calendar className="h-4.5 w-4.5 text-[#C1272D]" />
+            <h3 className={`${isDeadlinePassed ? 'text-base' : 'text-sm'} font-extrabold text-slate-950 flex items-center gap-2 mb-4`}>
+              <Calendar className={`${isDeadlinePassed ? 'h-5 w-5' : 'h-4.5 w-4.5'} text-[#C1272D]`} />
               Important Registration Deadlines
             </h3>
             <div className="space-y-3">
-              {timeline && timeline.map((event, idx) => (
-                <div key={event.id || idx} className="flex justify-between items-center text-xs p-2 rounded-xl bg-slate-50 border border-slate-100/50 hover:bg-slate-100/30 transition">
-                  <span className="text-slate-500 font-semibold pr-2 truncate" title={event.title}>{event.title}</span>
-                  <span className={`font-black shrink-0 ${event.date.includes('Mandatory') || idx === 1 ? 'text-[#C1272D] bg-red-50 px-2 py-0.5 rounded-md border border-red-100/60' : 'text-slate-900 bg-slate-100 px-2 py-0.5 rounded-md border border-slate-200/30'}`}>
-                    {event.date}
-                  </span>
-                </div>
-              ))}
+              {timeline && timeline.map((event, idx) => {
+                const isClosed = isDeadlinePassed && (event.id === 't1' || event.id === 't2');
+                const displayDate = isClosed ? 'Closed' : event.date;
+                return (
+                  <div key={event.id || idx} className="flex justify-between items-center text-xs p-2 rounded-xl bg-slate-50 border border-slate-100/50 hover:bg-slate-100/30 transition">
+                    <span className="text-slate-500 font-semibold pr-2 truncate" title={event.title}>{event.title}</span>
+                    <span className={`font-black shrink-0 ${isClosed ? 'text-red-750 bg-red-100/70 px-2.5 py-0.5 rounded-md border border-red-200/60' : (event.date.includes('Mandatory') || idx === 1 ? 'text-[#C1272D] bg-red-50 px-2 py-0.5 rounded-md border border-red-100/60' : 'text-slate-900 bg-slate-100 px-2 py-0.5 rounded-md border border-slate-200/30')}`}>
+                      {displayDate}
+                    </span>
+                  </div>
+                );
+              })}
               {(!timeline || timeline.length === 0) && (
                 <div className="text-xs text-slate-400 text-center py-2">No deadlines scheduled yet.</div>
               )}
             </div>
           </div>
 
-          {/* Countdown Card */}
-          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 to-slate-950 border border-slate-800 p-6 shadow-lg text-white">
-            {/* Soft decorative radial glow */}
-            <div className="absolute -right-8 -top-8 w-20 h-20 bg-red-500/10 rounded-full blur-xl pointer-events-none" />
+          {/* Countdown Card - Only shown when registration is open */}
+          {!isDeadlinePassed && (
+            <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 to-slate-950 border border-slate-800 p-6 shadow-lg text-white">
+              {/* Soft decorative radial glow */}
+              <div className="absolute -right-8 -top-8 w-20 h-20 bg-red-500/10 rounded-full blur-xl pointer-events-none" />
 
-            <div className="flex items-center gap-2 mb-4 pb-2.5 border-b border-slate-800">
-              <Clock className="h-4 w-4 text-red-500 animate-pulse" />
-              <span className="text-xs font-black uppercase tracking-widest text-slate-400">
-                Registration Closes In
-              </span>
+              <div className="flex items-center gap-2 mb-4 pb-2.5 border-b border-slate-800">
+                <Clock className="h-4 w-4 text-red-500 animate-pulse" />
+                <span className="text-xs font-black uppercase tracking-widest text-slate-400">
+                  Registration Closes In
+                </span>
+              </div>
+
+              {timeLeft.isExpired ? (
+                <div className="text-center py-3 bg-red-950/30 rounded-2xl border border-red-900/40">
+                  <span className="text-sm font-black text-red-400 block uppercase tracking-wider">Registration Closed</span>
+                </div>
+              ) : (
+                <div className="grid grid-cols-4 gap-2">
+                  {/* Days */}
+                  <div className="flex flex-col items-center bg-slate-900/90 border border-slate-800/80 rounded-2xl p-2.5 shadow-inner">
+                    <span className="text-xl font-black text-white font-mono leading-none">
+                      {String(timeLeft.days).padStart(2, '0')}
+                    </span>
+                    <span className="text-[9px] font-black text-slate-500 uppercase mt-1 tracking-wider">
+                      Days
+                    </span>
+                  </div>
+
+                  {/* Hours */}
+                  <div className="flex flex-col items-center bg-slate-900/90 border border-slate-800/80 rounded-2xl p-2.5 shadow-inner">
+                    <span className="text-xl font-black text-white font-mono leading-none">
+                      {String(timeLeft.hours).padStart(2, '0')}
+                    </span>
+                    <span className="text-[9px] font-black text-slate-500 uppercase mt-1 tracking-wider">
+                      Hrs
+                    </span>
+                  </div>
+
+                  {/* Minutes */}
+                  <div className="flex flex-col items-center bg-slate-900/90 border border-slate-800/80 rounded-2xl p-2.5 shadow-inner">
+                    <span className="text-xl font-black text-white font-mono leading-none">
+                      {String(timeLeft.minutes).padStart(2, '0')}
+                    </span>
+                    <span className="text-[9px] font-black text-slate-500 uppercase mt-1 tracking-wider">
+                      Mins
+                    </span>
+                  </div>
+
+                  {/* Seconds */}
+                  <div className="flex flex-col items-center bg-[#C1272D]/15 border border-[#C1272D]/35 rounded-2xl p-2.5 shadow-inner">
+                    <span className="text-xl font-black text-red-400 font-mono leading-none animate-pulse">
+                      {String(timeLeft.seconds).padStart(2, '0')}
+                    </span>
+                    <span className="text-[9px] font-black text-red-500 uppercase mt-1 tracking-wider">
+                      Secs
+                    </span>
+                  </div>
+                </div>
+              )}
             </div>
+          )}
 
-            {timeLeft.isExpired ? (
-              <div className="text-center py-3 bg-red-950/30 rounded-2xl border border-red-900/40">
-                <span className="text-sm font-black text-red-400 block uppercase tracking-wider">Registration Closed</span>
-              </div>
-            ) : (
-              <div className="grid grid-cols-4 gap-2">
-                {/* Days */}
-                <div className="flex flex-col items-center bg-slate-900/90 border border-slate-800/80 rounded-2xl p-2.5 shadow-inner">
-                  <span className="text-xl font-black text-white font-mono leading-none">
-                    {String(timeLeft.days).padStart(2, '0')}
-                  </span>
-                  <span className="text-[9px] font-black text-slate-500 uppercase mt-1 tracking-wider">
-                    Days
-                  </span>
+          {/* SIH Discussion & Sharing Card - Moved here when registration is closed */}
+          {isDeadlinePassed && (
+            <div className="relative overflow-hidden rounded-3xl bg-white border border-slate-200/85 p-6 shadow-md hover:shadow-lg transition duration-200 border-l-4 border-l-blue-600">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="p-2 rounded-xl bg-blue-500/10 text-blue-600 border border-blue-500/15">
+                  <FileText className="h-4.5 w-4.5" />
                 </div>
-
-                {/* Hours */}
-                <div className="flex flex-col items-center bg-slate-900/90 border border-slate-800/80 rounded-2xl p-2.5 shadow-inner">
-                  <span className="text-xl font-black text-white font-mono leading-none">
-                    {String(timeLeft.hours).padStart(2, '0')}
-                  </span>
-                  <span className="text-[9px] font-black text-slate-500 uppercase mt-1 tracking-wider">
-                    Hrs
-                  </span>
-                </div>
-
-                {/* Minutes */}
-                <div className="flex flex-col items-center bg-slate-900/90 border border-slate-800/80 rounded-2xl p-2.5 shadow-inner">
-                  <span className="text-xl font-black text-white font-mono leading-none">
-                    {String(timeLeft.minutes).padStart(2, '0')}
-                  </span>
-                  <span className="text-[9px] font-black text-slate-500 uppercase mt-1 tracking-wider">
-                    Mins
-                  </span>
-                </div>
-
-                {/* Seconds */}
-                <div className="flex flex-col items-center bg-[#C1272D]/15 border border-[#C1272D]/35 rounded-2xl p-2.5 shadow-inner">
-                  <span className="text-xl font-black text-red-400 font-mono leading-none animate-pulse">
-                    {String(timeLeft.seconds).padStart(2, '0')}
-                  </span>
-                  <span className="text-[9px] font-black text-red-500 uppercase mt-1 tracking-wider">
-                    Secs
+                <div>
+                  <h3 className="text-sm font-extrabold text-slate-950">
+                    SIH Discussion &amp; Sharing
+                  </h3>
+                  <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest block">
+                    Join Official Channels
                   </span>
                 </div>
               </div>
-            )}
-          </div>
+
+              <div className="space-y-4">
+                <p className="text-xs text-slate-550 font-semibold leading-relaxed">
+                  Need help choosing a problem statement, comparing solutions, or checking Solution feasibility? Discuss &amp; share SIH 2026 ideas with peers in our official channels.
+                </p>
+
+                <div className="space-y-2">
+                  {settings.whatsappGroupLink && (
+                    <a
+                      href={settings.whatsappGroupLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex w-full items-center justify-between px-3 py-2.5 rounded-xl text-xs font-bold text-[#1B3F8B] bg-blue-50 hover:bg-blue-100/70 border border-blue-100 transition"
+                    >
+                      <span>💬 Join Official WhatsApp Group</span>
+                      <ArrowRight className="h-3.5 w-3.5" />
+                    </a>
+                  )}
+                  {settings.problemStatementLink && (
+                    <a
+                      href={settings.problemStatementLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex w-full items-center justify-between px-3 py-2 rounded-xl text-xs font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-200 transition"
+                    >
+                      <span>💡 Visit Official SIH PS Page</span>
+                      <ArrowRight className="h-3.5 w-3.5" />
+                    </a>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
-        {/* Right 8 Columns: Form Wizard */}
-        <div className="lg:col-span-8">
+        {/* Right Side: Form Wizard or Important Information */}
+        <div className={isDeadlinePassed ? 'lg:col-span-7' : 'lg:col-span-8'}>
           {isTeamLoggedIn ? (
             <div className="space-y-6 animate-in fade-in duration-300">
               {/* Problem Statement Container */}
@@ -1010,24 +1066,43 @@ export const RegistrationRulesView: React.FC = () => {
                   )}
 
                   {isDeadlinePassed && regStep <= 3 ? (
-                    <div className="relative z-10 text-center py-4 space-y-6 max-w-sm mx-auto animate-in fade-in duration-200">
-                      {/* Premium Vector Illustration */}
-                      <div className="flex justify-center mb-1">
-                        <img 
-                          src="/registration_closed_vector.png" 
-                          alt="Registrations Closed" 
-                          className="h-28 w-auto object-contain select-none pointer-events-none filter drop-shadow-sm" 
-                        />
-                      </div>
-                      <div className="space-y-1.5">
-                        <h3 className="text-lg font-black text-slate-900">Registrations are Closed</h3>
-                        <p className="text-xs text-slate-500 font-semibold leading-relaxed">
-                          The official Team Registration cutoff deadline has passed. Please contact support & help via email or get in touch with the club coordinators. Stay tuned if any extension happens.
-                        </p>
+                    <div className="relative z-10 space-y-6 animate-in fade-in duration-300">
+                      
+                      {/* Premium Vector and Title */}
+                      <div className="text-center max-w-2xl mx-auto space-y-4">
+                        <div className="flex justify-center mb-1">
+                          <div className="relative">
+                            <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-[#C1272D] to-amber-500 opacity-20 blur-md animate-pulse" />
+                            <img 
+                              src="/registration_closed_vector.png" 
+                              alt="Registrations Closed" 
+                              className="relative h-32 w-auto object-contain select-none pointer-events-none filter drop-shadow-md" 
+                            />
+                          </div>
+                        </div>
+                        
+                        <div className="space-y-1.5">
+                          <h3 className="text-2xl font-black text-slate-900 tracking-tight">
+                            Registrations are Closed
+                          </h3>
+                          <p className="text-xs sm:text-sm text-slate-500 font-semibold leading-relaxed">
+                            The official Team Registration and Mentor submission cutoff deadlines have passed. Already registered teams can log in below to access their dashboard.
+                          </p>
+                        </div>
+
+                        <div className="flex flex-wrap justify-center gap-3 pt-2">
+                          <button
+                            onClick={() => setActiveTab('login')}
+                            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl text-xs font-black text-white bg-gradient-to-r from-[#1B3F8B] to-indigo-800 hover:opacity-95 shadow-md shadow-blue-900/10 transition transform active:scale-95 duration-200"
+                          >
+                            <Lock className="h-4 w-4" />
+                            Enter Team Portal / Login
+                          </button>
+                        </div>
                       </div>
 
                       {/* Best inspiring quote */}
-                      <div className="p-4.5 rounded-2xl bg-slate-50 border border-slate-200 border-l-4 border-l-[#C1272D] text-left relative overflow-hidden shadow-2xs">
+                      <div className="p-4.5 rounded-2xl bg-slate-50 border border-slate-200 border-l-4 border-l-[#C1272D] text-left relative overflow-hidden shadow-2xs max-w-xl mx-auto">
                         <span className="absolute -top-1.5 -left-1 text-slate-200/80 text-6xl font-serif select-none pointer-events-none">
                           “
                         </span>
@@ -1038,6 +1113,7 @@ export const RegistrationRulesView: React.FC = () => {
                           — {settings.customQuoteAuthor || "Steve Jobs"}
                         </p>
                       </div>
+
                     </div>
                   ) : (
                     <form onSubmit={(e) => { e.preventDefault(); if (regStep === 3) handleRegisterSubmit(e); }}>

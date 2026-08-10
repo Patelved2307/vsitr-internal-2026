@@ -754,7 +754,7 @@ app.post('/api/admin/emails/resend', async (req: Request, res: Response) => {
 // 13c. Test SMTP Configuration
 app.post('/api/admin/smtp/test', async (req: Request, res: Response) => {
   try {
-    const { host, port, user, pass, from, testRecipient } = req.body;
+    const { host, port, user, pass, from, testRecipient, testType } = req.body;
     if (host) process.env.SMTP_HOST = host;
     if (port) process.env.SMTP_PORT = String(port);
     if (user) process.env.SMTP_USER = user;
@@ -764,14 +764,52 @@ app.post('/api/admin/smtp/test', async (req: Request, res: Response) => {
     resetTransporter();
 
     const recipient = testRecipient || user || 'admin@vsitr.ac.in';
-    const result = await sendEmail({
-      recipientEmail: recipient,
-      recipientName: 'Admin Tester',
-      subject: '[Internal SIH 2026] SMTP Integration Test',
-      bodyHtml: '<p>This is a test email sent from the Internal SIH 2026 portal to verify SMTP server integration.</p>',
-      bodyText: 'This is a test email sent from the Internal SIH 2026 portal to verify SMTP server integration.',
-      type: 'admin_announcement',
-    });
+    let result;
+
+    if (testType === 'mentor_pending' || testType === 'mentor_completed') {
+      const isCompleted = testType === 'mentor_completed';
+      const teamMock = {
+        id: 'SIH2026-042',
+        teamName: 'Cyber Knights',
+        status: isCompleted ? 'completed' : 'pending',
+        createdAt: new Date().toISOString(),
+        leader: {
+          fullName: 'Ved Patel',
+          email: recipient,
+          mobile: '9876543210',
+          enrollmentNo: '23070101001',
+          department: 'IT',
+          semester: '5',
+          gender: 'Male'
+        },
+        members: [
+          { fullName: 'Aarav Sharma', email: 'aarav@example.com', mobile: '9876543211', enrollmentNo: '23070101002', department: 'IT', semester: '5', gender: 'Male' },
+          { fullName: 'Diya Patel', email: 'diya@example.com', mobile: '9876543212', enrollmentNo: '23070101003', department: 'IT', semester: '5', gender: 'Female' },
+          { fullName: 'Ishaan Verma', email: 'ishaan@example.com', mobile: '9876543213', enrollmentNo: '23070101004', department: 'CSE', semester: '5', gender: 'Male' },
+          { fullName: 'Kabir Mehta', email: 'kabir@example.com', mobile: '9876543214', enrollmentNo: '23070101005', department: 'CSE', semester: '5', gender: 'Male' },
+          { fullName: 'Meera Joshi', email: 'meera@example.com', mobile: '9876543215', enrollmentNo: '23070101006', department: 'CE', semester: '5', gender: 'Female' }
+        ],
+        mentor: isCompleted ? {
+          prefix: 'Dr.',
+          fullName: 'Ramesh Shah',
+          email: recipient, // Send mentor CC to the same recipient for testing
+          contactNumber: '9988776655',
+          department: 'IT',
+          submittedAt: new Date().toISOString()
+        } : undefined
+      };
+
+      result = await dispatchDeadlineReminderToLeader(teamMock as any, 'August 8, 2026', getAppUrl(req));
+    } else {
+      result = await sendEmail({
+        recipientEmail: recipient,
+        recipientName: 'Admin Tester',
+        subject: '[Internal SIH 2026] SMTP Integration Test',
+        bodyHtml: '<p>This is a test email sent from the Internal SIH 2026 portal to verify SMTP server integration.</p>',
+        bodyText: 'This is a test email sent from the Internal SIH 2026 portal to verify SMTP server integration.',
+        type: 'admin_announcement',
+      });
+    }
 
     if (result.status === 'sent') {
       res.json({ success: true, message: `SMTP test email successfully sent to ${recipient}!`, log: result });
