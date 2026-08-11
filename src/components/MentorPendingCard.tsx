@@ -67,10 +67,10 @@ export const MentorPendingCard: React.FC = () => {
                 Registration Complete
               </h3>
               <div className="flex flex-wrap items-center gap-4 text-xs font-semibold text-slate-600 mt-1.5">
-                <span className="inline-flex items-center gap-1.5 text-emerald-700 bg-emerald-500/5 px-2 py-0.5 rounded-md border border-emerald-500/10">
+                <span className="inline-flex items-center flex-wrap gap-1.5 text-emerald-700 bg-emerald-500/5 px-2 py-0.5 rounded-md border border-emerald-500/10">
                   <ShieldCheck className="h-4 w-4 text-emerald-600" /> Team Registration ✔
                 </span>
-                <span className="inline-flex items-center gap-1.5 text-emerald-700 bg-emerald-500/5 px-2 py-0.5 rounded-md border border-emerald-500/10">
+                <span className="inline-flex items-center flex-wrap gap-1.5 text-emerald-700 bg-emerald-500/5 px-2 py-0.5 rounded-md border border-emerald-500/10">
                   <ShieldCheck className="h-4 w-4 text-emerald-600" /> Mentor Details ✔ ({team.mentor?.prefix} {team.mentor?.fullName})
                 </span>
               </div>

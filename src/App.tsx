@@ -19,7 +19,7 @@ const MainLayout: React.FC = () => {
   const { activeTab, settings } = useAuth();
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#F7F8FB] text-[#1E1E2A] font-sans selection:bg-[#C1272D] selection:text-white">
+    <div className="min-h-screen flex flex-col bg-[#F7F8FB] text-[#1E1E2A] font-sans selection:bg-[#C1272D] selection:text-white overflow-x-hidden w-full">
       
       {/* Announcement Bar */}
       {settings.announcementBanner && activeTab !== 'admin' && (
@@ -32,7 +32,7 @@ const MainLayout: React.FC = () => {
       {activeTab !== 'admin' && <Navbar />}
 
       {/* Dynamic Main View */}
-      <main className="flex-grow">
+      <main className="flex-grow w-full overflow-x-hidden">
         {activeTab === 'home' && (
           <RegistrationRulesView />
         )}

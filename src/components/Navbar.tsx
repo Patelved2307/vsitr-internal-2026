@@ -49,22 +49,22 @@ export const Navbar: React.FC = () => {
               <img
                 src="/logos/sih-logo.png"
                 alt="SIH Official Logo"
-                className="h-7 w-7 sm:h-9 md:h-11 object-contain"
+                className="h-6 w-6 sm:h-9 md:h-11 object-contain"
               />
               <img
                 src="/logos/ksv-logo.png"
                 alt="KSV Logo"
-                className="h-7 w-7 sm:h-9 md:h-11 object-contain"
+                className="h-6 w-6 sm:h-9 md:h-11 object-contain"
               />
               <img
                 src="/logos/vsitr-logo.png"
                 alt="VSITR Logo"
-                className="h-7 w-7 sm:h-9 md:h-11 object-contain"
+                className="h-6 w-6 sm:h-9 md:h-11 object-contain"
               />
             </div>
 
             <div className="flex flex-col min-w-0 shrink-0">
-              <span className="text-sm sm:text-lg md:text-xl font-black tracking-tight whitespace-nowrap bg-gradient-to-r from-[#C1272D] via-[#8B235E] to-[#1B3F8B] bg-clip-text text-transparent">
+              <span className="text-xs sm:text-lg md:text-xl font-black tracking-tight whitespace-nowrap bg-gradient-to-r from-[#C1272D] via-[#8B235E] to-[#1B3F8B] bg-clip-text text-transparent">
                 Internal SIH 2026
               </span>
               <span className="text-[10px] sm:text-xs font-semibold text-slate-500 uppercase tracking-wider hidden sm:inline">
@@ -74,7 +74,7 @@ export const Navbar: React.FC = () => {
           </div>
 
           {/* Desktop Navigation Links */}
-          <nav className="hidden lg:flex items-center gap-6">
+          <nav className="hidden xl:flex items-center gap-6">
             <button
               onClick={() => setActiveTab('home')}
               className={`relative py-1 text-sm font-semibold transition ${activeTab === 'home'
@@ -143,7 +143,7 @@ export const Navbar: React.FC = () => {
           </nav>
 
           {/* Action Buttons Area */}
-          <div className="hidden lg:flex items-center gap-3">
+          <div className="hidden xl:flex items-center gap-3">
             {isTeamLoggedIn ? (
               /* Logged-In State: Exactly 2 buttons -> "Team Portal" & "Logout" */
               <>
@@ -179,7 +179,7 @@ export const Navbar: React.FC = () => {
           </div>
 
           {/* Mobile Hamburger Toggle */}
-          <div className="lg:hidden flex items-center gap-2">
+          <div className="xl:hidden flex items-center gap-2">
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="p-2 rounded-xl bg-slate-100 text-slate-700 hover:bg-slate-200 transition"
@@ -193,7 +193,7 @@ export const Navbar: React.FC = () => {
 
       {/* Mobile Menu Dropdown */}
       {mobileMenuOpen && (
-        <div className="lg:hidden border-t border-slate-200 bg-white px-4 pt-3 pb-6 space-y-3 shadow-xl animate-in slide-in-from-top duration-200">
+        <div className="xl:hidden border-t border-slate-200 bg-white px-4 pt-3 pb-6 space-y-3 shadow-xl animate-in slide-in-from-top duration-200">
           <div className="flex flex-col gap-2">
             <button
               onClick={() => {
