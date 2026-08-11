@@ -128,7 +128,7 @@ export function isUsingNeon(): boolean {
 }
 
 // Initialize Neon PostgreSQL or File Fallback
-export async function initDatabase(): Promise<void> {
+export async function initDatabase(force = false): Promise<void> {
   const dbUrl = getDatabaseUrl();
 
   if (dbUrl) {
@@ -161,6 +161,26 @@ export async function initDatabase(): Promise<void> {
           await serverlessPool.query('SELECT 1');
           activePool = serverlessPool;
           console.log('Successfully connected to Neon PostgreSQL via serverless Pool!');
+        }
+      }
+
+      // Check if database tables already exist to skip migrations & seeding (prevents serverless cold start latency)
+      if (!force) {
+        try {
+          const checkRes = await runQuery(`
+            SELECT EXISTS (
+              SELECT FROM pg_tables 
+              WHERE schemaname = 'public' 
+              AND tablename = 'app_config'
+            );
+          `);
+          if (checkRes.rows && checkRes.rows[0] && (checkRes.rows[0].exists === true || checkRes.rows[0].exists === 't')) {
+            isNeonConnected = true;
+            console.log('Database tables already exist. Skipping schema creation and sync to optimize latency.');
+            return;
+          }
+        } catch (err) {
+          console.warn('App config table check failed, will run full database initialization:', err);
         }
       }
 

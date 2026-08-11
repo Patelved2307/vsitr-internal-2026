@@ -85,7 +85,7 @@ app.get('/api/db/status', async (req: Request, res: Response) => {
 
 app.post('/api/db/init', async (req: Request, res: Response) => {
   try {
-    await initDatabase();
+    await initDatabase(true);
     const isNeon = isUsingNeon();
     const teams = await getAllTeams();
     res.json({
