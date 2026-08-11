@@ -829,45 +829,234 @@ app.post('/api/admin/smtp/test', async (req: Request, res: Response) => {
   }
 });
 
-// 14. CSV Export Endpoint
+// 14. CSV Export Endpoint (returning multi-sheet Excel XML)
 app.get('/api/export/csv', async (req: Request, res: Response) => {
   try {
     const teams = await getAllTeams();
-    let csv = 'Team ID,Team Name,Status,Leader Name,Leader Email,Leader Phone,Leader Enrolment,Leader Dept,Leader Sem,Leader Gender,';
     
-    // Add headers for 5 members
-    for (let i = 1; i <= 5; i++) {
-      csv += `M${i} Name,M${i} Email,M${i} Phone,M${i} Enrolment,M${i} Dept,M${i} Sem,M${i} Gender,`;
-    }
-    csv += 'Female Members Count,Mentor Name,Mentor Contact,Mentor Email,Registered At\n';
+    const escapeXml = (unsafe: string): string => {
+      if (unsafe === undefined || unsafe === null) return '';
+      return String(unsafe)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&apos;');
+    };
+
+    let totalParticipants = 0;
+    let femaleParticipants = 0;
+    let completedMentorCount = 0;
+    let pendingMentorCount = 0;
+    let deptIT = 0;
+    let deptCSE = 0;
+    let deptCE = 0;
+    let ps7LCount = 0;
+    let ps8LCount = 0;
 
     teams.forEach((t) => {
-      const allMembers = [t.leader, ...t.members];
-      const females = allMembers.filter((m) => m.gender === 'Female').length;
-      const mName = t.mentor ? `"${t.mentor.prefix} ${t.mentor.fullName}"` : 'Pending';
+      const membersCount = t.members ? t.members.filter((m: any) => m && m.fullName && m.fullName.trim() !== '').length : 0;
+      totalParticipants += 1 + membersCount;
+
+      const allMembers = [t.leader, ...(t.members || [])].filter(Boolean);
+      femaleParticipants += allMembers.filter((m: any) => m.gender === 'Female').length;
+
+      if (t.mentor && t.mentor.fullName && t.mentor.fullName.trim() !== '') {
+        completedMentorCount++;
+      } else {
+        pendingMentorCount++;
+      }
+
+      const dept = t.leader.department;
+      if (dept === 'IT') deptIT++;
+      else if (dept === 'CSE') deptCSE++;
+      else if (dept === 'CE') deptCE++;
+
+      if (t.selectedPsId === '7-L') ps7LCount++;
+      else if (t.selectedPsId === '8-L') ps8LCount++;
+    });
+
+    let xml = `<?xml version="1.0"?>
+<?mso-application progid="Excel.Sheet"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:o="urn:schemas-microsoft-com:office:office"
+ xmlns:x="urn:schemas-microsoft-com:office:excel"
+ xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:html="http://www.w3.org/TR/REC-html40">
+ <Worksheet ss:Name="Dashboard">
+  <Table>
+   <Row>
+    <Cell><Data ss:Type="String">Metric</Data></Cell>
+    <Cell><Data ss:Type="String">Value</Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String">Total Registered Teams</Data></Cell>
+    <Cell><Data ss:Type="Number">${teams.length}</Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String">Total Students Participated</Data></Cell>
+    <Cell><Data ss:Type="Number">${totalParticipants}</Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String">Female Participants</Data></Cell>
+    <Cell><Data ss:Type="Number">${femaleParticipants}</Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String">Mentors Submitted</Data></Cell>
+    <Cell><Data ss:Type="Number">${completedMentorCount}</Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String">Mentors Pending</Data></Cell>
+    <Cell><Data ss:Type="Number">${pendingMentorCount}</Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String">Information Tech (IT) Teams</Data></Cell>
+    <Cell><Data ss:Type="Number">${deptIT}</Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String">Computer Science (CSE) Teams</Data></Cell>
+    <Cell><Data ss:Type="Number">${deptCSE}</Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String">Computer Engg (CE) Teams</Data></Cell>
+    <Cell><Data ss:Type="Number">${deptCE}</Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String">AI Dropout Prediction (7-L) Selections</Data></Cell>
+    <Cell><Data ss:Type="Number">${ps7LCount}</Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String">Smart Waste Management (8-L) Selections</Data></Cell>
+    <Cell><Data ss:Type="Number">${ps8LCount}</Data></Cell>
+   </Row>
+  </Table>
+ </Worksheet>
+ <Worksheet ss:Name="Team Details">
+  <Table>
+   <Row>
+    <Cell><Data ss:Type="String">Team ID</Data></Cell>
+    <Cell><Data ss:Type="String">Team Name</Data></Cell>
+    <Cell><Data ss:Type="String">Status</Data></Cell>
+    <Cell><Data ss:Type="String">Leader Name</Data></Cell>
+    <Cell><Data ss:Type="String">Leader Email</Data></Cell>
+    <Cell><Data ss:Type="String">Leader Phone</Data></Cell>
+    <Cell><Data ss:Type="String">Leader Enrollment</Data></Cell>
+    <Cell><Data ss:Type="String">Leader Department</Data></Cell>
+    <Cell><Data ss:Type="String">Leader Semester</Data></Cell>
+    <Cell><Data ss:Type="String">Leader Gender</Data></Cell>
+`;
+
+    for (let i = 1; i <= 5; i++) {
+      xml += `    <Cell><Data ss:Type="String">M${i} Name</Data></Cell>
+    <Cell><Data ss:Type="String">M${i} Email</Data></Cell>
+    <Cell><Data ss:Type="String">M${i} Phone</Data></Cell>
+    <Cell><Data ss:Type="String">M${i} Enrollment</Data></Cell>
+    <Cell><Data ss:Type="String">M${i} Department</Data></Cell>
+    <Cell><Data ss:Type="String">M${i} Semester</Data></Cell>
+    <Cell><Data ss:Type="String">M${i} Gender</Data></Cell>
+`;
+    }
+
+    xml += `    <Cell><Data ss:Type="String">Female Members Count</Data></Cell>
+    <Cell><Data ss:Type="String">Mentor Name</Data></Cell>
+    <Cell><Data ss:Type="String">Mentor Contact</Data></Cell>
+    <Cell><Data ss:Type="String">Mentor Email</Data></Cell>
+    <Cell><Data ss:Type="String">Registered At</Data></Cell>
+   </Row>
+`;
+
+    teams.forEach((t) => {
+      const allMembers = [t.leader, ...(t.members || [])].filter(Boolean);
+      const females = allMembers.filter((m: any) => m.gender === 'Female').length;
+      const mName = t.mentor ? `${t.mentor.prefix} ${t.mentor.fullName}` : 'Pending';
       const mContact = t.mentor ? t.mentor.contactNumber : '';
       const mEmail = t.mentor ? t.mentor.email : '';
 
-      let row = `"${t.id}","${t.teamName}","${t.status}","${t.leader.fullName}","${t.leader.email}","${t.leader.mobile}","${t.leader.enrollmentNo}","${t.leader.department}","${t.leader.semester}","${t.leader.gender}",`;
-      
+      xml += `   <Row>
+    <Cell><Data ss:Type="String">${escapeXml(t.id)}</Data></Cell>
+    <Cell><Data ss:Type="String">${escapeXml(t.teamName)}</Data></Cell>
+    <Cell><Data ss:Type="String">${escapeXml(t.status)}</Data></Cell>
+    <Cell><Data ss:Type="String">${escapeXml(t.leader.fullName)}</Data></Cell>
+    <Cell><Data ss:Type="String">${escapeXml(t.leader.email)}</Data></Cell>
+    <Cell><Data ss:Type="String">${escapeXml(t.leader.mobile)}</Data></Cell>
+    <Cell><Data ss:Type="String">${escapeXml(t.leader.enrollmentNo)}</Data></Cell>
+    <Cell><Data ss:Type="String">${escapeXml(t.leader.department)}</Data></Cell>
+    <Cell><Data ss:Type="String">${escapeXml(t.leader.semester)}</Data></Cell>
+    <Cell><Data ss:Type="String">${escapeXml(t.leader.gender)}</Data></Cell>
+`;
+
       for (let i = 0; i < 5; i++) {
         const m = t.members[i];
         if (m && m.fullName && m.fullName.trim() !== '') {
-          row += `"${m.fullName}","${m.email}","${m.mobile}","${m.enrollmentNo}","${m.department}","${m.semester}","${m.gender}",`;
+          xml += `    <Cell><Data ss:Type="String">${escapeXml(m.fullName)}</Data></Cell>
+    <Cell><Data ss:Type="String">${escapeXml(m.email)}</Data></Cell>
+    <Cell><Data ss:Type="String">${escapeXml(m.mobile)}</Data></Cell>
+    <Cell><Data ss:Type="String">${escapeXml(m.enrollmentNo)}</Data></Cell>
+    <Cell><Data ss:Type="String">${escapeXml(m.department)}</Data></Cell>
+    <Cell><Data ss:Type="String">${escapeXml(m.semester)}</Data></Cell>
+    <Cell><Data ss:Type="String">${escapeXml(m.gender)}</Data></Cell>
+`;
         } else {
-          row += `,,,,,,,`; // 7 empty columns
+          xml += `    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+`;
         }
       }
-      
-      row += `${females},${mName},"${mContact}","${mEmail}","${t.createdAt}"\n`;
-      csv += row;
+
+      xml += `    <Cell><Data ss:Type="Number">${females}</Data></Cell>
+    <Cell><Data ss:Type="String">${escapeXml(mName)}</Data></Cell>
+    <Cell><Data ss:Type="String">${escapeXml(mContact)}</Data></Cell>
+    <Cell><Data ss:Type="String">${escapeXml(mEmail)}</Data></Cell>
+    <Cell><Data ss:Type="String">${escapeXml(t.createdAt)}</Data></Cell>
+   </Row>
+`;
     });
 
-    res.setHeader('Content-Type', 'text/csv');
-    res.setHeader('Content-Disposition', 'attachment; filename="VSITR_SIH_2026_Teams.csv"');
-    res.status(200).send(csv);
+    xml += `  </Table>
+ </Worksheet>
+ <Worksheet ss:Name="PS Selections">
+  <Table>
+   <Row>
+    <Cell><Data ss:Type="String">Team ID</Data></Cell>
+    <Cell><Data ss:Type="String">Team Name</Data></Cell>
+    <Cell><Data ss:Type="String">Leader Name</Data></Cell>
+    <Cell><Data ss:Type="String">Leader Email</Data></Cell>
+    <Cell><Data ss:Type="String">Selected PS ID</Data></Cell>
+    <Cell><Data ss:Type="String">Selected PS Title</Data></Cell>
+    <Cell><Data ss:Type="String">PS Selected At</Data></Cell>
+   </Row>
+`;
+
+    teams.forEach((t) => {
+      if (t.selectedPsId) {
+        xml += `   <Row>
+    <Cell><Data ss:Type="String">${escapeXml(t.id)}</Data></Cell>
+    <Cell><Data ss:Type="String">${escapeXml(t.teamName)}</Data></Cell>
+    <Cell><Data ss:Type="String">${escapeXml(t.leader.fullName)}</Data></Cell>
+    <Cell><Data ss:Type="String">${escapeXml(t.leader.email)}</Data></Cell>
+    <Cell><Data ss:Type="String">${escapeXml(t.selectedPsId)}</Data></Cell>
+    <Cell><Data ss:Type="String">${escapeXml(t.selectedPsTitle)}</Data></Cell>
+    <Cell><Data ss:Type="String">${escapeXml(t.psSelectedAt || '')}</Data></Cell>
+   </Row>
+`;
+      }
+    });
+
+    xml += `  </Table>
+ </Worksheet>
+</Workbook>
+`;
+
+    res.setHeader('Content-Type', 'application/vnd.ms-excel');
+    res.setHeader('Content-Disposition', 'attachment; filename="VSITR_SIH_2026_Report.xls"');
+    res.status(200).send(xml);
   } catch (err: any) {
-    res.status(500).send('Error generating CSV');
+    res.status(500).send('Error generating Excel report');
   }
 });
 
