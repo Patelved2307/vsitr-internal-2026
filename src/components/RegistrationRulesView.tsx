@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { api } from '../services/api';
 import { TeamMember, Department, Gender, MentorPrefix } from '../types';
+import { MentorPendingCard } from './MentorPendingCard';
 import { Button } from '@/components/ui/rainbow-borders-button';
 import { motion, AnimatePresence } from 'framer-motion';
 import { BorderBeamPanel } from '@/components/ui/border-beam-panel';
@@ -731,6 +732,8 @@ export const RegistrationRulesView: React.FC = () => {
           )}
         </div>
       </div>
+
+      <MentorPendingCard />
 
       {settings.isExtended && (
         <div className="mb-6 p-4 sm:p-5 rounded-3xl bg-amber-50/75 border border-amber-200/80 text-amber-900 flex items-start gap-3 shadow-xs animate-in slide-in-from-top duration-300">

@@ -5,7 +5,6 @@ import { Footer } from './components/Footer';
 import { ModalAlert } from './components/ModalAlert';
 
 import { RegistrationRulesView } from './components/RegistrationRulesView';
-import { MentorPendingCard } from './components/MentorPendingCard';
 import { FAQView, SupportView } from './components/InfoViews';
 import { RegistrationPage } from './pages/RegistrationPage';
 import { TeamLoginPage } from './pages/TeamLoginPage';
@@ -35,10 +34,7 @@ const MainLayout: React.FC = () => {
       {/* Dynamic Main View */}
       <main className="flex-grow">
         {activeTab === 'home' && (
-          <>
-            <MentorPendingCard />
-            <RegistrationRulesView />
-          </>
+          <RegistrationRulesView />
         )}
 
         {activeTab === 'rules' && (

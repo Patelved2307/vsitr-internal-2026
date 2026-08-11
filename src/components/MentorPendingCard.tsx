@@ -10,7 +10,7 @@ export const MentorPendingCard: React.FC = () => {
   const isPending = team.status === 'pending_mentor';
 
   return (
-    <div className="max-w-4xl mx-auto px-4 my-6">
+    <div className="w-full my-6">
       {isPending ? (
         /* Pending State: Glass card with Amber/Orange gradient left indicator */
         <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-amber-500/5 to-orange-500/5 p-5 sm:p-6 shadow-lg border border-amber-500/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 backdrop-blur-md">
