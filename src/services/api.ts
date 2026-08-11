@@ -298,4 +298,54 @@ export const api = {
     if (!res.ok) throw new Error(data.message || 'Failed to delete PPT submission');
     return data;
   },
+
+  // Problem Statements
+  getProblemStatements: async () => {
+    const res = await fetch('/api/problem-statements');
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message || 'Failed to load problem statements');
+    return data;
+  },
+
+  selectProblemStatement: async (payload: { teamId: string; psId: string; psTitle: string }) => {
+    const res = await fetch('/api/teams/select-ps', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message || 'Failed to submit problem statement selection');
+    return data;
+  },
+
+  createProblemStatement: async (payload: any) => {
+    const res = await fetch('/api/problem-statements', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message || 'Failed to create problem statement');
+    return data;
+  },
+
+  updateProblemStatement: async (id: string, payload: any) => {
+    const res = await fetch(`/api/problem-statements/${encodeURIComponent(id)}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message || 'Failed to update problem statement');
+    return data;
+  },
+
+  deleteProblemStatement: async (id: string) => {
+    const res = await fetch(`/api/problem-statements/${encodeURIComponent(id)}`, {
+      method: 'DELETE',
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message || 'Failed to delete problem statement');
+    return data;
+  },
 };

@@ -583,3 +583,177 @@ Kadi Sarva Vishwavidyalaya`;
     cc: hasMentor ? mentorEmail : undefined,
   });
 }
+
+// 4. Dispatch Problem Statement Selection Confirmation Email to ALL 6 Team Members
+export async function dispatchPsSelectionEmails(team: Team, psId: string, psTitle: string) {
+  const globalConfig = await getGlobalConfig().catch(() => null);
+  const whatsappLink = globalConfig?.settings?.whatsappGroupLink || 'https://chat.whatsapp.com/EfS0SSUc9aX4DJUhfrpD2U';
+
+  const allMembers = [team.leader, ...team.members];
+  const leaderName = team.leader.fullName;
+  const teamId = team.id;
+  const teamName = team.teamName;
+
+  const emailPromises = allMembers.map(async (member) => {
+    const subject = `📢 Internal SIH 2026 – Problem Statement Selection Confirmed`;
+
+    const bodyHtml = `
+      <div style="font-family: 'Inter', 'Segoe UI', Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #E2E8F0; border-radius: 16px; overflow: hidden; background-color: #ffffff; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03);">
+        <!-- Header Banner -->
+        <div style="background: linear-gradient(135deg, #1B3F8B 0%, #C1272D 100%); padding: 32px 24px; text-align: center; color: #ffffff;">
+          <span style="font-size: 32px; margin-bottom: 8px; display: inline-block;">📢</span>
+          <h2 style="margin: 0; font-size: 22px; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase;">Problem Statement Selected</h2>
+          <p style="margin: 6px 0 0; font-size: 13px; opacity: 0.9; font-weight: 500;">Vidush Somany Institute of Technology & Research (VSITR)</p>
+        </div>
+
+        <div style="padding: 32px 24px; color: #1E293B; line-height: 1.6;">
+          <p style="font-size: 16px; font-weight: 700; margin-top: 0; color: #0F172A;">Dear ${leaderName},</p>
+          <p style="font-size: 14px; color: #334155; margin-bottom: 20px;">
+            Greetings from the Internal Smart India Hackathon (SIH) 2026 Organizing Committee.
+          </p>
+          <p style="font-size: 14px; color: #334155; margin-bottom: 20px;">
+            We are pleased to inform you that your team has successfully selected and submitted a Problem Statement for Internal SIH 2026 through the Team Portal.
+          </p>
+
+          <!-- Problem Statement Details Card -->
+          <div style="background-color: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 12px; padding: 20px; margin-bottom: 24px;">
+            <h3 style="margin-top: 0; margin-bottom: 16px; font-size: 15px; font-weight: 700; color: #0F172A; border-bottom: 1px solid #E2E8F0; padding-bottom: 8px;">
+              📋 Problem Statement Details
+            </h3>
+            <table style="width: 100%; border-collapse: collapse; font-size: 14px; color: #334155;">
+              <tr>
+                <td style="padding: 6px 0; color: #64748B; width: 35%;"><strong>Team ID:</strong></td>
+                <td style="padding: 6px 0; font-weight: 700; color: #C1272D;">${teamId}</td>
+              </tr>
+              <tr>
+                <td style="padding: 6px 0; color: #64748B;"><strong>Team Name:</strong></td>
+                <td style="padding: 6px 0; font-weight: 700; color: #1E293B;">${teamName}</td>
+              </tr>
+              <tr>
+                <td style="padding: 6px 0; color: #64748B;"><strong>Problem Statement ID:</strong></td>
+                <td style="padding: 6px 0; font-weight: 700; color: #1B3F8B; font-family: monospace;">${psId}</td>
+              </tr>
+              <tr>
+                <td style="padding: 6px 0; color: #64748B; vertical-align: top;"><strong>Problem Statement Title:</strong></td>
+                <td style="padding: 6px 0; font-weight: 700; color: #1E293B; line-height: 1.4;">${psTitle}</td>
+              </tr>
+            </table>
+          </div>
+
+          <p style="font-size: 14px; color: #334155; margin-bottom: 20px;">
+            Your submitted Problem Statement details have been successfully recorded in the system. This confirmation email has been shared with the Team Leader and all registered team members for reference.
+          </p>
+
+          <!-- Important Next Steps -->
+          <div style="margin-bottom: 24px;">
+            <h3 style="font-size: 15px; font-weight: 700; color: #0F172A; margin-bottom: 12px;">
+              📌 Important Next Steps
+            </h3>
+            <ul style="margin: 0; padding-left: 20px; font-size: 13px; color: #475569; line-height: 1.6;">
+              <li style="margin-bottom: 8px;">After selecting your Problem Statement, you can start working on your proposed solution.</li>
+              <li style="margin-bottom: 8px;">The PPT Submission Date will be announced soon. Please stay tuned to the official communication channels.</li>
+              <li style="margin-bottom: 8px;">The Presentation Date will also be announced soon.</li>
+              <li style="margin-bottom: 8px;">Please regularly check the Team Portal, registered email, and official WhatsApp group for important announcements and updates.</li>
+            </ul>
+          </div>
+
+          <!-- WhatsApp Group -->
+          <div style="background-color: #ECFDF5; border: 1px dashed #10B981; border-radius: 12px; padding: 20px; margin-bottom: 24px; text-align: center;">
+            <h3 style="margin-top: 0; margin-bottom: 8px; font-size: 15px; font-weight: 700; color: #065F46;">
+              💬 Join the Official WhatsApp Group
+            </h3>
+            <p style="font-size: 13px; color: #047857; margin-top: 0; margin-bottom: 16px; line-height: 1.5;">
+              For regular updates and announcements, please join the official Internal SIH 2026 WhatsApp Group and share the link with all your team members.
+            </p>
+            <a href="${whatsappLink}" style="background-color: #10B981; color: #ffffff; text-decoration: none; padding: 12px 24px; border-radius: 8px; font-weight: 700; font-size: 14px; display: inline-block;">
+              👉 Join WhatsApp Group
+            </a>
+          </div>
+
+          <!-- Need Assistance -->
+          <div style="border-top: 1px solid #E2E8F0; padding-top: 20px; margin-bottom: 24px;">
+            <h4 style="margin-top: 0; margin-bottom: 8px; font-size: 14px; font-weight: 700; color: #0F172A;">
+              📞 Need Assistance?
+            </h4>
+            <p style="font-size: 13px; color: #475569; margin: 0; line-height: 1.6;">
+              For any queries or technical assistance, please contact us at:
+              <br/>
+              <strong>Email:</strong> <a href="mailto:sihinternal.vsitr@gmail.com" style="color: #1B3F8B; text-decoration: none; font-weight: 600;">sihinternal.vsitr@gmail.com</a>
+            </p>
+          </div>
+
+          <p style="font-size: 14px; color: #334155; margin-bottom: 24px;">
+            Thank you for your participation and cooperation.
+          </p>
+          <p style="font-size: 14px; color: #334155; font-weight: 600; margin-bottom: 0;">
+            We wish your team the very best for Internal SIH 2026! 🚀
+          </p>
+        </div>
+
+        <!-- Footer -->
+        <div style="background-color: #F1F5F9; border-top: 1px solid #E2E8F0; padding: 24px; text-align: center; color: #64748B; font-size: 12px; line-height: 1.6;">
+          <p style="margin: 0 0 4px; font-weight: 700; color: #475569;">Warm Regards,</p>
+          <p style="margin: 0 0 12px; font-weight: 700; color: #1E293B; font-size: 13px;">Internal Smart India Hackathon (SIH) 2026 Organizing Committee</p>
+          <p style="margin: 0 0 6px; font-weight: 600; color: #475569;">Research Club | Coding Club | Design Club | Soft Skills Club</p>
+          <p style="margin: 0 0 2px;">Vidush Somany Institute of Technology & Research (VSITR)</p>
+          <p style="margin: 0;">Kadi Sarva Vishwavidyalaya</p>
+        </div>
+      </div>
+    `;
+
+    const bodyText = `Dear ${leaderName},
+
+Greetings from the Internal Smart India Hackathon (SIH) 2026 Organizing Committee.
+
+We are pleased to inform you that your team has successfully selected and submitted a Problem Statement for Internal SIH 2026 through the Team Portal.
+
+📋 Problem Statement Details
+
+Team ID: ${teamId}
+Team Name: ${teamName}
+Problem Statement ID: ${psId}
+Problem Statement Title: ${psTitle}
+
+Your submitted Problem Statement details have been successfully recorded in the system. This confirmation email has been shared with the Team Leader and all registered team members for reference.
+
+📌 Important Next Steps
+After selecting your Problem Statement, you can start working on your proposed solution.
+The PPT Submission Date will be announced soon. Please stay tuned to the official communication channels.
+The Presentation Date will also be announced soon.
+Please regularly check the Team Portal, registered email, and official WhatsApp group for important announcements and updates.
+
+💬 Join the Official WhatsApp Group
+
+For regular updates and announcements, please join the official Internal SIH 2026 WhatsApp Group and share the link with all your team members.
+
+👉 Join WhatsApp Group: ${whatsappLink}
+
+📞 Need Assistance?
+
+For any queries or technical assistance, please contact us at:
+
+📧 sihinternal.vsitr@gmail.com
+
+Thank you for your participation and cooperation.
+
+We wish your team the very best for Internal SIH 2026! 🚀
+
+Warm Regards,
+Internal Smart India Hackathon (SIH) 2026 Organizing Committee
+Research Club | Coding Club | Design Club | Soft Skills Club
+Vidush Somany Institute of Technology & Research (VSITR)
+Kadi Sarva Vishwavidyalaya`;
+
+    await sendEmail({
+      recipientEmail: member.email,
+      recipientName: member.fullName,
+      teamId: team.id,
+      subject,
+      bodyHtml,
+      bodyText,
+      type: 'registration_confirmation',
+    });
+  });
+
+  await Promise.all(emailPromises);
+}

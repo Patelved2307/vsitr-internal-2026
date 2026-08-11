@@ -27,8 +27,8 @@ interface AuthContextType {
   reloadPortalData: () => Promise<void>;
 
   // UI Navigation view
-  activeTab: 'home' | 'rules' | 'faq' | 'support' | 'register' | 'login' | 'portal' | 'mentor' | 'admin' | 'ppt-submit' | 'timeline';
-  setActiveTab: (tab: 'home' | 'rules' | 'faq' | 'support' | 'register' | 'login' | 'portal' | 'mentor' | 'admin' | 'ppt-submit' | 'timeline') => void;
+  activeTab: 'home' | 'rules' | 'faq' | 'support' | 'register' | 'login' | 'portal' | 'mentor' | 'admin' | 'ppt-submit' | 'timeline' | 'problem-statements';
+  setActiveTab: (tab: 'home' | 'rules' | 'faq' | 'support' | 'register' | 'login' | 'portal' | 'mentor' | 'admin' | 'ppt-submit' | 'timeline' | 'problem-statements') => void;
   
   // Custom Modal Alerts
   modalAlert: { show: boolean; title: string; message: string; type?: 'error' | 'success' | 'info' } | null;
@@ -55,7 +55,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [clubCoordinators, setClubCoordinators] = useState<ClubCoordinator[]>(CLUB_COORDINATORS);
   const [isLoadingSettings, setIsLoadingSettings] = useState<boolean>(true);
 
-  const [activeTab, setActiveTab] = useState<'home' | 'rules' | 'faq' | 'support' | 'register' | 'login' | 'portal' | 'mentor' | 'admin' | 'ppt-submit' | 'timeline'>('home');
+  const [activeTab, setActiveTab] = useState<'home' | 'rules' | 'faq' | 'support' | 'register' | 'login' | 'portal' | 'mentor' | 'admin' | 'ppt-submit' | 'timeline' | 'problem-statements'>('home');
 
   const [modalAlert, setModalAlert] = useState<{ show: boolean; title: string; message: string; type?: 'error' | 'success' | 'info' } | null>(null);
 

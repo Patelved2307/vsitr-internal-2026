@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { api } from '../services/api';
-import { UserCheck, ShieldCheck, UserPlus, ExternalLink, Headset, Users, GraduationCap, AlertTriangle, ArrowRight, Edit3, X, Save, Check, User, Lock } from 'lucide-react';
+import { UserCheck, ShieldCheck, UserPlus, ExternalLink, Headset, Users, GraduationCap, AlertTriangle, ArrowRight, Edit3, X, Save, Check, User, Lock, BookOpen, Clock } from 'lucide-react';
+import { ProblemStatement } from '../types';
 
 export const TeamPortalPage: React.FC = () => {
   const { team, isTeamLoggedIn, setActiveTab, settings, clubCoordinators, loginTeamSession, showAlert, refreshTeamSession } = useAuth();
@@ -16,6 +17,42 @@ export const TeamPortalPage: React.FC = () => {
   const [isEditingMembers, setIsEditingMembers] = useState(false);
   const [isEditingMentor, setIsEditingMentor] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+
+  // Problem Statement selection states
+  const [psTimeLeft, setPsTimeLeft] = useState<{
+    days: number;
+    hours: number;
+    minutes: number;
+    seconds: number;
+    isExpired: boolean;
+  }>({ days: 0, hours: 0, minutes: 0, seconds: 0, isExpired: false });
+
+  // Countdown timer for PS Selection Selection Deadline (16 August, 2026 11:59 PM IST)
+  useEffect(() => {
+    const calculatePsTimeLeft = () => {
+      const psDeadline = new Date('2026-08-16T23:59:00+05:30').getTime(); // IST timezone
+      const nowVal = new Date().getTime();
+      const difference = psDeadline - nowVal;
+
+      if (difference <= 0) {
+        setPsTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0, isExpired: true });
+        return;
+      }
+
+      setPsTimeLeft({
+        days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+        hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
+        minutes: Math.floor((difference / 1000 / 60) % 60),
+        seconds: Math.floor((difference / 1000) % 60),
+        isExpired: false,
+      });
+    };
+
+    calculatePsTimeLeft();
+    const timer = setInterval(calculatePsTimeLeft, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
 
   // Form State for editing members
   const [editLeader, setEditLeader] = useState<any>(null);
@@ -153,7 +190,7 @@ export const TeamPortalPage: React.FC = () => {
   };
 
   return (
-    <div className="py-8 px-4 max-w-6xl mx-auto space-y-8 animate-in fade-in duration-300">
+    <div className="py-8 px-4 max-w-[1440px] mx-auto space-y-8 animate-in fade-in duration-300">
       
       {/* 5.1 TEAM ID SUMMARY BANNER */}
       <div className="relative p-6 sm:p-10 rounded-3xl bg-slate-950 text-white overflow-hidden shadow-2xl border border-slate-800/80">
@@ -238,6 +275,110 @@ export const TeamPortalPage: React.FC = () => {
             <ExternalLink className="h-4 w-4" />
           </a>
         </div>
+      </div>
+
+      {/* 5.1A PROBLEM STATEMENT SELECTION SECTION */}
+      <div className="rounded-3xl bg-white p-6 border border-slate-200 shadow-xl space-y-4 hover:shadow-2xl/10 transition duration-300">
+        <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+          <div className="flex items-center gap-2">
+            <div className="p-2 rounded-xl bg-red-50 text-[#C1272D]">
+              <BookOpen className="h-5 w-5" />
+            </div>
+            <h2 className="text-lg font-black text-slate-900 tracking-tight">
+              Problem Statement Selection
+            </h2>
+          </div>
+          
+          <div className="flex items-center gap-2">
+            {!psTimeLeft.isExpired && (
+              <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl font-black text-[10px] uppercase tracking-wider text-amber-800 bg-amber-50 border border-amber-200 shadow-2xs">
+                <Clock className="h-3 w-3" />
+                Deadline: 16 Aug, 11:59 PM
+              </span>
+            )}
+            {psTimeLeft.isExpired && (
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl font-black text-[10px] uppercase tracking-wider text-slate-500 bg-slate-100 border border-slate-200 shadow-2xs">
+                <Lock className="h-3 w-3" />
+                Locked
+              </span>
+            )}
+          </div>
+        </div>
+
+        {/* Selection Status or Selection Form */}
+        {team.selectedPsId ? (
+          /* Selection is already made - show full details, no change button */
+          <div className="space-y-4 animate-in fade-in duration-200">
+            {/* Selected PS Details Card */}
+            <div className="rounded-2xl bg-emerald-50 border border-emerald-200 overflow-hidden">
+              {/* Card Header */}
+              <div className="flex items-center gap-3 px-5 py-4 bg-emerald-500/10 border-b border-emerald-200">
+                <div className="flex items-center justify-center h-9 w-9 rounded-full bg-white border border-emerald-300 text-emerald-600 shrink-0">
+                  <Check className="h-5 w-5" />
+                </div>
+                <div>
+                  <p className="text-[10px] uppercase font-black text-emerald-700 tracking-wider">Problem Statement Selected</p>
+                  <p className="text-xs font-bold text-emerald-800">Your selection has been locked.</p>
+                </div>
+              </div>
+
+              {/* Full PS Details */}
+              <div className="p-5 space-y-4">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="text-[11px] font-black font-mono text-[#1B3F8B] bg-blue-50 border border-blue-200 px-2.5 py-1 rounded-lg">
+                    PSID: {team.selectedPsId}
+                  </span>
+                </div>
+                <div>
+                  <p className="text-[10px] uppercase font-bold text-slate-400 tracking-wider mb-1">Title</p>
+                  <p className="text-sm font-black text-slate-900 leading-snug">{team.selectedPsTitle}</p>
+                </div>
+                {team.psSelectedAt && (
+                  <div>
+                    <p className="text-[10px] uppercase font-bold text-slate-400 tracking-wider mb-1">Selected On</p>
+                    <p className="text-xs font-semibold text-slate-700">{new Date(team.psSelectedAt).toLocaleString('en-IN')}</p>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Confirmation note */}
+            <div className="px-4 py-3 rounded-2xl bg-slate-50 border border-slate-200 text-xs">
+              <p className="text-slate-600 font-semibold leading-relaxed">
+                📢 Confirmation email sent to <strong className="text-slate-800">{team.leader.email}</strong> and all registered members.
+              </p>
+            </div>
+          </div>
+        ) : (
+          /* Selection is NOT made: Render the CTA redirect card */
+          <div className="p-6 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-6 shadow-xs animate-in fade-in duration-200">
+            <div className="space-y-2">
+              <h4 className="text-sm font-black text-slate-900">No Problem Statement Selected Yet</h4>
+              <p className="text-xs text-slate-550 leading-relaxed font-semibold max-w-xl">
+                Your team has not selected a problem statement yet. To participate in the Internal SIH 2026, you must select one of the institute-level problem statements before the deadline.
+              </p>
+
+            </div>
+
+            {!psTimeLeft.isExpired ? (
+              <button
+                type="button"
+                onClick={() => {
+                  setActiveTab('problem-statements');
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+                className="shrink-0 inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl font-black text-xs text-white bg-[#1B3F8B] hover:bg-indigo-900 hover:shadow-lg transition transform active:scale-95 duration-200 cursor-pointer"
+              >
+                Select Problem Statement
+                <ArrowRight className="h-4 w-4" />
+              </button>
+            ) : (
+              <div className="shrink-0 px-4 py-2 bg-red-50 border border-red-200 text-red-700 font-bold text-xs rounded-xl">
+                Selection Closed
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       {/* 5.2 TEAM MEMBER DETAILS TABLE / CARDS */}

@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS app_config (
     value JSONB NOT NULL
 );
 
--- 2. Teams Table (Stores team info, leader details, members array, mentor details, registration status)
+-- 2. Teams Table (Stores team info, leader details, members array, mentor details, registration status, and PS selection)
 CREATE TABLE IF NOT EXISTS teams (
     id TEXT PRIMARY KEY,
     team_name TEXT NOT NULL,
@@ -15,8 +15,21 @@ CREATE TABLE IF NOT EXISTS teams (
     members JSONB NOT NULL,
     mentor JSONB,
     status TEXT NOT NULL,
+    selected_ps_id TEXT,
+    selected_ps_title TEXT,
+    ps_selected_at TIMESTAMPTZ,
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- 6. Problem Statements Table
+CREATE TABLE IF NOT EXISTS problem_statements (
+    id TEXT PRIMARY KEY,
+    title TEXT NOT NULL,
+    category TEXT NOT NULL, -- 'Software', 'Hardware', or 'Both'
+    description TEXT,
+    status TEXT NOT NULL DEFAULT 'open', -- 'open' or 'closed'
+    created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
 -- 3. Members Table (Individual member records including leaders)

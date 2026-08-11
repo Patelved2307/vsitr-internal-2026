@@ -4,7 +4,7 @@ import ws from 'ws';
 import fs from 'fs';
 import path from 'path';
 import dotenv from 'dotenv';
-import { EventSettings, FAQItem, Team, TimelineEvent, EmailLog, Rule } from '../types.js';
+import { EventSettings, FAQItem, Team, TimelineEvent, EmailLog, Rule, ProblemStatement } from '../types.js';
 import { CLUB_COORDINATORS, INITIAL_FAQS, INITIAL_SETTINGS, INITIAL_TIMELINE_EVENTS, INITIAL_RULES } from '../data/initialData.js';
 
 // Configure WebSocket for serverless Neon pool in Node environment
@@ -26,6 +26,7 @@ export interface DatabaseSchema {
   teams: Team[];
   emailLogs: EmailLog[];
   nextTeamNumber: number;
+  problemStatements: ProblemStatement[];
 }
 
 
@@ -240,6 +241,41 @@ export async function initDatabase(): Promise<void> {
         );
       `);
 
+      await runQuery(`
+        CREATE TABLE IF NOT EXISTS problem_statements (
+          id TEXT PRIMARY KEY,
+          title TEXT NOT NULL,
+          category TEXT NOT NULL,
+          description TEXT,
+          status TEXT NOT NULL DEFAULT 'open',
+          created_at TIMESTAMPTZ DEFAULT NOW()
+        );
+      `);
+
+      await runQuery(`ALTER TABLE teams ADD COLUMN IF NOT EXISTS selected_ps_id TEXT;`);
+      await runQuery(`ALTER TABLE teams ADD COLUMN IF NOT EXISTS selected_ps_title TEXT;`);
+      await runQuery(`ALTER TABLE teams ADD COLUMN IF NOT EXISTS ps_selected_at TIMESTAMPTZ;`);
+
+      await runQuery(`ALTER TABLE problem_statements ADD COLUMN IF NOT EXISTS sdg TEXT;`);
+      await runQuery(`ALTER TABLE problem_statements ADD COLUMN IF NOT EXISTS theme TEXT;`);
+
+      // Seed and synchronize default problem statements in Neon DB
+      await runQuery("DELETE FROM problem_statements WHERE id NOT IN ('7-L', '8-L');");
+      for (const ps of INITIAL_PROBLEM_STATEMENTS) {
+        await runQuery(
+          `INSERT INTO problem_statements (id, title, category, description, status, sdg, theme)
+           VALUES ($1, $2, $3, $4, $5, $6, $7)
+           ON CONFLICT (id) DO UPDATE SET
+             title = EXCLUDED.title,
+             category = EXCLUDED.category,
+             description = EXCLUDED.description,
+             status = EXCLUDED.status,
+             sdg = EXCLUDED.sdg,
+             theme = EXCLUDED.theme`,
+          [ps.id, ps.title, ps.category, ps.description || null, ps.status, ps.sdg || null, ps.theme || null]
+        );
+      }
+
       isNeonConnected = true;
 
       // Seed initial app_config in Neon if missing or update from local DB
@@ -265,8 +301,8 @@ export async function initDatabase(): Promise<void> {
         console.log(`Syncing ${fileDb.teams.length} local teams into Neon PostgreSQL...`);
         for (const t of fileDb.teams) {
           const res = await runQuery(
-            `INSERT INTO teams (id, team_name, leader, members, mentor, status, created_at, updated_at)
-             VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+            `INSERT INTO teams (id, team_name, leader, members, mentor, status, selected_ps_id, selected_ps_title, ps_selected_at, created_at, updated_at)
+             VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
              ON CONFLICT (id) DO NOTHING`,
             [
               t.id,
@@ -275,6 +311,9 @@ export async function initDatabase(): Promise<void> {
               JSON.stringify(t.members),
               t.mentor ? JSON.stringify(t.mentor) : null,
               t.status,
+              t.selectedPsId || null,
+              t.selectedPsTitle || null,
+              t.psSelectedAt || null,
               t.createdAt || new Date().toISOString(),
               t.updatedAt || new Date().toISOString(),
             ]
@@ -349,6 +388,7 @@ function ensureFileDb(): DatabaseSchema {
     teams: [],
     emailLogs: [],
     nextTeamNumber: 1,
+    problemStatements: INITIAL_PROBLEM_STATEMENTS,
   };
 
   try {
@@ -364,6 +404,9 @@ function ensureFileDb(): DatabaseSchema {
     const data = fs.readFileSync(DB_FILE, 'utf-8');
     const parsed = JSON.parse(data);
     if (!parsed.emailLogs) parsed.emailLogs = [];
+    // Always enforce the latest problem statements
+    parsed.problemStatements = INITIAL_PROBLEM_STATEMENTS;
+    saveFileDb(parsed);
     return parsed;
   } catch (err) {
     console.error('Error reading DB file, reinitializing', err);
@@ -520,6 +563,9 @@ export async function getAllTeams(): Promise<Team[]> {
           status: row.status,
           createdAt: row.created_at,
           updatedAt: row.updated_at,
+          selectedPsId: row.selected_ps_id || undefined,
+          selectedPsTitle: row.selected_ps_title || undefined,
+          psSelectedAt: row.ps_selected_at || undefined,
         };
       });
       return parsedTeams;
@@ -547,6 +593,9 @@ export async function getTeamById(id: string): Promise<Team | null> {
           status: row.status,
           createdAt: row.created_at,
           updatedAt: row.updated_at,
+          selectedPsId: row.selected_ps_id || undefined,
+          selectedPsTitle: row.selected_ps_title || undefined,
+          psSelectedAt: row.ps_selected_at || undefined,
         };
       }
     } catch (err) {
@@ -616,8 +665,9 @@ export async function updateTeam(id: string, updatedFields: Partial<Team>): Prom
     try {
       const res = await runQuery(
         `UPDATE teams 
-         SET team_name = $1, leader = $2, members = $3, mentor = $4, status = $5, updated_at = $6
-         WHERE UPPER(id) = UPPER($7)`,
+         SET team_name = $1, leader = $2, members = $3, mentor = $4, status = $5, updated_at = $6,
+             selected_ps_id = $7, selected_ps_title = $8, ps_selected_at = $9
+         WHERE UPPER(id) = UPPER($10)`,
         [
           merged.teamName,
           JSON.stringify(merged.leader),
@@ -625,6 +675,9 @@ export async function updateTeam(id: string, updatedFields: Partial<Team>): Prom
           merged.mentor ? JSON.stringify(merged.mentor) : null,
           merged.status,
           merged.updatedAt,
+          merged.selectedPsId || null,
+          merged.selectedPsTitle || null,
+          merged.psSelectedAt || null,
           id.trim(),
         ]
       );
@@ -640,10 +693,11 @@ export async function updateTeam(id: string, updatedFields: Partial<Team>): Prom
   const idx = db.teams.findIndex((t) => t.id.toUpperCase() === id.trim().toUpperCase());
   if (idx !== -1) {
     db.teams[idx] = merged;
-    saveFileDb(db);
-    return merged;
+  } else {
+    db.teams.push(merged);
   }
-  return neonSuccess ? merged : null;
+  saveFileDb(db);
+  return merged;
 }
 
 export async function deleteTeam(id: string): Promise<boolean> {
@@ -814,4 +868,149 @@ export async function deletePptSubmission(id: string): Promise<void> {
     db.pptSubmissions = db.pptSubmissions.filter((s: PptSubmission) => s.id !== id);
     saveFileDb(db);
   }
+}
+
+// =============================
+// PROBLEM STATEMENTS CRUD & SELECTION
+// =============================
+
+export const INITIAL_PROBLEM_STATEMENTS: ProblemStatement[] = [
+  {
+    id: "7-L",
+    title: "AI-Powered Academic Dropout Prediction and Intervention System",
+    category: "EdTech & Learning Analytics",
+    description: "Develop a platform that analyzes attendance, academic performance, learning behavior, and socio-economic indicators to identify students at risk of dropping out and recommend personalized interventions.",
+    status: "open",
+    sdg: "SDG 4: Quality Education",
+    theme: "AI for Education and Human Development"
+  },
+  {
+    id: "8-L",
+    title: "Smart Waste Management and Citizen Reporting Platform",
+    category: "Smart Governance",
+    description: "Create a system that enables citizens to report waste issues, tracks collection vehicles, predicts waste generation hotspots, and optimizes collection routes.",
+    status: "open",
+    sdg: "SDG 11: Sustainable Cities, SDG 12: Responsible Consumption",
+    theme: "Digital Solutions for Smart Cities and Circular Economy"
+  }
+];
+
+export async function getAllProblemStatements(): Promise<ProblemStatement[]> {
+  if (isNeonConnected) {
+    try {
+      const res = await runQuery('SELECT * FROM problem_statements ORDER BY id ASC');
+      return res.rows.map((row: any) => ({
+        id: row.id,
+        title: row.title,
+        category: row.category,
+        description: row.description || undefined,
+        status: row.status as 'open' | 'closed',
+        createdAt: row.created_at,
+        sdg: row.sdg || undefined,
+        theme: row.theme || undefined,
+      }));
+    } catch (err) {
+      console.error('Error fetching problem statements from Neon DB:', err);
+    }
+  }
+
+  const db = ensureFileDb();
+  return db.problemStatements || [];
+}
+
+export async function createProblemStatement(ps: ProblemStatement): Promise<ProblemStatement> {
+  if (isNeonConnected) {
+    try {
+      await runQuery(
+        `INSERT INTO problem_statements (id, title, category, description, status, sdg, theme)
+         VALUES ($1, $2, $3, $4, $5, $6, $7)
+         ON CONFLICT (id) DO UPDATE SET
+           title = EXCLUDED.title,
+           category = EXCLUDED.category,
+           description = EXCLUDED.description,
+           status = EXCLUDED.status,
+           sdg = EXCLUDED.sdg,
+           theme = EXCLUDED.theme`,
+        [ps.id, ps.title, ps.category, ps.description || null, ps.status, ps.sdg || null, ps.theme || null]
+      );
+    } catch (err) {
+      console.error('Error creating problem statement in Neon DB:', err);
+    }
+  }
+
+  const db = ensureFileDb();
+  if (!db.problemStatements) db.problemStatements = [];
+  const existingIdx = db.problemStatements.findIndex((p) => p.id === ps.id);
+  if (existingIdx !== -1) {
+    db.problemStatements[existingIdx] = ps;
+  } else {
+    db.problemStatements.push(ps);
+  }
+  saveFileDb(db);
+
+  return ps;
+}
+
+export async function updateProblemStatement(id: string, fields: Partial<ProblemStatement>): Promise<ProblemStatement | null> {
+  const all = await getAllProblemStatements();
+  const target = all.find((p) => p.id === id);
+  if (!target) return null;
+
+  const merged = { ...target, ...fields };
+
+  if (isNeonConnected) {
+    try {
+      await runQuery(
+        `UPDATE problem_statements
+         SET title = $1, category = $2, description = $3, status = $4, sdg = $5, theme = $6
+         WHERE id = $7`,
+        [merged.title, merged.category, merged.description || null, merged.status, merged.sdg || null, merged.theme || null, id]
+      );
+    } catch (err) {
+      console.error('Error updating problem statement in Neon DB:', err);
+    }
+  }
+
+  const db = ensureFileDb();
+  const idx = db.problemStatements.findIndex((p) => p.id === id);
+  if (idx !== -1) {
+    db.problemStatements[idx] = merged;
+    saveFileDb(db);
+  }
+
+  return merged;
+}
+
+export async function deleteProblemStatement(id: string): Promise<boolean> {
+  let neonSuccess = false;
+  if (isNeonConnected) {
+    try {
+      const res = await runQuery('DELETE FROM problem_statements WHERE id = $1', [id]);
+      if (res.rowCount > 0) neonSuccess = true;
+    } catch (err) {
+      console.error('Error deleting problem statement in Neon DB:', err);
+    }
+  }
+
+  const db = ensureFileDb();
+  const idx = db.problemStatements.findIndex((p) => p.id === id);
+  if (idx !== -1) {
+    db.problemStatements.splice(idx, 1);
+    saveFileDb(db);
+    return true;
+  }
+  return neonSuccess;
+}
+
+export async function updateTeamPsSelection(teamId: string, psId: string | null, psTitle: string | null): Promise<Team | null> {
+  const team = await getTeamById(teamId);
+  if (!team) return null;
+
+  const updatedFields = {
+    selectedPsId: psId || undefined,
+    selectedPsTitle: psTitle || undefined,
+    psSelectedAt: psId ? new Date().toISOString() : undefined,
+  };
+
+  return await updateTeam(teamId, updatedFields);
 }

@@ -11,7 +11,7 @@ import {
 export const FAQView: React.FC = () => {
   const { faqs } = useAuth();
   return (
-    <div className="max-w-4xl mx-auto py-10 px-4 animate-in fade-in duration-300">
+    <div className="max-w-[1440px] mx-auto py-10 px-4 animate-in fade-in duration-300">
       <div className="text-center mb-10">
         <div className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-50 text-[#1B3F8B] mb-4">
           <HelpCircle className="h-6 w-6" />

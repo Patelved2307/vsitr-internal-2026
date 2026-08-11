@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { api } from '../services/api';
-import { Team, EventSettings, TimelineEvent, FAQItem, EmailLog, PptSubmission , Rule, RuleCategory} from '../types';
+import { Team, EventSettings, TimelineEvent, FAQItem, EmailLog, PptSubmission , Rule, RuleCategory, ProblemStatement } from '../types';
 import {
   ShieldCheck,
   LogOut,
@@ -36,7 +36,10 @@ import {
   Database,
   SendHorizontal,
   ChevronUp, 
-  ChevronDown
+  ChevronDown,
+  BookOpen,
+  Cpu,
+  Laptop
 } from 'lucide-react';
 
 // Helper to convert UTC ISO string from server to local YYYY-MM-DDTHH:mm for datetime-local inputs
@@ -69,7 +72,7 @@ export const AdminPage: React.FC = () => {
   const [isAuthLoading, setIsAuthLoading] = useState(false);
 
   // Sidebar navigation selection
-  const [sidebarTab, setSidebarTab] = useState<'overview' | 'teams' | 'timeline' | 'faqs' | 'settings' | 'emails' | 'ppt-submissions'>('overview');
+  const [sidebarTab, setSidebarTab] = useState<'overview' | 'teams' | 'timeline' | 'faqs' | 'settings' | 'emails' | 'ppt-submissions' | 'problem-statements'>('overview');
 
   // Email & Neon Database state
   const [emailLogs, setEmailLogs] = useState<EmailLog[]>([]);
@@ -158,6 +161,86 @@ export const AdminPage: React.FC = () => {
   const [resendingEmailId, setResendingEmailId] = useState<string | null>(null);
   const [smtpTestEmail, setSmtpTestEmail] = useState('');
   const [smtpTestType, setSmtpTestType] = useState<'connection' | 'mentor_pending' | 'mentor_completed'>('connection');
+
+  // Problem statement list management state
+  const [adminPsList, setAdminPsList] = useState<ProblemStatement[]>([]);
+  const [isLoadingPs, setIsLoadingPs] = useState(false);
+  const [isEditingPs, setIsEditingPs] = useState(false);
+  const [editingPsData, setEditingPsData] = useState<Partial<ProblemStatement> | null>(null);
+  const [isCreatingPs, setIsCreatingPs] = useState(false);
+
+  const fetchAdminProblemStatements = async () => {
+    try {
+      setIsLoadingPs(true);
+      const res = await api.getProblemStatements();
+      if (res.success) {
+        setAdminPsList(res.problemStatements || []);
+      }
+    } catch (err) {
+      console.error('Failed to fetch problem statements', err);
+    } finally {
+      setIsLoadingPs(false);
+    }
+  };
+
+  useEffect(() => {
+    if (isAdminLoggedIn && sidebarTab === 'problem-statements') {
+      fetchAdminProblemStatements();
+    }
+  }, [isAdminLoggedIn, sidebarTab]);
+
+  const handleCreatePs = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingPsData?.id || !editingPsData?.title || !editingPsData?.category) {
+      showAlert('Required Fields', 'Please fill in ID, Title, and Category.');
+      return;
+    }
+    try {
+      const res = await api.createProblemStatement(editingPsData as any);
+      if (res.success) {
+        showAlert('Success', 'Problem statement created successfully.', 'success');
+        setIsCreatingPs(false);
+        setEditingPsData(null);
+        fetchAdminProblemStatements();
+      }
+    } catch (err: any) {
+      showAlert('Error', err.message || 'Failed to create problem statement.');
+    }
+  };
+
+  const handleUpdatePs = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingPsData?.id || !editingPsData?.title || !editingPsData?.category) {
+      showAlert('Required Fields', 'Please fill in ID, Title, and Category.');
+      return;
+    }
+    try {
+      const res = await api.updateProblemStatement(editingPsData.id, editingPsData);
+      if (res.success) {
+        showAlert('Success', 'Problem statement updated successfully.', 'success');
+        setIsEditingPs(false);
+        setEditingPsData(null);
+        fetchAdminProblemStatements();
+      }
+    } catch (err: any) {
+      showAlert('Error', err.message || 'Failed to update problem statement.');
+    }
+  };
+
+  const handleDeletePs = async (id: string) => {
+    if (!window.confirm(`Are you sure you want to delete problem statement ${id}?`)) {
+      return;
+    }
+    try {
+      const res = await api.deleteProblemStatement(id);
+      if (res.success) {
+        showAlert('Deleted', 'Problem statement deleted successfully.', 'success');
+        fetchAdminProblemStatements();
+      }
+    } catch (err: any) {
+      showAlert('Error', err.message || 'Failed to delete problem statement.');
+    }
+  };
 
   // Handle DB Manual Sync to Neon
   const handleSyncDb = async () => {
@@ -251,7 +334,7 @@ export const AdminPage: React.FC = () => {
       setIsLoadingTeams(true);
       setIsLoadingEmailLogs(true);
 
-      const [statsData, teamsData, emailLogsData, settingsData] = await Promise.all([
+      const [statsData, teamsData, emailLogsData, settingsData, psData] = await Promise.all([
         api.getAdminStats(),
         api.getAdminTeams({
           search: searchQuery,
@@ -260,12 +343,14 @@ export const AdminPage: React.FC = () => {
         }),
         api.getEmailLogs().catch(() => ({ logs: [] })),
         api.getSettings().catch(() => ({})),
+        api.getProblemStatements().catch(() => ({ problemStatements: [] })),
       ]);
 
       if (statsData.stats) setStats(statsData.stats);
       if (teamsData.teams) setTeams(teamsData.teams);
       if (emailLogsData.logs) setEmailLogs(emailLogsData.logs);
       if (settingsData.isNeon !== undefined) setIsNeonConnected(settingsData.isNeon);
+      if (psData.problemStatements) setAdminPsList(psData.problemStatements);
     } catch (err) {
       console.error('Error fetching admin data', err);
     } finally {
@@ -750,6 +835,23 @@ export const AdminPage: React.FC = () => {
                   {pptSubmissions.length}
                 </span>
               </button>
+
+              <button
+                onClick={() => setSidebarTab('problem-statements')}
+                className={`w-full flex items-center justify-between px-3.5 py-3 rounded-2xl font-bold text-xs transition ${
+                  sidebarTab === 'problem-statements'
+                    ? 'bg-rose-50 text-[#C1272D] shadow-xs'
+                    : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
+                }`}
+              >
+                <div className="flex items-center gap-3">
+                  <BookOpen className="h-4 w-4" />
+                  <span>Problem Statements</span>
+                </div>
+                <span className="px-2 py-0.5 rounded-full text-[10px] bg-red-100 text-red-700 font-bold">
+                  {adminPsList.length}
+                </span>
+              </button>
             </nav>
           </div>
 
@@ -945,6 +1047,48 @@ export const AdminPage: React.FC = () => {
                   </div>
                 </div>
 
+                {/* Problem Statement Selection Metrics */}
+                <div className="p-6 rounded-3xl bg-white border border-slate-200/80 shadow-xs space-y-4">
+                  <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                    <h3 className="text-sm font-bold text-slate-900">
+                      Problem Statement Selections ({teams.filter(t => t.selectedPsId).length} / {teams.length} Teams)
+                    </h3>
+                  </div>
+                  
+                  {teams.filter(t => t.selectedPsId).length === 0 ? (
+                    <p className="text-xs text-slate-500 font-medium py-2">No teams have selected a problem statement yet.</p>
+                  ) : (
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-xs text-left border-collapse">
+                        <thead>
+                          <tr className="border-b border-slate-100 text-slate-400 font-bold uppercase tracking-wider text-[9px]">
+                            <th className="py-2.5">Team</th>
+                            <th className="py-2.5">PS ID</th>
+                            <th className="py-2.5">PS Title</th>
+                            <th className="py-2.5">Selected At</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-slate-100 text-slate-700">
+                          {teams
+                            .filter(t => t.selectedPsId)
+                            .map((t) => (
+                              <tr key={t.id} className="hover:bg-slate-50/50">
+                                <td className="py-2 font-bold text-slate-900">
+                                  {t.teamName} <span className="text-[10px] text-slate-400 font-mono">({t.id})</span>
+                                </td>
+                                <td className="py-2 font-mono font-black text-[#C1272D]">{t.selectedPsId}</td>
+                                <td className="py-2 font-semibold text-slate-800">{t.selectedPsTitle}</td>
+                                <td className="py-2 text-slate-500 font-semibold">
+                                  {t.psSelectedAt ? new Date(t.psSelectedAt).toLocaleString('en-IN') : 'N/A'}
+                                </td>
+                              </tr>
+                            ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+                </div>
+
               </div>
             )}
 
@@ -991,13 +1135,14 @@ export const AdminPage: React.FC = () => {
                           <th className="py-3.5 px-4 bg-slate-50">Leader &amp; Contact</th>
                           <th className="py-3.5 px-4 bg-slate-50">Dept</th>
                           <th className="py-3.5 px-4 bg-slate-50">Status</th>
+                          <th className="py-3.5 px-4 bg-slate-50">PS Selected</th>
                           <th className="py-3.5 px-4 text-right bg-slate-50">Action</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-slate-100 font-medium text-slate-800">
                         {teams.length === 0 ? (
                           <tr>
-                            <td colSpan={6} className="py-12 text-center text-slate-400">
+                            <td colSpan={7} className="py-12 text-center text-slate-400">
                               No registered teams found matching the search or department filter.
                             </td>
                           </tr>
@@ -1025,6 +1170,20 @@ export const AdminPage: React.FC = () => {
                                 ) : (
                                   <span className="px-3 py-1 rounded-full text-[10px] font-extrabold bg-amber-100 text-amber-800 border border-amber-200">
                                     Pending Mentor
+                                  </span>
+                                )}
+                              </td>
+                              <td className="py-3.5 px-4">
+                                {t.selectedPsId ? (
+                                  <div>
+                                    <span className="px-2.5 py-1 rounded-full text-[10px] font-extrabold bg-blue-100 text-blue-800 border border-blue-200 block w-fit mb-0.5">
+                                      {t.selectedPsId}
+                                    </span>
+                                    <span className="text-[10px] text-slate-500 font-semibold">{t.selectedPsTitle || '—'}</span>
+                                  </div>
+                                ) : (
+                                  <span className="px-2.5 py-1 rounded-full text-[10px] font-extrabold bg-slate-100 text-slate-500 border border-slate-200">
+                                    Not Selected
                                   </span>
                                 )}
                               </td>
@@ -1680,6 +1839,208 @@ export const AdminPage: React.FC = () => {
               </div>
             )}
 
+            {/* TAB 7: PROBLEM STATEMENTS CRUD PANEL */}
+            {sidebarTab === 'problem-statements' && (
+              <div className="space-y-6 animate-in fade-in duration-200">
+                <div className="flex items-center justify-between border-b border-slate-200/60 pb-4">
+                  <div>
+                    <h1 className="text-2xl font-black text-slate-900 tracking-tight">
+                      Problem Statement Manager
+                    </h1>
+                    <p className="text-xs text-slate-500 font-medium mt-0.5">
+                      Create, edit, close, and delete institute-level problem statements for student selection.
+                    </p>
+                  </div>
+
+                  <button
+                    onClick={() => {
+                      setEditingPsData({ id: '', title: '', category: 'Software', description: '', status: 'open' });
+                      setIsCreatingPs(true);
+                      setIsEditingPs(false);
+                    }}
+                    className="inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl font-bold text-xs text-white bg-[#C1272D] hover:bg-red-700 shadow-md transition cursor-pointer"
+                  >
+                    <Plus className="h-4 w-4" />
+                    Add Problem Statement
+                  </button>
+                </div>
+
+                {/* Problem Statement List table */}
+                {isLoadingPs ? (
+                  <div className="flex items-center justify-center py-16">
+                    <div className="h-8 w-8 border-4 border-[#C1272D] border-t-transparent rounded-full animate-spin" />
+                  </div>
+                ) : adminPsList.length === 0 ? (
+                  <div className="text-center py-16 text-slate-400">
+                    <BookOpen className="h-10 w-10 mx-auto mb-3 opacity-30" />
+                    <p className="text-sm font-bold">No Problem Statements found.</p>
+                  </div>
+                ) : (
+                  <div className="rounded-3xl bg-white border border-slate-200 overflow-auto max-h-[600px] shadow-xs">
+                    <table className="w-full text-xs border-collapse">
+                      <thead className="sticky top-0 bg-slate-50 z-10 border-b border-slate-100">
+                        <tr className="text-left font-extrabold text-slate-500 uppercase tracking-wider">
+                          <th className="py-3 px-4 bg-slate-50">ID</th>
+                          <th className="py-3 px-4 bg-slate-50">Title</th>
+                          <th className="py-3 px-4 bg-slate-50">Category</th>
+                          <th className="py-3 px-4 bg-slate-50">Status</th>
+                          <th className="py-3 px-4 bg-slate-50 text-right">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-50">
+                        {adminPsList.map((ps) => (
+                          <tr key={ps.id} className="hover:bg-slate-50/80 transition">
+                            <td className="py-3.5 px-4 font-mono font-bold text-[#1B3F8B]">{ps.id}</td>
+                            <td className="py-3.5 px-4 font-black text-slate-900 max-w-sm truncate">{ps.title}</td>
+                            <td className="py-3.5 px-4 font-bold text-slate-700">{ps.category}</td>
+                            <td className="py-3.5 px-4">
+                              <span className={`px-2 py-0.5 rounded-full font-bold text-[10px] uppercase ${
+                                ps.status === 'open'
+                                  ? 'bg-emerald-50 text-emerald-700 border border-emerald-100'
+                                  : 'bg-slate-100 text-slate-700 border border-slate-200'
+                              }`}>
+                                {ps.status}
+                              </span>
+                            </td>
+                            <td className="py-3.5 px-4 text-right space-x-2">
+                              <button
+                                onClick={() => {
+                                  setEditingPsData(ps);
+                                  setIsEditingPs(true);
+                                  setIsCreatingPs(false);
+                                }}
+                                className="p-1 text-blue-600 hover:bg-blue-50 rounded-lg transition inline-block cursor-pointer"
+                                title="Edit"
+                              >
+                                <Edit3 className="h-4 w-4" />
+                              </button>
+                              <button
+                                onClick={() => handleDeletePs(ps.id)}
+                                className="p-1 text-red-600 hover:bg-red-50 rounded-lg transition inline-block cursor-pointer"
+                                title="Delete"
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+
+                {/* MODAL: CREATE / EDIT PROBLEM STATEMENT */}
+                {(isCreatingPs || isEditingPs) && editingPsData && (
+                  <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/40 backdrop-blur-xs">
+                    <div className="w-full max-w-lg rounded-3xl bg-white border border-slate-200 shadow-2xl overflow-hidden relative animate-in zoom-in-95 duration-200">
+                      <div className="absolute top-0 left-0 right-0 h-1.5 bg-[#C1272D]" />
+                      
+                      <div className="p-6 flex items-center justify-between border-b border-slate-100">
+                        <h3 className="text-base font-black text-slate-950">
+                          {isCreatingPs ? 'Add New Problem Statement' : 'Edit Problem Statement'}
+                        </h3>
+                        <button
+                          onClick={() => {
+                            setIsCreatingPs(false);
+                            setIsEditingPs(false);
+                            setEditingPsData(null);
+                          }}
+                          className="p-1.5 text-slate-400 hover:bg-slate-50 hover:text-slate-700 rounded-xl transition cursor-pointer"
+                        >
+                          <X className="h-5 w-5" />
+                        </button>
+                      </div>
+
+                      <form onSubmit={isCreatingPs ? handleCreatePs : handleUpdatePs} className="p-6 space-y-4 text-xs font-bold text-slate-700">
+                        <div className="space-y-1.5">
+                          <label className="block">Problem Statement ID <span className="text-red-500">*</span></label>
+                          <input
+                            type="text"
+                            required
+                            disabled={isEditingPs}
+                            placeholder="e.g. VSITR-PS07"
+                            value={editingPsData.id || ''}
+                            onChange={(e) => setEditingPsData({ ...editingPsData, id: e.target.value })}
+                            className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-semibold outline-none focus:border-[#C1272D] disabled:opacity-50"
+                          />
+                        </div>
+
+                        <div className="space-y-1.5">
+                          <label className="block">Problem Statement Title <span className="text-red-500">*</span></label>
+                          <input
+                            type="text"
+                            required
+                            placeholder="e.g. Smart Traffic Management System"
+                            value={editingPsData.title || ''}
+                            onChange={(e) => setEditingPsData({ ...editingPsData, title: e.target.value })}
+                            className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-semibold outline-none focus:border-[#C1272D]"
+                          />
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4">
+                          <div className="space-y-1.5">
+                            <label className="block">Category <span className="text-red-500">*</span></label>
+                            <select
+                              value={editingPsData.category || 'Software'}
+                              onChange={(e) => setEditingPsData({ ...editingPsData, category: e.target.value as any })}
+                              className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-semibold outline-none focus:border-[#C1272D] bg-white"
+                            >
+                              <option value="Software">Software</option>
+                              <option value="Hardware">Hardware</option>
+                              <option value="Both">Both</option>
+                            </select>
+                          </div>
+
+                          <div className="space-y-1.5">
+                            <label className="block">Status <span className="text-red-500">*</span></label>
+                            <select
+                              value={editingPsData.status || 'open'}
+                              onChange={(e) => setEditingPsData({ ...editingPsData, status: e.target.value as any })}
+                              className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-semibold outline-none focus:border-[#C1272D] bg-white"
+                            >
+                              <option value="open">Open (Available)</option>
+                              <option value="closed">Closed (Unavailable)</option>
+                            </select>
+                          </div>
+                        </div>
+
+                        <div className="space-y-1.5">
+                          <label className="block">Description</label>
+                          <textarea
+                            placeholder="Provide brief problem details, scope, or technology stack..."
+                            rows={4}
+                            value={editingPsData.description || ''}
+                            onChange={(e) => setEditingPsData({ ...editingPsData, description: e.target.value })}
+                            className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-semibold outline-none focus:border-[#C1272D] resize-none"
+                          />
+                        </div>
+
+                        <div className="flex items-center gap-3 pt-3 justify-end">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setIsCreatingPs(false);
+                              setIsEditingPs(false);
+                              setEditingPsData(null);
+                            }}
+                            className="px-5 py-2.5 rounded-xl font-bold bg-slate-100 text-slate-700 hover:bg-slate-200 transition cursor-pointer"
+                          >
+                            Cancel
+                          </button>
+                          <button
+                            type="submit"
+                            className="px-6 py-2.5 rounded-xl font-bold text-white bg-[#C1272D] hover:bg-red-700 transition cursor-pointer"
+                          >
+                            {isCreatingPs ? 'Create' : 'Save Changes'}
+                          </button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
             {/* TAB 6: EMAIL DISPATCH NOTIFICATIONS & NEON DATABASE LOGS */}
             {sidebarTab === 'emails' && (
               <div className="space-y-6 animate-in fade-in duration-200">
@@ -1985,6 +2346,38 @@ export const AdminPage: React.FC = () => {
               </div>
             )}
 
+            {/* Problem Statement Details */}
+            {selectedTeam.selectedPsId ? (
+              <div className="p-4 rounded-2xl bg-blue-50 border border-blue-200 text-xs space-y-2">
+                <div className="flex items-center gap-2">
+                  <BookOpen className="h-4 w-4 text-[#1B3F8B]" />
+                  <span className="font-black text-slate-900 uppercase tracking-wider text-[10px]">Problem Statement Selected</span>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  <div>
+                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">PSID</p>
+                    <p className="font-black text-[#1B3F8B] font-mono">{selectedTeam.selectedPsId}</p>
+                  </div>
+                  {selectedTeam.psSelectedAt && (
+                    <div>
+                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">Selected At</p>
+                      <p className="font-semibold text-slate-700">{new Date(selectedTeam.psSelectedAt).toLocaleString('en-IN')}</p>
+                    </div>
+                  )}
+                </div>
+                <div>
+                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">Title</p>
+                  <p className="font-bold text-slate-800 leading-snug">{selectedTeam.selectedPsTitle || '—'}</p>
+                </div>
+              </div>
+            ) : (
+              <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-500 font-bold flex items-center gap-2">
+                <BookOpen className="h-4 w-4 text-slate-400" />
+                No Problem Statement Selected Yet
+              </div>
+            )}
+
+
             <div className="pt-2 flex items-center justify-between border-t border-slate-100">
               <button
                 onClick={() => setDeleteConfirmTeam(selectedTeam)}
@@ -1999,6 +2392,7 @@ export const AdminPage: React.FC = () => {
                 Close
               </button>
             </div>
+
           </div>
         </div>
       )}

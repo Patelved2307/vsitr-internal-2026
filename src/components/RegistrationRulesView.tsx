@@ -31,7 +31,8 @@ import {
   ShieldCheck,
   Calendar,
   Lock,
-  Clock
+  Clock,
+  BookOpen
 } from 'lucide-react';
 
 const FLOATING_LINES_WAVES = ['top', 'middle', 'bottom'] as Array<'top' | 'middle' | 'bottom'>;
@@ -468,7 +469,7 @@ export const RegistrationRulesView: React.FC = () => {
     ];
 
     return (
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
         {/* Rules Top Banner */}
         <div className="text-center mb-8 relative">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-red-50 text-[#C1272D] border border-red-100 text-xs font-extrabold uppercase tracking-wider mb-3 shadow-xs">
@@ -646,7 +647,7 @@ export const RegistrationRulesView: React.FC = () => {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Top Banner Area */}
       <div className="relative text-center mb-8 p-6 sm:p-10 rounded-3xl bg-slate-950 text-white overflow-hidden shadow-2xl border border-slate-800/80">
         {/* FloatingLines Background */}
@@ -742,6 +743,30 @@ export const RegistrationRulesView: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* Official SIH Announcement Banner */}
+      <div className="mb-8 p-6 rounded-3xl bg-[#FFF9E6] border border-amber-300 text-amber-950 flex flex-col md:flex-row items-start gap-4 shadow-md relative overflow-hidden animate-in fade-in duration-500">
+        <div className="absolute top-0 left-0 bottom-0 w-1.5 bg-amber-500" />
+        <div className="p-3 bg-amber-500/10 border border-amber-500/20 text-amber-600 rounded-2xl shrink-0">
+          <AlertTriangle className="h-6 w-6 animate-pulse" />
+        </div>
+        <div className="space-y-1.5">
+          <h3 className="text-base sm:text-lg font-black tracking-tight text-amber-950 flex items-center gap-2">
+            📢 Important Announcement: Official SIH Problem Statements Delayed
+          </h3>
+          <p className="text-xs sm:text-sm text-slate-800 leading-relaxed font-semibold">
+            SIH has officially announced a delay in releasing the official Problem Statements. Until they are released, VSITR will conduct the Internal SIH using institute-released problem statements. Selected teams will participate on these. Once the official SIH problem statements are released later, teams will select their official statement and the Internal SIH will be conducted again.
+          </p>
+          <div className="pt-2 flex gap-3">
+            <button
+              onClick={() => setActiveTab('problem-statements')}
+              className="px-4 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-500 text-white text-xs font-black shadow-sm transition"
+            >
+              View Institute Problem Statements
+            </button>
+          </div>
+        </div>
+      </div>
 
       {/* Main Grid: Left (Deadlines - wider when registration is closed), Right (Form Wizard / Info Panel) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
@@ -1072,33 +1097,35 @@ export const RegistrationRulesView: React.FC = () => {
                       <div className="text-center max-w-2xl mx-auto space-y-4">
                         <div className="flex justify-center mb-1">
                           <div className="relative">
-                            <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-[#C1272D] to-amber-500 opacity-20 blur-md animate-pulse" />
+                            <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-[#C1272D] to-blue-500 opacity-20 blur-md animate-pulse" />
                             <img 
-                              src="/registration_closed_vector.png" 
-                              alt="Registrations Closed" 
+                              src="/problem_statement_selection_vector.png" 
+                              alt="Select Problem Statement" 
                               className="relative h-32 w-auto object-contain select-none pointer-events-none filter drop-shadow-md" 
                             />
                           </div>
                         </div>
                         
-                        <div className="space-y-1.5">
+                        <div className="space-y-2">
                           <h3 className="text-2xl font-black text-slate-900 tracking-tight">
-                            Registrations are Closed
+                            Select the Problem Statement
                           </h3>
-                          <p className="text-xs sm:text-sm text-slate-500 font-semibold leading-relaxed">
-                            The official Team Registration and Mentor submission cutoff deadlines have passed. Already registered teams can log in below to access their dashboard.
+                          <p className="text-xs sm:text-sm text-slate-600 font-semibold leading-relaxed">
+                            Registration is closed, and the Selection Phase is now active! Selected teams must log in to their Team Portal to choose their problem statement. Selection is open until <strong className="text-[#C1272D]">16 August, 2026 at 11:59 PM</strong>.
                           </p>
                         </div>
+                      </div>
 
-                        <div className="flex flex-wrap justify-center gap-3 pt-2">
-                          <button
-                            onClick={() => setActiveTab('login')}
-                            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl text-xs font-black text-white bg-gradient-to-r from-[#1B3F8B] to-indigo-800 hover:opacity-95 shadow-md shadow-blue-900/10 transition transform active:scale-95 duration-200"
-                          >
-                            <Lock className="h-4 w-4" />
-                            Enter Team Portal / Login
-                          </button>
-                        </div>
+                      {/* Select Problem Statement Button */}
+                      <div className="flex flex-wrap justify-center gap-3 pt-2">
+                        <button
+                          type="button"
+                          onClick={() => setActiveTab('login')}
+                          className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl text-xs font-black text-white bg-gradient-to-r from-[#1B3F8B] to-blue-700 hover:opacity-95 shadow-md shadow-blue-900/10 transition transform active:scale-95 duration-200 cursor-pointer"
+                        >
+                          <BookOpen className="h-4 w-4" />
+                          Select Problem Statement
+                        </button>
                       </div>
 
                       {/* Best inspiring quote */}
@@ -1113,7 +1140,6 @@ export const RegistrationRulesView: React.FC = () => {
                           — {settings.customQuoteAuthor || "Steve Jobs"}
                         </p>
                       </div>
-
                     </div>
                   ) : (
                     <form onSubmit={(e) => { e.preventDefault(); if (regStep === 3) handleRegisterSubmit(e); }}>

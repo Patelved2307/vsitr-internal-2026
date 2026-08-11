@@ -24,6 +24,11 @@ import {
   createPptSubmission,
   getAllPptSubmissions,
   deletePptSubmission,
+  getAllProblemStatements,
+  createProblemStatement,
+  updateProblemStatement,
+  deleteProblemStatement,
+  updateTeamPsSelection,
 } from './src/db/neonDb.js';
 import {
   dispatchTeamRegistrationEmails,
@@ -31,6 +36,7 @@ import {
   sendEmail,
   resendEmailLog,
   resetTransporter,
+  dispatchPsSelectionEmails,
 } from './src/services/emailService.js';
 
 const PORT = 3000;
@@ -889,6 +895,99 @@ async function startServer() {
     try {
       await deletePptSubmission(req.params.id);
       res.json({ success: true, message: 'PPT submission deleted.' });
+    } catch (err: any) {
+      res.status(500).json({ success: false, message: err.message });
+    }
+  });
+
+  // ============================
+  // PROBLEM STATEMENT ROUTES
+  // ============================
+
+  // Get all problem statements (Public)
+  app.get('/api/problem-statements', async (req: Request, res: Response) => {
+    try {
+      const list = await getAllProblemStatements();
+      res.json({ success: true, problemStatements: list });
+    } catch (err: any) {
+      res.status(500).json({ success: false, message: err.message });
+    }
+  });
+
+  // Create a problem statement (Admin)
+  app.post('/api/problem-statements', async (req: Request, res: Response) => {
+    try {
+      const { id, title, category, description, status } = req.body;
+      if (!id || !title || !category) {
+        return res.status(400).json({ success: false, message: 'ID, Title, and Category are required.' });
+      }
+      const created = await createProblemStatement({ id, title, category, description, status: status || 'open' });
+      res.json({ success: true, message: 'Problem Statement created successfully.', problemStatement: created });
+    } catch (err: any) {
+      res.status(500).json({ success: false, message: err.message });
+    }
+  });
+
+  // Update a problem statement (Admin)
+  app.put('/api/problem-statements/:id', async (req: Request, res: Response) => {
+    try {
+      const updated = await updateProblemStatement(req.params.id, req.body);
+      if (!updated) {
+        return res.status(404).json({ success: false, message: 'Problem Statement not found.' });
+      }
+      res.json({ success: true, message: 'Problem Statement updated successfully.', problemStatement: updated });
+    } catch (err: any) {
+      res.status(500).json({ success: false, message: err.message });
+    }
+  });
+
+  // Delete a problem statement (Admin)
+  app.delete('/api/problem-statements/:id', async (req: Request, res: Response) => {
+    try {
+      const ok = await deleteProblemStatement(req.params.id);
+      if (!ok) {
+        return res.status(404).json({ success: false, message: 'Problem Statement not found.' });
+      }
+      res.json({ success: true, message: 'Problem Statement deleted successfully.' });
+    } catch (err: any) {
+      res.status(500).json({ success: false, message: err.message });
+    }
+  });
+
+  // Submit PS Selection for Team (Self-Service in Team Portal)
+  app.post('/api/teams/select-ps', async (req: Request, res: Response) => {
+    try {
+      const { teamId, psId, psTitle } = req.body;
+
+      if (!teamId || !psId || !psTitle) {
+        return res.status(400).json({ success: false, message: 'Team ID, Problem Statement ID, and Title are required.' });
+      }
+
+      // Check deadline: 16 August, 2026 till 11:59pm
+      const deadline = new Date('2026-08-16T23:59:00+05:30'); // IST timezone
+      const now = new Date();
+      if (now > deadline) {
+        return res.status(400).json({
+          success: false,
+          message: 'The deadline for selecting problem statements has passed (August 16, 2026, 11:59 PM).'
+        });
+      }
+
+      const updatedTeam = await updateTeamPsSelection(teamId, psId, psTitle);
+      if (!updatedTeam) {
+        return res.status(404).json({ success: false, message: 'Team not found.' });
+      }
+
+      // Automatically dispatch confirmation emails to the entire team (asynchronous)
+      dispatchPsSelectionEmails(updatedTeam, psId, psTitle).catch((emailErr) => {
+        console.error('Failed to dispatch PS selection emails:', emailErr);
+      });
+
+      res.json({
+        success: true,
+        message: 'Problem Statement selection confirmed successfully!',
+        team: updatedTeam,
+      });
     } catch (err: any) {
       res.status(500).json({ success: false, message: err.message });
     }

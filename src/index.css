@@ -24,4 +24,43 @@
   100% { background-position: 0 0; }
 }
 
+/* ─── Global Cursor Fix ──────────────────────────── */
+/* Prevent the text-cursor (I-beam) on non-editable content */
+*,
+*::before,
+*::after {
+  cursor: default;
+}
 
+/* Restore pointer cursor for interactive elements */
+a,
+button,
+[role="button"],
+[role="menuitem"],
+[role="tab"],
+[role="option"],
+select,
+label,
+input[type="checkbox"],
+input[type="radio"],
+input[type="submit"],
+input[type="button"],
+input[type="reset"],
+summary,
+.cursor-pointer {
+  cursor: pointer;
+}
+
+/* Restore text cursor for editable inputs */
+input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="button"]):not([type="reset"]):not([type="range"]),
+textarea {
+  cursor: text;
+}
+
+/* Disabled elements */
+[disabled],
+button:disabled,
+input:disabled,
+select:disabled {
+  cursor: not-allowed;
+}

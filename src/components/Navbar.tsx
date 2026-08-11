@@ -37,7 +37,7 @@ export const Navbar: React.FC = () => {
           : 'bg-white py-3 border-b border-slate-100'
         }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
 
           {/* Left: 3 Logos + Title */}
@@ -82,8 +82,21 @@ export const Navbar: React.FC = () => {
                   : 'text-slate-600 hover:text-slate-900'
                 }`}
             >
-              Register Team
+              Home
               {activeTab === 'home' && (
+                <span className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-[#C1272D] to-[#1B3F8B] rounded-full" />
+              )}
+            </button>
+
+            <button
+              onClick={() => setActiveTab('problem-statements')}
+              className={`relative py-1 text-sm font-semibold transition ${activeTab === 'problem-statements'
+                  ? 'text-[#1B3F8B]'
+                  : 'text-slate-600 hover:text-slate-900'
+                }`}
+            >
+              Problem Statements
+              {activeTab === 'problem-statements' && (
                 <span className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-[#C1272D] to-[#1B3F8B] rounded-full" />
               )}
             </button>
@@ -156,21 +169,12 @@ export const Navbar: React.FC = () => {
               </>
             ) : (
               /* Logged-Out State: "Register Your Team" + "Team Login" */
-              <>
-                <button
-                  onClick={() => setActiveTab('login')}
-                  className="px-4 py-2 text-sm font-bold text-[#1B3F8B] border-2 border-[#1B3F8B]/20 hover:border-[#1B3F8B] hover:bg-blue-50/50 rounded-xl transition"
-                >
-                  Team Login
-                </button>
-
-                <Button
-                  onClick={() => setActiveTab('home')}
-                  className="px-4 py-2 text-sm font-bold"
-                >
-                  Register Your Team
-                </Button>
-              </>
+              <button
+                onClick={() => setActiveTab('login')}
+                className="px-5 py-2.5 text-sm font-extrabold text-white bg-[#1B3F8B] hover:bg-blue-900 rounded-xl shadow-md transition transform active:scale-95 duration-200"
+              >
+                Team Login
+              </button>
             )}
           </div>
 
@@ -199,7 +203,17 @@ export const Navbar: React.FC = () => {
               className={`text-left px-3 py-2 rounded-lg font-medium text-sm ${activeTab === 'home' ? 'bg-blue-50 text-[#1B3F8B] font-bold' : 'text-slate-700'
                 }`}
             >
-              Register Team
+              Home
+            </button>
+            <button
+              onClick={() => {
+                setActiveTab('problem-statements');
+                setMobileMenuOpen(false);
+              }}
+              className={`text-left px-3 py-2 rounded-lg font-medium text-sm ${activeTab === 'problem-statements' ? 'bg-blue-50 text-[#1B3F8B] font-bold' : 'text-slate-700'
+                }`}
+            >
+              Problem Statements
             </button>
             <button
               onClick={() => {
@@ -257,26 +271,15 @@ export const Navbar: React.FC = () => {
                 </button>
               </>
             ) : (
-              <>
-                <button
-                  onClick={() => {
-                    setActiveTab('login');
-                    setMobileMenuOpen(false);
-                  }}
-                  className="w-full text-center py-2.5 rounded-xl font-bold text-[#1B3F8B] border border-[#1B3F8B]"
-                >
-                  Team Login
-                </button>
-                <Button
-                  onClick={() => {
-                    setActiveTab('home');
-                    setMobileMenuOpen(false);
-                  }}
-                  className="w-full text-center py-2.5 font-bold"
-                >
-                  Register Your Team
-                </Button>
-              </>
+              <button
+                onClick={() => {
+                  setActiveTab('login');
+                  setMobileMenuOpen(false);
+                }}
+                className="w-full text-center py-2.5 rounded-xl font-extrabold text-white bg-[#1B3F8B] hover:bg-blue-900 shadow-md transition"
+              >
+                Team Login
+              </button>
             )}
           </div>
         </div>

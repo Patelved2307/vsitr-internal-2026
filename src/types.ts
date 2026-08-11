@@ -29,6 +29,17 @@ export interface MentorDetails {
 
 export type RegistrationStatus = 'pending_mentor' | 'completed';
 
+export interface ProblemStatement {
+  id: string;
+  title: string;
+  category: string; // e.g., 'Software', 'Hardware', 'Both'
+  description?: string;
+  status: 'open' | 'closed';
+  createdAt?: string;
+  sdg?: string;
+  theme?: string;
+}
+
 export interface Team {
   id: string; // e.g. SIH2026-001
   teamName: string;
@@ -38,6 +49,9 @@ export interface Team {
   status: RegistrationStatus;
   createdAt: string;
   updatedAt: string;
+  selectedPsId?: string;
+  selectedPsTitle?: string;
+  psSelectedAt?: string;
 }
 
 export interface TimelineEvent {

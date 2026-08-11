@@ -34,7 +34,7 @@ export const Footer: React.FC = () => {
       {/* Top Gradient Border Line */}
       <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#C1272D] via-amber-500 to-[#1B3F8B] z-10" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-10 relative">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 z-10 relative">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 pb-10 border-b border-slate-800/80">
 
           {/* Col 1: Brand & Logos */}
@@ -96,23 +96,16 @@ export const Footer: React.FC = () => {
                   Support &amp; Club Coordinators
                 </button>
               </li>
-              <li>
-                {isTeamLoggedIn ? (
+              {isTeamLoggedIn && (
+                <li>
                   <button
                     onClick={() => setActiveTab('portal')}
                     className="text-blue-400 hover:underline font-bold"
                   >
                     My Team Portal
                   </button>
-                ) : (
-                  <button
-                    onClick={() => setActiveTab('register')}
-                    className="text-red-400 hover:underline font-bold"
-                  >
-                    Register Team
-                  </button>
-                )}
-              </li>
+                </li>
+              )}
             </ul>
           </div>
 
@@ -170,22 +163,11 @@ export const Footer: React.FC = () => {
 
         </div>
 
-        {/* Bottom Copyright */}
-        <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-400">
-          <p>© 2026 Internal SIH Hackathon — Vidush Somany Institute of Technology &amp; Research (KSV)</p>
-          <button
-            onClick={() => setActiveTab('admin')}
-            className="inline-flex items-center gap-1.5 text-slate-400 hover:text-white font-bold transition z-20"
-          >
-            <ShieldCheck className="h-3.5 w-3.5 text-red-400" />
-            Admin Portal Access
-          </button>
-        </div>
       </div>
 
-      {/* Text hover effect */}
-      <div className="flex h-[8rem] sm:h-[14rem] lg:h-[22rem] -mt-8 sm:-mt-16 lg:-mt-24 -mb-8 sm:-mb-16 lg:-mb-24 relative z-10">
-        <TextHoverEffect text="VSITR" className="z-20" />
+      {/* Bottom Copyright centered */}
+      <div className="pt-8 pb-8 text-center text-xs text-slate-400 relative z-10 border-t border-slate-800/60 max-w-[1440px] mx-auto w-[90%]">
+        <p>© 2026 Internal SIH Hackathon — Vidush Somany Institute of Technology &amp; Research (KSV)</p>
       </div>
 
       <FooterBackgroundGradient />
