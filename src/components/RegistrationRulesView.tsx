@@ -991,47 +991,43 @@ export const RegistrationRulesView: React.FC = () => {
               </div>
 
               {/* PPT Submission Card */}
-              <div className="relative overflow-hidden rounded-3xl bg-white border border-slate-200/80 p-6 sm:p-8 shadow-md hover:shadow-xl hover:border-slate-300 transition duration-300">
-                <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-gradient-to-b from-slate-405 to-slate-505" />
-                <div className="flex items-center gap-3.5 mb-4 pl-1">
-                  <div className="p-2.5 rounded-2xl bg-slate-500/10 text-slate-600 border border-slate-500/15">
-                    <FileText className="h-5.5 w-5.5" />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-black text-slate-950 tracking-tight">
-                      Submit Your PPT
-                    </h3>
-                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block">
-                      Pitch Deck Submission Portal
-                    </span>
-                  </div>
-                </div>
-
-                <div className="space-y-4 pl-1">
-                  <p className="text-xs text-slate-650 leading-relaxed font-semibold">
-                    {settings.pptSubmissionStatus || 'PPT submission portal will open after the registration deadline. Stay tuned.'}
-                  </p>
-                  {settings.pptSubmissionDeadline && (
-                    <div className="flex items-center gap-2 text-xs font-bold text-[#C1272D] bg-red-50 px-2.5 py-1 rounded-lg border border-red-100/55 inline-flex w-auto">
-                      <Calendar className="h-3.5 w-3.5" />
-                      Submission Deadline: {settings.pptSubmissionDeadline}
+              {settings.pptSubmissionOpen && (
+                <div className="relative overflow-hidden rounded-3xl bg-white border border-slate-200/80 p-6 sm:p-8 shadow-md hover:shadow-xl hover:border-slate-300 transition duration-300">
+                  <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-gradient-to-b from-[#C1272D] to-red-500" />
+                  <div className="flex items-center gap-3.5 mb-4 pl-1">
+                    <div className="p-2.5 rounded-2xl bg-red-500/10 text-[#C1272D] border border-red-500/15">
+                      <FileText className="h-5.5 w-5.5" />
                     </div>
-                  )}
-                  {settings.pptSubmissionOpen ? (
+                    <div>
+                      <h3 className="text-lg font-black text-slate-950 tracking-tight">
+                        Submit Your PPT
+                      </h3>
+                      <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block">
+                        Pitch Deck Submission Portal
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="space-y-4 pl-1">
+                    <p className="text-xs text-slate-650 leading-relaxed font-semibold">
+                      {settings.pptSubmissionStatus || 'PPT submission portal will open after the registration deadline. Stay tuned.'}
+                    </p>
+                    {settings.pptSubmissionDeadline && (
+                      <div className="flex items-center gap-2 text-xs font-bold text-[#C1272D] bg-red-50 px-2.5 py-1 rounded-lg border border-red-100/55 inline-flex w-auto">
+                        <Calendar className="h-3.5 w-3.5" />
+                        Submission Deadline: {settings.pptSubmissionDeadline}
+                      </div>
+                    )}
                     <button
                       onClick={() => setActiveTab('ppt-submit')}
-                      className="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl text-xs font-black text-white bg-gradient-to-r from-[#C1272D] to-red-650 hover:from-red-650 hover:to-red-550 transition shadow-md shadow-red-500/10 transform active:scale-95 duration-200"
+                      className="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl text-xs font-black text-white bg-gradient-to-r from-[#C1272D] to-red-655 hover:from-red-655 hover:to-red-500 transition shadow-md shadow-red-500/10 transform active:scale-95 duration-200"
                     >
                       Submit Your PPT
                       <ArrowRight className="h-4 w-4" />
                     </button>
-                  ) : (
-                    <span className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-black text-slate-500 bg-slate-100 border border-slate-200 cursor-not-allowed">
-                      Submissions Not Yet Open
-                    </span>
-                  )}
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           ) : (
             <>
