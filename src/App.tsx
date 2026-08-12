@@ -64,8 +64,8 @@ const MainLayout: React.FC = () => {
         {activeTab === 'problem-statements' && <ProblemStatementsPage />}
       </main>
 
-      {/* Footer */}
-      <Footer />
+      {/* Footer - hidden in admin section */}
+      {activeTab !== 'admin' && <Footer />}
 
       {/* Custom Alert Modal */}
       <ModalAlert />

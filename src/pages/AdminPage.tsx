@@ -94,13 +94,8 @@ export const AdminPage: React.FC = () => {
   const [deptFilter, setDeptFilter] = useState('ALL');
   const [statusFilter, setStatusFilter] = useState('ALL');
 
-  // Active action menu for team row
-  const [activeMenuTeamId, setActiveMenuTeamId] = useState<string | null>(null);
-
   // Selected Team Modal for Inspect / Admin Edit
   const [selectedTeam, setSelectedTeam] = useState<Team | null>(null);
-  const [isEditingTeamAdmin, setIsEditingTeamAdmin] = useState(false);
-  const [adminEditTeamData, setAdminEditTeamData] = useState<any>(null);
   const [deleteConfirmTeam, setDeleteConfirmTeam] = useState<Team | null>(null);
 
   // Editable Event Settings State
@@ -141,17 +136,11 @@ export const AdminPage: React.FC = () => {
   // Editable FAQs State
   const [editFaqs, setEditFaqs] = useState<FAQItem[]>(faqs);
   const [editingFaqId, setEditingFaqId] = useState<string | null>(null);
-  const [faqEditItem, setFaqEditItem] = useState<{ question: string; answer: string }>({
-    question: '',
-    answer: '',
-  });
   const [newFaqQ, setNewFaqQ] = useState('');
   const [newFaqA, setNewFaqA] = useState('');
 
   // Editable Rules State
   const [editRules, setEditRules] = useState<Rule[]>(rules);
-  const [editingRuleId, setEditingRuleId] = useState<string | null>(null);
-  const [ruleEditText, setRuleEditText] = useState('');
   const [newRuleText, setNewRuleText] = useState('');
   const [newRuleCategory, setNewRuleCategory] = useState<RuleCategory>('official');
 
@@ -621,11 +610,11 @@ export const AdminPage: React.FC = () => {
   // LOGIN SCREEN FOR ADMIN
   if (!isAdminLoggedIn) {
     return (
-      <div className="min-h-[75vh] flex items-center justify-center py-12 px-4 bg-[#F8FAFC] relative">
+      <div className="min-h-screen flex items-center justify-center py-12 px-4 bg-[#F8FAFC] relative">
         <button
           type="button"
           onClick={() => setActiveTab('home')}
-          className="absolute top-4 left-4 sm:top-8 sm:left-8 flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-slate-800 transition-colors bg-white px-3 py-1.5 rounded-full border border-slate-200 shadow-sm"
+          className="absolute top-4 left-4 sm:top-8 sm:left-8 flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-slate-800 transition-colors bg-white px-3.5 py-2 rounded-full border border-slate-200 shadow-xs"
         >
           <ChevronRight className="h-4 w-4 rotate-180" />
           Back to Home
@@ -655,10 +644,10 @@ export const AdminPage: React.FC = () => {
                   <input
                     type="text"
                     required
-                    placeholder="e.g. admin"
+                    placeholder="e.g. sih_admin_vsitr"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
-                    className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:border-[#C1272D] outline-none transition font-medium"
+                    className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:border-[#C1272D] outline-none transition font-medium text-slate-900"
                   />
                 </div>
 
@@ -672,14 +661,14 @@ export const AdminPage: React.FC = () => {
                     placeholder="••••••••"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:border-[#C1272D] outline-none transition font-medium"
+                    className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:border-[#C1272D] outline-none transition font-medium text-slate-900"
                   />
                 </div>
 
                 <button
                   type="submit"
                   disabled={isAuthLoading}
-                  className="w-full py-3 rounded-xl font-bold text-xs uppercase tracking-wider text-white bg-gradient-to-r from-[#C1272D] to-red-700 hover:opacity-95 shadow-md transition transform active:scale-95 flex items-center justify-center gap-2"
+                  className="w-full py-3 rounded-xl font-bold text-xs uppercase tracking-wider text-white bg-gradient-to-r from-[#C1272D] to-red-700 hover:opacity-95 shadow-md transition transform active:scale-95 flex items-center justify-center gap-2 cursor-pointer"
                 >
                   {isAuthLoading ? 'Authenticating Admin...' : 'Login to Admin Console'}
                 </button>
@@ -714,20 +703,20 @@ export const AdminPage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#FAFAFC] flex flex-col md:flex-row">
+    <div className="min-h-screen bg-[#F8FAFC] flex flex-col md:flex-row antialiased">
 
-      {/* LEFT SIDEBAR NAVIGATION (Matching image layout) */}
-      <div className="w-full md:w-64 bg-white border-r border-slate-200 p-5 flex flex-col justify-between shrink-0">
+      {/* LEFT SIDEBAR NAVIGATION */}
+      <div className="w-full md:w-64 lg:w-72 bg-white border-r border-slate-200/80 p-5 flex flex-col justify-between shrink-0 md:h-screen md:sticky md:top-0 z-30 shadow-2xs overflow-y-auto no-scrollbar">
         <div className="space-y-6">
 
           {/* Logo / Brand Header */}
-          <div className="flex items-center gap-3 px-2">
-            <div className="h-10 w-10 rounded-2xl bg-gradient-to-tr from-[#C1272D] to-rose-500 flex items-center justify-center text-white shadow-md">
+          <div className="flex items-center gap-3 px-1 py-1">
+            <div className="h-10 w-10 rounded-2xl bg-gradient-to-tr from-[#C1272D] to-rose-600 flex items-center justify-center text-white shadow-md shrink-0">
               <ShieldCheck className="h-6 w-6" />
             </div>
-            <div>
-              <h2 className="text-base font-black text-slate-900 tracking-tight leading-tight">
-                SIH Admin
+            <div className="min-w-0">
+              <h2 className="text-base font-black text-slate-900 tracking-tight leading-tight truncate">
+                SIH Admin Console
               </h2>
               <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
                 VSITR 2026
@@ -736,111 +725,120 @@ export const AdminPage: React.FC = () => {
           </div>
 
           {/* Nav Menu Items */}
-          <nav className="space-y-1">
+          <nav className="space-y-1.5">
             <button
               onClick={() => setSidebarTab('overview')}
-              className={`w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl font-bold text-xs transition ${sidebarTab === 'overview'
-                  ? 'bg-rose-50 text-[#C1272D] shadow-xs'
+              className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-bold text-xs transition ${sidebarTab === 'overview'
+                  ? 'bg-rose-50 text-[#C1272D] shadow-2xs border border-rose-100'
                   : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
                 }`}
             >
-              <LayoutDashboard className="h-4 w-4" />
-              <span>Overview &amp; Stats</span>
+              <LayoutDashboard className="h-4 w-4 shrink-0" />
+              <span className="truncate">Overview &amp; Stats</span>
             </button>
 
             <button
               onClick={() => setSidebarTab('teams')}
-              className={`w-full flex items-center justify-between px-3.5 py-3 rounded-2xl font-bold text-xs transition ${sidebarTab === 'teams'
-                  ? 'bg-rose-50 text-[#C1272D] shadow-xs'
+              className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl font-bold text-xs transition ${sidebarTab === 'teams'
+                  ? 'bg-rose-50 text-[#C1272D] shadow-2xs border border-rose-100'
                   : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
                 }`}
             >
-              <div className="flex items-center gap-3">
-                <Users className="h-4 w-4" />
-                <span>Team Registry</span>
+              <div className="flex items-center gap-3 min-w-0">
+                <Users className="h-4 w-4 shrink-0" />
+                <span className="truncate">Team Registry</span>
               </div>
-              <span className="px-2 py-0.5 rounded-full text-[10px] bg-slate-100 text-slate-700">
+              <span className="px-2 py-0.5 rounded-full text-[10px] bg-slate-100 text-slate-700 font-extrabold shrink-0">
                 {teams.length}
               </span>
             </button>
 
             <button
               onClick={() => setSidebarTab('timeline')}
-              className={`w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl font-bold text-xs transition ${sidebarTab === 'timeline'
-                  ? 'bg-rose-50 text-[#C1272D] shadow-xs'
+              className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-bold text-xs transition ${sidebarTab === 'timeline'
+                  ? 'bg-rose-50 text-[#C1272D] shadow-2xs border border-rose-100'
                   : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
                 }`}
             >
-              <Clock className="h-4 w-4" />
-              <span>Timeline &amp; Schedule</span>
+              <Clock className="h-4 w-4 shrink-0" />
+              <span className="truncate">Timeline &amp; Schedule</span>
             </button>
 
             <button
               onClick={() => setSidebarTab('faqs')}
-              className={`w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl font-bold text-xs transition ${sidebarTab === 'faqs'
-                  ? 'bg-rose-50 text-[#C1272D] shadow-xs'
+              className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-bold text-xs transition ${sidebarTab === 'faqs'
+                  ? 'bg-rose-50 text-[#C1272D] shadow-2xs border border-rose-100'
                   : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
                 }`}
             >
-              <HelpCircle className="h-4 w-4" />
-              <span>FAQs &amp; Rules</span>
+              <HelpCircle className="h-4 w-4 shrink-0" />
+              <span className="truncate">FAQs &amp; Rules</span>
             </button>
 
             <button
               onClick={() => setSidebarTab('settings')}
-              className={`w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl font-bold text-xs transition ${sidebarTab === 'settings'
-                  ? 'bg-rose-50 text-[#C1272D] shadow-xs'
+              className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-bold text-xs transition ${sidebarTab === 'settings'
+                  ? 'bg-rose-50 text-[#C1272D] shadow-2xs border border-rose-100'
                   : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
                 }`}
             >
-              <Settings className="h-4 w-4" />
-              <span>Event Settings</span>
+              <Settings className="h-4 w-4 shrink-0" />
+              <span className="truncate">Event Settings</span>
             </button>
 
             <button
               onClick={() => setSidebarTab('emails')}
-              className={`w-full flex items-center justify-between px-3.5 py-3 rounded-2xl font-bold text-xs transition ${sidebarTab === 'emails'
-                  ? 'bg-rose-50 text-[#C1272D] shadow-xs'
+              className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl font-bold text-xs transition ${sidebarTab === 'emails'
+                  ? 'bg-rose-50 text-[#C1272D] shadow-2xs border border-rose-100'
                   : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
                 }`}
             >
-              <div className="flex items-center gap-3">
-                <Mail className="h-4 w-4" />
-                <span>Emails &amp; </span>
+              <div className="flex items-center gap-3 min-w-0">
+                <Mail className="h-4 w-4 shrink-0" />
+                <span className="truncate">Emails &amp; Logs</span>
               </div>
-              <span className="px-2 py-0.5 rounded-full text-[10px] bg-blue-100 text-blue-700 font-bold">
+              <span className="px-2 py-0.5 rounded-full text-[10px] bg-blue-100 text-blue-700 font-extrabold shrink-0">
                 {emailLogs.length}
               </span>
             </button>
 
             <button
-              onClick={async () => { setSidebarTab('ppt-submissions'); setIsLoadingPptSubmissions(true); try { const d = await api.getAdminPptSubmissions(); setPptSubmissions(d.submissions || []); } catch (e) { } finally { setIsLoadingPptSubmissions(false); } }}
-              className={`w-full flex items-center justify-between px-3.5 py-3 rounded-2xl font-bold text-xs transition ${sidebarTab === 'ppt-submissions'
-                  ? 'bg-rose-50 text-[#C1272D] shadow-xs'
+              onClick={async () => {
+                setSidebarTab('ppt-submissions');
+                setIsLoadingPptSubmissions(true);
+                try {
+                  const d = await api.getAdminPptSubmissions();
+                  setPptSubmissions(d.submissions || []);
+                } catch (e) { } finally {
+                  setIsLoadingPptSubmissions(false);
+                }
+              }}
+              className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl font-bold text-xs transition ${sidebarTab === 'ppt-submissions'
+                  ? 'bg-rose-50 text-[#C1272D] shadow-2xs border border-rose-100'
                   : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
                 }`}
             >
-              <div className="flex items-center gap-3">
-                <FileText className="h-4 w-4" />
-                <span>PPT Submissions</span>
+              <div className="flex items-center gap-3 min-w-0">
+                <FileText className="h-4 w-4 shrink-0" />
+                <span className="truncate">PPT Submissions</span>
               </div>
-              <span className="px-2 py-0.5 rounded-full text-[10px] bg-red-100 text-red-700 font-bold">
+              <span className="px-2 py-0.5 rounded-full text-[10px] bg-red-100 text-red-700 font-extrabold shrink-0">
                 {pptSubmissions.length}
               </span>
             </button>
 
             <button
               onClick={() => setSidebarTab('problem-statements')}
-              className={`w-full flex items-center justify-between px-3.5 py-3 rounded-2xl font-bold text-xs transition ${sidebarTab === 'problem-statements'
-                  ? 'bg-rose-50 text-[#C1272D] shadow-xs'
+              className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl font-bold text-xs transition ${sidebarTab === 'problem-statements'
+                  ? 'bg-rose-50 text-[#C1272D] shadow-2xs border border-rose-100'
                   : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
                 }`}
             >
-              <div className="flex items-center gap-3">
-                <BookOpen className="h-4 w-4" />
-                <span>Problem Statements</span>
+              <div className="flex items-center gap-3 min-w-0">
+                <BookOpen className="h-4 w-4 shrink-0" />
+                <span className="truncate">Problem Statements</span>
               </div>
-              <span className="px-2 py-0.5 rounded-full text-[10px] bg-red-100 text-red-700 font-bold">
+              <span className="px-2 py-0.5 rounded-full text-[10px] bg-red-100 text-red-700 font-extrabold shrink-0">
                 {adminPsList.length}
               </span>
             </button>
@@ -848,12 +846,12 @@ export const AdminPage: React.FC = () => {
         </div>
 
         {/* Bottom Sidebar Action: Status Toggle & Logout */}
-        <div className="pt-4 border-t border-slate-100 space-y-3">
-          {/* Quick Registration Mode Toggle (Matching 'Busy Mode' in reference image) */}
+        <div className="pt-4 mt-6 border-t border-slate-100 space-y-2.5">
+          {/* Quick Registration Mode Toggle */}
           <div className="p-3 rounded-2xl bg-slate-50 border border-slate-200/80 flex items-center justify-between">
             <div>
               <span className="text-[11px] font-bold text-slate-800 block leading-tight">
-                Registration
+                Registration Status
               </span>
               <span className={`text-[10px] font-extrabold block ${editIsOpen ? 'text-emerald-600' : 'text-slate-400'}`}>
                 {editIsOpen ? 'Live & Open' : 'Closed'}
@@ -861,7 +859,7 @@ export const AdminPage: React.FC = () => {
             </div>
             <button
               onClick={handleToggleRegistration}
-              className={`p-1 rounded-full transition ${editIsOpen ? 'text-emerald-600' : 'text-slate-300'}`}
+              className={`p-1 rounded-full transition cursor-pointer ${editIsOpen ? 'text-emerald-600' : 'text-slate-300'}`}
               title="Toggle Registration Open/Closed"
             >
               {editIsOpen ? <ToggleRight className="h-7 w-7" /> : <ToggleLeft className="h-7 w-7" />}
@@ -870,58 +868,66 @@ export const AdminPage: React.FC = () => {
 
           <button
             onClick={() => setActiveTab('home')}
-            className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold text-slate-600 hover:text-[#1B3F8B] hover:bg-blue-50 transition"
+            className="w-full flex items-center gap-2 px-3 py-2.5 rounded-xl text-xs font-bold text-slate-600 hover:text-[#1B3F8B] hover:bg-blue-50 transition cursor-pointer"
           >
-            <LayoutDashboard className="h-4 w-4 text-[#1B3F8B]" />
-            <span>Go to Main Website</span>
+            <LayoutDashboard className="h-4 w-4 text-[#1B3F8B] shrink-0" />
+            <span className="truncate">Go to Main Website</span>
           </button>
 
           <button
             onClick={logoutAdminSession}
-            className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold text-slate-500 hover:text-red-600 hover:bg-red-50 transition"
+            className="w-full flex items-center gap-2 px-3 py-2.5 rounded-xl text-xs font-bold text-slate-500 hover:text-red-600 hover:bg-red-50 transition cursor-pointer"
           >
-            <LogOut className="h-4 w-4" />
-            <span>Log out Admin</span>
+            <LogOut className="h-4 w-4 shrink-0" />
+            <span className="truncate">Log out Admin</span>
           </button>
         </div>
       </div>
 
       {/* RIGHT MAIN CONTENT AREA */}
-      <div className="flex-1 bg-[#FAFAFC] p-6 lg:p-8 flex flex-col justify-between overflow-y-auto">
+      <div className="flex-1 bg-[#F8FAFC] p-4 sm:p-6 lg:p-8 flex flex-col justify-between overflow-y-auto no-scrollbar min-h-screen">
 
-        <div className="space-y-6">
-          {/* TOP HEADER BAR (Matching reference image) */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200/60">
+        <div className="space-y-6 max-w-[1600px] w-full mx-auto">
+          {/* TOP HEADER BAR */}
+          <div className="sticky top-0 bg-[#F8FAFC]/95 backdrop-blur-md z-20 pb-4 pt-1 border-b border-slate-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
 
             {/* Search Bar Input */}
             <div className="relative w-full sm:w-80">
               <Search className="absolute left-3.5 top-3 h-4 w-4 text-slate-400" />
               <input
                 type="text"
-                placeholder="Search team, leader, enrollment..."
+                placeholder="Search team name, ID, leader..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-white border border-slate-200 text-xs focus:outline-none focus:border-[#C1272D] shadow-2xs"
+                className="w-full pl-10 pr-9 py-2.5 rounded-2xl bg-white border border-slate-200 text-xs text-slate-900 placeholder:text-slate-400 font-medium focus:outline-none focus:border-[#C1272D] shadow-2xs"
               />
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery('')}
+                  className="absolute right-3 top-3 text-slate-400 hover:text-slate-600"
+                >
+                  <X className="h-3.5 w-3.5" />
+                </button>
+              )}
             </div>
 
             {/* Status Indicator & Admin Profile */}
             <div className="flex items-center gap-3 shrink-0">
-              <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white border border-slate-200 shadow-2xs text-xs font-bold text-slate-700">
-                <span className={`h-2 w-2 rounded-full ${editIsOpen ? 'bg-emerald-500 animate-pulse' : 'bg-slate-400'}`} />
+              <div className="flex items-center gap-2 px-3.5 py-2 rounded-full bg-white border border-slate-200 shadow-2xs text-xs font-bold text-slate-700">
+                <span className={`h-2.5 w-2.5 rounded-full ${editIsOpen ? 'bg-emerald-500 animate-pulse' : 'bg-slate-400'}`} />
                 {editIsOpen ? 'Open For Registration' : 'Registration Closed'}
               </div>
 
               <button
                 onClick={loadAdminData}
-                className="p-2.5 rounded-2xl bg-white border border-slate-200 hover:bg-slate-50 text-slate-600 shadow-2xs transition"
+                className="p-2.5 rounded-2xl bg-white border border-slate-200 hover:bg-slate-50 text-slate-600 shadow-2xs transition cursor-pointer"
                 title="Refresh Data"
               >
-                <RefreshCw className="h-4 w-4" />
+                <RefreshCw className={`h-4 w-4 ${(isLoadingStats || isLoadingTeams || isLoadingEmailLogs) ? 'animate-spin text-[#C1272D]' : ''}`} />
               </button>
 
               <div className="flex items-center gap-2.5 pl-2 border-l border-slate-200">
-                <div className="h-9 w-9 rounded-full bg-[#1B3F8B] text-white flex items-center justify-center font-bold text-xs shadow-xs">
+                <div className="h-9 w-9 rounded-full bg-[#1B3F8B] text-white flex items-center justify-center font-black text-xs shadow-xs">
                   AD
                 </div>
                 <div className="hidden lg:block text-left">
@@ -937,7 +943,7 @@ export const AdminPage: React.FC = () => {
           {sidebarTab === 'overview' && stats && (
             <div className="space-y-6 animate-in fade-in duration-200">
 
-              <div className="flex items-center justify-between">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div>
                   <h1 className="text-2xl font-black text-slate-900 tracking-tight">
                     Registration Overview
@@ -949,7 +955,7 @@ export const AdminPage: React.FC = () => {
 
                 <button
                   onClick={handleExportCSV}
-                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl font-bold text-xs text-white bg-emerald-600 hover:bg-emerald-700 shadow-md transition"
+                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl font-bold text-xs text-white bg-emerald-600 hover:bg-emerald-700 shadow-md transition cursor-pointer shrink-0"
                 >
                   <Download className="h-4 w-4" />
                   Export CSV
@@ -957,7 +963,7 @@ export const AdminPage: React.FC = () => {
               </div>
 
               {/* Stat KPI Cards Grid */}
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div className="p-5 rounded-3xl bg-white border border-slate-200/80 shadow-xs space-y-1">
                   <span className="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider block">
                     Total Teams
@@ -1003,7 +1009,7 @@ export const AdminPage: React.FC = () => {
                   </span>
                   <button
                     onClick={handleBulkReminder}
-                    className="text-[11px] font-bold text-amber-700 hover:underline block"
+                    className="text-[11px] font-bold text-amber-700 hover:underline block cursor-pointer"
                   >
                     Remind {stats.pendingMentorCount} Pending →
                   </button>
@@ -1079,14 +1085,14 @@ export const AdminPage: React.FC = () => {
                 {teams.filter(t => t.selectedPsId).length === 0 ? (
                   <p className="text-xs text-slate-500 font-medium py-2">No teams have selected a problem statement yet.</p>
                 ) : (
-                  <div className="overflow-x-auto">
-                    <table className="w-full text-xs text-left border-collapse">
+                  <div className="overflow-x-auto w-full">
+                    <table className="w-full text-xs text-left border-collapse min-w-[700px]">
                       <thead>
                         <tr className="border-b border-slate-100 text-slate-400 font-bold uppercase tracking-wider text-[9px]">
-                          <th className="py-2.5">Team</th>
-                          <th className="py-2.5">PS ID</th>
-                          <th className="py-2.5">PS Title</th>
-                          <th className="py-2.5">Selected At</th>
+                          <th className="py-2.5 px-3">Team</th>
+                          <th className="py-2.5 px-3">PS ID</th>
+                          <th className="py-2.5 px-3">PS Title</th>
+                          <th className="py-2.5 px-3">Selected At</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-slate-100 text-slate-700">
@@ -1094,12 +1100,12 @@ export const AdminPage: React.FC = () => {
                           .filter(t => t.selectedPsId)
                           .map((t) => (
                             <tr key={t.id} className="hover:bg-slate-50/50">
-                              <td className="py-2 font-bold text-slate-900">
+                              <td className="py-2.5 px-3 font-bold text-slate-900 whitespace-nowrap">
                                 {t.teamName} <span className="text-[10px] text-slate-400 font-mono">({t.id})</span>
                               </td>
-                              <td className="py-2 font-mono font-black text-[#C1272D]">{t.selectedPsId}</td>
-                              <td className="py-2 font-semibold text-slate-800">{t.selectedPsTitle}</td>
-                              <td className="py-2 text-slate-500 font-semibold">
+                              <td className="py-2.5 px-3 font-mono font-black text-[#C1272D] whitespace-nowrap">{t.selectedPsId}</td>
+                              <td className="py-2.5 px-3 font-semibold text-slate-800">{t.selectedPsTitle}</td>
+                              <td className="py-2.5 px-3 text-slate-500 font-semibold whitespace-nowrap">
                                 {t.psSelectedAt ? new Date(t.psSelectedAt).toLocaleString('en-IN') : 'N/A'}
                               </td>
                             </tr>
@@ -1113,29 +1119,30 @@ export const AdminPage: React.FC = () => {
             </div>
           )}
 
-          {/* TAB 2: TEAM REGISTRY (Matching reference image table style with clean cards/rows) */}
+          {/* TAB 2: TEAM REGISTRY (Clean Perfect-Fit Layout & Table) */}
           {sidebarTab === 'teams' && (
             <div className="space-y-4 animate-in fade-in duration-200">
 
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              {/* Unified Header Card with Filter Pills */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-3xl border border-slate-200/80 shadow-2xs">
                 <div>
-                  <h1 className="text-2xl font-black text-slate-900 tracking-tight">
+                  <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
                     Team Registry
                   </h1>
-                  <p className="text-xs text-slate-500 font-medium">
+                  <p className="text-xs text-slate-500 font-medium mt-0.5">
                     All registered 6-member teams. Click inspect or use actions to edit/delete.
                   </p>
                 </div>
 
                 {/* Department Filter Pills */}
-                <div className="flex items-center gap-1.5 overflow-x-auto pb-1">
+                <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-0.5 shrink-0">
                   {['ALL', 'IT', 'CSE', 'CE'].map((d) => (
                     <button
                       key={d}
                       onClick={() => setDeptFilter(d)}
-                      className={`px-3 py-1.5 rounded-xl text-xs font-bold transition ${deptFilter === d
+                      className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer whitespace-nowrap ${deptFilter === d
                           ? 'bg-[#C1272D] text-white shadow-2xs'
-                          : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
+                          : 'bg-slate-50 text-slate-600 border border-slate-200 hover:bg-slate-100 hover:text-slate-900'
                         }`}
                     >
                       {d === 'ALL' ? 'All Depts' : d}
@@ -1144,19 +1151,28 @@ export const AdminPage: React.FC = () => {
                 </div>
               </div>
 
-              {/* Teams List Table (Styled like Bringova Order History table in reference) */}
+              {/* Teams List Table with Proportional Colgroup & Perfect Fit */}
               <div className="bg-white rounded-3xl border border-slate-200/80 shadow-xs overflow-hidden">
-                <div className="overflow-auto max-h-[550px]">
-                  <table className="w-full text-left text-xs border-collapse">
-                    <thead className="sticky top-0 bg-slate-50 z-10 border-b border-slate-200">
-                      <tr className="text-slate-400 font-extrabold uppercase text-[10px] tracking-wider">
-                        <th className="py-3.5 px-4 bg-slate-50">Team ID</th>
-                        <th className="py-3.5 px-4 bg-slate-50">Team Name</th>
-                        <th className="py-3.5 px-4 bg-slate-50">Leader &amp; Contact</th>
-                        <th className="py-3.5 px-4 bg-slate-50">Dept</th>
-                        <th className="py-3.5 px-4 bg-slate-50">Status</th>
-                        <th className="py-3.5 px-4 bg-slate-50">PS Selected</th>
-                        <th className="py-3.5 px-4 text-right bg-slate-50">Action</th>
+                <div className="overflow-x-auto no-scrollbar w-full">
+                  <table className="w-full text-left text-xs border-collapse min-w-[900px]">
+                    <colgroup>
+                      <col className="w-[12%]" />
+                      <col className="w-[18%]" />
+                      <col className="w-[24%]" />
+                      <col className="w-[13%]" />
+                      <col className="w-[11%]" />
+                      <col className="w-[14%]" />
+                      <col className="w-[8%]" />
+                    </colgroup>
+                    <thead className="bg-slate-50/90 border-b border-slate-200/80">
+                      <tr className="text-slate-500 font-extrabold uppercase text-[10px] tracking-wider whitespace-nowrap">
+                        <th className="py-3.5 px-4 bg-slate-50/90">Team ID</th>
+                        <th className="py-3.5 px-4 bg-slate-50/90">Team Name</th>
+                        <th className="py-3.5 px-4 bg-slate-50/90">Leader &amp; Contact</th>
+                        <th className="py-3.5 px-4 bg-slate-50/90">Dept &amp; Sem</th>
+                        <th className="py-3.5 px-4 bg-slate-50/90">Status</th>
+                        <th className="py-3.5 px-4 bg-slate-50/90">PS Selected</th>
+                        <th className="py-3.5 px-4 bg-slate-50/90 text-right">Action</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-100 font-medium text-slate-800">
@@ -1168,21 +1184,21 @@ export const AdminPage: React.FC = () => {
                         </tr>
                       ) : (
                         teams.map((t) => (
-                          <tr key={t.id} className="hover:bg-slate-50/80 transition">
-                            <td className="py-3.5 px-4 font-mono font-bold text-[#1B3F8B]">
+                          <tr key={t.id} className="hover:bg-slate-50/80 transition-colors">
+                            <td className="py-3.5 px-4 font-mono font-bold text-[#1B3F8B] text-xs whitespace-nowrap align-middle">
                               {t.id}
                             </td>
-                            <td className="py-3.5 px-4 font-black text-slate-900 text-sm">
+                            <td className="py-3.5 px-4 font-black text-slate-900 text-sm whitespace-nowrap align-middle truncate max-w-[180px]" title={t.teamName}>
                               {t.teamName}
                             </td>
-                            <td className="py-3.5 px-4">
-                              <span className="font-bold text-slate-900 block">{t.leader.fullName}</span>
-                              <span className="text-[11px] text-slate-500 block">{t.leader.email}</span>
+                            <td className="py-3.5 px-4 align-middle">
+                              <span className="font-bold text-slate-900 text-xs block whitespace-nowrap">{t.leader.fullName}</span>
+                              <span className="text-[11px] text-slate-500 font-medium block truncate max-w-[200px]" title={t.leader.email}>{t.leader.email}</span>
                             </td>
-                            <td className="py-3.5 px-4 font-bold text-[#1B3F8B]">
+                            <td className="py-3.5 px-4 font-bold text-[#1B3F8B] text-xs whitespace-nowrap align-middle">
                               {t.leader.department} • Sem {t.leader.semester}
                             </td>
-                            <td className="py-3.5 px-4">
+                            <td className="py-3.5 px-4 whitespace-nowrap align-middle">
                               {t.status === 'completed' ? (
                                 <span className="px-3 py-1 rounded-full text-[10px] font-extrabold bg-emerald-100 text-emerald-800 border border-emerald-200">
                                   Completed
@@ -1193,13 +1209,15 @@ export const AdminPage: React.FC = () => {
                                 </span>
                               )}
                             </td>
-                            <td className="py-3.5 px-4">
+                            <td className="py-3.5 px-4 align-middle">
                               {t.selectedPsId ? (
                                 <div>
-                                  <span className="px-2.5 py-1 rounded-full text-[10px] font-extrabold bg-blue-100 text-blue-800 border border-blue-200 block w-fit mb-0.5">
+                                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-blue-100 text-blue-800 border border-blue-200 inline-block mb-0.5">
                                     {t.selectedPsId}
                                   </span>
-                                  <span className="text-[10px] text-slate-500 font-semibold">{t.selectedPsTitle || '—'}</span>
+                                  <span className="text-[11px] text-slate-600 font-medium block truncate max-w-[180px]" title={t.selectedPsTitle}>
+                                    {t.selectedPsTitle || '—'}
+                                  </span>
                                 </div>
                               ) : (
                                 <span className="px-2.5 py-1 rounded-full text-[10px] font-extrabold bg-slate-100 text-slate-500 border border-slate-200">
@@ -1207,20 +1225,22 @@ export const AdminPage: React.FC = () => {
                                 </span>
                               )}
                             </td>
-                            <td className="py-3.5 px-4 text-right relative">
-                              <button
-                                onClick={() => setSelectedTeam(t)}
-                                className="px-3 py-1.5 rounded-xl font-bold text-xs text-[#1B3F8B] bg-blue-50 hover:bg-blue-100 transition mr-1"
-                              >
-                                Inspect / Edit
-                              </button>
-                              <button
-                                onClick={() => setDeleteConfirmTeam(t)}
-                                className="p-1.5 rounded-xl text-red-600 hover:bg-red-50 transition"
-                                title="Delete Team"
-                              >
-                                <Trash2 className="h-4 w-4" />
-                              </button>
+                            <td className="py-3.5 px-4 text-right whitespace-nowrap align-middle">
+                              <div className="inline-flex items-center justify-end gap-1.5">
+                                <button
+                                  onClick={() => setSelectedTeam(t)}
+                                  className="px-3 py-1.5 rounded-xl font-bold text-xs text-[#1B3F8B] bg-blue-50 hover:bg-blue-100 border border-blue-200/60 transition cursor-pointer"
+                                >
+                                  Inspect / Edit
+                                </button>
+                                <button
+                                  onClick={() => setDeleteConfirmTeam(t)}
+                                  className="p-1.5 rounded-xl text-red-500 hover:text-red-700 bg-red-50 hover:bg-red-100 border border-red-100/80 transition cursor-pointer"
+                                  title="Delete Team"
+                                >
+                                  <Trash2 className="h-4 w-4" />
+                                </button>
+                              </div>
                             </td>
                           </tr>
                         ))
@@ -1249,7 +1269,7 @@ export const AdminPage: React.FC = () => {
                 <button
                   onClick={handleSaveSettings}
                   disabled={isSavingSettings}
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl font-bold text-xs text-white bg-gradient-to-r from-[#C1272D] to-[#1B3F8B] shadow-md hover:opacity-95 transition"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl font-bold text-xs text-white bg-gradient-to-r from-[#C1272D] to-[#1B3F8B] shadow-md hover:opacity-95 transition cursor-pointer"
                 >
                   <Check className="h-4 w-4" />
                   {isSavingSettings ? 'Saving...' : 'Save Timeline Changes'}
@@ -1270,33 +1290,33 @@ export const AdminPage: React.FC = () => {
                             type="text"
                             value={timelineEditItem.title}
                             onChange={(e) => setTimelineEditItem({ ...timelineEditItem, title: e.target.value })}
-                            className="p-2 rounded-xl border border-slate-300 font-bold"
+                            className="p-2 rounded-xl border border-slate-300 font-bold text-slate-900"
                           />
                           <input
                             type="text"
                             value={timelineEditItem.date}
                             onChange={(e) => setTimelineEditItem({ ...timelineEditItem, date: e.target.value })}
-                            className="p-2 rounded-xl border border-slate-300 font-bold"
+                            className="p-2 rounded-xl border border-slate-300 font-bold text-slate-900"
                           />
                         </div>
                         <textarea
                           value={timelineEditItem.description}
                           onChange={(e) => setTimelineEditItem({ ...timelineEditItem, description: e.target.value })}
-                          className="w-full p-2 rounded-xl border border-slate-300"
+                          className="w-full p-2 rounded-xl border border-slate-300 text-slate-900"
                           rows={2}
                         />
                         <div className="flex justify-end gap-2">
                           <button
                             type="button"
                             onClick={() => setEditingTimelineId(null)}
-                            className="px-3 py-1 rounded-xl bg-slate-100 font-bold text-slate-600"
+                            className="px-3 py-1 rounded-xl bg-slate-100 font-bold text-slate-600 cursor-pointer"
                           >
                             Cancel
                           </button>
                           <button
                             type="button"
                             onClick={() => handleSaveTimelineItem(item.id)}
-                            className="px-4 py-1 rounded-xl bg-[#1B3F8B] text-white font-bold"
+                            className="px-4 py-1 rounded-xl bg-[#1B3F8B] text-white font-bold cursor-pointer"
                           >
                             Save Item
                           </button>
@@ -1314,16 +1334,16 @@ export const AdminPage: React.FC = () => {
                           <p className="text-xs text-slate-500">{item.description}</p>
                         </div>
 
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-2 shrink-0">
                           <button
                             onClick={() => handleStartEditTimeline(item)}
-                            className="p-2 rounded-xl bg-slate-100 text-slate-700 hover:bg-slate-200 transition"
+                            className="p-2 rounded-xl bg-slate-100 text-slate-700 hover:bg-slate-200 transition cursor-pointer"
                           >
                             <Edit3 className="h-4 w-4" />
                           </button>
                           <button
                             onClick={() => handleDeleteTimelineItem(item.id)}
-                            className="p-2 rounded-xl bg-red-50 text-red-600 hover:bg-red-100 transition"
+                            className="p-2 rounded-xl bg-red-50 text-red-600 hover:bg-red-100 transition cursor-pointer"
                           >
                             <Trash2 className="h-4 w-4" />
                           </button>
@@ -1345,27 +1365,27 @@ export const AdminPage: React.FC = () => {
                     placeholder="Milestone Title (e.g. Mentor Review Round)"
                     value={newTimelineTitle}
                     onChange={(e) => setNewTimelineTitle(e.target.value)}
-                    className="px-3.5 py-2 rounded-xl border border-slate-300 bg-white focus:outline-none"
+                    className="px-3.5 py-2 rounded-xl border border-slate-300 bg-white focus:outline-none text-slate-900"
                   />
                   <input
                     type="text"
                     placeholder="Date & Time string (e.g. 10 Aug 2026, 11:00 AM)"
                     value={newTimelineDate}
                     onChange={(e) => setNewTimelineDate(e.target.value)}
-                    className="px-3.5 py-2 rounded-xl border border-slate-300 bg-white focus:outline-none"
+                    className="px-3.5 py-2 rounded-xl border border-slate-300 bg-white focus:outline-none text-slate-900"
                   />
                   <input
                     type="text"
                     placeholder="Event Description / Notes"
                     value={newTimelineDesc}
                     onChange={(e) => setNewTimelineDesc(e.target.value)}
-                    className="sm:col-span-2 px-3.5 py-2 rounded-xl border border-slate-300 bg-white focus:outline-none"
+                    className="sm:col-span-2 px-3.5 py-2 rounded-xl border border-slate-300 bg-white focus:outline-none text-slate-900"
                   />
                 </div>
                 <button
                   type="button"
                   onClick={handleAddTimeline}
-                  className="px-5 py-2 rounded-xl font-bold text-xs bg-slate-900 text-white hover:bg-black shadow-xs transition"
+                  className="px-5 py-2 rounded-xl font-bold text-xs bg-slate-900 text-white hover:bg-black shadow-xs transition cursor-pointer"
                 >
                   Add Event Milestone
                 </button>
@@ -1390,7 +1410,7 @@ export const AdminPage: React.FC = () => {
                 <button
                   onClick={handleSaveSettings}
                   disabled={isSavingSettings}
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl font-bold text-xs text-white bg-gradient-to-r from-[#C1272D] to-[#1B3F8B] shadow-md hover:opacity-95 transition"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl font-bold text-xs text-white bg-gradient-to-r from-[#C1272D] to-[#1B3F8B] shadow-md hover:opacity-95 transition cursor-pointer"
                 >
                   <Check className="h-4 w-4" />
                   {isSavingSettings ? 'Saving...' : 'Save All FAQs & Rules'}
@@ -1411,7 +1431,7 @@ export const AdminPage: React.FC = () => {
                     <button
                       type="button"
                       onClick={() => handleDeleteFaq(faq.id)}
-                      className="text-red-500 hover:text-red-700 p-1 shrink-0"
+                      className="text-red-500 hover:text-red-700 p-1 shrink-0 cursor-pointer"
                     >
                       <Trash2 className="h-4 w-4" />
                     </button>
@@ -1425,19 +1445,19 @@ export const AdminPage: React.FC = () => {
                     placeholder="Question title..."
                     value={newFaqQ}
                     onChange={(e) => setNewFaqQ(e.target.value)}
-                    className="w-full p-2 rounded-xl border border-slate-300 bg-white"
+                    className="w-full p-2 rounded-xl border border-slate-300 bg-white text-slate-900"
                   />
                   <textarea
                     placeholder="Answer text..."
                     value={newFaqA}
                     onChange={(e) => setNewFaqA(e.target.value)}
-                    className="w-full p-2 rounded-xl border border-slate-300 bg-white"
+                    className="w-full p-2 rounded-xl border border-slate-300 bg-white text-slate-900"
                     rows={2}
                   />
                   <button
                     type="button"
                     onClick={handleAddFaq}
-                    className="px-4 py-2 rounded-xl font-bold bg-slate-900 text-white"
+                    className="px-4 py-2 rounded-xl font-bold bg-slate-900 text-white cursor-pointer"
                   >
                     Add FAQ
                   </button>
@@ -1468,7 +1488,7 @@ export const AdminPage: React.FC = () => {
                                 type="button"
                                 onClick={() => handleMoveRule(r.id, 'up')}
                                 disabled={idx === 0}
-                                className="text-slate-400 hover:text-slate-700 disabled:opacity-30 p-1"
+                                className="text-slate-400 hover:text-slate-700 disabled:opacity-30 p-1 cursor-pointer"
                               >
                                 <ChevronUp className="h-4 w-4" />
                               </button>
@@ -1476,14 +1496,14 @@ export const AdminPage: React.FC = () => {
                                 type="button"
                                 onClick={() => handleMoveRule(r.id, 'down')}
                                 disabled={idx === catRules.length - 1}
-                                className="text-slate-400 hover:text-slate-700 disabled:opacity-30 p-1"
+                                className="text-slate-400 hover:text-slate-700 disabled:opacity-30 p-1 cursor-pointer"
                               >
                                 <ChevronDown className="h-4 w-4" />
                               </button>
                               <button
                                 type="button"
                                 onClick={() => handleDeleteRule(r.id)}
-                                className="text-red-500 hover:text-red-700 p-1 ml-1"
+                                className="text-red-500 hover:text-red-700 p-1 ml-1 cursor-pointer"
                               >
                                 <Trash2 className="h-4 w-4" />
                               </button>
@@ -1500,7 +1520,7 @@ export const AdminPage: React.FC = () => {
                   <select
                     value={newRuleCategory}
                     onChange={(e) => setNewRuleCategory(e.target.value as RuleCategory)}
-                    className="w-full p-2 rounded-xl border border-slate-300 bg-white font-medium"
+                    className="w-full p-2 rounded-xl border border-slate-300 bg-white font-medium text-slate-900"
                   >
                     <option value="official">01. Official SIH Rules &amp; Regulations</option>
                     <option value="phases">02. Internal SIH 2026 Registration Phases</option>
@@ -1511,12 +1531,12 @@ export const AdminPage: React.FC = () => {
                     placeholder="Enter new rule text..."
                     value={newRuleText}
                     onChange={(e) => setNewRuleText(e.target.value)}
-                    className="w-full p-2 rounded-xl border border-slate-300 bg-white"
+                    className="w-full p-2 rounded-xl border border-slate-300 bg-white text-slate-900"
                   />
                   <button
                     type="button"
                     onClick={handleAddRule}
-                    className="px-4 py-2 rounded-xl font-bold bg-slate-900 text-white"
+                    className="px-4 py-2 rounded-xl font-bold bg-slate-900 text-white cursor-pointer"
                   >
                     Add Rule
                   </button>
@@ -1542,7 +1562,7 @@ export const AdminPage: React.FC = () => {
                 <button
                   onClick={handleSaveSettings}
                   disabled={isSavingSettings}
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl font-bold text-xs text-white bg-gradient-to-r from-[#C1272D] to-[#1B3F8B] shadow-md hover:opacity-95 transition"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl font-bold text-xs text-white bg-gradient-to-r from-[#C1272D] to-[#1B3F8B] shadow-md hover:opacity-95 transition cursor-pointer"
                 >
                   <Check className="h-4 w-4" />
                   {isSavingSettings ? 'Saving...' : 'Save Settings Live'}
@@ -1559,7 +1579,7 @@ export const AdminPage: React.FC = () => {
                     required
                     value={toLocalISOString(editDeadline)}
                     onChange={(e) => setEditDeadline(new Date(e.target.value).toISOString())}
-                    className="w-full px-4 py-2.5 rounded-xl border border-slate-300 font-bold focus:border-[#C1272D] outline-none"
+                    className="w-full px-4 py-2.5 rounded-xl border border-slate-300 font-bold focus:border-[#C1272D] outline-none text-slate-900"
                   />
                   <p className="text-[11px] text-slate-500 mt-1">
                     Updates the live home page countdown timer immediately.
@@ -1573,7 +1593,7 @@ export const AdminPage: React.FC = () => {
                   <select
                     value={editIsOpen ? 'true' : 'false'}
                     onChange={(e) => setEditIsOpen(e.target.value === 'true')}
-                    className="w-full px-4 py-2.5 rounded-xl border border-slate-300 font-bold outline-none"
+                    className="w-full px-4 py-2.5 rounded-xl border border-slate-300 font-bold outline-none text-slate-900 bg-white"
                   >
                     <option value="true">OPEN — Allow Student Registration</option>
                     <option value="false">CLOSED — Lock Registration Site-Wide</option>
@@ -1587,7 +1607,7 @@ export const AdminPage: React.FC = () => {
                   <select
                     value={editIsExtended ? 'true' : 'false'}
                     onChange={(e) => setEditIsExtended(e.target.value === 'true')}
-                    className="w-full px-4 py-2.5 rounded-xl border border-slate-300 font-bold outline-none"
+                    className="w-full px-4 py-2.5 rounded-xl border border-slate-300 font-bold outline-none text-slate-900 bg-white"
                   >
                     <option value="false">REGULAR — Close exactly at deadline</option>
                     <option value="true">EXTENDED — Allow registrations post-deadline (Extension Active)</option>
@@ -1604,7 +1624,7 @@ export const AdminPage: React.FC = () => {
                       required
                       value={toLocalISOString(editExtendedDeadline)}
                       onChange={(e) => setEditExtendedDeadline(new Date(e.target.value).toISOString())}
-                      className="w-full px-4 py-2.5 rounded-xl border border-slate-300 font-bold focus:border-[#C1272D] outline-none"
+                      className="w-full px-4 py-2.5 rounded-xl border border-slate-300 font-bold focus:border-[#C1272D] outline-none text-slate-900"
                     />
                     <p className="text-[11px] text-slate-500 mt-1">
                       The countdown timer will automatically switch to count down to this new date.
@@ -1621,7 +1641,7 @@ export const AdminPage: React.FC = () => {
                       type="text"
                       value={editCustomQuote || ''}
                       onChange={(e) => setEditCustomQuote(e.target.value)}
-                      className="w-full px-4 py-2.5 rounded-xl border border-slate-300 font-medium focus:border-[#1B3F8B] outline-none"
+                      className="w-full px-4 py-2.5 rounded-xl border border-slate-300 font-medium focus:border-[#1B3F8B] outline-none text-slate-900"
                       placeholder="e.g. Innovation distinguishes between a leader and a follower."
                     />
                   </div>
@@ -1633,7 +1653,7 @@ export const AdminPage: React.FC = () => {
                       type="text"
                       value={editCustomQuoteAuthor || ''}
                       onChange={(e) => setEditCustomQuoteAuthor(e.target.value)}
-                      className="w-full px-4 py-2.5 rounded-xl border border-slate-300 font-medium focus:border-[#1B3F8B] outline-none"
+                      className="w-full px-4 py-2.5 rounded-xl border border-slate-300 font-medium focus:border-[#1B3F8B] outline-none text-slate-900"
                       placeholder="e.g. Steve Jobs"
                     />
                   </div>
@@ -1648,7 +1668,7 @@ export const AdminPage: React.FC = () => {
                     required
                     value={editWhatsapp || ''}
                     onChange={(e) => setEditWhatsapp(e.target.value)}
-                    className="w-full px-4 py-2.5 rounded-xl border border-slate-300 font-medium focus:border-[#1B3F8B] outline-none"
+                    className="w-full px-4 py-2.5 rounded-xl border border-slate-300 font-medium focus:border-[#1B3F8B] outline-none text-slate-900"
                   />
                 </div>
 
@@ -1661,7 +1681,7 @@ export const AdminPage: React.FC = () => {
                     placeholder="e.g. 📢 Registrations close on 05 August 2026!"
                     value={editBanner || ''}
                     onChange={(e) => setEditBanner(e.target.value)}
-                    className="w-full px-4 py-2.5 rounded-xl border border-slate-300 font-medium focus:border-[#1B3F8B] outline-none"
+                    className="w-full px-4 py-2.5 rounded-xl border border-slate-300 font-medium focus:border-[#1B3F8B] outline-none text-slate-900"
                   />
                 </div>
 
@@ -1674,7 +1694,7 @@ export const AdminPage: React.FC = () => {
                       type="url"
                       value={editProblemStatementLink || ''}
                       onChange={(e) => setEditProblemStatementLink(e.target.value)}
-                      className="w-full px-4 py-2.5 rounded-xl border border-slate-300 font-medium focus:border-[#1B3F8B] outline-none"
+                      className="w-full px-4 py-2.5 rounded-xl border border-slate-300 font-medium focus:border-[#1B3F8B] outline-none text-slate-900"
                       placeholder="e.g. https://www.sih.gov.in/sih2025PS"
                     />
                   </div>
@@ -1686,7 +1706,7 @@ export const AdminPage: React.FC = () => {
                       type="text"
                       value={editProblemStatementStatus || ''}
                       onChange={(e) => setEditProblemStatementStatus(e.target.value)}
-                      className="w-full px-4 py-2.5 rounded-xl border border-slate-300 font-medium focus:border-[#1B3F8B] outline-none"
+                      className="w-full px-4 py-2.5 rounded-xl border border-slate-300 font-medium focus:border-[#1B3F8B] outline-none text-slate-900"
                       placeholder="e.g. Announced soon..."
                     />
                   </div>
@@ -1701,7 +1721,7 @@ export const AdminPage: React.FC = () => {
                       type="text"
                       value={editPptTemplateLink || ''}
                       onChange={(e) => setEditPptTemplateLink(e.target.value)}
-                      className="w-full px-4 py-2.5 rounded-xl border border-slate-300 font-medium focus:border-[#1B3F8B] outline-none"
+                      className="w-full px-4 py-2.5 rounded-xl border border-slate-300 font-medium focus:border-[#1B3F8B] outline-none text-slate-900"
                       placeholder="e.g. /templates/sih_template.pptx"
                     />
                   </div>
@@ -1713,7 +1733,7 @@ export const AdminPage: React.FC = () => {
                       type="text"
                       value={editPptTemplateStatus || ''}
                       onChange={(e) => setEditPptTemplateStatus(e.target.value)}
-                      className="w-full px-4 py-2.5 rounded-xl border border-slate-300 font-medium focus:border-[#1B3F8B] outline-none"
+                      className="w-full px-4 py-2.5 rounded-xl border border-slate-300 font-medium focus:border-[#1B3F8B] outline-none text-slate-900"
                       placeholder="e.g. Coming soon..."
                     />
                   </div>
@@ -1728,7 +1748,7 @@ export const AdminPage: React.FC = () => {
                       <select
                         value={editPptSubmissionOpen ? 'true' : 'false'}
                         onChange={(e) => setEditPptSubmissionOpen(e.target.value === 'true')}
-                        className="w-full px-4 py-2.5 rounded-xl border border-slate-300 font-bold outline-none"
+                        className="w-full px-4 py-2.5 rounded-xl border border-slate-300 font-bold outline-none text-slate-900 bg-white"
                       >
                         <option value="true">OPEN — Teams Can Submit PPTs</option>
                         <option value="false">CLOSED — Submission Not Allowed</option>
@@ -1740,7 +1760,7 @@ export const AdminPage: React.FC = () => {
                         type="text"
                         value={editPptSubmissionDeadline || ''}
                         onChange={(e) => setEditPptSubmissionDeadline(e.target.value)}
-                        className="w-full px-4 py-2.5 rounded-xl border border-slate-300 font-medium focus:border-[#C1272D] outline-none"
+                        className="w-full px-4 py-2.5 rounded-xl border border-slate-300 font-medium focus:border-[#C1272D] outline-none text-slate-900"
                         placeholder="e.g. 08 August 2026, 11:59 PM"
                       />
                     </div>
@@ -1751,7 +1771,7 @@ export const AdminPage: React.FC = () => {
                       rows={2}
                       value={editPptSubmissionStatus || ''}
                       onChange={(e) => setEditPptSubmissionStatus(e.target.value)}
-                      className="w-full px-4 py-2.5 rounded-xl border border-slate-300 font-medium focus:border-[#C1272D] outline-none resize-none"
+                      className="w-full px-4 py-2.5 rounded-xl border border-slate-300 font-medium focus:border-[#C1272D] outline-none resize-none text-slate-900"
                       placeholder="e.g. PPT submission portal is now open..."
                     />
                   </div>
@@ -1760,7 +1780,6 @@ export const AdminPage: React.FC = () => {
 
             </div>
           )}
-
 
           {/* TAB: PPT SUBMISSIONS */}
           {sidebarTab === 'ppt-submissions' && (
@@ -1776,8 +1795,16 @@ export const AdminPage: React.FC = () => {
                   </p>
                 </div>
                 <button
-                  onClick={async () => { setIsLoadingPptSubmissions(true); try { const d = await api.getAdminPptSubmissions(); setPptSubmissions(d.submissions || []); } catch (e) { } finally { setIsLoadingPptSubmissions(false); } }}
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-2xl font-bold text-xs text-white bg-[#1B3F8B] hover:bg-blue-900 transition"
+                  onClick={async () => {
+                    setIsLoadingPptSubmissions(true);
+                    try {
+                      const d = await api.getAdminPptSubmissions();
+                      setPptSubmissions(d.submissions || []);
+                    } catch (e) { } finally {
+                      setIsLoadingPptSubmissions(false);
+                    }
+                  }}
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-2xl font-bold text-xs text-white bg-[#1B3F8B] hover:bg-blue-900 transition cursor-pointer shrink-0"
                 >
                   <RefreshCw className={`h-3.5 w-3.5 ${isLoadingPptSubmissions ? 'animate-spin' : ''}`} />
                   Refresh
@@ -1789,71 +1816,73 @@ export const AdminPage: React.FC = () => {
                   <div className="h-8 w-8 border-4 border-[#C1272D] border-t-transparent rounded-full animate-spin" />
                 </div>
               ) : pptSubmissions.length === 0 ? (
-                <div className="text-center py-16 text-slate-400">
+                <div className="text-center py-16 text-slate-400 bg-white rounded-3xl border border-slate-200">
                   <FileText className="h-10 w-10 mx-auto mb-3 opacity-30" />
-                  <p className="text-sm font-bold">No PPT submissions yet.</p>
-                  <p className="text-xs mt-1">Submissions will appear here once teams submit their presentations.</p>
+                  <p className="text-sm font-bold text-slate-700">No PPT submissions yet.</p>
+                  <p className="text-xs text-slate-500 mt-1">Submissions will appear here once teams submit their presentations.</p>
                 </div>
               ) : (
-                <div className="rounded-3xl bg-white border border-slate-200 overflow-auto max-h-[500px] shadow-xs">
-                  <table className="w-full text-xs border-collapse">
-                    <thead className="sticky top-0 bg-slate-50 z-10 border-b border-slate-100">
-                      <tr className="text-left font-extrabold text-slate-500 uppercase tracking-wider">
-                        <th className="py-3 px-4 bg-slate-50">Team ID</th>
-                        <th className="py-3 px-4 bg-slate-50">Team Name</th>
-                        <th className="py-3 px-4 bg-slate-50">Leader</th>
-                        <th className="py-3 px-4 bg-slate-50">PPT Link</th>
-                        <th className="py-3 px-4 bg-slate-50">Submitted</th>
-                        <th className="py-3 px-4 bg-slate-50 text-right">Action</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-slate-50">
-                      {pptSubmissions.map((sub) => (
-                        <tr key={sub.id} className="hover:bg-slate-50/80 transition">
-                          <td className="py-3.5 px-4 font-mono font-bold text-[#1B3F8B]">{sub.teamId}</td>
-                          <td className="py-3.5 px-4 font-black text-slate-900">{sub.teamName}</td>
-                          <td className="py-3.5 px-4">
-                            <span className="font-bold text-slate-900 block">{sub.leaderName}</span>
-                            <span className="text-[11px] text-slate-500">{sub.leaderEmail}</span>
-                          </td>
-                          <td className="py-3.5 px-4">
-                            <a
-                              href={sub.fileUrl}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[10px] font-extrabold bg-blue-50 text-blue-700 hover:bg-blue-100 transition"
-                            >
-                              View PPT →
-                            </a>
-                          </td>
-                          <td className="py-3.5 px-4 text-slate-500">
-                            {new Date(sub.submittedAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
-                          </td>
-                          <td className="py-3.5 px-4">
-                            <button
-                              onClick={async () => {
-                                if (!confirm(`Delete submission from ${sub.teamId}?`)) return;
-                                setDeletingPptId(sub.id);
-                                try {
-                                  await api.deletePptSubmission(sub.id);
-                                  setPptSubmissions(prev => prev.filter(s => s.id !== sub.id));
-                                } catch (e: any) {
-                                  showAlert('Error', e.message || 'Could not delete submission.');
-                                } finally {
-                                  setDeletingPptId(null);
-                                }
-                              }}
-                              disabled={deletingPptId === sub.id}
-                              className="p-1.5 rounded-lg text-red-400 hover:bg-red-50 hover:text-red-600 transition disabled:opacity-50"
-                              title="Delete submission"
-                            >
-                              <Trash2 className="h-3.5 w-3.5" />
-                            </button>
-                          </td>
+                <div className="rounded-3xl bg-white border border-slate-200/80 overflow-hidden shadow-xs">
+                  <div className="overflow-x-auto w-full">
+                    <table className="w-full text-xs border-collapse min-w-[850px]">
+                      <thead className="bg-slate-50/90 border-b border-slate-200/80">
+                        <tr className="text-left font-extrabold text-slate-500 uppercase tracking-wider whitespace-nowrap">
+                          <th className="py-3.5 px-4 bg-slate-50/90">Team ID</th>
+                          <th className="py-3.5 px-4 bg-slate-50/90">Team Name</th>
+                          <th className="py-3.5 px-4 bg-slate-50/90">Leader</th>
+                          <th className="py-3.5 px-4 bg-slate-50/90">PPT Link</th>
+                          <th className="py-3.5 px-4 bg-slate-50/90">Submitted</th>
+                          <th className="py-3.5 px-4 bg-slate-50/90 text-right">Action</th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                      </thead>
+                      <tbody className="divide-y divide-slate-100 font-medium text-slate-800">
+                        {pptSubmissions.map((sub) => (
+                          <tr key={sub.id} className="hover:bg-slate-50/80 transition-colors">
+                            <td className="py-3.5 px-4 font-mono font-bold text-[#1B3F8B] whitespace-nowrap">{sub.teamId}</td>
+                            <td className="py-3.5 px-4 font-black text-slate-900 whitespace-nowrap">{sub.teamName}</td>
+                            <td className="py-3.5 px-4">
+                              <span className="font-bold text-slate-900 block whitespace-nowrap">{sub.leaderName}</span>
+                              <span className="text-[11px] text-slate-500 font-medium block truncate max-w-[180px]">{sub.leaderEmail}</span>
+                            </td>
+                            <td className="py-3.5 px-4 whitespace-nowrap">
+                              <a
+                                href={sub.fileUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-[11px] font-extrabold bg-blue-50 text-blue-700 hover:bg-blue-100 transition border border-blue-200/60"
+                              >
+                                View PPT →
+                              </a>
+                            </td>
+                            <td className="py-3.5 px-4 text-slate-500 whitespace-nowrap">
+                              {new Date(sub.submittedAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
+                            </td>
+                            <td className="py-3.5 px-4 text-right whitespace-nowrap">
+                              <button
+                                onClick={async () => {
+                                  if (!confirm(`Delete submission from ${sub.teamId}?`)) return;
+                                  setDeletingPptId(sub.id);
+                                  try {
+                                    await api.deletePptSubmission(sub.id);
+                                    setPptSubmissions(prev => prev.filter(s => s.id !== sub.id));
+                                  } catch (e: any) {
+                                    showAlert('Error', e.message || 'Could not delete submission.');
+                                  } finally {
+                                    setDeletingPptId(null);
+                                  }
+                                }}
+                                disabled={deletingPptId === sub.id}
+                                className="p-1.5 rounded-xl text-red-500 hover:text-red-700 hover:bg-red-50 transition border border-transparent hover:border-red-100 disabled:opacity-50 cursor-pointer"
+                                title="Delete submission"
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               )}
             </div>
@@ -1862,7 +1891,7 @@ export const AdminPage: React.FC = () => {
           {/* TAB 7: PROBLEM STATEMENTS CRUD PANEL */}
           {sidebarTab === 'problem-statements' && (
             <div className="space-y-6 animate-in fade-in duration-200">
-              <div className="flex items-center justify-between border-b border-slate-200/60 pb-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200/60 pb-4">
                 <div>
                   <h1 className="text-2xl font-black text-slate-900 tracking-tight">
                     Problem Statement Manager
@@ -1878,7 +1907,7 @@ export const AdminPage: React.FC = () => {
                     setIsCreatingPs(true);
                     setIsEditingPs(false);
                   }}
-                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl font-bold text-xs text-white bg-[#C1272D] hover:bg-red-700 shadow-md transition cursor-pointer"
+                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl font-bold text-xs text-white bg-[#C1272D] hover:bg-red-700 shadow-md transition cursor-pointer shrink-0"
                 >
                   <Plus className="h-4 w-4" />
                   Add Problem Statement
@@ -1891,67 +1920,69 @@ export const AdminPage: React.FC = () => {
                   <div className="h-8 w-8 border-4 border-[#C1272D] border-t-transparent rounded-full animate-spin" />
                 </div>
               ) : adminPsList.length === 0 ? (
-                <div className="text-center py-16 text-slate-400">
+                <div className="text-center py-16 text-slate-400 bg-white rounded-3xl border border-slate-200">
                   <BookOpen className="h-10 w-10 mx-auto mb-3 opacity-30" />
-                  <p className="text-sm font-bold">No Problem Statements found.</p>
+                  <p className="text-sm font-bold text-slate-700">No Problem Statements found.</p>
                 </div>
               ) : (
-                <div className="rounded-3xl bg-white border border-slate-200 overflow-auto max-h-[600px] shadow-xs">
-                  <table className="w-full text-xs border-collapse">
-                    <thead className="sticky top-0 bg-slate-50 z-10 border-b border-slate-100">
-                      <tr className="text-left font-extrabold text-slate-500 uppercase tracking-wider">
-                        <th className="py-3 px-4 bg-slate-50">ID</th>
-                        <th className="py-3 px-4 bg-slate-50">Title</th>
-                        <th className="py-3 px-4 bg-slate-50">Category</th>
-                        <th className="py-3 px-4 bg-slate-50">Status</th>
-                        <th className="py-3 px-4 bg-slate-50 text-right">Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-slate-50">
-                      {adminPsList.map((ps) => (
-                        <tr key={ps.id} className="hover:bg-slate-50/80 transition">
-                          <td className="py-3.5 px-4 font-mono font-bold text-[#1B3F8B]">{ps.id}</td>
-                          <td className="py-3.5 px-4 font-black text-slate-900 max-w-sm truncate">{ps.title}</td>
-                          <td className="py-3.5 px-4 font-bold text-slate-700">{ps.category}</td>
-                          <td className="py-3.5 px-4">
-                            <span className={`px-2 py-0.5 rounded-full font-bold text-[10px] uppercase ${ps.status === 'open'
-                                ? 'bg-emerald-50 text-emerald-700 border border-emerald-100'
-                                : 'bg-slate-100 text-slate-700 border border-slate-200'
-                              }`}>
-                              {ps.status}
-                            </span>
-                          </td>
-                          <td className="py-3.5 px-4 text-right space-x-2">
-                            <button
-                              onClick={() => {
-                                setEditingPsData(ps);
-                                setIsEditingPs(true);
-                                setIsCreatingPs(false);
-                              }}
-                              className="p-1 text-blue-600 hover:bg-blue-50 rounded-lg transition inline-block cursor-pointer"
-                              title="Edit"
-                            >
-                              <Edit3 className="h-4 w-4" />
-                            </button>
-                            <button
-                              onClick={() => handleDeletePs(ps.id)}
-                              className="p-1 text-red-600 hover:bg-red-50 rounded-lg transition inline-block cursor-pointer"
-                              title="Delete"
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </button>
-                          </td>
+                <div className="rounded-3xl bg-white border border-slate-200/80 overflow-hidden shadow-xs">
+                  <div className="overflow-x-auto w-full">
+                    <table className="w-full text-xs border-collapse min-w-[800px]">
+                      <thead className="bg-slate-50/90 border-b border-slate-200/80">
+                        <tr className="text-left font-extrabold text-slate-500 uppercase tracking-wider whitespace-nowrap">
+                          <th className="py-3.5 px-4 bg-slate-50/90">ID</th>
+                          <th className="py-3.5 px-4 bg-slate-50/90">Title</th>
+                          <th className="py-3.5 px-4 bg-slate-50/90">Category</th>
+                          <th className="py-3.5 px-4 bg-slate-50/90">Status</th>
+                          <th className="py-3.5 px-4 bg-slate-50/90 text-right">Actions</th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                      </thead>
+                      <tbody className="divide-y divide-slate-100 font-medium text-slate-800">
+                        {adminPsList.map((ps) => (
+                          <tr key={ps.id} className="hover:bg-slate-50/80 transition-colors">
+                            <td className="py-3.5 px-4 font-mono font-bold text-[#1B3F8B] whitespace-nowrap">{ps.id}</td>
+                            <td className="py-3.5 px-4 font-black text-slate-900">{ps.title}</td>
+                            <td className="py-3.5 px-4 font-bold text-slate-700 whitespace-nowrap">{ps.category}</td>
+                            <td className="py-3.5 px-4 whitespace-nowrap">
+                              <span className={`px-2.5 py-1 rounded-full font-extrabold text-[10px] uppercase ${ps.status === 'open'
+                                  ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                                  : 'bg-slate-100 text-slate-700 border border-slate-200'
+                                }`}>
+                                {ps.status}
+                              </span>
+                            </td>
+                            <td className="py-3.5 px-4 text-right space-x-1 whitespace-nowrap">
+                              <button
+                                onClick={() => {
+                                  setEditingPsData(ps);
+                                  setIsEditingPs(true);
+                                  setIsCreatingPs(false);
+                                }}
+                                className="p-1.5 text-blue-600 hover:bg-blue-50 rounded-xl transition inline-block cursor-pointer border border-transparent hover:border-blue-100"
+                                title="Edit"
+                              >
+                                <Edit3 className="h-4 w-4" />
+                              </button>
+                              <button
+                                onClick={() => handleDeletePs(ps.id)}
+                                className="p-1.5 text-red-600 hover:bg-red-50 rounded-xl transition inline-block cursor-pointer border border-transparent hover:border-red-100"
+                                title="Delete"
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               )}
 
               {/* MODAL: CREATE / EDIT PROBLEM STATEMENT */}
               {(isCreatingPs || isEditingPs) && editingPsData && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/40 backdrop-blur-xs">
-                  <div className="w-full max-w-lg rounded-3xl bg-white border border-slate-200 shadow-2xl overflow-hidden relative animate-in zoom-in-95 duration-200">
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/50 backdrop-blur-xs">
+                  <div className="w-full max-w-lg rounded-3xl bg-white border border-slate-200 shadow-2xl overflow-hidden relative animate-in zoom-in-95 duration-150">
                     <div className="absolute top-0 left-0 right-0 h-1.5 bg-[#C1272D]" />
 
                     <div className="p-6 flex items-center justify-between border-b border-slate-100">
@@ -1964,7 +1995,7 @@ export const AdminPage: React.FC = () => {
                           setIsEditingPs(false);
                           setEditingPsData(null);
                         }}
-                        className="p-1.5 text-slate-400 hover:bg-slate-50 hover:text-slate-700 rounded-xl transition cursor-pointer"
+                        className="p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-700 rounded-xl transition cursor-pointer"
                       >
                         <X className="h-5 w-5" />
                       </button>
@@ -1980,7 +2011,7 @@ export const AdminPage: React.FC = () => {
                           placeholder="e.g. VSITR-PS07"
                           value={editingPsData.id || ''}
                           onChange={(e) => setEditingPsData({ ...editingPsData, id: e.target.value })}
-                          className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-semibold outline-none focus:border-[#C1272D] disabled:opacity-50"
+                          className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-semibold outline-none focus:border-[#C1272D] disabled:opacity-50 text-slate-900"
                         />
                       </div>
 
@@ -1992,7 +2023,7 @@ export const AdminPage: React.FC = () => {
                           placeholder="e.g. Smart Traffic Management System"
                           value={editingPsData.title || ''}
                           onChange={(e) => setEditingPsData({ ...editingPsData, title: e.target.value })}
-                          className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-semibold outline-none focus:border-[#C1272D]"
+                          className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-semibold outline-none focus:border-[#C1272D] text-slate-900"
                         />
                       </div>
 
@@ -2002,7 +2033,7 @@ export const AdminPage: React.FC = () => {
                           <select
                             value={editingPsData.category || 'Software'}
                             onChange={(e) => setEditingPsData({ ...editingPsData, category: e.target.value as any })}
-                            className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-semibold outline-none focus:border-[#C1272D] bg-white"
+                            className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-semibold outline-none focus:border-[#C1272D] bg-white text-slate-900"
                           >
                             <option value="Software">Software</option>
                             <option value="Hardware">Hardware</option>
@@ -2015,7 +2046,7 @@ export const AdminPage: React.FC = () => {
                           <select
                             value={editingPsData.status || 'open'}
                             onChange={(e) => setEditingPsData({ ...editingPsData, status: e.target.value as any })}
-                            className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-semibold outline-none focus:border-[#C1272D] bg-white"
+                            className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-semibold outline-none focus:border-[#C1272D] bg-white text-slate-900"
                           >
                             <option value="open">Open (Available)</option>
                             <option value="closed">Closed (Unavailable)</option>
@@ -2030,7 +2061,7 @@ export const AdminPage: React.FC = () => {
                           rows={4}
                           value={editingPsData.description || ''}
                           onChange={(e) => setEditingPsData({ ...editingPsData, description: e.target.value })}
-                          className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-semibold outline-none focus:border-[#C1272D] resize-none"
+                          className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-semibold outline-none focus:border-[#C1272D] resize-none text-slate-900"
                         />
                       </div>
 
@@ -2079,7 +2110,7 @@ export const AdminPage: React.FC = () => {
                 <button
                   onClick={handleTriggerDeadlineReminders}
                   disabled={isSendingDeadlineReminders}
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl font-bold text-xs text-white bg-gradient-to-r from-[#C1272D] to-amber-600 shadow-md hover:opacity-95 transition disabled:opacity-50 shrink-0"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl font-bold text-xs text-white bg-gradient-to-r from-[#C1272D] to-amber-600 shadow-md hover:opacity-95 transition disabled:opacity-50 shrink-0 cursor-pointer"
                 >
                   {isSendingDeadlineReminders ? (
                     <>
@@ -2116,7 +2147,7 @@ export const AdminPage: React.FC = () => {
                     <button
                       onClick={handleSyncDb}
                       disabled={isSyncingDb}
-                      className="px-3 py-1.5 rounded-xl font-extrabold text-[11px] text-white bg-[#1B3F8B] hover:bg-blue-900 shadow-xs flex items-center gap-1.5 transition"
+                      className="px-3.5 py-2 rounded-xl font-extrabold text-[11px] text-white bg-[#1B3F8B] hover:bg-blue-900 shadow-xs flex items-center gap-1.5 transition cursor-pointer"
                     >
                       <RefreshCw className={`h-3.5 w-3.5 ${isSyncingDb ? 'animate-spin' : ''}`} />
                       {isSyncingDb ? 'Syncing...' : 'Sync to Neon DB'}
@@ -2178,7 +2209,7 @@ export const AdminPage: React.FC = () => {
                       <button
                         type="submit"
                         disabled={isTestingSmtp}
-                        className="px-3 py-2 rounded-xl text-xs font-bold bg-emerald-500 hover:bg-emerald-600 text-slate-950 flex items-center gap-1.5 transition"
+                        className="px-3.5 py-2 rounded-xl text-xs font-bold bg-emerald-500 hover:bg-emerald-600 text-slate-950 flex items-center gap-1.5 transition cursor-pointer"
                       >
                         <SendHorizontal className={`h-3.5 w-3.5 ${isTestingSmtp ? 'animate-spin' : ''}`} />
                         {isTestingSmtp ? 'Testing...' : 'Send Test'}
@@ -2203,9 +2234,9 @@ export const AdminPage: React.FC = () => {
                   <button
                     onClick={loadAdminData}
                     disabled={isLoadingEmailLogs}
-                    className="p-2 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 text-xs font-bold flex items-center gap-1.5"
+                    className="p-2 px-3 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 text-xs font-bold flex items-center gap-1.5 cursor-pointer"
                   >
-                    <RefreshCw className={`h-3.5 w-3.5 ${isLoadingEmailLogs ? 'animate-spin' : ''}`} />
+                    <RefreshCw className={`h-3.5 w-3.5 ${isLoadingEmailLogs ? 'animate-spin text-[#C1272D]' : ''}`} />
                     Refresh Logs
                   </button>
                 </div>
@@ -2215,82 +2246,88 @@ export const AdminPage: React.FC = () => {
                     No emails logged yet. Register a team or click "Send Registration Deadline Edit Reminder" above to test automated email dispatching.
                   </div>
                 ) : (
-                  <div className="overflow-auto max-h-[500px] border border-slate-200/60 rounded-2xl shadow-xs">
-                    <table className="w-full text-left text-xs border-collapse">
-                      <thead className="sticky top-0 bg-slate-50 z-10 border-b border-slate-200">
-                        <tr className="text-slate-500 font-bold uppercase tracking-wider text-[10px]">
-                          <th className="py-3.5 px-4 bg-slate-50">Recipient</th>
-                          <th className="py-3.5 px-4 bg-slate-50">Team ID</th>
-                          <th className="py-3.5 px-4 bg-slate-50">Type</th>
-                          <th className="py-3.5 px-4 bg-slate-50">Subject</th>
-                          <th className="py-3.5 px-4 bg-slate-50">Status</th>
-                          <th className="py-3.5 px-4 bg-slate-50">Timestamp</th>
-                          <th className="py-3.5 px-4 text-right bg-slate-50">Action</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-slate-100 font-medium text-slate-700">
-                        {emailLogs.map((log) => (
-                          <tr key={log.id} className="hover:bg-slate-50/80 transition">
-                            <td className="py-3.5 px-4 font-bold text-slate-900">
-                              {log.recipientName}
-                              <span className="block text-[11px] font-normal text-slate-500 font-mono">
-                                {log.recipientEmail}
-                              </span>
-                            </td>
-                            <td className="py-3.5 px-4 font-mono font-bold text-[#1B3F8B]">
-                              {log.teamId || 'N/A'}
-                            </td>
-                            <td className="py-3.5 px-4">
-                              <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold ${log.type === 'registration_confirmation'
-                                  ? 'bg-blue-50 text-blue-700 border border-blue-200'
-                                  : 'bg-amber-50 text-amber-700 border border-amber-200'
-                                }`}>
-                                {log.type === 'registration_confirmation' ? 'Member Confirmation' : 'Deadline Edit Reminder'}
-                              </span>
-                            </td>
-                            <td className="py-3.5 px-4 text-slate-800 font-semibold max-w-[180px] truncate" title={log.subject}>
-                              {log.subject}
-                            </td>
-                            <td className="py-3.5 px-4">
-                              <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black uppercase ${log.status === 'sent'
-                                  ? 'bg-emerald-100 text-emerald-800'
-                                  : log.status === 'simulated'
-                                    ? 'bg-blue-100 text-blue-800'
-                                    : 'bg-red-100 text-red-800'
-                                }`}>
-                                <CheckCircle2 className="h-3 w-3" />
-                                {log.status === 'simulated' ? 'Simulated (No SMTP)' : log.status}
-                              </span>
-                            </td>
-                            <td className="py-3.5 px-4 text-[11px] text-slate-500">
-                              {new Date(log.sentAt).toLocaleString('en-IN', {
-                                month: 'short',
-                                day: 'numeric',
-                                hour: '2-digit',
-                                minute: '2-digit',
-                              })}
-                            </td>
-                            <td className="py-3.5 px-4 text-right flex items-center justify-end gap-1.5">
-                              <button
-                                onClick={() => handleResendEmail(log.id)}
-                                disabled={resendingEmailId === log.id}
-                                className="px-2.5 py-1.5 rounded-xl bg-[#1B3F8B] hover:bg-blue-900 text-white font-bold text-[11px] transition flex items-center gap-1 shadow-2xs"
-                                title="Resend email to recipient"
-                              >
-                                <SendHorizontal className={`h-3 w-3 ${resendingEmailId === log.id ? 'animate-spin' : ''}`} />
-                                {resendingEmailId === log.id ? 'Sending...' : 'Resend'}
-                              </button>
-                              <button
-                                onClick={() => setSelectedEmailLog(log)}
-                                className="px-2.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-[11px] transition"
-                              >
-                                View Body
-                              </button>
-                            </td>
+                  <div className="rounded-2xl border border-slate-200/80 overflow-hidden shadow-xs">
+                    <div className="overflow-x-auto w-full">
+                      <table className="w-full text-left text-xs border-collapse min-w-[920px]">
+                        <thead className="bg-slate-50/90 border-b border-slate-200/80">
+                          <tr className="text-slate-500 font-bold uppercase tracking-wider text-[10px] whitespace-nowrap">
+                            <th className="py-3.5 px-4 bg-slate-50/90">Recipient</th>
+                            <th className="py-3.5 px-4 bg-slate-50/90">Team ID</th>
+                            <th className="py-3.5 px-4 bg-slate-50/90">Type</th>
+                            <th className="py-3.5 px-4 bg-slate-50/90">Subject</th>
+                            <th className="py-3.5 px-4 bg-slate-50/90">Status</th>
+                            <th className="py-3.5 px-4 bg-slate-50/90">Timestamp</th>
+                            <th className="py-3.5 px-4 text-right bg-slate-50/90">Action</th>
                           </tr>
-                        ))}
-                      </tbody>
-                    </table>
+                        </thead>
+                        <tbody className="divide-y divide-slate-100 font-medium text-slate-700">
+                          {emailLogs.map((log) => (
+                            <tr key={log.id} className="hover:bg-slate-50/80 transition-colors">
+                              <td className="py-3.5 px-4 font-bold text-slate-900 whitespace-nowrap">
+                                {log.recipientName}
+                                <span className="block text-[11px] font-normal text-slate-500 font-mono">
+                                  {log.recipientEmail}
+                                </span>
+                              </td>
+                              <td className="py-3.5 px-4 font-mono font-bold text-[#1B3F8B] whitespace-nowrap">
+                                {log.teamId || 'N/A'}
+                              </td>
+                              <td className="py-3.5 px-4 whitespace-nowrap">
+                                <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold ${log.type === 'registration_confirmation'
+                                    ? 'bg-blue-50 text-blue-700 border border-blue-200'
+                                    : log.type === 'ps_selection'
+                                      ? 'bg-purple-50 text-purple-700 border border-purple-200'
+                                      : 'bg-amber-50 text-amber-700 border border-amber-200'
+                                  }`}>
+                                  {log.type === 'registration_confirmation' ? 'Member Confirmation' : log.type === 'ps_selection' ? 'PS Selection Confirmed' : 'Deadline Edit Reminder'}
+                                </span>
+                              </td>
+                              <td className="py-3.5 px-4 text-slate-800 font-semibold max-w-[200px] truncate" title={log.subject}>
+                                {log.subject}
+                              </td>
+                              <td className="py-3.5 px-4 whitespace-nowrap">
+                                <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase ${log.status === 'sent'
+                                    ? 'bg-emerald-100 text-emerald-800'
+                                    : log.status === 'simulated'
+                                      ? 'bg-blue-100 text-blue-800'
+                                      : 'bg-red-100 text-red-800'
+                                  }`}>
+                                  <CheckCircle2 className="h-3 w-3" />
+                                  {log.status === 'simulated' ? 'Simulated (No SMTP)' : log.status}
+                                </span>
+                              </td>
+                              <td className="py-3.5 px-4 text-[11px] text-slate-500 whitespace-nowrap">
+                                {new Date(log.sentAt).toLocaleString('en-IN', {
+                                  month: 'short',
+                                  day: 'numeric',
+                                  hour: '2-digit',
+                                  minute: '2-digit',
+                                })}
+                              </td>
+                              <td className="py-3.5 px-4 text-right whitespace-nowrap">
+                                <div className="inline-flex items-center justify-end gap-1.5">
+                                  <button
+                                    onClick={() => handleResendEmail(log.id)}
+                                    disabled={resendingEmailId === log.id}
+                                    className="px-2.5 py-1.5 rounded-xl bg-[#1B3F8B] hover:bg-blue-900 text-white font-bold text-[11px] transition flex items-center gap-1 shadow-2xs cursor-pointer"
+                                    title="Resend email to recipient"
+                                  >
+                                    <SendHorizontal className={`h-3 w-3 ${resendingEmailId === log.id ? 'animate-spin' : ''}`} />
+                                    {resendingEmailId === log.id ? 'Sending...' : 'Resend'}
+                                  </button>
+                                  <button
+                                    onClick={() => setSelectedEmailLog(log)}
+                                    className="px-2.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-[11px] transition cursor-pointer"
+                                  >
+                                    View Body
+                                  </button>
+                                </div>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
                 )}
               </div>
@@ -2301,7 +2338,7 @@ export const AdminPage: React.FC = () => {
         </div>
 
         {/* FOOTER BAR INSIDE DASHBOARD */}
-        <div className="pt-6 mt-6 border-t border-slate-200/60 flex flex-col sm:flex-row items-center justify-between text-[11px] text-slate-400 font-medium gap-2">
+        <div className="pt-6 mt-8 border-t border-slate-200/80 flex flex-col sm:flex-row items-center justify-between text-[11px] text-slate-400 font-medium gap-2">
           <span>VSITR Internal SIH 2026 Control Center</span>
           <span>Research, Coding, Design &amp; Soft Skills Clubs</span>
         </div>
@@ -2310,20 +2347,20 @@ export const AdminPage: React.FC = () => {
 
       {/* INSPECT TEAM MODAL */}
       {selectedTeam && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4 animate-in fade-in duration-200">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/50 backdrop-blur-xs p-4 animate-in fade-in duration-150">
           <div className="relative w-full max-w-2xl rounded-3xl bg-white p-6 shadow-2xl border border-slate-100 text-slate-800 space-y-4 max-h-[90vh] overflow-y-auto">
             <button
               onClick={() => setSelectedTeam(null)}
-              className="absolute top-4 right-4 p-1 rounded-full text-slate-400 hover:bg-slate-100 hover:text-slate-700"
+              className="absolute top-4 right-4 p-1.5 rounded-full text-slate-400 hover:bg-slate-100 hover:text-slate-700 cursor-pointer"
             >
               <X className="h-5 w-5" />
             </button>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 pr-8">
               <span className="px-3 py-1 rounded-full font-mono font-bold bg-[#1B3F8B] text-white text-xs">
                 {selectedTeam.id}
               </span>
-              <h2 className="text-lg font-black text-slate-900">
+              <h2 className="text-lg font-black text-slate-900 truncate">
                 "{selectedTeam.teamName}"
               </h2>
             </div>
@@ -2340,10 +2377,10 @@ export const AdminPage: React.FC = () => {
               </h4>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
                 {[selectedTeam.leader, ...selectedTeam.members].map((m, i) => (
-                  <div key={i} className="p-2.5 rounded-xl bg-slate-100 border text-slate-800 space-y-0.5">
+                  <div key={i} className="p-2.5 rounded-xl bg-slate-100/80 border text-slate-800 space-y-0.5">
                     <div className="flex justify-between font-bold">
-                      <span>{m.fullName} {m.isLeader ? '(Leader)' : ''}</span>
-                      <span className="text-[#1B3F8B]">{m.department} • Sem {m.semester}</span>
+                      <span className="truncate mr-2">{m.fullName} {m.isLeader ? '(Leader)' : ''}</span>
+                      <span className="text-[#1B3F8B] whitespace-nowrap">{m.department} • Sem {m.semester}</span>
                     </div>
                     <p className="text-[11px] text-slate-500 font-mono">Enr: {m.enrollmentNo} | {m.gender}</p>
                   </div>
@@ -2352,7 +2389,7 @@ export const AdminPage: React.FC = () => {
             </div>
 
             {selectedTeam.mentor ? (
-              <div className="p-3.5 rounded-2xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-900">
+              <div className="p-3.5 rounded-2xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-900 space-y-0.5">
                 <span className="font-bold block">Faculty Mentor:</span>
                 <p>{selectedTeam.mentor.prefix} {selectedTeam.mentor.fullName} ({selectedTeam.mentor.department})</p>
                 <p>Phone: {selectedTeam.mentor.contactNumber} | Email: {selectedTeam.mentor.email}</p>
@@ -2394,17 +2431,16 @@ export const AdminPage: React.FC = () => {
               </div>
             )}
 
-
             <div className="pt-2 flex items-center justify-between border-t border-slate-100">
               <button
                 onClick={() => setDeleteConfirmTeam(selectedTeam)}
-                className="px-4 py-2 rounded-xl text-xs font-bold text-red-600 bg-red-50 hover:bg-red-100 transition"
+                className="px-4 py-2 rounded-xl text-xs font-bold text-red-600 bg-red-50 hover:bg-red-100 transition cursor-pointer"
               >
                 Delete Team
               </button>
               <button
                 onClick={() => setSelectedTeam(null)}
-                className="px-5 py-2 rounded-xl text-xs font-bold bg-slate-900 text-white"
+                className="px-5 py-2 rounded-xl text-xs font-bold bg-slate-900 text-white hover:bg-black transition cursor-pointer"
               >
                 Close
               </button>
@@ -2416,25 +2452,25 @@ export const AdminPage: React.FC = () => {
 
       {/* DELETE CONFIRMATION MODAL */}
       {deleteConfirmTeam && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4 animate-in fade-in duration-200">
-          <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl border border-red-200 text-slate-800">
-            <div className="flex items-center gap-3 text-red-600 mb-3">
-              <AlertTriangle className="h-6 w-6" />
-              <h3 className="text-base font-bold">Confirm Delete Team</h3>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/50 backdrop-blur-xs p-4 animate-in fade-in duration-150">
+          <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl border border-red-200 text-slate-800 space-y-4">
+            <div className="flex items-center gap-3 text-red-600">
+              <AlertTriangle className="h-6 w-6 shrink-0" />
+              <h3 className="text-base font-black">Confirm Delete Team</h3>
             </div>
-            <p className="text-xs text-slate-600 mb-4">
+            <p className="text-xs text-slate-600 leading-relaxed">
               Are you sure you want to permanently delete team <strong className="text-slate-900">"{deleteConfirmTeam.teamName}"</strong> ({deleteConfirmTeam.id})? This action cannot be undone.
             </p>
-            <div className="flex justify-end gap-2 text-xs">
+            <div className="flex justify-end gap-2 text-xs pt-2">
               <button
                 onClick={() => setDeleteConfirmTeam(null)}
-                className="px-4 py-2 rounded-xl font-bold bg-slate-100 text-slate-700"
+                className="px-4 py-2 rounded-xl font-bold bg-slate-100 text-slate-700 hover:bg-slate-200 transition cursor-pointer"
               >
                 Cancel
               </button>
               <button
                 onClick={() => handleDeleteTeam(deleteConfirmTeam.id)}
-                className="px-4 py-2 rounded-xl font-bold bg-red-600 text-white hover:bg-red-700 shadow-md"
+                className="px-4 py-2 rounded-xl font-bold bg-red-600 text-white hover:bg-red-700 shadow-md transition cursor-pointer"
               >
                 Delete Permanently
               </button>
@@ -2445,21 +2481,23 @@ export const AdminPage: React.FC = () => {
 
       {/* EMAIL BODY INSPECTOR MODAL */}
       {selectedEmailLog && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4 animate-in fade-in duration-200">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/50 backdrop-blur-xs p-4 animate-in fade-in duration-150">
           <div className="relative w-full max-w-lg rounded-3xl bg-white p-6 shadow-2xl border border-slate-100 text-slate-800 space-y-4 max-h-[85vh] overflow-y-auto">
             <button
               onClick={() => setSelectedEmailLog(null)}
-              className="absolute top-4 right-4 p-1 rounded-full text-slate-400 hover:bg-slate-100 hover:text-slate-700"
+              className="absolute top-4 right-4 p-1.5 rounded-full text-slate-400 hover:bg-slate-100 hover:text-slate-700 cursor-pointer"
             >
               <X className="h-5 w-5" />
             </button>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 pr-8">
               <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold ${selectedEmailLog.type === 'registration_confirmation'
                   ? 'bg-blue-100 text-blue-800'
-                  : 'bg-amber-100 text-amber-800'
+                  : selectedEmailLog.type === 'ps_selection'
+                    ? 'bg-purple-100 text-purple-800'
+                    : 'bg-amber-100 text-amber-800'
                 }`}>
-                {selectedEmailLog.type === 'registration_confirmation' ? 'Member Confirmation' : 'Deadline Edit Reminder'}
+                {selectedEmailLog.type === 'registration_confirmation' ? 'Member Confirmation' : selectedEmailLog.type === 'ps_selection' ? 'PS Selection Confirmed' : 'Deadline Edit Reminder'}
               </span>
               <span className="text-xs font-mono font-bold text-slate-500">
                 {selectedEmailLog.id}
@@ -2475,7 +2513,7 @@ export const AdminPage: React.FC = () => {
               </p>
             </div>
 
-            <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-xs font-mono whitespace-pre-wrap leading-relaxed text-slate-700">
+            <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-xs font-mono whitespace-pre-wrap leading-relaxed text-slate-700 max-h-[400px] overflow-y-auto">
               {selectedEmailLog.body}
             </div>
 
@@ -2487,14 +2525,14 @@ export const AdminPage: React.FC = () => {
                   }
                 }}
                 disabled={resendingEmailId === selectedEmailLog.id}
-                className="px-4 py-2 rounded-xl text-xs font-bold bg-[#1B3F8B] text-white hover:bg-blue-900 flex items-center gap-1.5 shadow-xs"
+                className="px-4 py-2 rounded-xl text-xs font-bold bg-[#1B3F8B] text-white hover:bg-blue-900 flex items-center gap-1.5 shadow-xs cursor-pointer"
               >
                 <SendHorizontal className={`h-3.5 w-3.5 ${resendingEmailId === selectedEmailLog.id ? 'animate-spin' : ''}`} />
                 {resendingEmailId === selectedEmailLog.id ? 'Resending Email...' : 'Resend Email Now'}
               </button>
               <button
                 onClick={() => setSelectedEmailLog(null)}
-                className="px-5 py-2 rounded-xl text-xs font-bold bg-slate-900 text-white"
+                className="px-5 py-2 rounded-xl text-xs font-bold bg-slate-900 text-white hover:bg-black transition cursor-pointer"
               >
                 Close Log
               </button>

@@ -24,6 +24,26 @@
   100% { background-position: 0 0; }
 }
 
+/* ─── Global Scrollbar Removal ─────────────────── */
+::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
+  display: none;
+}
+
+* {
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
 /* ─── Global Cursor Fix ──────────────────────────── */
 /* Prevent the text-cursor (I-beam) on non-editable content */
 *,

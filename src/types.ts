@@ -122,7 +122,7 @@ export interface EmailLog {
   teamId?: string;
   subject: string;
   body: string;
-  type: 'registration_confirmation' | 'deadline_reminder' | 'admin_announcement';
+  type: 'registration_confirmation' | 'deadline_reminder' | 'admin_announcement' | 'ps_selection';
   status: 'sent' | 'simulated' | 'failed';
   sentAt: string;
 }

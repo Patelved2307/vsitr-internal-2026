@@ -1167,10 +1167,13 @@ async function startServer() {
         return res.status(404).json({ success: false, message: 'Team not found.' });
       }
 
-      // Automatically dispatch confirmation emails to the entire team (asynchronous)
-      dispatchPsSelectionEmails(updatedTeam, psId, psTitle).catch((emailErr) => {
-        console.error('Failed to dispatch PS selection emails:', emailErr);
-      });
+      // Automatically dispatch confirmation emails to all 6 team members
+      try {
+        await dispatchPsSelectionEmails(updatedTeam, psId, psTitle);
+        console.log(`[PS Selection Email] Successfully dispatched confirmation emails for team ${teamId} (${psId})`);
+      } catch (emailErr) {
+        console.error('[PS Selection Email Error] Failed to dispatch PS selection emails:', emailErr);
+      }
 
       res.json({
         success: true,

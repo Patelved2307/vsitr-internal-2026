@@ -48,7 +48,7 @@ export async function sendEmail({
   subject: string;
   bodyHtml: string;
   bodyText: string;
-  type: 'registration_confirmation' | 'deadline_reminder' | 'admin_announcement';
+  type: 'registration_confirmation' | 'deadline_reminder' | 'admin_announcement' | 'ps_selection';
   cc?: string;
 }): Promise<EmailLog> {
   const mailTransporter = getTransporter();
@@ -607,7 +607,7 @@ export async function dispatchPsSelectionEmails(team: Team, psId: string, psTitl
         </div>
 
         <div style="padding: 32px 24px; color: #1E293B; line-height: 1.6;">
-          <p style="font-size: 16px; font-weight: 700; margin-top: 0; color: #0F172A;">Dear ${leaderName},</p>
+          <p style="font-size: 16px; font-weight: 700; margin-top: 0; color: #0F172A;">Dear ${member.fullName},</p>
           <p style="font-size: 14px; color: #334155; margin-bottom: 20px;">
             Greetings from the Internal Smart India Hackathon (SIH) 2026 Organizing Committee.
           </p>
@@ -701,7 +701,7 @@ export async function dispatchPsSelectionEmails(team: Team, psId: string, psTitl
       </div>
     `;
 
-    const bodyText = `Dear ${leaderName},
+    const bodyText = `Dear ${member.fullName},
 
 Greetings from the Internal Smart India Hackathon (SIH) 2026 Organizing Committee.
 
@@ -751,7 +751,7 @@ Kadi Sarva Vishwavidyalaya`;
       subject,
       bodyHtml,
       bodyText,
-      type: 'registration_confirmation',
+      type: 'ps_selection',
     });
   });
 
