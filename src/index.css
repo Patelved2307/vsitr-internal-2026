@@ -1,5 +1,49 @@
 @import "tailwindcss";
 
+/* ─── Brand Fonts ─────────────────────────────────── */
+/* Matter: body/UI text. Season Mix: display headings. Both self-hosted from
+   public/fonts so they're on the same origin (no external font requests). */
+@font-face {
+  font-family: 'Matter';
+  src: url('/fonts/MatterRegular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Matter';
+  src: url('/fonts/MatterMedium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Matter';
+  src: url('/fonts/MatterSemiBold.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Season Mix';
+  src: url('/fonts/SeasonMix-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Season Mix';
+  src: url('/fonts/SeasonMix-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@theme {
+  --font-sans: 'Matter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-display: 'Season Mix', 'Matter', ui-sans-serif, system-ui, sans-serif;
+}
+
 .rainbow-border::before,
 .rainbow-border::after {
   content: '';
