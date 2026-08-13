@@ -53,6 +53,22 @@ export const TimelineSection: React.FC = () => {
       ),
     },
     {
+      title: "Till 23 Aug, 11:59 PM",
+      content: (
+        <div>
+          <h4 className="text-lg font-black text-slate-850 mb-2">PPT Submission</h4>
+          <p className="text-neutral-800 text-xs md:text-sm font-medium mb-4 leading-relaxed">
+            All teams must submit their finalized solution presentation (PPT) via the team portal before the deadline.
+          </p>
+          <div className="flex gap-2">
+            <span className="inline-flex px-2.5 py-1 rounded-full text-[10px] font-extrabold uppercase bg-blue-50 text-blue-700 border border-blue-200">
+              Upcoming
+            </span>
+          </div>
+        </div>
+      ),
+    },
+    {
       title: "27 August 2026",
       content: (
         <div>
