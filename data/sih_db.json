@@ -34,9 +34,23 @@
     {
       "id": "t3",
       "date": "16 August 2026, 11:59 PM",
-      "title": "Problem Statement Selection ",
+      "title": "Problem Statement Selection",
       "active": false,
-      "description": "Select the Problem Statement from team Portal Once the Problem statement is selected be modification can be done. "
+      "description": "Select the Problem Statement from team Portal. Once the Problem statement is selected no modification can be done."
+    },
+    {
+      "id": "t4",
+      "date": "23 August 2026, 11:59 PM",
+      "title": "PPT Submission",
+      "active": false,
+      "description": "Submit your team PPT presentation detailing your proposed solution."
+    },
+    {
+      "id": "t5",
+      "date": "27 August 2026",
+      "title": "PPT Presentation Day",
+      "active": false,
+      "description": "In-person pitch deck presentation & technical evaluation before faculty panel."
     }
   ],
   "faqs": [
