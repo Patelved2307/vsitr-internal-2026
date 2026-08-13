@@ -77,7 +77,7 @@ export const TeamPortalPage: React.FC = () => {
         <h2 className="text-2xl font-black text-slate-900">
           Session Expired or Not Logged In
         </h2>
-        <p className="text-xs text-slate-500 max-w-sm mt-1">
+        <p className="text-sm text-slate-500 max-w-sm mt-1">
           Please log in with your Team ID and Leader Email to view your Team Portal.
         </p>
         <button
@@ -230,7 +230,7 @@ export const TeamPortalPage: React.FC = () => {
               Team "{team.teamName}"
             </h1>
 
-            <p className="text-xs text-slate-400">
+            <p className="text-sm text-slate-400">
               Registered on: <span className="font-semibold text-slate-200">{new Date(team.createdAt).toLocaleString('en-IN')}</span>
             </p>
           </div>
@@ -260,7 +260,7 @@ export const TeamPortalPage: React.FC = () => {
             <h3 className="text-xl font-black tracking-tight text-white">
               Join Official SIH 2026 WhatsApp Group
             </h3>
-            <p className="text-xs text-slate-300 max-w-xl leading-relaxed">
+            <p className="text-sm text-slate-300 max-w-xl leading-relaxed">
               All real-time updates, screening calls, presentation schedules, and reminders will be shared here.
             </p>
           </div>
@@ -318,7 +318,7 @@ export const TeamPortalPage: React.FC = () => {
                 </div>
                 <div>
                   <p className="text-[10px] uppercase font-black text-emerald-700 tracking-wider">Problem Statement Selected</p>
-                  <p className="text-xs font-bold text-emerald-800">Your selection has been locked.</p>
+                  <p className="text-sm font-bold text-emerald-800">Your selection has been locked.</p>
                 </div>
               </div>
 
@@ -336,7 +336,7 @@ export const TeamPortalPage: React.FC = () => {
                 {team.psSelectedAt && (
                   <div>
                     <p className="text-[10px] uppercase font-bold text-slate-400 tracking-wider mb-1">Selected On</p>
-                    <p className="text-xs font-semibold text-slate-700">{new Date(team.psSelectedAt).toLocaleString('en-IN')}</p>
+                    <p className="text-sm font-semibold text-slate-700">{new Date(team.psSelectedAt).toLocaleString('en-IN')}</p>
                   </div>
                 )}
               </div>
@@ -354,7 +354,7 @@ export const TeamPortalPage: React.FC = () => {
           <div className="p-6 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-6 shadow-xs animate-in fade-in duration-200">
             <div className="space-y-2">
               <h4 className="text-sm font-black text-slate-900">No Problem Statement Selected Yet</h4>
-              <p className="text-xs text-slate-550 leading-relaxed font-semibold max-w-xl">
+              <p className="text-sm text-slate-550 leading-relaxed font-semibold max-w-xl">
                 Your team has not selected a problem statement yet. To participate in the Internal SIH 2026, you must select one of the institute-level problem statements before the deadline.
               </p>
 
@@ -535,7 +535,7 @@ export const TeamPortalPage: React.FC = () => {
               <p className="text-base font-black text-slate-800">
                 Mentor Details Not Registered
               </p>
-              <p className="text-xs text-slate-500 mt-1 max-w-md mx-auto leading-relaxed font-semibold">
+              <p className="text-sm text-slate-500 mt-1 max-w-md mx-auto leading-relaxed font-semibold">
                 Phase 2 Mentor Submissions are closed. Your team did not register a Faculty Mentor before the deadline. Please reach out to your club coordinators immediately for emergency support or allocation.
               </p>
             </div>
@@ -554,7 +554,7 @@ export const TeamPortalPage: React.FC = () => {
           </h2>
         </div>
 
-        <p className="text-xs text-slate-600">
+        <p className="text-sm text-slate-600">
           Need assistance with your team registration or pitch submissions? Contact any of the club coordinators below:
         </p>
 

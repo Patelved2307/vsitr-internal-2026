@@ -208,7 +208,7 @@ export const RegistrationPage: React.FC = () => {
           <h1 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
             Register Your Team
           </h1>
-          <p className="text-xs sm:text-sm text-slate-600 max-w-lg mx-auto mt-2 font-medium">
+          <p className="text-sm text-slate-600 max-w-lg mx-auto mt-2 font-medium">
             Form a 6-member team with at least 1 female student from VSITR (IT, CSE, CE departments).
           </p>
         </div>
@@ -283,7 +283,7 @@ export const RegistrationPage: React.FC = () => {
                   <Users className="h-5 w-5 text-[#C1272D]" />
                   Step 1: Choose Your Team Name
                 </h2>
-                <p className="text-xs text-slate-500 mt-0.5">
+                <p className="text-sm text-slate-500 mt-0.5">
                   Your team name will be displayed on all official leaderboards and certificates.
                 </p>
               </div>
@@ -300,7 +300,7 @@ export const RegistrationPage: React.FC = () => {
                   onChange={(e) => setTeamName(e.target.value)}
                   className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#C1272D] text-slate-900 font-semibold text-base shadow-xs"
                 />
-                <p className="text-xs text-slate-500 mt-2">
+                <p className="text-sm text-slate-500 mt-2">
                   ⚠ Rule 5 Reminder: Must be unique across VSITR and must NOT contain institute name ("VSITR" or "Vidush Somany").
                 </p>
               </div>
@@ -326,7 +326,7 @@ export const RegistrationPage: React.FC = () => {
                   <User className="h-5 w-5 text-[#1B3F8B]" />
                   Step 2: Team Leader Details
                 </h2>
-                <p className="text-xs text-slate-500 mt-0.5">
+                <p className="text-sm text-slate-500 mt-0.5">
                   The Team Leader is the sole contact person for official SIH 2026 email communications.
                 </p>
               </div>
@@ -432,7 +432,7 @@ export const RegistrationPage: React.FC = () => {
                     }`}
                   />
                   {leader.mobile && leader.mobile.length !== 10 && (
-                    <p className="text-xs text-red-600 mt-1 font-semibold">
+                    <p className="text-sm text-red-600 mt-1 font-semibold">
                       Invalid phone number. Must be exactly 10 digits.
                     </p>
                   )}
@@ -456,7 +456,7 @@ export const RegistrationPage: React.FC = () => {
                     }`}
                   />
                   {leader.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(leader.email.trim()) && (
-                    <p className="text-xs text-red-600 mt-1 font-semibold">
+                    <p className="text-sm text-red-600 mt-1 font-semibold">
                       Invalid email address.
                     </p>
                   )}
@@ -494,7 +494,7 @@ export const RegistrationPage: React.FC = () => {
                     <Users className="h-5 w-5 text-amber-600" />
                     Step 3: Team Members Details (5 Members)
                   </h2>
-                  <p className="text-xs text-slate-500 mt-0.5">
+                  <p className="text-sm text-slate-500 mt-0.5">
                     Team Leader + {members.length} Members = {members.length + 1} Total. Must have at least 1 female participant.
                   </p>
                 </div>
@@ -558,7 +558,7 @@ export const RegistrationPage: React.FC = () => {
                           placeholder="First Name - Middle - Surname"
                           value={member.fullName}
                           onChange={(e) => updateMember(idx, 'fullName', e.target.value)}
-                          className="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-xs focus:ring-2 focus:ring-[#1B3F8B] outline-none font-medium bg-slate-50/50 focus:bg-white"
+                          className="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-sm focus:ring-2 focus:ring-[#1B3F8B] outline-none font-medium bg-slate-50/50 focus:bg-white"
                         />
                       </div>
 
@@ -570,7 +570,7 @@ export const RegistrationPage: React.FC = () => {
                         <select
                           value={member.gender}
                           onChange={(e) => updateMember(idx, 'gender', e.target.value as Gender)}
-                          className={`w-full px-3.5 py-2 rounded-xl border text-xs focus:ring-2 focus:ring-[#1B3F8B] outline-none font-bold ${
+                          className={`w-full px-3.5 py-2 rounded-xl border text-sm focus:ring-2 focus:ring-[#1B3F8B] outline-none font-bold ${
                             member.gender === 'Female'
                               ? 'bg-purple-50 text-purple-800 border-purple-300'
                               : 'bg-slate-50/50 text-slate-800 border-slate-200'
@@ -594,7 +594,7 @@ export const RegistrationPage: React.FC = () => {
                           placeholder={member.semester === '1' ? 'Not required for Sem 1' : 'e.g. 24BEIT54026'}
                           value={member.enrollmentNo}
                           onChange={(e) => updateMember(idx, 'enrollmentNo', e.target.value)}
-                          className="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-xs font-mono focus:ring-2 focus:ring-[#1B3F8B] outline-none font-bold bg-slate-50/50 focus:bg-white"
+                          className="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-sm font-mono focus:ring-2 focus:ring-[#1B3F8B] outline-none font-bold bg-slate-50/50 focus:bg-white"
                         />
                       </div>
 
@@ -606,7 +606,7 @@ export const RegistrationPage: React.FC = () => {
                         <select
                           value={member.department}
                           onChange={(e) => updateMember(idx, 'department', e.target.value as Department)}
-                          className="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-xs focus:ring-2 focus:ring-[#1B3F8B] outline-none font-bold bg-slate-50/50 focus:bg-white"
+                          className="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-sm focus:ring-2 focus:ring-[#1B3F8B] outline-none font-bold bg-slate-50/50 focus:bg-white"
                         >
                           <option value="IT">IT</option>
                           <option value="CSE">CSE</option>
@@ -622,7 +622,7 @@ export const RegistrationPage: React.FC = () => {
                         <select
                           value={member.semester}
                           onChange={(e) => updateMember(idx, 'semester', e.target.value)}
-                          className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs focus:ring-2 focus:ring-[#1B3F8B] outline-none font-bold bg-slate-50/50 focus:bg-white"
+                          className="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm focus:ring-2 focus:ring-[#1B3F8B] outline-none font-bold bg-slate-50/50 focus:bg-white"
                         >
                           {['1', '2', '3', '4', '5', '6', '7', '8'].map((s) => (
                             <option key={s} value={s}>
@@ -644,7 +644,7 @@ export const RegistrationPage: React.FC = () => {
                           placeholder="e.g. 9876543210"
                           value={member.mobile}
                           onChange={(e) => updateMember(idx, 'mobile', e.target.value.replace(/\D/g, ''))}
-                          className={`w-full px-3.5 py-2 rounded-xl border text-xs font-mono focus:ring-2 outline-none font-bold bg-slate-50/50 focus:bg-white ${
+                          className={`w-full px-3.5 py-2 rounded-xl border text-sm font-mono focus:ring-2 outline-none font-bold bg-slate-50/50 focus:bg-white ${
                             member.mobile && member.mobile.length !== 10
                               ? 'border-red-500 focus:ring-red-500'
                               : 'border-slate-200 focus:ring-[#1B3F8B]'
@@ -668,7 +668,7 @@ export const RegistrationPage: React.FC = () => {
                           placeholder="e.g. member.personal@gmail.com"
                           value={member.email}
                           onChange={(e) => updateMember(idx, 'email', e.target.value)}
-                          className={`w-full px-3.5 py-2 rounded-xl border text-xs focus:ring-2 outline-none font-medium bg-slate-50/50 focus:bg-white ${
+                          className={`w-full px-3.5 py-2 rounded-xl border text-sm focus:ring-2 outline-none font-medium bg-slate-50/50 focus:bg-white ${
                             member.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(member.email.trim())
                               ? 'border-red-500 focus:ring-red-500'
                               : 'border-slate-200 focus:ring-[#1B3F8B]'
@@ -732,7 +732,7 @@ export const RegistrationPage: React.FC = () => {
               <h2 className="text-xl font-black text-slate-900">
                 Registration Successful!
               </h2>
-              <p className="text-xs text-slate-500 mt-0.5">
+              <p className="text-sm text-slate-500 mt-0.5">
                 Your team has been registered for Internal SIH 2026.
               </p>
             </div>

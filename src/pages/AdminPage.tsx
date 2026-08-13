@@ -632,7 +632,7 @@ export const AdminPage: React.FC = () => {
               <h1 className="text-2xl font-black text-slate-900 tracking-tight">
                 Admin Portal Authentication
               </h1>
-              <p className="text-xs text-slate-500 mt-1 font-medium leading-relaxed">
+              <p className="text-sm text-slate-500 mt-1 font-medium leading-relaxed">
                 Authorized faculty, club coordinators &amp; event administrator access only.
               </p>
 
@@ -948,7 +948,7 @@ export const AdminPage: React.FC = () => {
                   <h1 className="text-2xl font-black text-slate-900 tracking-tight">
                     Registration Overview
                   </h1>
-                  <p className="text-xs text-slate-500 font-medium mt-0.5">
+                  <p className="text-sm text-slate-500 font-medium mt-0.5">
                     Real-time internal hackathon metrics, gender ratio &amp; departmental stats.
                   </p>
                 </div>
@@ -1129,7 +1129,7 @@ export const AdminPage: React.FC = () => {
                   <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
                     Team Registry
                   </h1>
-                  <p className="text-xs text-slate-500 font-medium mt-0.5">
+                  <p className="text-sm text-slate-500 font-medium mt-0.5">
                     All registered 6-member teams. Click inspect or use actions to edit/delete.
                   </p>
                 </div>
@@ -1261,7 +1261,7 @@ export const AdminPage: React.FC = () => {
                   <h1 className="text-2xl font-black text-slate-900 tracking-tight">
                     Timeline &amp; Schedule Editor
                   </h1>
-                  <p className="text-xs text-slate-500 font-medium mt-0.5">
+                  <p className="text-sm text-slate-500 font-medium mt-0.5">
                     Directly add, update, or remove hackathon event milestone dates.
                   </p>
                 </div>
@@ -1402,7 +1402,7 @@ export const AdminPage: React.FC = () => {
                   <h1 className="text-2xl font-black text-slate-900 tracking-tight">
                     FAQs &amp; Official Rules Editor
                   </h1>
-                  <p className="text-xs text-slate-500 font-medium mt-0.5">
+                  <p className="text-sm text-slate-500 font-medium mt-0.5">
                     Edit rules and frequently asked questions displayed to students.
                   </p>
                 </div>
@@ -1554,7 +1554,7 @@ export const AdminPage: React.FC = () => {
                   <h1 className="text-2xl font-black text-slate-900 tracking-tight">
                     Portal &amp; Live Deadline Settings
                   </h1>
-                  <p className="text-xs text-slate-500 font-medium mt-0.5">
+                  <p className="text-sm text-slate-500 font-medium mt-0.5">
                     Configure registration cutoff dates, links &amp; live announcement banner.
                   </p>
                 </div>
@@ -1790,7 +1790,7 @@ export const AdminPage: React.FC = () => {
                     <FileText className="h-6 w-6 text-[#C1272D]" />
                     PPT Submissions
                   </h1>
-                  <p className="text-xs text-slate-500 font-medium mt-0.5">
+                  <p className="text-sm text-slate-500 font-medium mt-0.5">
                     All team pitch deck submissions. Click the link to view the shared presentation.
                   </p>
                 </div>
@@ -1896,7 +1896,7 @@ export const AdminPage: React.FC = () => {
                   <h1 className="text-2xl font-black text-slate-900 tracking-tight">
                     Problem Statement Manager
                   </h1>
-                  <p className="text-xs text-slate-500 font-medium mt-0.5">
+                  <p className="text-sm text-slate-500 font-medium mt-0.5">
                     Create, edit, close, and delete institute-level problem statements for student selection.
                   </p>
                 </div>
@@ -2102,7 +2102,7 @@ export const AdminPage: React.FC = () => {
                     <Mail className="h-6 w-6 text-[#1B3F8B]" />
                     Email Dispatch &amp; Database Hub
                   </h1>
-                  <p className="text-xs text-slate-500 font-medium mt-0.5">
+                  <p className="text-sm text-slate-500 font-medium mt-0.5">
                     Monitor automated team member registration notifications and trigger deadline edit emails.
                   </p>
                 </div>

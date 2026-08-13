@@ -149,7 +149,7 @@ export const SupportView: React.FC = () => {
                             </h4>
                             <ul className="space-y-1 pl-2 border-l border-white/10">
                               {club.facultyCoordinators.map((faculty, fIdx) => (
-                                <li key={fIdx} className="text-[11px] sm:text-xs lg:text-sm font-bold text-slate-250 truncate">
+                                <li key={fIdx} className="text-xs sm:text-sm font-bold text-slate-250 truncate">
                                   {faculty}
                                 </li>
                               ))}
@@ -164,7 +164,7 @@ export const SupportView: React.FC = () => {
                             </h4>
                             <ul className="space-y-1.5 pl-2 border-l border-white/10">
                               {club.studentCoordinators.map((student, sIdx) => (
-                                <li key={sIdx} className="text-[11px] sm:text-xs lg:text-sm font-semibold text-slate-200 border-b border-white/5 pb-1 last:border-0 last:pb-0">
+                                <li key={sIdx} className="text-xs sm:text-sm font-semibold text-slate-200 border-b border-white/5 pb-1 last:border-0 last:pb-0">
                                   <div className="flex items-center justify-between gap-1">
                                     <span className="truncate">{student.name}</span>
                                     <span className="text-[8px] bg-white/10 px-1.5 py-0.5 rounded-sm text-slate-300 font-bold shrink-0">

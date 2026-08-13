@@ -31,7 +31,7 @@ export const MentorPendingCard: React.FC = () => {
               <h3 className="text-base sm:text-lg font-black text-slate-900 mt-1.5 tracking-tight">
                 Mentor Details Pending — Action Required
               </h3>
-              <p className="text-xs sm:text-sm text-slate-600 mt-0.5 leading-relaxed">
+              <p className="text-sm text-slate-600 mt-0.5 leading-relaxed">
                 Team <span className="font-bold text-slate-900">"{team.teamName}"</span> is registered! Please complete Phase 2 by submitting your official faculty mentor details to confirm final entry.
               </p>
             </div>
@@ -66,7 +66,7 @@ export const MentorPendingCard: React.FC = () => {
               <h3 className="text-base sm:text-lg font-black text-slate-900 mt-1.5 tracking-tight">
                 Registration Complete
               </h3>
-              <div className="flex flex-wrap items-center gap-4 text-xs font-semibold text-slate-600 mt-1.5">
+              <div className="flex flex-wrap items-center gap-4 text-sm font-semibold text-slate-600 mt-1.5">
                 <span className="inline-flex items-center flex-wrap gap-1.5 text-emerald-700 bg-emerald-500/5 px-2 py-0.5 rounded-md border border-emerald-500/10">
                   <ShieldCheck className="h-4 w-4 text-emerald-600" /> Team Registration ✔
                 </span>

@@ -105,7 +105,7 @@ export const MentorSubmissionPage: React.FC = () => {
         <h1 className="text-3xl font-black text-slate-900">
           Faculty Mentor Registration (by Branch)
         </h1>
-        <p className="text-xs sm:text-sm text-slate-500 max-w-md mx-auto mt-1">
+        <p className="text-sm text-slate-500 max-w-md mx-auto mt-1">
           Link your official faculty mentor from their respective branch to confirm your Internal SIH 2026 team registration.
         </p>
       </div>
@@ -125,7 +125,7 @@ export const MentorSubmissionPage: React.FC = () => {
             Thank you. Your SIH Internal Hackathon registration is now <span className="text-emerald-700 font-extrabold underline">fully completed</span>.
           </p>
 
-          <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-xs text-slate-600 leading-relaxed text-left max-w-lg mx-auto">
+          <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-sm text-slate-600 leading-relaxed text-left max-w-lg mx-auto">
             All future communication — screening schedules, problem statements, presentation dates, and selection updates — will be shared directly with the Team Leader via registered college email.
           </div>
 

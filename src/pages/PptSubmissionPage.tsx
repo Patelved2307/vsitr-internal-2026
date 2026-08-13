@@ -72,7 +72,7 @@ export const PptSubmissionPage: React.FC = () => {
           {settings.pptSubmissionStatus && (
             <div className="flex items-start gap-3 p-4 rounded-2xl bg-blue-50 border border-blue-100">
               <AlertCircle className="h-4 w-4 text-blue-600 shrink-0 mt-0.5" />
-              <p className="text-xs text-blue-800 font-semibold leading-relaxed">{settings.pptSubmissionStatus}</p>
+              <p className="text-sm text-blue-800 font-semibold leading-relaxed">{settings.pptSubmissionStatus}</p>
             </div>
           )}
           {!isOpen ? (
@@ -80,13 +80,13 @@ export const PptSubmissionPage: React.FC = () => {
               <div className="p-4 rounded-full bg-slate-100"><FileText className="h-8 w-8 text-slate-400" /></div>
               <div>
                 <p className="text-sm font-bold text-slate-700">PPT Submission is Currently Closed</p>
-                <p className="text-xs text-slate-400 mt-1">The admin will open submissions when the time comes. Check back later.</p>
+                <p className="text-sm text-slate-400 mt-1">The admin will open submissions when the time comes. Check back later.</p>
               </div>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-5">
               <div className="p-4 rounded-2xl bg-amber-50 border border-amber-100">
-                <p className="text-xs text-amber-800 font-semibold leading-relaxed"><span className="font-black">How to submit:</span> Upload your PPT to Google Drive or OneDrive, set sharing to "Anyone with the link can view", and paste the shareable link below.</p>
+                <p className="text-sm text-amber-800 font-semibold leading-relaxed"><span className="font-black">How to submit:</span> Upload your PPT to Google Drive or OneDrive, set sharing to "Anyone with the link can view", and paste the shareable link below.</p>
               </div>
               <div>
                 <label className="block text-xs font-bold text-slate-700 mb-1.5">Team ID <span className="text-red-500">*</span></label>

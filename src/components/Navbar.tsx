@@ -43,38 +43,38 @@ export const Navbar: React.FC = () => {
           {/* Left: 3 Logos + Title */}
           <div
             onClick={() => setActiveTab('home')}
-            className="flex items-center gap-1.5 sm:gap-3 cursor-pointer group min-w-0"
+            className="flex items-center gap-1.5 sm:gap-3 cursor-pointer group shrink-0"
           >
             <div className="flex items-center gap-1 sm:gap-2 shrink-0">
               <img
                 src="/logos/sih-logo.png"
                 alt="SIH Official Logo"
-                className="h-6 w-6 sm:h-9 md:h-11 object-contain"
+                className="h-8 w-8 sm:h-11 md:h-14 object-contain"
               />
               <img
                 src="/logos/ksv-logo.png"
                 alt="KSV Logo"
-                className="h-6 w-6 sm:h-9 md:h-11 object-contain"
+                className="h-8 w-8 sm:h-11 md:h-14 object-contain"
               />
               <img
                 src="/logos/vsitr-logo.png"
                 alt="VSITR Logo"
-                className="h-6 w-6 sm:h-9 md:h-11 object-contain"
+                className="h-8 w-8 sm:h-11 md:h-14 object-contain"
               />
             </div>
 
             <div className="flex flex-col min-w-0 shrink-0">
-              <span className="text-xs sm:text-lg md:text-xl font-black tracking-tight whitespace-nowrap bg-gradient-to-r from-[#C1272D] via-[#8B235E] to-[#1B3F8B] bg-clip-text text-transparent">
+              <span className="text-sm sm:text-xl md:text-2xl font-black tracking-tight whitespace-nowrap bg-gradient-to-r from-[#C1272D] via-[#8B235E] to-[#1B3F8B] bg-clip-text text-transparent">
                 Internal SIH 2026
               </span>
-              <span className="text-[10px] sm:text-xs font-semibold text-slate-500 uppercase tracking-wider hidden sm:inline">
+              <span className="text-xs sm:text-sm font-semibold text-slate-500 uppercase tracking-wider hidden sm:inline">
                 VSITR • KSV Kadi
               </span>
             </div>
           </div>
 
           {/* Desktop Navigation Links */}
-          <nav className="hidden xl:flex items-center gap-6">
+          <nav className="hidden xl:flex items-center gap-4 shrink-0 whitespace-nowrap">
             <button
               onClick={() => setActiveTab('home')}
               className={`relative py-1 text-sm font-semibold transition ${activeTab === 'home'
@@ -143,7 +143,7 @@ export const Navbar: React.FC = () => {
           </nav>
 
           {/* Action Buttons Area */}
-          <div className="hidden xl:flex items-center gap-3">
+          <div className="hidden xl:flex items-center gap-3 shrink-0">
             {isTeamLoggedIn ? (
               /* Logged-In State: Exactly 2 buttons -> "Team Portal" & "Logout" */
               <>

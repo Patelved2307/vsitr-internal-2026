@@ -429,7 +429,7 @@ export const RegistrationRulesView: React.FC = () => {
         renderContent: () => (
           <div className="space-y-5">
             {eligibilityRules.map((rule, idx) => (
-              <div key={rule.id || idx} className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-600">
+              <div key={rule.id || idx} className="flex items-start gap-2.5 text-sm text-slate-600">
                 <CheckCircle className="h-4.5 w-4.5 text-[#C1272D] shrink-0 mt-0.5" />
                 <p><span className="font-extrabold text-slate-800">Rule {idx + 1}:</span> {rule.text}</p>
               </div>
@@ -444,7 +444,7 @@ export const RegistrationRulesView: React.FC = () => {
         renderContent: () => (
           <div className="space-y-5">
             {processRules.map((rule, idx) => (
-              <div key={rule.id || idx} className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-600">
+              <div key={rule.id || idx} className="flex items-start gap-2.5 text-sm text-slate-600">
                 <FileText className="h-4.5 w-4.5 text-[#1B3F8B] shrink-0 mt-0.5" />
                 <p><span className="font-extrabold text-slate-800">Step {idx + 1}:</span> {rule.text}</p>
               </div>
@@ -459,7 +459,7 @@ export const RegistrationRulesView: React.FC = () => {
         renderContent: () => (
           <div className="space-y-5">
             {conductRules.map((rule, idx) => (
-              <div key={rule.id || idx} className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-600">
+              <div key={rule.id || idx} className="flex items-start gap-2.5 text-sm text-slate-600">
                 <AlertCircle className="h-4.5 w-4.5 text-amber-600 shrink-0 mt-0.5" />
                 <p><span className="font-extrabold text-slate-800">Rule {idx + 1 + conductOffset}:</span> {rule.text}</p>
               </div>
@@ -480,7 +480,7 @@ export const RegistrationRulesView: React.FC = () => {
           <h1 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
             Rules &amp; Regulations
           </h1>
-          <p className="text-xs sm:text-sm text-slate-600 max-w-xl mx-auto mt-2 font-medium">
+          <p className="text-sm text-slate-600 max-w-xl mx-auto mt-2 font-medium">
             Please review the official eligibility criteria, registration phases, and conduct policies for the Internal SIH 2026.
           </p>
         </div>
@@ -789,7 +789,7 @@ export const RegistrationRulesView: React.FC = () => {
                 const isClosed = isDeadlinePassed && (event.id === 't1' || event.id === 't2');
                 const displayDate = isClosed ? 'Closed' : event.date;
                 return (
-                  <div key={event.id || idx} className="flex justify-between items-center text-xs p-2 rounded-xl bg-slate-50 border border-slate-100/50 hover:bg-slate-100/30 transition">
+                  <div key={event.id || idx} className="flex justify-between items-center text-sm p-2 rounded-xl bg-slate-50 border border-slate-100/50 hover:bg-slate-100/30 transition">
                     <span className="text-slate-500 font-semibold pr-2 truncate" title={event.title}>{event.title}</span>
                     <span className={`font-black shrink-0 ${isClosed ? 'text-red-750 bg-red-100/70 px-2.5 py-0.5 rounded-md border border-red-200/60' : (event.date.includes('Mandatory') || idx === 1 ? 'text-[#C1272D] bg-red-50 px-2 py-0.5 rounded-md border border-red-100/60' : 'text-slate-900 bg-slate-100 px-2 py-0.5 rounded-md border border-slate-200/30')}`}>
                       {displayDate}
@@ -884,7 +884,7 @@ export const RegistrationRulesView: React.FC = () => {
               </div>
 
               <div className="space-y-4">
-                <p className="text-xs text-slate-550 font-semibold leading-relaxed">
+                <p className="text-sm text-slate-550 font-semibold leading-relaxed">
                   Need help choosing a problem statement, comparing solutions, or checking Solution feasibility? Discuss &amp; share SIH 2026 ideas with peers in our official channels.
                 </p>
 
@@ -939,7 +939,7 @@ export const RegistrationRulesView: React.FC = () => {
                 </div>
 
                 <div className="space-y-4 pl-1">
-                  <p className="text-xs text-slate-650 leading-relaxed font-semibold">
+                  <p className="text-sm text-slate-650 leading-relaxed font-semibold">
                     {settings.problemStatementStatus || 'Problem statement announcements will be announced once we get update from the official SIH website.'}
                   </p>
 
@@ -975,7 +975,7 @@ export const RegistrationRulesView: React.FC = () => {
                 </div>
 
                 <div className="space-y-4 pl-1">
-                  <p className="text-xs text-slate-650 leading-relaxed font-semibold">
+                  <p className="text-sm text-slate-650 leading-relaxed font-semibold">
                     {settings.pptTemplateStatus || 'The template will be released soon. Download it from here.'}
                   </p>
 
@@ -1012,7 +1012,7 @@ export const RegistrationRulesView: React.FC = () => {
                   </div>
 
                   <div className="space-y-4 pl-1">
-                    <p className="text-xs text-slate-650 leading-relaxed font-semibold">
+                    <p className="text-sm text-slate-650 leading-relaxed font-semibold">
                       {settings.pptSubmissionStatus || 'PPT submission portal will open after the registration deadline. Stay tuned.'}
                     </p>
                     {settings.pptSubmissionDeadline && (
@@ -1109,7 +1109,7 @@ export const RegistrationRulesView: React.FC = () => {
                           <h3 className="text-2xl font-black text-slate-900 tracking-tight">
                             Select the Problem Statement
                           </h3>
-                          <p className="text-xs sm:text-sm text-slate-600 font-semibold leading-relaxed">
+                          <p className="text-sm text-slate-600 font-semibold leading-relaxed">
                             Registration is closed, and the Selection Phase is now active! Selected teams must log in to their Team Portal to choose their problem statement. Selection is open until <strong className="text-[#C1272D]">16 August, 2026 at 11:59 PM</strong>.
                           </p>
                         </div>

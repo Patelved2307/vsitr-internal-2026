@@ -82,7 +82,7 @@ export const ProblemStatementsPage: React.FC = () => {
         <h1 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight leading-none">
           Problem Statements
         </h1>
-        <p className="text-xs sm:text-sm text-slate-500 font-semibold leading-relaxed">
+        <p className="text-sm text-slate-500 font-semibold leading-relaxed">
           Choose an institute-released problem statement to work on for the Internal Smart India Hackathon 2026. Teams should coordinate and lock their selection through their dashboard.
         </p>
       </div>
@@ -111,7 +111,7 @@ export const ProblemStatementsPage: React.FC = () => {
           {/* ⚠️ Important Note */}
           <div className="flex items-start gap-3 px-4 py-3 rounded-2xl bg-red-50 border border-red-200">
             <AlertCircle className="h-4 w-4 text-red-600 shrink-0 mt-0.5" />
-            <p className="text-xs font-bold text-red-700 leading-relaxed">
+            <p className="text-sm font-bold text-red-700 leading-relaxed">
               <span className="font-black">Important:</span> Once a Problem Statement is selected, <span className="underline underline-offset-2">no modifications will be allowed</span>. Please review the details carefully before confirming your selection.
             </p>
           </div>
@@ -145,7 +145,7 @@ export const ProblemStatementsPage: React.FC = () => {
                         <strong className="font-bold block leading-snug text-slate-900 text-sm">
                           {ps.title}
                         </strong>
-                        <p className="text-slate-500 text-xs leading-relaxed font-normal">
+                        <p className="text-slate-500 text-sm leading-relaxed font-normal">
                           {ps.description}
                         </p>
                       </td>
@@ -206,7 +206,7 @@ export const ProblemStatementsPage: React.FC = () => {
               {/* ⚠️ Warning Note */}
               <div className="flex items-start gap-3 p-3.5 rounded-xl bg-red-50 border border-red-200">
                 <AlertCircle className="h-4 w-4 text-red-600 shrink-0 mt-0.5" />
-                <p className="text-xs font-bold text-red-700 leading-relaxed">
+                <p className="text-sm font-bold text-red-700 leading-relaxed">
                   <span className="font-black">Warning:</span> Once confirmed, this selection <span className="underline underline-offset-2">cannot be changed or modified</span>.
                 </p>
               </div>
@@ -286,7 +286,7 @@ export const ProblemStatementsPage: React.FC = () => {
 
             <div className="flex items-start gap-2.5 p-3.5 rounded-xl bg-amber-50 border border-amber-200 text-left">
               <AlertCircle className="h-4 w-4 text-amber-600 shrink-0 mt-0.5" />
-              <p className="text-xs font-bold text-amber-800 leading-relaxed">
+              <p className="text-sm font-bold text-amber-800 leading-relaxed">
                 This selection is now final and <span className="underline underline-offset-2">cannot be modified</span>.
               </p>
             </div>

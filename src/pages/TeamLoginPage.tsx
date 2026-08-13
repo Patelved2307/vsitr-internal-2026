@@ -56,7 +56,7 @@ export const TeamLoginPage: React.FC = () => {
             <h1 className="text-2xl font-black text-slate-900">
               Team Portal Login
             </h1>
-            <p className="text-xs text-slate-500 mt-1 leading-relaxed font-medium">
+            <p className="text-sm text-slate-500 mt-1 leading-relaxed font-medium">
               Access your team status, official WhatsApp group link, and Phase 2 mentor submission portal.
             </p>
 
@@ -126,7 +126,7 @@ export const TeamLoginPage: React.FC = () => {
             </form>
           </div>
 
-          <div className="mt-6 pt-4 border-t border-slate-100 text-center text-xs text-slate-500">
+          <div className="mt-6 pt-4 border-t border-slate-100 text-center text-sm text-slate-500">
             Haven't registered your team yet?{' '}
             <button
               onClick={() => setActiveTab('register')}
@@ -152,7 +152,7 @@ export const TeamLoginPage: React.FC = () => {
             <h3 className="text-xl font-black text-white leading-tight">
               Internal SIH 2026 Team Workspace
             </h3>
-            <p className="text-xs text-slate-300 mt-1.5 leading-relaxed">
+            <p className="text-sm text-slate-300 mt-1.5 leading-relaxed">
               Track registration status, download official pitch templates, communicate with faculty mentors, and join the student WhatsApp coordination group.
             </p>
           </div>
