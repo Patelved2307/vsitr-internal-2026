@@ -190,7 +190,7 @@ export const TeamPortalPage: React.FC = () => {
   };
 
   return (
-    <div className="py-8 px-4 max-w-[1440px] mx-auto space-y-8 animate-in fade-in duration-300">
+    <div className="py-8 px-4 max-w-[1200px] mx-auto space-y-8 animate-in fade-in duration-300">
       
       {/* 5.1 TEAM ID SUMMARY BANNER */}
       <div className="relative p-6 sm:p-10 rounded-3xl bg-slate-950 text-white overflow-hidden shadow-2xl border border-slate-800/80">

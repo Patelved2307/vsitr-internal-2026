@@ -470,7 +470,7 @@ export const RegistrationRulesView: React.FC = () => {
     ];
 
     return (
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
         {/* Rules Top Banner */}
         <div className="text-center mb-8 relative">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-red-50 text-[#C1272D] border border-red-100 text-xs font-extrabold uppercase tracking-wider mb-3 shadow-xs">
@@ -648,7 +648,7 @@ export const RegistrationRulesView: React.FC = () => {
   }
 
   return (
-    <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Top Banner Area */}
       <div className="relative text-center mb-8 p-6 sm:p-10 rounded-3xl bg-slate-950 text-white overflow-hidden shadow-2xl border border-slate-800/80">
         {/* FloatingLines Background */}

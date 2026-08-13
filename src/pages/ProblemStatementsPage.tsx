@@ -75,7 +75,7 @@ export const ProblemStatementsPage: React.FC = () => {
   };
 
   return (
-    <div className="py-8 px-4 max-w-[1440px] mx-auto space-y-8 animate-in fade-in duration-300">
+    <div className="py-8 px-4 max-w-[1200px] mx-auto space-y-8 animate-in fade-in duration-300">
       
       {/* Page Title & Subtitle */}
       <div className="space-y-2 border-b border-slate-200 pb-4">

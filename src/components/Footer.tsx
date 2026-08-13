@@ -34,7 +34,7 @@ export const Footer: React.FC = () => {
       {/* Top Gradient Border Line */}
       <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#C1272D] via-amber-500 to-[#1B3F8B] z-10" />
 
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 z-10 relative">
+      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 z-10 relative">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 pb-10 border-b border-slate-800/80">
 
           {/* Col 1: Brand & Logos */}
@@ -166,7 +166,7 @@ export const Footer: React.FC = () => {
       </div>
 
       {/* Bottom Copyright centered */}
-      <div className="pt-8 pb-8 text-center text-xs text-slate-400 relative z-10 border-t border-slate-800/60 max-w-[1440px] mx-auto w-[90%]">
+      <div className="pt-8 pb-8 text-center text-xs text-slate-400 relative z-10 border-t border-slate-800/60 max-w-[1200px] mx-auto w-[90%]">
         <p>© 2026 Internal SIH Hackathon — Vidush Somany Institute of Technology &amp; Research (KSV)</p>
       </div>
 
