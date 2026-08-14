@@ -725,6 +725,32 @@ export const TeamPortalPage: React.FC = () => {
               <FileText className="h-4 w-4 text-[#1B3F8B]" /> Download Sample Filled Guide (PDF)
             </a>
           </div>
+
+          {/* REFERENCE DEMO YOUTUBE VIDEO BANNER */}
+          <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-red-50 via-orange-50/40 to-red-50 border border-red-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-2xs mt-3">
+            <div className="flex items-start gap-3">
+              <div className="h-9 w-9 rounded-xl bg-white text-red-600 border border-red-200 shadow-2xs flex items-center justify-center shrink-0 mt-0.5">
+                <Play className="h-5 w-5 fill-red-600" />
+              </div>
+              <div className="space-y-1">
+                <h4 className="text-xs sm:text-sm font-black text-slate-900">
+                  Need Reference Guide for Recording Your 2-Minute Video Pitch?
+                </h4>
+                <p className="text-xs text-slate-600 font-medium leading-relaxed max-w-2xl">
+                  Watch our official reference guide video clip to understand how to record, structure, and pitch your 2-minute solution presentation before uploading your link.
+                </p>
+              </div>
+            </div>
+
+            <a
+              href="https://youtu.be/Dq56dKHGbcQ"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-5 py-2.5 rounded-xl text-xs font-black text-white bg-red-600 hover:bg-red-700 transition shadow-md shrink-0 cursor-pointer"
+            >
+              <Play className="h-4 w-4 fill-white" /> Watch Reference Video →
+            </a>
+          </div>
         </div>
       </div>
 
