@@ -1528,14 +1528,146 @@
         "contactNumber": "9876543216"
       },
       "status": "completed",
+      "createdAt": "2026-08-01T10:00:00.000Z",
+      "updatedAt": "2026-08-14T13:05:19.608Z",
       "selectedPsId": "8-L",
       "selectedPsTitle": "Smart Waste Management and Citizen Reporting Platform",
-      "psSelectedAt": "2026-08-10T12:00:00.000Z",
-      "createdAt": "2026-08-01T10:00:00.000Z",
-      "updatedAt": "2026-08-14T06:56:30.294Z"
+      "psSelectedAt": "2026-08-10T12:00:00.000Z"
     }
   ],
   "emailLogs": [
+    {
+      "id": "EMAIL-1786712737926-657",
+      "recipientEmail": "member3@vsitr.ac.in",
+      "recipientName": "Member Three",
+      "teamId": "SIH2026-000",
+      "subject": "🎉 Submission Confirmed! Internal SIH 2026 - PPT & Prototype Received [Team SIH2026-000 - VSITR Testing Team (Internal)]",
+      "body": "\nInternal Smart India Hackathon 2026 - PPT & Prototype Submission Confirmation\n\nDear Member Three (Team Member),\n\nCongratulations! We have successfully received official PPT & Prototype submission for Team VSITR Testing Team (Internal) (ID: SIH2026-000).\n\nSUBMISSION RECEIPT:\n- Team ID: SIH2026-000\n- Team Name: VSITR Testing Team (Internal)\n- Problem Statement: [8-L] Smart Waste Management and Citizen Reporting Platform\n- PPT Presentation: SIH2026-000.pptx\n- 2-Min Pitch Video: https://www.youtube.com/watch?v=Dq56dKHGbcQ\n- GitHub Repository: https://github.com/Patelved2307/vsitr-internal-2026\n- Submission Timestamp: 14 Aug 2026, 06:35 pm\n\nNEXT PHASE: PPT PRESENTATION DAY\n- Date: 27 August 2026\n- Venue: Gandhinagar Campus\n- Time Schedule: Detailed time slots will be shared soon.\n\nPREPARATION CHECKLIST:\n1. Bring your laptop with your working prototype code & local setup ready.\n2. Prepare your live pitch presentation and working prototype demonstration strictly adhering to your submitted official PPT deck format.\n3. All 6 team members must attend in formal attire with institute ID cards.\n\nNote: Detailed guidelines, presentation rules, evaluation criteria, and complete time-slot schedules will be shared with all team leaders soon via email and your Team Portal dashboard.\n\nContact Support: sihinternal.vsitr@gmail.com\nVSITR, Kadi\n    ",
+      "type": "ppt_submission",
+      "status": "sent",
+      "sentAt": "2026-08-14T13:05:37.926Z"
+    },
+    {
+      "id": "EMAIL-1786712737647-516",
+      "recipientEmail": "member4@vsitr.ac.in",
+      "recipientName": "Member Four",
+      "teamId": "SIH2026-000",
+      "subject": "🎉 Submission Confirmed! Internal SIH 2026 - PPT & Prototype Received [Team SIH2026-000 - VSITR Testing Team (Internal)]",
+      "body": "\nInternal Smart India Hackathon 2026 - PPT & Prototype Submission Confirmation\n\nDear Member Four (Team Member),\n\nCongratulations! We have successfully received official PPT & Prototype submission for Team VSITR Testing Team (Internal) (ID: SIH2026-000).\n\nSUBMISSION RECEIPT:\n- Team ID: SIH2026-000\n- Team Name: VSITR Testing Team (Internal)\n- Problem Statement: [8-L] Smart Waste Management and Citizen Reporting Platform\n- PPT Presentation: SIH2026-000.pptx\n- 2-Min Pitch Video: https://www.youtube.com/watch?v=Dq56dKHGbcQ\n- GitHub Repository: https://github.com/Patelved2307/vsitr-internal-2026\n- Submission Timestamp: 14 Aug 2026, 06:35 pm\n\nNEXT PHASE: PPT PRESENTATION DAY\n- Date: 27 August 2026\n- Venue: Gandhinagar Campus\n- Time Schedule: Detailed time slots will be shared soon.\n\nPREPARATION CHECKLIST:\n1. Bring your laptop with your working prototype code & local setup ready.\n2. Prepare your live pitch presentation and working prototype demonstration strictly adhering to your submitted official PPT deck format.\n3. All 6 team members must attend in formal attire with institute ID cards.\n\nNote: Detailed guidelines, presentation rules, evaluation criteria, and complete time-slot schedules will be shared with all team leaders soon via email and your Team Portal dashboard.\n\nContact Support: sihinternal.vsitr@gmail.com\nVSITR, Kadi\n    ",
+      "type": "ppt_submission",
+      "status": "sent",
+      "sentAt": "2026-08-14T13:05:37.647Z"
+    },
+    {
+      "id": "EMAIL-1786712735634-568",
+      "recipientEmail": "member5@vsitr.ac.in",
+      "recipientName": "Member Five",
+      "teamId": "SIH2026-000",
+      "subject": "🎉 Submission Confirmed! Internal SIH 2026 - PPT & Prototype Received [Team SIH2026-000 - VSITR Testing Team (Internal)]",
+      "body": "\nInternal Smart India Hackathon 2026 - PPT & Prototype Submission Confirmation\n\nDear Member Five (Team Member),\n\nCongratulations! We have successfully received official PPT & Prototype submission for Team VSITR Testing Team (Internal) (ID: SIH2026-000).\n\nSUBMISSION RECEIPT:\n- Team ID: SIH2026-000\n- Team Name: VSITR Testing Team (Internal)\n- Problem Statement: [8-L] Smart Waste Management and Citizen Reporting Platform\n- PPT Presentation: SIH2026-000.pptx\n- 2-Min Pitch Video: https://www.youtube.com/watch?v=Dq56dKHGbcQ\n- GitHub Repository: https://github.com/Patelved2307/vsitr-internal-2026\n- Submission Timestamp: 14 Aug 2026, 06:35 pm\n\nNEXT PHASE: PPT PRESENTATION DAY\n- Date: 27 August 2026\n- Venue: Gandhinagar Campus\n- Time Schedule: Detailed time slots will be shared soon.\n\nPREPARATION CHECKLIST:\n1. Bring your laptop with your working prototype code & local setup ready.\n2. Prepare your live pitch presentation and working prototype demonstration strictly adhering to your submitted official PPT deck format.\n3. All 6 team members must attend in formal attire with institute ID cards.\n\nNote: Detailed guidelines, presentation rules, evaluation criteria, and complete time-slot schedules will be shared with all team leaders soon via email and your Team Portal dashboard.\n\nContact Support: sihinternal.vsitr@gmail.com\nVSITR, Kadi\n    ",
+      "type": "ppt_submission",
+      "status": "sent",
+      "sentAt": "2026-08-14T13:05:35.634Z"
+    },
+    {
+      "id": "EMAIL-1786712735365-512",
+      "recipientEmail": "member2@vsitr.ac.in",
+      "recipientName": "Member Two",
+      "teamId": "SIH2026-000",
+      "subject": "🎉 Submission Confirmed! Internal SIH 2026 - PPT & Prototype Received [Team SIH2026-000 - VSITR Testing Team (Internal)]",
+      "body": "\nInternal Smart India Hackathon 2026 - PPT & Prototype Submission Confirmation\n\nDear Member Two (Team Member),\n\nCongratulations! We have successfully received official PPT & Prototype submission for Team VSITR Testing Team (Internal) (ID: SIH2026-000).\n\nSUBMISSION RECEIPT:\n- Team ID: SIH2026-000\n- Team Name: VSITR Testing Team (Internal)\n- Problem Statement: [8-L] Smart Waste Management and Citizen Reporting Platform\n- PPT Presentation: SIH2026-000.pptx\n- 2-Min Pitch Video: https://www.youtube.com/watch?v=Dq56dKHGbcQ\n- GitHub Repository: https://github.com/Patelved2307/vsitr-internal-2026\n- Submission Timestamp: 14 Aug 2026, 06:35 pm\n\nNEXT PHASE: PPT PRESENTATION DAY\n- Date: 27 August 2026\n- Venue: Gandhinagar Campus\n- Time Schedule: Detailed time slots will be shared soon.\n\nPREPARATION CHECKLIST:\n1. Bring your laptop with your working prototype code & local setup ready.\n2. Prepare your live pitch presentation and working prototype demonstration strictly adhering to your submitted official PPT deck format.\n3. All 6 team members must attend in formal attire with institute ID cards.\n\nNote: Detailed guidelines, presentation rules, evaluation criteria, and complete time-slot schedules will be shared with all team leaders soon via email and your Team Portal dashboard.\n\nContact Support: sihinternal.vsitr@gmail.com\nVSITR, Kadi\n    ",
+      "type": "ppt_submission",
+      "status": "sent",
+      "sentAt": "2026-08-14T13:05:35.365Z"
+    },
+    {
+      "id": "EMAIL-1786712735085-385",
+      "recipientEmail": "member1@vsitr.ac.in",
+      "recipientName": "Member One",
+      "teamId": "SIH2026-000",
+      "subject": "🎉 Submission Confirmed! Internal SIH 2026 - PPT & Prototype Received [Team SIH2026-000 - VSITR Testing Team (Internal)]",
+      "body": "\nInternal Smart India Hackathon 2026 - PPT & Prototype Submission Confirmation\n\nDear Member One (Team Member),\n\nCongratulations! We have successfully received official PPT & Prototype submission for Team VSITR Testing Team (Internal) (ID: SIH2026-000).\n\nSUBMISSION RECEIPT:\n- Team ID: SIH2026-000\n- Team Name: VSITR Testing Team (Internal)\n- Problem Statement: [8-L] Smart Waste Management and Citizen Reporting Platform\n- PPT Presentation: SIH2026-000.pptx\n- 2-Min Pitch Video: https://www.youtube.com/watch?v=Dq56dKHGbcQ\n- GitHub Repository: https://github.com/Patelved2307/vsitr-internal-2026\n- Submission Timestamp: 14 Aug 2026, 06:35 pm\n\nNEXT PHASE: PPT PRESENTATION DAY\n- Date: 27 August 2026\n- Venue: Gandhinagar Campus\n- Time Schedule: Detailed time slots will be shared soon.\n\nPREPARATION CHECKLIST:\n1. Bring your laptop with your working prototype code & local setup ready.\n2. Prepare your live pitch presentation and working prototype demonstration strictly adhering to your submitted official PPT deck format.\n3. All 6 team members must attend in formal attire with institute ID cards.\n\nNote: Detailed guidelines, presentation rules, evaluation criteria, and complete time-slot schedules will be shared with all team leaders soon via email and your Team Portal dashboard.\n\nContact Support: sihinternal.vsitr@gmail.com\nVSITR, Kadi\n    ",
+      "type": "ppt_submission",
+      "status": "sent",
+      "sentAt": "2026-08-14T13:05:35.085Z"
+    },
+    {
+      "id": "EMAIL-1786712734970-219",
+      "recipientEmail": "test.sih2026@vsitr.ac.in",
+      "recipientName": "Test Leader (VSITR)",
+      "teamId": "SIH2026-000",
+      "subject": "🎉 Submission Confirmed! Internal SIH 2026 - PPT & Prototype Received [Team SIH2026-000 - VSITR Testing Team (Internal)]",
+      "body": "\nInternal Smart India Hackathon 2026 - PPT & Prototype Submission Confirmation\n\nDear Test Leader (VSITR) (Team Leader),\n\nCongratulations! We have successfully received official PPT & Prototype submission for Team VSITR Testing Team (Internal) (ID: SIH2026-000).\n\nSUBMISSION RECEIPT:\n- Team ID: SIH2026-000\n- Team Name: VSITR Testing Team (Internal)\n- Problem Statement: [8-L] Smart Waste Management and Citizen Reporting Platform\n- PPT Presentation: SIH2026-000.pptx\n- 2-Min Pitch Video: https://www.youtube.com/watch?v=Dq56dKHGbcQ\n- GitHub Repository: https://github.com/Patelved2307/vsitr-internal-2026\n- Submission Timestamp: 14 Aug 2026, 06:35 pm\n\nNEXT PHASE: PPT PRESENTATION DAY\n- Date: 27 August 2026\n- Venue: Gandhinagar Campus\n- Time Schedule: Detailed time slots will be shared soon.\n\nPREPARATION CHECKLIST:\n1. Bring your laptop with your working prototype code & local setup ready.\n2. Prepare your live pitch presentation and working prototype demonstration strictly adhering to your submitted official PPT deck format.\n3. All 6 team members must attend in formal attire with institute ID cards.\n\nNote: Detailed guidelines, presentation rules, evaluation criteria, and complete time-slot schedules will be shared with all team leaders soon via email and your Team Portal dashboard.\n\nContact Support: sihinternal.vsitr@gmail.com\nVSITR, Kadi\n    ",
+      "type": "ppt_submission",
+      "status": "sent",
+      "sentAt": "2026-08-14T13:05:34.971Z"
+    },
+    {
+      "id": "EMAIL-1786712730109-682",
+      "recipientEmail": "member4@vsitr.ac.in",
+      "recipientName": "Member Four",
+      "teamId": "SIH2026-000",
+      "subject": "🎉 Submission Confirmed! Internal SIH 2026 - PPT & Prototype Received [Team SIH2026-000 - VSITR Testing Team (Internal)]",
+      "body": "\nInternal Smart India Hackathon 2026 - PPT & Prototype Submission Confirmation\n\nDear Member Four (Team Member),\n\nCongratulations! We have successfully received official PPT & Prototype submission for Team VSITR Testing Team (Internal) (ID: SIH2026-000).\n\nSUBMISSION RECEIPT:\n- Team ID: SIH2026-000\n- Team Name: VSITR Testing Team (Internal)\n- Problem Statement: [8-L] Smart Waste Management and Citizen Reporting Platform\n- PPT Presentation: SIH2026-000.pptx\n- 2-Min Pitch Video: https://www.youtube.com/watch?v=Dq56dKHGbcQ\n- GitHub Repository: https://github.com/Patelved2307/vsitr-internal-2026\n- Submission Timestamp: 14 Aug 2026, 06:35 pm\n\nNEXT PHASE: PPT PRESENTATION DAY\n- Date: 27 August 2026\n- Venue: Gandhinagar Campus\n- Time Schedule: Detailed time slots will be shared soon.\n\nPREPARATION CHECKLIST:\n1. Bring your laptop with your working prototype code & local setup ready.\n2. Prepare your live pitch presentation and working prototype demonstration strictly adhering to your submitted official PPT deck format.\n3. All 6 team members must attend in formal attire with institute ID cards.\n\nNote: Detailed guidelines, presentation rules, evaluation criteria, and complete time-slot schedules will be shared with all team leaders soon via email and your Team Portal dashboard.\n\nContact Support: sihinternal.vsitr@gmail.com\nVSITR, Kadi\n    ",
+      "type": "ppt_submission",
+      "status": "sent",
+      "sentAt": "2026-08-14T13:05:30.109Z"
+    },
+    {
+      "id": "EMAIL-1786712727724-905",
+      "recipientEmail": "member1@vsitr.ac.in",
+      "recipientName": "Member One",
+      "teamId": "SIH2026-000",
+      "subject": "🎉 Submission Confirmed! Internal SIH 2026 - PPT & Prototype Received [Team SIH2026-000 - VSITR Testing Team (Internal)]",
+      "body": "\nInternal Smart India Hackathon 2026 - PPT & Prototype Submission Confirmation\n\nDear Member One (Team Member),\n\nCongratulations! We have successfully received official PPT & Prototype submission for Team VSITR Testing Team (Internal) (ID: SIH2026-000).\n\nSUBMISSION RECEIPT:\n- Team ID: SIH2026-000\n- Team Name: VSITR Testing Team (Internal)\n- Problem Statement: [8-L] Smart Waste Management and Citizen Reporting Platform\n- PPT Presentation: SIH2026-000.pptx\n- 2-Min Pitch Video: https://www.youtube.com/watch?v=Dq56dKHGbcQ\n- GitHub Repository: https://github.com/Patelved2307/vsitr-internal-2026\n- Submission Timestamp: 14 Aug 2026, 06:35 pm\n\nNEXT PHASE: PPT PRESENTATION DAY\n- Date: 27 August 2026\n- Venue: Gandhinagar Campus\n- Time Schedule: Detailed time slots will be shared soon.\n\nPREPARATION CHECKLIST:\n1. Bring your laptop with your working prototype code & local setup ready.\n2. Prepare your live pitch presentation and working prototype demonstration strictly adhering to your submitted official PPT deck format.\n3. All 6 team members must attend in formal attire with institute ID cards.\n\nNote: Detailed guidelines, presentation rules, evaluation criteria, and complete time-slot schedules will be shared with all team leaders soon via email and your Team Portal dashboard.\n\nContact Support: sihinternal.vsitr@gmail.com\nVSITR, Kadi\n    ",
+      "type": "ppt_submission",
+      "status": "sent",
+      "sentAt": "2026-08-14T13:05:27.724Z"
+    },
+    {
+      "id": "EMAIL-1786712727562-372",
+      "recipientEmail": "member3@vsitr.ac.in",
+      "recipientName": "Member Three",
+      "teamId": "SIH2026-000",
+      "subject": "🎉 Submission Confirmed! Internal SIH 2026 - PPT & Prototype Received [Team SIH2026-000 - VSITR Testing Team (Internal)]",
+      "body": "\nInternal Smart India Hackathon 2026 - PPT & Prototype Submission Confirmation\n\nDear Member Three (Team Member),\n\nCongratulations! We have successfully received official PPT & Prototype submission for Team VSITR Testing Team (Internal) (ID: SIH2026-000).\n\nSUBMISSION RECEIPT:\n- Team ID: SIH2026-000\n- Team Name: VSITR Testing Team (Internal)\n- Problem Statement: [8-L] Smart Waste Management and Citizen Reporting Platform\n- PPT Presentation: SIH2026-000.pptx\n- 2-Min Pitch Video: https://www.youtube.com/watch?v=Dq56dKHGbcQ\n- GitHub Repository: https://github.com/Patelved2307/vsitr-internal-2026\n- Submission Timestamp: 14 Aug 2026, 06:35 pm\n\nNEXT PHASE: PPT PRESENTATION DAY\n- Date: 27 August 2026\n- Venue: Gandhinagar Campus\n- Time Schedule: Detailed time slots will be shared soon.\n\nPREPARATION CHECKLIST:\n1. Bring your laptop with your working prototype code & local setup ready.\n2. Prepare your live pitch presentation and working prototype demonstration strictly adhering to your submitted official PPT deck format.\n3. All 6 team members must attend in formal attire with institute ID cards.\n\nNote: Detailed guidelines, presentation rules, evaluation criteria, and complete time-slot schedules will be shared with all team leaders soon via email and your Team Portal dashboard.\n\nContact Support: sihinternal.vsitr@gmail.com\nVSITR, Kadi\n    ",
+      "type": "ppt_submission",
+      "status": "sent",
+      "sentAt": "2026-08-14T13:05:27.562Z"
+    },
+    {
+      "id": "EMAIL-1786712727368-353",
+      "recipientEmail": "member2@vsitr.ac.in",
+      "recipientName": "Member Two",
+      "teamId": "SIH2026-000",
+      "subject": "🎉 Submission Confirmed! Internal SIH 2026 - PPT & Prototype Received [Team SIH2026-000 - VSITR Testing Team (Internal)]",
+      "body": "\nInternal Smart India Hackathon 2026 - PPT & Prototype Submission Confirmation\n\nDear Member Two (Team Member),\n\nCongratulations! We have successfully received official PPT & Prototype submission for Team VSITR Testing Team (Internal) (ID: SIH2026-000).\n\nSUBMISSION RECEIPT:\n- Team ID: SIH2026-000\n- Team Name: VSITR Testing Team (Internal)\n- Problem Statement: [8-L] Smart Waste Management and Citizen Reporting Platform\n- PPT Presentation: SIH2026-000.pptx\n- 2-Min Pitch Video: https://www.youtube.com/watch?v=Dq56dKHGbcQ\n- GitHub Repository: https://github.com/Patelved2307/vsitr-internal-2026\n- Submission Timestamp: 14 Aug 2026, 06:35 pm\n\nNEXT PHASE: PPT PRESENTATION DAY\n- Date: 27 August 2026\n- Venue: Gandhinagar Campus\n- Time Schedule: Detailed time slots will be shared soon.\n\nPREPARATION CHECKLIST:\n1. Bring your laptop with your working prototype code & local setup ready.\n2. Prepare your live pitch presentation and working prototype demonstration strictly adhering to your submitted official PPT deck format.\n3. All 6 team members must attend in formal attire with institute ID cards.\n\nNote: Detailed guidelines, presentation rules, evaluation criteria, and complete time-slot schedules will be shared with all team leaders soon via email and your Team Portal dashboard.\n\nContact Support: sihinternal.vsitr@gmail.com\nVSITR, Kadi\n    ",
+      "type": "ppt_submission",
+      "status": "sent",
+      "sentAt": "2026-08-14T13:05:27.368Z"
+    },
+    {
+      "id": "EMAIL-1786712726943-332",
+      "recipientEmail": "test.sih2026@vsitr.ac.in",
+      "recipientName": "Test Leader (VSITR)",
+      "teamId": "SIH2026-000",
+      "subject": "🎉 Submission Confirmed! Internal SIH 2026 - PPT & Prototype Received [Team SIH2026-000 - VSITR Testing Team (Internal)]",
+      "body": "\nInternal Smart India Hackathon 2026 - PPT & Prototype Submission Confirmation\n\nDear Test Leader (VSITR) (Team Leader),\n\nCongratulations! We have successfully received official PPT & Prototype submission for Team VSITR Testing Team (Internal) (ID: SIH2026-000).\n\nSUBMISSION RECEIPT:\n- Team ID: SIH2026-000\n- Team Name: VSITR Testing Team (Internal)\n- Problem Statement: [8-L] Smart Waste Management and Citizen Reporting Platform\n- PPT Presentation: SIH2026-000.pptx\n- 2-Min Pitch Video: https://www.youtube.com/watch?v=Dq56dKHGbcQ\n- GitHub Repository: https://github.com/Patelved2307/vsitr-internal-2026\n- Submission Timestamp: 14 Aug 2026, 06:35 pm\n\nNEXT PHASE: PPT PRESENTATION DAY\n- Date: 27 August 2026\n- Venue: Gandhinagar Campus\n- Time Schedule: Detailed time slots will be shared soon.\n\nPREPARATION CHECKLIST:\n1. Bring your laptop with your working prototype code & local setup ready.\n2. Prepare your live pitch presentation and working prototype demonstration strictly adhering to your submitted official PPT deck format.\n3. All 6 team members must attend in formal attire with institute ID cards.\n\nNote: Detailed guidelines, presentation rules, evaluation criteria, and complete time-slot schedules will be shared with all team leaders soon via email and your Team Portal dashboard.\n\nContact Support: sihinternal.vsitr@gmail.com\nVSITR, Kadi\n    ",
+      "type": "ppt_submission",
+      "status": "sent",
+      "sentAt": "2026-08-14T13:05:26.943Z"
+    },
+    {
+      "id": "EMAIL-1786712726571-170",
+      "recipientEmail": "member5@vsitr.ac.in",
+      "recipientName": "Member Five",
+      "teamId": "SIH2026-000",
+      "subject": "🎉 Submission Confirmed! Internal SIH 2026 - PPT & Prototype Received [Team SIH2026-000 - VSITR Testing Team (Internal)]",
+      "body": "\nInternal Smart India Hackathon 2026 - PPT & Prototype Submission Confirmation\n\nDear Member Five (Team Member),\n\nCongratulations! We have successfully received official PPT & Prototype submission for Team VSITR Testing Team (Internal) (ID: SIH2026-000).\n\nSUBMISSION RECEIPT:\n- Team ID: SIH2026-000\n- Team Name: VSITR Testing Team (Internal)\n- Problem Statement: [8-L] Smart Waste Management and Citizen Reporting Platform\n- PPT Presentation: SIH2026-000.pptx\n- 2-Min Pitch Video: https://www.youtube.com/watch?v=Dq56dKHGbcQ\n- GitHub Repository: https://github.com/Patelved2307/vsitr-internal-2026\n- Submission Timestamp: 14 Aug 2026, 06:35 pm\n\nNEXT PHASE: PPT PRESENTATION DAY\n- Date: 27 August 2026\n- Venue: Gandhinagar Campus\n- Time Schedule: Detailed time slots will be shared soon.\n\nPREPARATION CHECKLIST:\n1. Bring your laptop with your working prototype code & local setup ready.\n2. Prepare your live pitch presentation and working prototype demonstration strictly adhering to your submitted official PPT deck format.\n3. All 6 team members must attend in formal attire with institute ID cards.\n\nNote: Detailed guidelines, presentation rules, evaluation criteria, and complete time-slot schedules will be shared with all team leaders soon via email and your Team Portal dashboard.\n\nContact Support: sihinternal.vsitr@gmail.com\nVSITR, Kadi\n    ",
+      "type": "ppt_submission",
+      "status": "sent",
+      "sentAt": "2026-08-14T13:05:26.571Z"
+    },
     {
       "id": "EMAIL-1786690595851-548",
       "recipientEmail": "test.sih2026@vsitr.ac.in",

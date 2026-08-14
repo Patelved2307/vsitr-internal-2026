@@ -1263,33 +1263,16 @@ export async function ensureTestTeamSeeded() {
   const db = ensureFileDb();
   const idx = db.teams.findIndex((t) => t.id.toUpperCase() === 'SIH2026-000');
   if (idx === -1) {
-    db.teams.push({ ...TEST_TEAM, pptSubmission: undefined });
-  } else {
-    delete db.teams[idx].pptSubmission;
-    db.teams[idx] = { ...TEST_TEAM, pptSubmission: undefined };
+    db.teams.push(TEST_TEAM);
+    saveFileDb(db);
   }
-  if (db.pptSubmissions) {
-    db.pptSubmissions = db.pptSubmissions.filter((s: any) => s.teamId?.toUpperCase() !== 'SIH2026-000' && s.id !== 'PPT-SIH2026-000');
-  }
-  saveFileDb(db);
 
   if (isNeonConnected) {
     try {
-      await runQuery(`DELETE FROM ppt_submissions WHERE UPPER(team_id) = 'SIH2026-000' OR id = 'PPT-SIH2026-000'`);
-      await runQuery(`UPDATE teams SET ppt_submission = NULL WHERE UPPER(id) = 'SIH2026-000'`);
       await runQuery(
-        `INSERT INTO teams (id, team_name, leader, members, mentor, status, selected_ps_id, selected_ps_title, ps_selected_at, ppt_submission, created_at, updated_at)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, NULL, $10, $11)
-         ON CONFLICT (id) DO UPDATE SET
-           team_name = EXCLUDED.team_name,
-           leader = EXCLUDED.leader,
-           members = EXCLUDED.members,
-           mentor = EXCLUDED.mentor,
-           status = EXCLUDED.status,
-           selected_ps_id = EXCLUDED.selected_ps_id,
-           selected_ps_title = EXCLUDED.selected_ps_title,
-           ps_selected_at = EXCLUDED.ps_selected_at,
-           ppt_submission = NULL`,
+        `INSERT INTO teams (id, team_name, leader, members, mentor, status, selected_ps_id, selected_ps_title, ps_selected_at, created_at, updated_at)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+         ON CONFLICT (id) DO NOTHING`,
         [
           TEST_TEAM.id,
           TEST_TEAM.teamName,
