@@ -499,9 +499,19 @@ export async function getGlobalConfig() {
         }
         
         const fileDb = ensureFileDb();
+        const mergedSettings = { ...fileDb.settings, ...(val.settings || {}) };
+        if (!mergedSettings.pptSubmissionDeadline || mergedSettings.pptSubmissionDeadline.includes('23 August')) {
+          mergedSettings.pptSubmissionDeadline = '25 August 2026, 11:59 PM';
+        }
+        const mergedTimeline = (val.timeline || fileDb.timeline).map((t: any) => {
+          if (t.id === 't4' && t.date.includes('23 August')) {
+            return { ...t, date: '25 August 2026, 11:59 PM' };
+          }
+          return t;
+        });
         return {
-          settings: { ...fileDb.settings, ...(val.settings || {}) },
-          timeline: val.timeline || fileDb.timeline,
+          settings: mergedSettings,
+          timeline: mergedTimeline,
           faqs: val.faqs || fileDb.faqs,
           rules: val.rules || fileDb.rules,
           nextTeamNumber: val.nextTeamNumber || fileDb.nextTeamNumber || 1,
@@ -512,6 +522,10 @@ export async function getGlobalConfig() {
     }
   }
   const fileDb = ensureFileDb();
+  if (!fileDb.settings.pptSubmissionDeadline || fileDb.settings.pptSubmissionDeadline.includes('23 August')) {
+    fileDb.settings.pptSubmissionDeadline = '25 August 2026, 11:59 PM';
+    saveFileDb(fileDb);
+  }
   return {
     settings: fileDb.settings,
     timeline: fileDb.timeline,

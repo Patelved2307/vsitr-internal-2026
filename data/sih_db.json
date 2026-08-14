@@ -3,7 +3,7 @@
     "registrationDeadline": "2026-08-02T18:29:59.000Z",
     "isRegistrationOpen": false,
     "whatsappGroupLink": "https://chat.whatsapp.com/SIH2026InternalVSITR",
-    "announcementBanner": "Problem Statement Selection is OPEN! Deadline: 16 August 2026, 11:59 PM.",
+    "announcementBanner": "Internal SIH 2026 PPT & Prototype Submission is LIVE! Submission Deadline: 25 August 2026, 11:59 PM.",
     "problemStatementLink": "https://www.sih.gov.in/sih2025PS",
     "problemStatementStatus": "The problem statements will be released soon at the link below, and team leaders will receive an email notification as soon as they go live. You can access them directly through that link or by navigating to the website in your browser.",
     "pptTemplateLink": "https://drive.google.com/drive/folders/14N_F8cFzbaVpoGANSUDBqnBTJ8OJlinB?usp=sharing",
@@ -14,7 +14,7 @@
     "customQuoteAuthor": "Steve Jobs",
     "pptSubmissionOpen": true,
     "pptSubmissionStatus": "PPT & Prototype Submission Portal is now LIVE! Registered team leaders can submit their official PowerPoint presentation (.ppt / .pptx), YouTube prototype video demo link, and GitHub repository link before the deadline.",
-    "pptSubmissionDeadline": "23 August 2026, 11:56 PM",
+    "pptSubmissionDeadline": "25 August 2026, 11:59 PM",
     "pptReferenceLink": "/SIH-PPT-REFERANCE.pdf"
   },
   "timeline": [
@@ -41,7 +41,7 @@
     },
     {
       "id": "t4",
-      "date": "23 August 2026, 11:59 PM",
+      "date": "25 August 2026, 11:59 PM",
       "title": "PPT Submission",
       "active": false,
       "description": "Submit your team PPT presentation detailing your proposed solution."
