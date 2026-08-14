@@ -797,7 +797,7 @@ export async function saveEmailLog(log: EmailLog): Promise<EmailLog> {
 export async function getEmailLogs(): Promise<EmailLog[]> {
   if (isNeonConnected) {
     try {
-      const res = await runQuery('SELECT * FROM email_logs ORDER BY sent_at DESC LIMIT 100');
+      const res = await runQuery('SELECT * FROM email_logs ORDER BY sent_at DESC');
       return res.rows.map((row) => ({
         id: row.id,
         recipientEmail: row.recipient_email,
