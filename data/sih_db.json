@@ -179,6 +179,1109 @@
   ],
   "teams": [
     {
+      "id": "SIH2026-016",
+      "teamName": "Code_Crafters",
+      "leader": {
+        "id": "leader",
+        "email": "tusharsurani55@gmail.com",
+        "gender": "Male",
+        "mobile": "9510318121",
+        "fullName": "Tushar Kantibhai Surani",
+        "isLeader": true,
+        "semester": "7",
+        "department": "CSE",
+        "enrollmentNo": "23becse54014"
+      },
+      "members": [
+        {
+          "id": "m1",
+          "email": "riya09052006@gmail.com",
+          "gender": "Female",
+          "mobile": "9054306536",
+          "fullName": "Riya Jayeshbhai Patel",
+          "isLeader": false,
+          "semester": "7",
+          "department": "CE",
+          "enrollmentNo": "224sbece54013"
+        },
+        {
+          "id": "m2",
+          "email": "manthan11042006@gmail.com",
+          "gender": "Male",
+          "mobile": "8330103876",
+          "fullName": "Manthan Sanjaykumar Trivedi",
+          "isLeader": false,
+          "semester": "7",
+          "department": "CSE",
+          "enrollmentNo": "23becse54015"
+        },
+        {
+          "id": "m3",
+          "email": "devlimbachiya852@gmail.com",
+          "gender": "Male",
+          "mobile": "9054378320",
+          "fullName": "Dev Dhavalkumar Limbachiya",
+          "isLeader": false,
+          "semester": "7",
+          "department": "CSE",
+          "enrollmentNo": "23becse54004"
+        },
+        {
+          "id": "m4",
+          "email": "parmarsmit064@gmail.com",
+          "gender": "Male",
+          "mobile": "9870012408",
+          "fullName": "Smit Tulsibhai Parmar",
+          "isLeader": false,
+          "semester": "7",
+          "department": "CE",
+          "enrollmentNo": "23bece54012"
+        },
+        {
+          "id": "m5",
+          "email": "Shauryapa2308@gmail.com",
+          "gender": "Male",
+          "mobile": "8347541310",
+          "fullName": "Shaurya Rajendrakumar Patel",
+          "isLeader": false,
+          "semester": "3",
+          "department": "CSE",
+          "enrollmentNo": "25becse54016"
+        }
+      ],
+      "mentor": {
+        "email": "apmodi.cse@vsitr.ac.in",
+        "prefix": "Prof.",
+        "fullName": "Amit Modi",
+        "institute": "VSITR",
+        "department": "CSE",
+        "submittedAt": "2026-08-06T06:38:27.570Z",
+        "contactNumber": "9033327789"
+      },
+      "status": "completed",
+      "createdAt": "2026-08-04T18:08:33.923Z",
+      "updatedAt": "2026-08-08T01:18:00.215Z"
+    },
+    {
+      "id": "SIH2026-015",
+      "teamName": "AlgoRhythms",
+      "leader": {
+        "id": "leader",
+        "email": "salinahirani07@gmail.com",
+        "gender": "Female",
+        "mobile": "9427277842",
+        "fullName": "Salina Rahimbhai Hirani",
+        "isLeader": true,
+        "semester": "5",
+        "department": "CSE",
+        "enrollmentNo": "24BECSE54013"
+      },
+      "members": [
+        {
+          "id": "m1",
+          "email": "tanishapandya21@gmail.com",
+          "gender": "Female",
+          "mobile": "9313459376",
+          "fullName": "Tanisha Pramodkumar Pandya",
+          "isLeader": false,
+          "semester": "5",
+          "department": "CSE",
+          "enrollmentNo": "24BECSE54025"
+        },
+        {
+          "id": "m2",
+          "email": "jiyapatel4579@gmail.com",
+          "gender": "Female",
+          "mobile": "6354356020",
+          "fullName": "Patel Jiyaben Rohitbhai",
+          "isLeader": false,
+          "semester": "5",
+          "department": "IT",
+          "enrollmentNo": "24BEIT54017"
+        },
+        {
+          "id": "m3",
+          "email": "3012akp@gmail.com",
+          "gender": "Female",
+          "mobile": "8866025411",
+          "fullName": "Prajapati Asmita Kapilaben",
+          "isLeader": false,
+          "semester": "5",
+          "department": "IT",
+          "enrollmentNo": "24BEIT54028"
+        },
+        {
+          "id": "m4",
+          "email": "aadipatel711@gmail.com",
+          "gender": "Female",
+          "mobile": "7567381840",
+          "fullName": "Patel Aditi Nanabhai",
+          "isLeader": false,
+          "semester": "3",
+          "department": "IT",
+          "enrollmentNo": "25BEIT54004"
+        },
+        {
+          "id": "m5",
+          "email": "chavdakrisha0307@gmail.com",
+          "gender": "Female",
+          "mobile": "6359051919",
+          "fullName": "Chavda Krisha",
+          "isLeader": false,
+          "semester": "1",
+          "department": "CSE",
+          "enrollmentNo": ""
+        }
+      ],
+      "mentor": {
+        "email": "apmodi.cse@vsitr.ac.in",
+        "prefix": "Prof.",
+        "fullName": "Amit Modi",
+        "institute": "VSITR Gandhinagar",
+        "department": "CSE",
+        "submittedAt": "2026-08-06T10:22:09.302Z",
+        "contactNumber": "9033327789"
+      },
+      "status": "completed",
+      "createdAt": "2026-08-04T15:27:25.115Z",
+      "updatedAt": "2026-08-06T10:22:09.977Z"
+    },
+    {
+      "id": "SIH2026-014",
+      "teamName": "Innovision",
+      "leader": {
+        "id": "leader",
+        "email": "24bece54008@vsitr.ac.in",
+        "gender": "Male",
+        "mobile": "9510011904",
+        "fullName": "Goswami Jaimin Alpeshgiri",
+        "isLeader": true,
+        "semester": "5",
+        "department": "CE",
+        "enrollmentNo": "24BECE54008"
+      },
+      "members": [
+        {
+          "id": "m1",
+          "email": "25bece54003@vsitr.ac.in",
+          "gender": "Male",
+          "mobile": "7600127194",
+          "fullName": "Patel Prince Bhadreshkumar",
+          "isLeader": false,
+          "semester": "3",
+          "department": "CE",
+          "enrollmentNo": "25BECE54003"
+        },
+        {
+          "id": "m2",
+          "email": "25beit54010@vsitr.ac.in",
+          "gender": "Female",
+          "mobile": "9723574857",
+          "fullName": "Patel Yashree Bharatkumar",
+          "isLeader": false,
+          "semester": "3",
+          "department": "IT",
+          "enrollmentNo": "25BEIT54010"
+        },
+        {
+          "id": "m3",
+          "email": "napstar0609@gmail.com",
+          "gender": "Male",
+          "mobile": "7284003628",
+          "fullName": "Patel Jenish Nileshkumar",
+          "isLeader": false,
+          "semester": "3",
+          "department": "CSE",
+          "enrollmentNo": "D2D-01"
+        },
+        {
+          "id": "m4",
+          "email": "divya98257@gmail.com",
+          "gender": "Male",
+          "mobile": "8780128524",
+          "fullName": "Patel Divya VijayKumar",
+          "isLeader": false,
+          "semester": "3",
+          "department": "CSE",
+          "enrollmentNo": "D2D-02"
+        },
+        {
+          "id": "m5",
+          "email": "vrajprajapati2878@gmail.com",
+          "gender": "Male",
+          "mobile": "7383714035",
+          "fullName": "Prajapati Vraj Bharatbhai",
+          "isLeader": false,
+          "semester": "3",
+          "department": "CSE",
+          "enrollmentNo": "D2D-03"
+        }
+      ],
+      "mentor": {
+        "email": "skmakwana.cse@vsitr.ac.in",
+        "prefix": "Prof.",
+        "fullName": "Sanjay Makwana",
+        "institute": "VSITR",
+        "department": "CSE",
+        "submittedAt": "2026-08-07T07:34:24.234Z",
+        "contactNumber": "8460503021"
+      },
+      "status": "completed",
+      "createdAt": "2026-08-04T13:41:03.979Z",
+      "updatedAt": "2026-08-07T07:38:10.556Z"
+    },
+    {
+      "id": "SIH2026-013",
+      "teamName": "Gotham",
+      "leader": {
+        "id": "leader",
+        "email": "kherbhavyaraj@gmail.com",
+        "gender": "Male",
+        "mobile": "9898735022",
+        "fullName": "Kher Bhavyarajsinh Rajendrasinh",
+        "isLeader": true,
+        "semester": "5",
+        "department": "CE",
+        "enrollmentNo": "24BECE54015"
+      },
+      "members": [
+        {
+          "id": "m1",
+          "email": "godhanipavan06@gmail.com",
+          "gender": "Male",
+          "mobile": "9313542055",
+          "fullName": "Godhani Pavan Navnitbhai",
+          "isLeader": false,
+          "semester": "5",
+          "department": "CE",
+          "enrollmentNo": "24BECE54007"
+        },
+        {
+          "id": "m2",
+          "email": "rudrajsisodiya613@gmail.com",
+          "gender": "Male",
+          "mobile": "8401712560",
+          "fullName": "Sisodiya Rudraj Vinodkumar",
+          "isLeader": false,
+          "semester": "5",
+          "department": "CE",
+          "enrollmentNo": "24BECE54036"
+        },
+        {
+          "id": "m3",
+          "email": "jaydarji046@gmail.com",
+          "gender": "Male",
+          "mobile": "9724856846",
+          "fullName": "Darji Jay Harshadbhai",
+          "isLeader": false,
+          "semester": "5",
+          "department": "CE",
+          "enrollmentNo": "24BECE54005"
+        },
+        {
+          "id": "m4",
+          "email": "patelpankti679@gmail.com",
+          "gender": "Female",
+          "mobile": "9213436384",
+          "fullName": "Patel Pankti Alpeshkumar",
+          "isLeader": false,
+          "semester": "1",
+          "department": "CSE",
+          "enrollmentNo": ""
+        },
+        {
+          "id": "m5",
+          "email": "vedipatel015@gmail.com",
+          "gender": "Female",
+          "mobile": "9998571770",
+          "fullName": "Patel Vedi Chirag",
+          "isLeader": false,
+          "semester": "1",
+          "department": "CSE",
+          "enrollmentNo": ""
+        }
+      ],
+      "mentor": {
+        "email": "skmakwana.cse@vsitr.ac.in",
+        "prefix": "Prof.",
+        "fullName": "Sanjay Makwana",
+        "institute": "VSITR Gandhinagar",
+        "department": "CSE",
+        "submittedAt": "2026-08-08T12:14:00.532Z",
+        "contactNumber": "8460503021"
+      },
+      "status": "completed",
+      "createdAt": "2026-08-04T11:40:30.367Z",
+      "updatedAt": "2026-08-08T12:14:01.178Z"
+    },
+    {
+      "id": "SIH2026-012",
+      "teamName": "Code Crafters",
+      "leader": {
+        "id": "leader",
+        "email": "24becse54040@vsitr.ac.in",
+        "gender": "Female",
+        "mobile": "9328135389",
+        "fullName": "Patil Jagruti Nandakumar",
+        "isLeader": true,
+        "semester": "5",
+        "department": "CSE",
+        "enrollmentNo": "24becse54040"
+      },
+      "members": [
+        {
+          "id": "m1",
+          "email": "225sbecse54010@vsitr.ac.in",
+          "gender": "Female",
+          "mobile": "9879922253",
+          "fullName": "Patel Hetu Rakeshkumar",
+          "isLeader": false,
+          "semester": "5",
+          "department": "CSE",
+          "enrollmentNo": "225sbecse54010"
+        },
+        {
+          "id": "m2",
+          "email": "25beit54003@vsitr.ac.in",
+          "gender": "Female",
+          "mobile": "8799144776",
+          "fullName": "Parmar Hani AshokKumar",
+          "isLeader": false,
+          "semester": "3",
+          "department": "IT",
+          "enrollmentNo": "25beit54003"
+        },
+        {
+          "id": "m3",
+          "email": "25becse54011@vsitr.ac.in",
+          "gender": "Female",
+          "mobile": "9664529212",
+          "fullName": "Patel Kashish Kanubhai",
+          "isLeader": false,
+          "semester": "3",
+          "department": "CSE",
+          "enrollmentNo": "25BECSE54011"
+        },
+        {
+          "id": "m4",
+          "email": "25becse54002@vsitr.ac.in",
+          "gender": "Female",
+          "mobile": "8320962976",
+          "fullName": "Dabhi Krishna Hitendrakumar",
+          "isLeader": false,
+          "semester": "3",
+          "department": "CSE",
+          "enrollmentNo": "25becse54002"
+        },
+        {
+          "id": "m5",
+          "email": "pinapatel957@gmail.com",
+          "gender": "Female",
+          "mobile": "8511216779",
+          "fullName": "Patel Avani Manojbhai",
+          "isLeader": false,
+          "semester": "1",
+          "department": "CSE",
+          "enrollmentNo": "sem 1"
+        }
+      ],
+      "mentor": {
+        "email": "skmakwana.cse@vsitr.ac.in",
+        "prefix": "Prof.",
+        "fullName": "SANJAY MAKWANA",
+        "institute": "VSITR Kadi",
+        "department": "CSE",
+        "submittedAt": "2026-08-06T13:30:58.177Z",
+        "contactNumber": "8460503021"
+      },
+      "status": "completed",
+      "createdAt": "2026-08-04T06:12:23.895Z",
+      "updatedAt": "2026-08-06T16:40:05.634Z"
+    },
+    {
+      "id": "SIH2026-011",
+      "teamName": "Siya Ram",
+      "leader": {
+        "id": "leader",
+        "email": "24becse54030@vsitr.ac.in",
+        "gender": "Male",
+        "mobile": "9909211149",
+        "fullName": "Patel Heel Riteshkumar",
+        "isLeader": true,
+        "semester": "5",
+        "department": "CSE",
+        "enrollmentNo": "24becse54030"
+      },
+      "members": [
+        {
+          "id": "m1",
+          "email": "25becse54018@vsitr.ac.in",
+          "gender": "Female",
+          "mobile": "9512905101",
+          "fullName": "Patel vaidehi piyushkumar",
+          "isLeader": false,
+          "semester": "3",
+          "department": "CSE",
+          "enrollmentNo": "25becse54018"
+        },
+        {
+          "id": "m2",
+          "email": "23bece54019@vsitr.ac.in",
+          "gender": "Male",
+          "mobile": "7016990389",
+          "fullName": "Patel Purv shaileshbhai",
+          "isLeader": false,
+          "semester": "5",
+          "department": "CE",
+          "enrollmentNo": "23bece54019"
+        },
+        {
+          "id": "m3",
+          "email": "24becse54020@vsitr.ac.in",
+          "gender": "Male",
+          "mobile": "9316565758",
+          "fullName": "Kumadara dhruv manubhai",
+          "isLeader": false,
+          "semester": "5",
+          "department": "CSE",
+          "enrollmentNo": "24becse54020"
+        },
+        {
+          "id": "m4",
+          "email": "25bece54013@vsitr.ac.in",
+          "gender": "Male",
+          "mobile": "8200291885",
+          "fullName": "Patel Urvish Rakeshbhai",
+          "isLeader": false,
+          "semester": "3",
+          "department": "CE",
+          "enrollmentNo": "25bece54013"
+        },
+        {
+          "id": "m5",
+          "email": "25becse54010@vsitr.ac.in",
+          "gender": "Male",
+          "mobile": "8487974709",
+          "fullName": "Patel Het sanjaykumar",
+          "isLeader": false,
+          "semester": "3",
+          "department": "CSE",
+          "enrollmentNo": "25becse54010"
+        }
+      ],
+      "mentor": {
+        "email": "amvaghela.it@vsitr.ac.in",
+        "prefix": "Dr.",
+        "fullName": "Ankit Vaghela",
+        "institute": "VSITR Kadi",
+        "department": "IT",
+        "submittedAt": "2026-08-08T15:56:58.856Z",
+        "contactNumber": "9558144901"
+      },
+      "status": "completed",
+      "createdAt": "2026-08-03T16:24:48.964Z",
+      "updatedAt": "2026-08-08T15:56:59.511Z"
+    },
+    {
+      "id": "SIH2026-010",
+      "teamName": "Build beyond",
+      "leader": {
+        "id": "leader",
+        "email": "jhanvithakor07@gmail.com",
+        "gender": "Female",
+        "mobile": "9313118582",
+        "fullName": "Thakor Jhanvi ",
+        "isLeader": true,
+        "semester": "1",
+        "department": "CE",
+        "enrollmentNo": ""
+      },
+      "members": [
+        {
+          "id": "m1",
+          "email": "prajapatidhruvidineshkumar@gmail.com",
+          "gender": "Female",
+          "mobile": "7779043942",
+          "fullName": "Dhruvi Prajapati ",
+          "isLeader": false,
+          "semester": "1",
+          "department": "CSE",
+          "enrollmentNo": ""
+        },
+        {
+          "id": "m2",
+          "email": "palashimanshi09@gmail.com",
+          "gender": "Female",
+          "mobile": "7863070924",
+          "fullName": "Himanshi palas",
+          "isLeader": false,
+          "semester": "1",
+          "department": "CSE",
+          "enrollmentNo": ""
+        },
+        {
+          "id": "m3",
+          "email": "pateldriti27@gmail.com",
+          "gender": "Female",
+          "mobile": "8849500814",
+          "fullName": "Driti patel",
+          "isLeader": false,
+          "semester": "1",
+          "department": "CSE",
+          "enrollmentNo": ""
+        },
+        {
+          "id": "m4",
+          "email": "brindaprajapati.20@gmail.com",
+          "gender": "Female",
+          "mobile": "7863023870",
+          "fullName": "Brinda Prajapati ",
+          "isLeader": false,
+          "semester": "1",
+          "department": "CSE",
+          "enrollmentNo": ""
+        },
+        {
+          "id": "m5",
+          "email": "vedikaatre05@gmail.com",
+          "gender": "Female",
+          "mobile": "6352732570",
+          "fullName": "Vedika Atre ",
+          "isLeader": false,
+          "semester": "1",
+          "department": "CSE",
+          "enrollmentNo": ""
+        }
+      ],
+      "mentor": {
+        "email": "aasutariya.ce@vsitr.ac.in",
+        "prefix": "Dr.",
+        "fullName": "AnandKumar Amrutlal Sutariya",
+        "institute": "VSITR Kadi",
+        "department": "CE",
+        "submittedAt": "2026-08-05T14:21:13.660Z",
+        "contactNumber": "8511140249"
+      },
+      "status": "completed",
+      "createdAt": "2026-08-03T09:42:29.443Z",
+      "updatedAt": "2026-08-05T14:21:14.323Z"
+    },
+    {
+      "id": "SIH2026-009",
+      "teamName": "Code Inovator",
+      "leader": {
+        "id": "leader",
+        "email": "vekariyajeel0@gmail.com",
+        "gender": "Male",
+        "mobile": "9726230239",
+        "fullName": "Vekariya Jeel Nileshbhai",
+        "isLeader": true,
+        "semester": "5",
+        "department": "CE",
+        "enrollmentNo": "24BECE54041"
+      },
+      "members": [
+        {
+          "id": "m1",
+          "email": "rmonik748@gmail.com",
+          "gender": "Male",
+          "mobile": "9106638851",
+          "fullName": "Rathod Monik Rajeshbhai ",
+          "isLeader": false,
+          "semester": "5",
+          "department": "CSE",
+          "enrollmentNo": "24BECSE54042"
+        },
+        {
+          "id": "m2",
+          "email": "iambdharmik@gmail.com",
+          "gender": "Male",
+          "mobile": "9901574194",
+          "fullName": "Bambhaniya Dharmik Shaileshbhai ",
+          "isLeader": false,
+          "semester": "5",
+          "department": "CSE",
+          "enrollmentNo": "24BECSE54003"
+        },
+        {
+          "id": "m3",
+          "email": "rajsangani2000@gmail.com",
+          "gender": "Male",
+          "mobile": "6355927304",
+          "fullName": "Sangani Raj Dilipbhai",
+          "isLeader": false,
+          "semester": "5",
+          "department": "CSE",
+          "enrollmentNo": "24BECSE54044"
+        },
+        {
+          "id": "m4",
+          "email": "ndanidhariya25@gmail.com",
+          "gender": "Male",
+          "mobile": "7016608287",
+          "fullName": "Danidhariya Nandan Alpeshbhai",
+          "isLeader": false,
+          "semester": "5",
+          "department": "CSE",
+          "enrollmentNo": "24BECSE54009"
+        },
+        {
+          "id": "m5",
+          "email": "khushighodasara0606@gmail.com",
+          "gender": "Female",
+          "mobile": "9879403898",
+          "fullName": " Ghodasara Khushi Nileshbhai ",
+          "isLeader": false,
+          "semester": "5",
+          "department": "CSE",
+          "enrollmentNo": "225SBECSE54001"
+        }
+      ],
+      "mentor": {
+        "email": "hmshastri.ce@vsitr.ac.in",
+        "prefix": "Prof.",
+        "fullName": "Hiral Shastri",
+        "institute": "KSV Gandhinagar",
+        "department": "CE",
+        "submittedAt": "2026-08-04T09:53:37.531Z",
+        "contactNumber": "9724642591"
+      },
+      "status": "completed",
+      "createdAt": "2026-08-02T08:42:35.252Z",
+      "updatedAt": "2026-08-04T09:53:38.199Z"
+    },
+    {
+      "id": "SIH2026-008",
+      "teamName": "VisionX",
+      "leader": {
+        "id": "leader",
+        "email": "dhairyajoshi280@gmail.com",
+        "gender": "Male",
+        "mobile": "7069560385",
+        "fullName": "Joshi Dhairya Prakashkumar ",
+        "isLeader": true,
+        "semester": "5",
+        "department": "CE",
+        "enrollmentNo": "24BECE54011"
+      },
+      "members": [
+        {
+          "id": "m1",
+          "email": "dipendrarathore32@gmail.com",
+          "gender": "Male",
+          "mobile": "9904022713",
+          "fullName": "Rathod Dipendrasinh  Rupsinh ",
+          "isLeader": false,
+          "semester": "5",
+          "department": "CE",
+          "enrollmentNo": "24BECE54032"
+        },
+        {
+          "id": "m2",
+          "email": "chavdak0164@gmail.com",
+          "gender": "Female",
+          "mobile": "9714485058",
+          "fullName": "Chavda Kumud Rameshbhai",
+          "isLeader": false,
+          "semester": "5",
+          "department": "CSE",
+          "enrollmentNo": "24BECSE54007"
+        },
+        {
+          "id": "m3",
+          "email": "pothanasidddhartha2006@gmail.com",
+          "gender": "Male",
+          "mobile": "8140221935",
+          "fullName": "Pothana Siddhartha",
+          "isLeader": false,
+          "semester": "5",
+          "department": "CSE",
+          "enrollmentNo": "24BECSE54041"
+        },
+        {
+          "id": "m4",
+          "email": "mj563476@gmail.com",
+          "gender": "Male",
+          "mobile": "9510954752",
+          "fullName": "Joshi Meet ",
+          "isLeader": false,
+          "semester": "5",
+          "department": "IT",
+          "enrollmentNo": "225sBEIT54004"
+        },
+        {
+          "id": "m5",
+          "email": "rolikushwaha848880@gmail.com",
+          "gender": "Female",
+          "mobile": "8488800137",
+          "fullName": "Kushwaha Roli ",
+          "isLeader": false,
+          "semester": "5",
+          "department": "CSE",
+          "enrollmentNo": "24BECSE54001"
+        }
+      ],
+      "mentor": {
+        "email": "hmshastri.ce@vsitr.ac.in",
+        "prefix": "Prof.",
+        "fullName": "Hiral Shastri",
+        "institute": "KSV Gandhinagar",
+        "department": "CE",
+        "submittedAt": "2026-08-04T10:01:05.597Z",
+        "contactNumber": "9724642591"
+      },
+      "status": "completed",
+      "createdAt": "2026-08-02T06:51:11.212Z",
+      "updatedAt": "2026-08-06T10:51:08.007Z"
+    },
+    {
+      "id": "SIH2026-007",
+      "teamName": "TechTitans",
+      "leader": {
+        "id": "leader",
+        "email": "vyasjenil0@gmail.com",
+        "gender": "Male",
+        "mobile": "9016158393",
+        "fullName": "Vyas Jenil Nileshkumar",
+        "isLeader": true,
+        "semester": "5",
+        "department": "CSE",
+        "enrollmentNo": "24BECSE54050"
+      },
+      "members": [
+        {
+          "id": "m1",
+          "email": "devangpatel1972003@gmail.com",
+          "gender": "Male",
+          "mobile": "7801952840",
+          "fullName": "PATEL DEVANG SHAILESHBHAI ",
+          "isLeader": false,
+          "semester": "5",
+          "department": "CE",
+          "enrollmentNo": "225SBECE54005"
+        },
+        {
+          "id": "m2",
+          "email": "djpatel3116@gmail.com",
+          "gender": "Male",
+          "mobile": "8980178040",
+          "fullName": "Patel Devanshu Jayeshkumar",
+          "isLeader": false,
+          "semester": "3",
+          "department": "CSE",
+          "enrollmentNo": "25BECSE54008"
+        },
+        {
+          "id": "m3",
+          "email": "daveprathamesh2008@gmail.com",
+          "gender": "Male",
+          "mobile": "9924057958",
+          "fullName": "Dave Prathamesh Vishal ",
+          "isLeader": false,
+          "semester": "1",
+          "department": "CSE",
+          "enrollmentNo": ""
+        },
+        {
+          "id": "m4",
+          "email": "Hasnainkhanusiya675@gmail.com",
+          "gender": "Male",
+          "mobile": "9870018917",
+          "fullName": "Khanusiya Hasnain Julfekar Ali",
+          "isLeader": false,
+          "semester": "1",
+          "department": "CE",
+          "enrollmentNo": ""
+        },
+        {
+          "id": "m5",
+          "email": "ektapatel26092002@gmail.com",
+          "gender": "Female",
+          "mobile": "9825441019",
+          "fullName": " Ekta Patel ",
+          "isLeader": false,
+          "semester": "5",
+          "department": "CSE",
+          "enrollmentNo": " 225SBECSE54009 "
+        }
+      ],
+      "mentor": {
+        "email": "skmakawana.cse@vsitr.ac.in",
+        "prefix": "Prof.",
+        "fullName": "Sanjay Makawana",
+        "institute": "KSV Gandhinagar",
+        "department": "CSE",
+        "submittedAt": "2026-08-04T09:58:56.108Z",
+        "contactNumber": "8460503021"
+      },
+      "status": "completed",
+      "createdAt": "2026-08-01T17:47:55.715Z",
+      "updatedAt": "2026-08-13T18:30:52.825Z",
+      "selectedPsId": "8-L",
+      "selectedPsTitle": "Smart Waste Management and Citizen Reporting Platform",
+      "psSelectedAt": "2026-08-13T18:30:52.600Z"
+    },
+    {
+      "id": "SIH2026-006",
+      "teamName": "Hexasync",
+      "leader": {
+        "id": "leader",
+        "email": "hetchaudhary474@gmail.com",
+        "gender": "Male",
+        "mobile": "8320432413",
+        "fullName": "Patel hetkumar Kiritbhai ",
+        "isLeader": true,
+        "semester": "1",
+        "department": "CE",
+        "enrollmentNo": ""
+      },
+      "members": [
+        {
+          "id": "m1",
+          "email": "sem67637@gmail.com",
+          "gender": "Male",
+          "mobile": "9016914412",
+          "fullName": "Patel semkumar rakeshbhai ",
+          "isLeader": false,
+          "semester": "1",
+          "department": "IT",
+          "enrollmentNo": ""
+        },
+        {
+          "id": "m2",
+          "email": "yash4321king@gmail.com",
+          "gender": "Male",
+          "mobile": "9213650460",
+          "fullName": "Prajapati yash pareshkumar ",
+          "isLeader": false,
+          "semester": "1",
+          "department": "CE",
+          "enrollmentNo": ""
+        },
+        {
+          "id": "m3",
+          "email": "mishrashivani1225@gmail.com",
+          "gender": "Female",
+          "mobile": "9687961546",
+          "fullName": "Mishra Shivani kumari santosh",
+          "isLeader": false,
+          "semester": "1",
+          "department": "CSE",
+          "enrollmentNo": ""
+        },
+        {
+          "id": "m4",
+          "email": "yashritrivedi160@gmail.com",
+          "gender": "Female",
+          "mobile": "9023964797",
+          "fullName": "Trivedi Yashri Alkesh ",
+          "isLeader": false,
+          "semester": "1",
+          "department": "CSE",
+          "enrollmentNo": ""
+        },
+        {
+          "id": "m5",
+          "email": "pranshi0930@gmail.com",
+          "gender": "Female",
+          "mobile": "8980923583",
+          "fullName": "Patel pranshi Nileshkumar",
+          "isLeader": false,
+          "semester": "1",
+          "department": "CSE",
+          "enrollmentNo": ""
+        }
+      ],
+      "mentor": {
+        "email": "hmshastri.ce@vsitr.ac.in",
+        "prefix": "Prof.",
+        "fullName": "Hiral shastri",
+        "institute": "KSV Gandhinagar",
+        "department": "CE",
+        "submittedAt": "2026-08-04T09:42:39.434Z",
+        "contactNumber": "9724642591",
+        "officeAddress": "Vsitr"
+      },
+      "status": "completed",
+      "createdAt": "2026-08-01T16:54:51.644Z",
+      "updatedAt": "2026-08-04T09:42:40.112Z"
+    },
+    {
+      "id": "SIH2026-005",
+      "teamName": "INNOVATORS ASSEMBLE",
+      "leader": {
+        "id": "leader",
+        "email": "24bece54004@vsitr.ac.in",
+        "gender": "Male",
+        "mobile": "9227001306",
+        "fullName": "Christian Sanyam Maheshkumar",
+        "isLeader": true,
+        "semester": "5",
+        "department": "CE",
+        "enrollmentNo": "24BECE54004"
+      },
+      "members": [
+        {
+          "id": "m1",
+          "email": "225sbeit54005@vsitr.ac.in",
+          "gender": "Female",
+          "mobile": "8128265937",
+          "fullName": "Patel Hardi Kamleshkumar",
+          "isLeader": false,
+          "semester": "5",
+          "department": "IT",
+          "enrollmentNo": "225SBEIT54005"
+        },
+        {
+          "id": "m2",
+          "email": "24becse54023@vsitr.ac.in",
+          "gender": "Male",
+          "mobile": "7984746360",
+          "fullName": "Mansuri Anas Sabbirbhai",
+          "isLeader": false,
+          "semester": "5",
+          "department": "CSE",
+          "enrollmentNo": "24BECSE54023"
+        },
+        {
+          "id": "m3",
+          "email": "24bece54033@vsitr.ac.in",
+          "gender": "Male",
+          "mobile": "8347944683",
+          "fullName": "Raval Manhar Vishnubhai",
+          "isLeader": false,
+          "semester": "5",
+          "department": "CE",
+          "enrollmentNo": "24BECE54033"
+        },
+        {
+          "id": "m4",
+          "email": "arvindp5798@gmail.com",
+          "gender": "Male",
+          "mobile": "9274170615",
+          "fullName": "Chaudhary Arvindbhai Rameshbhai",
+          "isLeader": false,
+          "semester": "1",
+          "department": "CSE",
+          "enrollmentNo": ""
+        },
+        {
+          "id": "m5",
+          "email": "desainiraj5083@gmail.com",
+          "gender": "Male",
+          "mobile": "9081980593",
+          "fullName": "Desai Niraj Khodabhai",
+          "isLeader": false,
+          "semester": "1",
+          "department": "CE",
+          "enrollmentNo": ""
+        }
+      ],
+      "mentor": {
+        "email": "skmakwana.cse@vsitr.ac.in",
+        "prefix": "Prof.",
+        "fullName": "Sanjay Makwana",
+        "institute": "KSV Gandhinagar",
+        "department": "CSE",
+        "submittedAt": "2026-08-03T16:47:26.154Z",
+        "contactNumber": "8460503021",
+        "officeAddress": "VSITR, Gandhinagar"
+      },
+      "status": "completed",
+      "createdAt": "2026-08-01T16:30:43.592Z",
+      "updatedAt": "2026-08-13T14:03:21.532Z",
+      "selectedPsId": "8-L",
+      "selectedPsTitle": "Smart Waste Management and Citizen Reporting Platform",
+      "psSelectedAt": "2026-08-13T14:03:20.888Z"
+    },
+    {
+      "id": "SIH2026-004",
+      "teamName": "The Semicolons",
+      "leader": {
+        "id": "leader",
+        "email": "hpstudent33@gmail.com",
+        "gender": "Male",
+        "mobile": "8866481235",
+        "fullName": "Himanshu Shaileshbhai Patel",
+        "isLeader": true,
+        "semester": "3",
+        "department": "CSE",
+        "enrollmentNo": "25BECSE54027"
+      },
+      "members": [
+        {
+          "id": "m1",
+          "email": "25becse54021@vsitr.ac.in",
+          "gender": "Female",
+          "mobile": "7096549829",
+          "fullName": "Rajput Simran Premkumar",
+          "isLeader": false,
+          "semester": "3",
+          "department": "CSE",
+          "enrollmentNo": "25BECSE54021"
+        },
+        {
+          "id": "m2",
+          "email": "25bece54016@vsitr.ac.in",
+          "gender": "Male",
+          "mobile": "9327343240",
+          "fullName": "Kartik Arunkumar Sharma",
+          "isLeader": false,
+          "semester": "3",
+          "department": "CE",
+          "enrollmentNo": "25BECE54016"
+        },
+        {
+          "id": "m3",
+          "email": "25becse54014@vsitr.ac.in",
+          "gender": "Male",
+          "mobile": "9825131740",
+          "fullName": "Patel Megh Kanubhai",
+          "isLeader": false,
+          "semester": "3",
+          "department": "CSE",
+          "enrollmentNo": "25BECSE54014"
+        },
+        {
+          "id": "m4",
+          "email": "ptithi2411@gmail.com",
+          "gender": "Female",
+          "mobile": "9054161462",
+          "fullName": "Patel Tithi Kalpeshkumar",
+          "isLeader": false,
+          "semester": "1",
+          "department": "CSE",
+          "enrollmentNo": ""
+        },
+        {
+          "id": "m5",
+          "email": "25beit54005@vsitr.ac.in",
+          "gender": "Female",
+          "mobile": "9537482101",
+          "fullName": "Patel Bansari Mahendrakumar",
+          "isLeader": false,
+          "semester": "3",
+          "department": "IT",
+          "enrollmentNo": "25BEIT005"
+        }
+      ],
+      "mentor": {
+        "email": "skmakwana.cse@vsitr.ac.in",
+        "prefix": "Prof.",
+        "fullName": "Sanjay Makwana",
+        "institute": "VSITR",
+        "department": "CSE",
+        "submittedAt": "2026-08-07T05:23:11.435Z",
+        "contactNumber": "8460503021"
+      },
+      "status": "completed",
+      "createdAt": "2026-07-31T14:52:45.794Z",
+      "updatedAt": "2026-08-12T06:42:41.742Z",
+      "selectedPsId": "8-L",
+      "selectedPsTitle": "Smart Waste Management and Citizen Reporting Platform",
+      "psSelectedAt": "2026-08-12T06:42:41.086Z"
+    },
+    {
       "id": "SIH2026-003",
       "teamName": "GDHTM",
       "leader": {
@@ -260,10 +1363,94 @@
       },
       "status": "completed",
       "createdAt": "2026-07-31T08:57:09.375Z",
-      "updatedAt": "2026-08-11T10:18:49.593Z",
+      "updatedAt": "2026-08-13T17:06:44.988Z",
       "selectedPsId": "8-L",
       "selectedPsTitle": "Smart Waste Management and Citizen Reporting Platform",
-      "psSelectedAt": "2026-08-11T10:18:49.327Z"
+      "psSelectedAt": "2026-08-13T17:06:44.323Z"
+    },
+    {
+      "id": "SIH2026-002",
+      "teamName": "astrova",
+      "leader": {
+        "id": "leader",
+        "email": "shahtirth425@gmail.com",
+        "gender": "Male",
+        "mobile": "9316773942",
+        "fullName": "shah tirth prashantkumar",
+        "isLeader": true,
+        "semester": "5",
+        "department": "CSE",
+        "enrollmentNo": "225SBECSE54020"
+      },
+      "members": [
+        {
+          "id": "m1",
+          "email": "pateldhruva2004@gmail.com",
+          "gender": "Female",
+          "mobile": "7016695410",
+          "fullName": "Patel Dhruva Niranjanbhai ",
+          "isLeader": false,
+          "semester": "5",
+          "department": "CSE",
+          "enrollmentNo": " 225sbecse54008"
+        },
+        {
+          "id": "m2",
+          "email": "roshani143014@gmail.com",
+          "gender": "Female",
+          "mobile": "9558934530",
+          "fullName": "SOLANKI ROSHANI DIPAKKUMAR",
+          "isLeader": false,
+          "semester": "5",
+          "department": "CE",
+          "enrollmentNo": "24BECE54037"
+        },
+        {
+          "id": "m3",
+          "email": "aashkavaghasia07@gmail.com",
+          "gender": "Female",
+          "mobile": "7600048770",
+          "fullName": "Vaghasia Aashka Kaushikbhai",
+          "isLeader": false,
+          "semester": "5",
+          "department": "CSE",
+          "enrollmentNo": "24BECSE54048"
+        },
+        {
+          "id": "m4",
+          "email": "semip7881@gmail.com",
+          "gender": "Female",
+          "mobile": "8141928009",
+          "fullName": "Patel Semi Harshadbhai ",
+          "isLeader": false,
+          "semester": "3",
+          "department": "CSE",
+          "enrollmentNo": "25becse54015"
+        },
+        {
+          "id": "m5",
+          "email": "devmavlankar2002@gmail.com",
+          "gender": "Male",
+          "mobile": "9662601402",
+          "fullName": "MAVLANKAR DEV DILIPKUMAR",
+          "isLeader": false,
+          "semester": "5",
+          "department": "IT",
+          "enrollmentNo": "225SBEIT54009"
+        }
+      ],
+      "mentor": {
+        "email": "skmakwana.cse@vsitr.ac.in",
+        "prefix": "Prof.",
+        "fullName": "Sanjay Makwana",
+        "institute": "VSITR Gandhinagar",
+        "department": "CSE",
+        "submittedAt": "2026-08-04T17:12:01.849Z",
+        "contactNumber": "8460503021"
+      },
+      "status": "completed",
+      "createdAt": "2026-07-29T12:24:23.410Z",
+      "updatedAt": "2026-08-04T17:12:02.069Z"
     }
   ],
   "emailLogs": [

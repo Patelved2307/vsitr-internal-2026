@@ -963,16 +963,19 @@ export const AdminPage: React.FC = () => {
               </div>
 
               {/* Stat KPI Cards Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div className="p-5 rounded-3xl bg-white border border-slate-200/80 shadow-xs space-y-1">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+                <div 
+                  onClick={() => setSidebarTab('teams')}
+                  className="p-5 rounded-3xl bg-white border border-slate-200/80 shadow-xs space-y-1 cursor-pointer hover:border-[#C1272D] transition group"
+                >
                   <span className="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider block">
                     Total Teams
                   </span>
                   <span className="text-3xl font-black text-[#C1272D] block">
                     {stats.totalTeams}
                   </span>
-                  <span className="text-[11px] text-slate-500 font-medium block">
-                    6 members per team
+                  <span className="text-[11px] text-[#C1272D] font-bold block group-hover:underline">
+                    View All {stats.totalTeams} Teams →
                   </span>
                 </div>
 
@@ -1013,6 +1016,21 @@ export const AdminPage: React.FC = () => {
                   >
                     Remind {stats.pendingMentorCount} Pending →
                   </button>
+                </div>
+
+                <div 
+                  onClick={() => setSidebarTab('teams')}
+                  className="p-5 rounded-3xl bg-white border border-slate-200/80 shadow-xs space-y-1 cursor-pointer hover:border-purple-500 transition group"
+                >
+                  <span className="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider block">
+                    PS Selected
+                  </span>
+                  <span className="text-3xl font-black text-purple-700 block">
+                    {teams.filter(t => t.selectedPsId).length} / {stats.totalTeams}
+                  </span>
+                  <span className="text-[11px] text-purple-700 font-bold block group-hover:underline">
+                    4 Teams Locked PS →
+                  </span>
                 </div>
               </div>
 
