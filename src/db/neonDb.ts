@@ -280,7 +280,6 @@ export async function initDatabase(force = false): Promise<void> {
       await runQuery(`ALTER TABLE problem_statements ADD COLUMN IF NOT EXISTS theme TEXT;`);
 
       // Seed and synchronize default problem statements in Neon DB
-      await runQuery("DELETE FROM problem_statements WHERE id NOT IN ('7-L', '8-L');");
       for (const ps of INITIAL_PROBLEM_STATEMENTS) {
         await runQuery(
           `INSERT INTO problem_statements (id, title, category, description, status, sdg, theme)
@@ -316,14 +315,23 @@ export async function initDatabase(force = false): Promise<void> {
         );
       }
 
-      // Sync any local teams from sih_db.json into Neon teams, members, and mentors tables (only if they do not exist in Neon)
+      // Sync any local teams from sih_db.json into Neon teams, members, and mentors tables
       if (fileDb.teams && fileDb.teams.length > 0) {
         console.log(`Syncing ${fileDb.teams.length} local teams into Neon PostgreSQL...`);
         for (const t of fileDb.teams) {
           const res = await runQuery(
             `INSERT INTO teams (id, team_name, leader, members, mentor, status, selected_ps_id, selected_ps_title, ps_selected_at, created_at, updated_at)
              VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
-             ON CONFLICT (id) DO NOTHING`,
+             ON CONFLICT (id) DO UPDATE SET
+               team_name = EXCLUDED.team_name,
+               leader = EXCLUDED.leader,
+               members = EXCLUDED.members,
+               mentor = EXCLUDED.mentor,
+               status = EXCLUDED.status,
+               selected_ps_id = COALESCE(EXCLUDED.selected_ps_id, teams.selected_ps_id),
+               selected_ps_title = COALESCE(EXCLUDED.selected_ps_title, teams.selected_ps_title),
+               ps_selected_at = COALESCE(EXCLUDED.ps_selected_at, teams.ps_selected_at),
+               updated_at = EXCLUDED.updated_at`,
             [
               t.id,
               t.teamName,
@@ -338,9 +346,7 @@ export async function initDatabase(force = false): Promise<void> {
               t.updatedAt || new Date().toISOString(),
             ]
           );
-          if (res.rowCount > 0) {
-            await syncNormalizedMembersAndMentors(t);
-          }
+          await syncNormalizedMembersAndMentors(t);
         }
 
         // Also sync email logs if any exist locally
@@ -424,8 +430,9 @@ function ensureFileDb(): DatabaseSchema {
     const data = fs.readFileSync(DB_FILE, 'utf-8');
     const parsed = JSON.parse(data);
     if (!parsed.emailLogs) parsed.emailLogs = [];
-    // Always enforce the latest problem statements
-    parsed.problemStatements = INITIAL_PROBLEM_STATEMENTS;
+    if (!parsed.problemStatements || parsed.problemStatements.length === 0) {
+      parsed.problemStatements = INITIAL_PROBLEM_STATEMENTS;
+    }
     saveFileDb(parsed);
     return parsed;
   } catch (err) {
@@ -631,14 +638,17 @@ export async function createTeam(team: Team): Promise<Team> {
   if (isNeonConnected) {
     try {
       await runQuery(
-        `INSERT INTO teams (id, team_name, leader, members, mentor, status, created_at, updated_at)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+        `INSERT INTO teams (id, team_name, leader, members, mentor, status, selected_ps_id, selected_ps_title, ps_selected_at, created_at, updated_at)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
          ON CONFLICT (id) DO UPDATE SET
            team_name = EXCLUDED.team_name,
            leader = EXCLUDED.leader,
            members = EXCLUDED.members,
            mentor = EXCLUDED.mentor,
            status = EXCLUDED.status,
+           selected_ps_id = EXCLUDED.selected_ps_id,
+           selected_ps_title = EXCLUDED.selected_ps_title,
+           ps_selected_at = EXCLUDED.ps_selected_at,
            updated_at = EXCLUDED.updated_at`,
         [
           team.id,
@@ -647,6 +657,9 @@ export async function createTeam(team: Team): Promise<Team> {
           JSON.stringify(team.members),
           team.mentor ? JSON.stringify(team.mentor) : null,
           team.status,
+          team.selectedPsId || null,
+          team.selectedPsTitle || null,
+          team.psSelectedAt || null,
           team.createdAt,
           team.updatedAt,
         ]

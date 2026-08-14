@@ -786,8 +786,8 @@ export const RegistrationRulesView: React.FC = () => {
             </h3>
             <div className="space-y-3">
               {timeline && timeline.map((event, idx) => {
-                const isClosed = isDeadlinePassed && (event.id === 't1' || event.id === 't2');
-                const displayDate = isClosed ? 'Closed' : event.date;
+                const isClosed = event.date.toLowerCase().includes('closed') || (isDeadlinePassed && event.id === 't1' && !settings.isExtended);
+                const displayDate = event.date;
                 return (
                   <div key={event.id || idx} className="flex justify-between items-center text-sm p-2 rounded-xl bg-slate-50 border border-slate-100/50 hover:bg-slate-100/30 transition">
                     <span className="text-slate-500 font-semibold pr-2 truncate" title={event.title}>{event.title}</span>

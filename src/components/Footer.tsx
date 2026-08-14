@@ -150,7 +150,7 @@ export const Footer: React.FC = () => {
 
             <div className="pt-2">
               <a
-                href="https://chat.whatsapp.com/EfS0SSUc9aX4DJUhfrpD2U"
+                href={settings?.whatsappGroupLink || "https://chat.whatsapp.com/EfS0SSUc9aX4DJUhfrpD2U"}
                 target="_blank"
                 rel="noreferrer"
                 className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-emerald-950/60 text-emerald-300 border border-emerald-800/80 text-xs font-bold hover:bg-emerald-600 hover:text-white transition shadow-2xs"

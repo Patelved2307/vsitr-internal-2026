@@ -38,3 +38,6 @@ Thumbs.db
 # Local Backups
 backup/
 
+
+.vercel
+.env*
