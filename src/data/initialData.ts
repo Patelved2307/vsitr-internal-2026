@@ -63,16 +63,16 @@ export const INITIAL_TIMELINE_EVENTS: TimelineEvent[] = [
   },
   {
     id: 't4',
-    title: 'PPT Submission',
+    title: 'PPT, Video Clip & 20% Prototype Submission',
     date: '25 August 2026, 11:59 PM',
-    description: 'Submit your team PPT presentation detailing your proposed solution.',
-    active: false,
+    description: 'Submit your PowerPoint deck (.ppt/.pptx), 2-minute YouTube video pitch clip, and 20% prototype code repository before 11:59 PM.',
+    active: true,
   },
   {
     id: 't5',
     title: 'PPT Presentation Day',
-    date: '27 August 2026',
-    description: 'In-person pitch deck presentation & technical evaluation before faculty panel.',
+    date: '27 August 2026 (Time will be shared soon)',
+    description: 'In-person pitch deck presentation & technical evaluation before faculty panel. Venue: Gandhinagar Campus. Schedule & time slots will be shared soon.',
     active: false,
   },
 ];

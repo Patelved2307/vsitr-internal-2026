@@ -504,8 +504,22 @@ export async function getGlobalConfig() {
           mergedSettings.pptSubmissionDeadline = '25 August 2026, 11:59 PM';
         }
         const mergedTimeline = (val.timeline || fileDb.timeline).map((t: any) => {
-          if (t.id === 't4' && t.date.includes('23 August')) {
-            return { ...t, date: '25 August 2026, 11:59 PM' };
+          if (t.id === 't4') {
+            return {
+              ...t,
+              title: 'PPT, Video Clip & 20% Prototype Submission',
+              date: '25 August 2026, 11:59 PM',
+              description: 'Submit your PowerPoint deck (.ppt/.pptx), 2-minute YouTube video pitch clip, and 20% prototype code repository before 11:59 PM.',
+              active: true,
+            };
+          }
+          if (t.id === 't5') {
+            return {
+              ...t,
+              title: 'PPT Presentation Day',
+              date: '27 August 2026 (Time will be shared soon)',
+              description: 'In-person pitch deck presentation & technical evaluation before faculty panel. Venue: Gandhinagar Campus. Schedule & time slots will be shared soon.',
+            };
           }
           return t;
         });

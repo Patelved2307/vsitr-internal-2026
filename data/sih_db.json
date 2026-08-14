@@ -42,16 +42,16 @@
     {
       "id": "t4",
       "date": "25 August 2026, 11:59 PM",
-      "title": "PPT Submission",
-      "active": false,
-      "description": "Submit your team PPT presentation detailing your proposed solution."
+      "title": "PPT, Video Clip & 20% Prototype Submission",
+      "active": true,
+      "description": "Submit your PowerPoint deck (.ppt/.pptx), 2-minute YouTube video pitch clip, and 20% prototype code repository before 11:59 PM."
     },
     {
       "id": "t5",
-      "date": "27 August 2026",
+      "date": "27 August 2026 (Time will be shared soon)",
       "title": "PPT Presentation Day",
       "active": false,
-      "description": "In-person pitch deck presentation & technical evaluation before faculty panel."
+      "description": "In-person pitch deck presentation & technical evaluation before faculty panel. Venue: Gandhinagar Campus. Schedule & time slots will be shared soon."
     }
   ],
   "faqs": [
