@@ -1532,17 +1532,7 @@
       "selectedPsTitle": "Smart Waste Management and Citizen Reporting Platform",
       "psSelectedAt": "2026-08-10T12:00:00.000Z",
       "createdAt": "2026-08-01T10:00:00.000Z",
-      "updatedAt": "2026-08-14T06:56:30.294Z",
-      "pptSubmission": {
-        "pptFileName": "SIH2026-000.pptx",
-        "pptFileUrl": "/api/uploads/ppt/SIH2026-000_1786690590027_SIH2026_000.pptx",
-        "pptFileSize": 924505,
-        "pptUploadedAt": "2026-08-14T06:56:30.030Z",
-        "demoVideoUrl": "https://www.youtube.com/watch?v=Dq56dKHGbcQ",
-        "githubRepoUrl": "https://github.com/Patelved2307/vsitr-internal-2026",
-        "githubCollaboratorsAdded": true,
-        "submittedAt": "2026-08-14T06:56:30.030Z"
-      }
+      "updatedAt": "2026-08-14T06:56:30.294Z"
     }
   ],
   "emailLogs": [
