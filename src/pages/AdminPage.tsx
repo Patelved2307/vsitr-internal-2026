@@ -2264,20 +2264,19 @@ export const AdminPage: React.FC = () => {
                     No emails logged yet. Register a team or click "Send Registration Deadline Edit Reminder" above to test automated email dispatching.
                   </div>
                 ) : (
-                  <div className="rounded-2xl border border-slate-200/80 overflow-hidden shadow-xs">
-                    <div className="overflow-x-auto w-full">
-                      <table className="w-full text-left text-xs border-collapse min-w-[920px]">
-                        <thead className="bg-slate-50/90 border-b border-slate-200/80">
-                          <tr className="text-slate-500 font-bold uppercase tracking-wider text-[10px] whitespace-nowrap">
-                            <th className="py-3.5 px-4 bg-slate-50/90">Recipient</th>
-                            <th className="py-3.5 px-4 bg-slate-50/90">Team ID</th>
-                            <th className="py-3.5 px-4 bg-slate-50/90">Type</th>
-                            <th className="py-3.5 px-4 bg-slate-50/90">Subject</th>
-                            <th className="py-3.5 px-4 bg-slate-50/90">Status</th>
-                            <th className="py-3.5 px-4 bg-slate-50/90">Timestamp</th>
-                            <th className="py-3.5 px-4 text-right bg-slate-50/90">Action</th>
-                          </tr>
-                        </thead>
+                  <div className="rounded-2xl border border-slate-200/80 max-h-[520px] overflow-y-auto overflow-x-auto">
+                    <table className="w-full text-left text-xs border-collapse min-w-[980px]">
+                      <thead className="bg-slate-50 sticky top-0 z-10 shadow-2xs">
+                        <tr className="text-slate-500 font-bold uppercase tracking-wider text-[10px] whitespace-nowrap border-b border-slate-200/80">
+                          <th className="py-3.5 px-4 bg-slate-50">Recipient</th>
+                          <th className="py-3.5 px-4 bg-slate-50">Team ID</th>
+                          <th className="py-3.5 px-4 bg-slate-50">Type</th>
+                          <th className="py-3.5 px-4 bg-slate-50">Subject</th>
+                          <th className="py-3.5 px-4 bg-slate-50">Status</th>
+                          <th className="py-3.5 px-4 bg-slate-50">Timestamp</th>
+                          <th className="py-3.5 px-4 text-right bg-slate-50 min-w-[170px]">Action</th>
+                        </tr>
+                      </thead>
                         <tbody className="divide-y divide-slate-100 font-medium text-slate-700">
                           {emailLogs.map((log) => (
                             <tr key={log.id} className="hover:bg-slate-50/80 transition-colors">
@@ -2354,8 +2353,7 @@ export const AdminPage: React.FC = () => {
                         </tbody>
                       </table>
                     </div>
-                  </div>
-                )}
+                  )}
               </div>
 
             </div>
