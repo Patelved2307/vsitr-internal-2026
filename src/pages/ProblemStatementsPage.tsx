@@ -30,6 +30,8 @@ export const ProblemStatementsPage: React.FC = () => {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const isPsExpired = Date.now() > new Date('2026-08-16T23:59:00+05:30').getTime();
+
   useEffect(() => {
     const fetchProblemStatements = async () => {
       try {
@@ -162,6 +164,10 @@ export const ProblemStatementsPage: React.FC = () => {
                         {isSelectedByThisTeam ? (
                           <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold rounded-xl text-xs uppercase tracking-wider">
                             <Check className="h-3.5 w-3.5" /> Selected
+                          </span>
+                        ) : isPsExpired ? (
+                          <span className="inline-flex items-center gap-1 px-3 py-1.5 bg-red-50 text-red-700 border border-red-200 font-extrabold rounded-xl text-xs uppercase tracking-wider">
+                            Selection Closed
                           </span>
                         ) : isTeamLoggedIn ? (
                           <button

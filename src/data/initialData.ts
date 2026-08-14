@@ -59,7 +59,7 @@ export const INITIAL_TIMELINE_EVENTS: TimelineEvent[] = [
     title: 'Problem Statement Selection',
     date: '16 August 2026, 11:59 PM',
     description: 'Select the Problem Statement from team Portal. Once the Problem statement is selected no modification can be done.',
-    active: false,
+    active: true,
   },
   {
     id: 't4',

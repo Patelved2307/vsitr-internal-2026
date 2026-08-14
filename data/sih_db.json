@@ -36,7 +36,7 @@
       "id": "t3",
       "date": "16 August 2026, 11:59 PM",
       "title": "Problem Statement Selection",
-      "active": false,
+      "active": true,
       "description": "Select the Problem Statement from team Portal. Once the Problem statement is selected no modification can be done."
     },
     {

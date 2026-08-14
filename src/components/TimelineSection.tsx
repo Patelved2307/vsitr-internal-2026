@@ -5,9 +5,63 @@ import { Timeline } from './ui/timeline';
 export const TimelineSection: React.FC = () => {
   const { timeline } = useAuth();
 
+  const now = Date.now();
+
   const data = (timeline || []).map((event) => {
-    const isClosed = event.date.toLowerCase().includes('closed');
-    const isActive = event.active;
+    let statusLabel = 'Upcoming';
+    let statusStyle = 'bg-blue-50 text-blue-700 border-blue-200';
+    let isLiveDot = false;
+
+    if (event.id === 't1') {
+      const cutoff = new Date('2026-08-02T23:59:00+05:30').getTime();
+      if (now > cutoff) {
+        statusLabel = 'Closed';
+        statusStyle = 'bg-red-50 text-red-700 border-red-200';
+      } else {
+        statusLabel = 'Active';
+        statusStyle = 'bg-emerald-50 text-emerald-700 border-emerald-200';
+        isLiveDot = true;
+      }
+    } else if (event.id === 't2') {
+      const cutoff = new Date('2026-08-05T23:59:00+05:30').getTime();
+      if (now > cutoff) {
+        statusLabel = 'Closed';
+        statusStyle = 'bg-red-50 text-red-700 border-red-200';
+      } else {
+        statusLabel = 'Active';
+        statusStyle = 'bg-emerald-50 text-emerald-700 border-emerald-200';
+        isLiveDot = true;
+      }
+    } else if (event.id === 't3') {
+      const cutoff = new Date('2026-08-16T23:59:00+05:30').getTime();
+      if (now > cutoff) {
+        statusLabel = 'Closed';
+        statusStyle = 'bg-red-50 text-red-700 border-red-200';
+      } else {
+        statusLabel = 'Active';
+        statusStyle = 'bg-emerald-50 text-emerald-700 border-emerald-200';
+        isLiveDot = true;
+      }
+    } else if (event.id === 't4') {
+      const cutoff = new Date('2026-08-25T23:59:00+05:30').getTime();
+      if (now > cutoff) {
+        statusLabel = 'Closed';
+        statusStyle = 'bg-red-50 text-red-700 border-red-200';
+      } else {
+        statusLabel = 'Active';
+        statusStyle = 'bg-emerald-50 text-emerald-700 border-emerald-200';
+        isLiveDot = true;
+      }
+    } else {
+      if (event.active) {
+        statusLabel = 'Active';
+        statusStyle = 'bg-emerald-50 text-emerald-700 border-emerald-200';
+        isLiveDot = true;
+      } else if (event.date.toLowerCase().includes('closed')) {
+        statusLabel = 'Closed';
+        statusStyle = 'bg-red-50 text-red-700 border-red-200';
+      }
+    }
 
     return {
       title: event.date,
@@ -18,20 +72,10 @@ export const TimelineSection: React.FC = () => {
             {event.description}
           </p>
           <div className="flex gap-2">
-            {isClosed ? (
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-extrabold uppercase bg-red-50 text-red-750 border border-red-200">
-                Closed
-              </span>
-            ) : isActive ? (
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-extrabold uppercase bg-emerald-50 text-emerald-700 border border-emerald-200">
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-ping" />
-                Active
-              </span>
-            ) : (
-              <span className="inline-flex px-2.5 py-1 rounded-full text-[10px] font-extrabold uppercase bg-blue-50 text-blue-700 border border-blue-200">
-                Upcoming
-              </span>
-            )}
+            <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-extrabold uppercase border ${statusStyle}`}>
+              {isLiveDot && <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-ping" />}
+              {statusLabel}
+            </span>
           </div>
         </div>
       ),
