@@ -294,73 +294,75 @@ export const PptSubmissionPage: React.FC = () => {
           </div>
 
           {/* Clean Key-Value Rows */}
-          <div className="divide-y divide-slate-100 space-y-1">
+          <div className="divide-y divide-slate-100 text-xs">
 
             {/* 1. TEAM ID */}
-            <div className="py-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-              <span className="text-xs font-black uppercase tracking-wider text-slate-400 sm:w-44 shrink-0">
+            <div className="py-3.5 grid grid-cols-1 sm:grid-cols-[180px_1fr_auto] items-center gap-3">
+              <span className="font-extrabold uppercase tracking-wider text-slate-500">
                 TEAM ID
               </span>
-              <div className="flex items-center gap-2 flex-wrap">
-                <span className="px-3 py-1 rounded-xl bg-blue-50 text-[#1B3F8B] font-mono font-black text-sm border border-blue-200">
+              <div className="flex items-center gap-2">
+                <span className="px-3 py-1 rounded-xl bg-blue-50 text-[#1B3F8B] font-mono font-black text-sm border border-blue-200 shadow-2xs">
                   {team.id}
                 </span>
-                <span className="inline-flex items-center gap-1 text-emerald-700 text-xs font-black bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">
-                  <Check className="h-3.5 w-3.5 text-emerald-600" /> Verified
-                </span>
               </div>
+              <span className="inline-flex items-center gap-1 text-emerald-700 text-xs font-extrabold bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-200/80 shrink-0 sm:ml-auto">
+                <Check className="h-3.5 w-3.5 text-emerald-600" /> Verified
+              </span>
             </div>
 
             {/* 2. TEAM NAME */}
-            <div className="py-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-              <span className="text-xs font-black uppercase tracking-wider text-slate-400 sm:w-44 shrink-0">
+            <div className="py-3.5 grid grid-cols-1 sm:grid-cols-[180px_1fr_auto] items-center gap-3">
+              <span className="font-extrabold uppercase tracking-wider text-slate-500">
                 TEAM NAME
               </span>
-              <div className="flex items-center gap-2 flex-wrap">
+              <div className="flex items-center gap-2">
                 <span className="font-black text-slate-900 text-sm sm:text-base">
                   {team.teamName}
                 </span>
-                <span className="inline-flex items-center gap-1 text-emerald-700 text-xs font-black bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">
-                  <Check className="h-3.5 w-3.5 text-emerald-600" /> Verified
-                </span>
               </div>
+              <span className="inline-flex items-center gap-1 text-emerald-700 text-xs font-extrabold bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-200/80 shrink-0 sm:ml-auto">
+                <Check className="h-3.5 w-3.5 text-emerald-600" /> Verified
+              </span>
             </div>
 
             {/* 3. TEAM LEADER */}
-            <div className="py-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-              <span className="text-xs font-black uppercase tracking-wider text-slate-400 sm:w-44 shrink-0">
+            <div className="py-3.5 grid grid-cols-1 sm:grid-cols-[180px_1fr_auto] items-center gap-3">
+              <span className="font-extrabold uppercase tracking-wider text-slate-500">
                 TEAM LEADER
               </span>
               <div className="flex items-center gap-2 flex-wrap">
                 <span className="font-black text-slate-900 text-sm">
                   {team.leader.fullName}
                 </span>
-                <span className="font-mono font-medium text-slate-500 text-xs">
+                <span className="font-mono font-semibold text-slate-500 text-xs">
                   ({team.leader.email})
                 </span>
-                <span className="inline-flex items-center gap-1 text-emerald-700 text-xs font-black bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">
-                  <Check className="h-3.5 w-3.5 text-emerald-600" /> Verified
-                </span>
               </div>
+              <span className="inline-flex items-center gap-1 text-emerald-700 text-xs font-extrabold bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-200/80 shrink-0 sm:ml-auto">
+                <Check className="h-3.5 w-3.5 text-emerald-600" /> Verified
+              </span>
             </div>
 
             {/* 4. SELECTED PROBLEM STATEMENT */}
-            <div className="pt-3 flex flex-col sm:flex-row sm:items-start justify-between gap-2">
-              <span className="text-xs font-black uppercase tracking-wider text-slate-400 sm:w-44 shrink-0 mt-0.5">
+            <div className="pt-3.5 grid grid-cols-1 sm:grid-cols-[180px_1fr_auto] items-start gap-3">
+              <span className="font-extrabold uppercase tracking-wider text-slate-500 mt-1">
                 PROBLEM STATEMENT
               </span>
               {team.selectedPsId ? (
-                <div className="flex items-start gap-2 flex-wrap flex-1">
-                  <span className="px-2.5 py-0.5 rounded-md bg-blue-100 text-[#1B3F8B] font-mono font-black text-xs border border-blue-200 shrink-0 mt-0.5">
-                    {team.selectedPsId}
-                  </span>
-                  <span className="font-black text-slate-900 text-sm leading-relaxed flex-1">
-                    {team.selectedPsTitle}
-                  </span>
-                  <span className="inline-flex items-center gap-1 text-emerald-700 text-xs font-black bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200 shrink-0">
+                <>
+                  <div className="flex items-start gap-2.5 flex-wrap">
+                    <span className="px-2.5 py-0.5 rounded-md bg-blue-100 text-[#1B3F8B] font-mono font-black text-xs border border-blue-200 shrink-0 mt-0.5">
+                      {team.selectedPsId}
+                    </span>
+                    <span className="font-black text-slate-900 text-sm leading-relaxed">
+                      {team.selectedPsTitle}
+                    </span>
+                  </div>
+                  <span className="inline-flex items-center gap-1 text-emerald-700 text-xs font-extrabold bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-200/80 shrink-0 sm:ml-auto mt-0.5">
                     <Check className="h-3.5 w-3.5 text-emerald-600" /> Verified
                   </span>
-                </div>
+                </>
               ) : (
                 <p className="text-xs font-bold text-slate-400 italic">No Problem Statement Selected Yet</p>
               )}
