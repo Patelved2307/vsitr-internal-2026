@@ -748,28 +748,30 @@ export const RegistrationRulesView: React.FC = () => {
       )}
 
       {/* Official SIH Announcement Banner */}
-      <div className="mb-8 p-6 rounded-3xl bg-[#FFF9E6] border border-amber-300 text-amber-950 flex flex-col md:flex-row items-start gap-4 shadow-md relative overflow-hidden animate-in fade-in duration-500">
-        <div className="absolute top-0 left-0 bottom-0 w-1.5 bg-amber-500" />
-        <div className="p-3 bg-amber-500/10 border border-amber-500/20 text-amber-600 rounded-2xl shrink-0">
-          <AlertTriangle className="h-6 w-6 animate-pulse" />
-        </div>
-        <div className="space-y-1.5">
-          <h3 className="text-base sm:text-lg font-black tracking-tight text-amber-950 flex items-center gap-2">
-            📢 Important Announcement: Official SIH Problem Statements Delayed
-          </h3>
-          <p className="text-xs sm:text-sm text-slate-800 leading-relaxed font-semibold">
-            SIH has officially announced a delay in releasing the official Problem Statements. Until they are released, VSITR will conduct the Internal SIH using institute-released problem statements. Selected teams will participate on these. Once the official SIH problem statements are released later, teams will select their official statement and the Internal SIH will be conducted again.
-          </p>
-          <div className="pt-2 flex gap-3">
-            <button
-              onClick={() => setActiveTab('problem-statements')}
-              className="px-4 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-500 text-white text-xs font-black shadow-sm transition"
-            >
-              View Institute Problem Statements
-            </button>
+      {settings?.announcementBanner && (
+        <div className="mb-8 p-6 rounded-3xl bg-[#FFF9E6] border border-amber-300 text-amber-950 flex flex-col md:flex-row items-start gap-4 shadow-md relative overflow-hidden animate-in fade-in duration-500">
+          <div className="absolute top-0 left-0 bottom-0 w-1.5 bg-amber-500" />
+          <div className="p-3 bg-amber-500/10 border border-amber-500/20 text-amber-600 rounded-2xl shrink-0">
+            <AlertTriangle className="h-6 w-6 animate-pulse" />
+          </div>
+          <div className="space-y-1.5 flex-1">
+            <h3 className="text-base sm:text-lg font-black tracking-tight text-amber-950 flex items-center gap-2">
+              📢 Important Announcement
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-800 leading-relaxed font-semibold">
+              {settings.announcementBanner}
+            </p>
+            <div className="pt-2 flex gap-3">
+              <button
+                onClick={() => setActiveTab('problem-statements')}
+                className="px-4 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-500 text-white text-xs font-black shadow-sm transition cursor-pointer"
+              >
+                View Institute Problem Statements
+              </button>
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* Main Grid: Left (Deadlines - wider when registration is closed), Right (Form Wizard / Info Panel) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
