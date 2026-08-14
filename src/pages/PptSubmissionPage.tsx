@@ -189,31 +189,133 @@ export const PptSubmissionPage: React.FC = () => {
   }
 
   if (team?.pptSubmission?.submittedAt || team?.pptSubmission?.pptFileUrl) {
+    const sub = team.pptSubmission;
     return (
-      <div className="min-h-[75vh] flex items-center justify-center py-12 px-4">
-        <div className="max-w-xl w-full p-8 rounded-3xl bg-white border border-emerald-200 shadow-xl text-center space-y-5">
-          <div className="h-16 w-16 rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto shadow-sm">
-            <CheckCircle2 className="h-8 w-8" />
-          </div>
-          <div className="space-y-2">
-            <span className="px-3 py-1 rounded-full text-xs font-black text-emerald-800 bg-emerald-100 border border-emerald-300 inline-flex items-center gap-1.5">
-              <ShieldCheck className="h-3.5 w-3.5 text-emerald-600" /> Submission Completed &amp; Locked
-            </span>
-            <h2 className="text-2xl font-black text-slate-900">
-              Presentation &amp; Prototype Already Submitted
-            </h2>
-            <p className="text-xs text-slate-600 font-semibold max-w-md mx-auto leading-relaxed">
-              Your PPT deck, demo pitch video, and GitHub prototype repository details for Team <strong className="text-slate-900">{team.teamName} ({team.id})</strong> have been received and verified. No further modifications are permitted.
-            </p>
+      <div className="min-h-screen py-8 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto space-y-6">
+        <div className="flex items-center justify-between gap-3">
+          <button
+            onClick={() => setActiveTab('portal')}
+            className="inline-flex items-center gap-2 text-xs font-extrabold text-slate-700 hover:text-[#1B3F8B] transition bg-white px-4 py-2.5 rounded-xl border border-slate-200 shadow-2xs cursor-pointer"
+          >
+            <ArrowLeft className="h-4 w-4" /> Back to Team Portal
+          </button>
+          <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-emerald-50 text-emerald-800 font-black text-xs uppercase tracking-wider border border-emerald-200 shadow-2xs">
+            <ShieldCheck className="h-4 w-4 text-emerald-600" /> Submission Verified &amp; Locked
+          </span>
+        </div>
+
+        {/* VERIFIED RECEIPT CARD */}
+        <div className="rounded-3xl bg-gradient-to-br from-emerald-50/90 via-teal-50/40 to-emerald-50/90 p-6 sm:p-8 border border-emerald-200/90 shadow-xl space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-emerald-200/60 pb-5">
+            <div className="flex items-center gap-3.5">
+              <div className="p-3 rounded-2xl bg-emerald-500 text-white shrink-0 shadow-md">
+                <CheckCircle2 className="h-7 w-7" />
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <h3 className="text-lg sm:text-xl font-black text-emerald-950 tracking-tight">
+                    Presentation &amp; Prototype Submission Received
+                  </h3>
+                  <span className="px-2.5 py-0.5 rounded-full bg-emerald-200/80 text-emerald-900 font-extrabold text-[10px] uppercase tracking-wider border border-emerald-300/60">
+                    Verified
+                  </span>
+                </div>
+                <p className="text-xs text-emerald-800 font-medium mt-0.5">
+                  Submitted on: {new Date(sub.submittedAt || Date.now()).toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' })}
+                </p>
+              </div>
+            </div>
           </div>
 
-          <div className="pt-2">
-            <button
-              onClick={() => setActiveTab('portal')}
-              className="px-6 py-3 rounded-xl bg-[#1B3F8B] text-white font-extrabold text-xs shadow-md hover:bg-blue-900 transition cursor-pointer"
-            >
-              Return to Team Portal →
-            </button>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {/* PPT FILE */}
+            <div className="p-4 rounded-2xl bg-white border border-emerald-200/80 shadow-2xs space-y-2 flex flex-col justify-between">
+              <div className="space-y-1">
+                <div className="flex items-center gap-2 text-slate-400">
+                  <FileText className="h-4 w-4 text-[#1B3F8B]" />
+                  <span className="text-[10px] font-black uppercase tracking-wider text-slate-500">PPT FILE DECK</span>
+                </div>
+                <p className="text-sm font-mono font-black text-slate-900 truncate" title={sub.pptFileName}>
+                  {sub.pptFileName || 'SIH2026-Presentation.pptx'}
+                </p>
+              </div>
+              {sub.pptFileUrl && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (sub.pptFileUrl?.startsWith('data:')) {
+                      const parts = sub.pptFileUrl.split(',');
+                      const mimeMatch = parts[0].match(/:(.*?);/);
+                      const mime = mimeMatch ? mimeMatch[1] : 'application/octet-stream';
+                      const bstr = atob(parts[1]);
+                      let n = bstr.length;
+                      const u8arr = new Uint8Array(n);
+                      while (n--) u8arr[n] = bstr.charCodeAt(n);
+                      const blob = new Blob([u8arr], { type: mime });
+                      const url = URL.createObjectURL(blob);
+                      const a = document.createElement('a');
+                      a.href = url;
+                      a.download = sub.pptFileName || `${team.id}_presentation.pptx`;
+                      document.body.appendChild(a);
+                      a.click();
+                      document.body.removeChild(a);
+                      URL.revokeObjectURL(url);
+                    } else {
+                      window.open(sub.pptFileUrl, '_blank');
+                    }
+                  }}
+                  className="inline-flex items-center gap-1.5 text-xs font-black text-[#1B3F8B] hover:underline pt-2 border-t border-slate-100 cursor-pointer"
+                >
+                  <Download className="h-3.5 w-3.5" /> Download PPT Deck
+                </button>
+              )}
+            </div>
+
+            {/* VIDEO CLIP */}
+            <div className="p-4 rounded-2xl bg-white border border-emerald-200/80 shadow-2xs space-y-2 flex flex-col justify-between">
+              <div className="space-y-1">
+                <div className="flex items-center gap-2 text-slate-400">
+                  <Video className="h-4 w-4 text-[#C1272D]" />
+                  <span className="text-[10px] font-black uppercase tracking-wider text-slate-500">2-MIN PITCH VIDEO</span>
+                </div>
+                <p className="text-sm font-extrabold text-slate-900 truncate">
+                  YouTube Video Pitch
+                </p>
+              </div>
+              {sub.demoVideoUrl && (
+                <a
+                  href={sub.demoVideoUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 text-xs font-black text-[#C1272D] hover:underline pt-2 border-t border-slate-100"
+                >
+                  <Play className="h-3.5 w-3.5 fill-[#C1272D]" /> Watch YouTube Video →
+                </a>
+              )}
+            </div>
+
+            {/* GITHUB REPO */}
+            <div className="p-4 rounded-2xl bg-white border border-emerald-200/80 shadow-2xs space-y-2 flex flex-col justify-between">
+              <div className="space-y-1">
+                <div className="flex items-center gap-2 text-slate-400">
+                  <GitBranch className="h-4 w-4 text-slate-800" />
+                  <span className="text-[10px] font-black uppercase tracking-wider text-slate-500">20% PROTOTYPE REPO</span>
+                </div>
+                <p className="text-sm font-extrabold text-slate-900 truncate">
+                  GitHub Repository
+                </p>
+              </div>
+              {sub.githubRepoUrl && (
+                <a
+                  href={sub.githubRepoUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 text-xs font-black text-slate-800 hover:underline pt-2 border-t border-slate-100"
+                >
+                  <GitBranch className="h-3.5 w-3.5" /> View GitHub Repo →
+                </a>
+              )}
+            </div>
           </div>
         </div>
       </div>

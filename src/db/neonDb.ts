@@ -788,7 +788,11 @@ export async function updateTeam(id: string, updatedFields: Partial<Team>): Prom
           id.trim(),
         ]
       );
-      if (res.rowCount > 0) neonSuccess = true;
+      if (res.rowCount > 0) {
+        neonSuccess = true;
+      } else {
+        await createTeam(merged);
+      }
       await syncNormalizedMembersAndMentors(merged);
     } catch (err) {
       console.error('Error updating team in Neon DB:', err);
