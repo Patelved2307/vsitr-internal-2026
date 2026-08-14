@@ -974,6 +974,17 @@ export async function createPptSubmission(data: any): Promise<PptSubmission> {
   }
   saveFileDb(db);
 
+  // Automatically dispatch confirmation emails to team leader & team members
+  try {
+    const teamData = await getTeamById(submission.teamId);
+    if (teamData) {
+      const { dispatchPptSubmissionEmail } = await import('../services/emailService.js');
+      await dispatchPptSubmissionEmail(teamData, submission);
+    }
+  } catch (emailErr) {
+    console.error('Error dispatching PPT submission confirmation emails:', emailErr);
+  }
+
   return submission;
 }
 

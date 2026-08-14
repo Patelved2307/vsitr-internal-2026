@@ -145,7 +145,7 @@ export interface EmailLog {
   teamId?: string;
   subject: string;
   body: string;
-  type: 'registration_confirmation' | 'deadline_reminder' | 'admin_announcement' | 'ps_selection';
+  type: 'registration_confirmation' | 'deadline_reminder' | 'admin_announcement' | 'ps_selection' | 'ppt_submission';
   status: 'sent' | 'simulated' | 'failed';
   sentAt: string;
 }

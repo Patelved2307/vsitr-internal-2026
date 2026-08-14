@@ -1,5 +1,5 @@
 import nodemailer from 'nodemailer';
-import { Team, TeamMember, EmailLog } from '../types.js';
+import { Team, TeamMember, EmailLog, PptSubmission } from '../types.js';
 import { saveEmailLog, getGlobalConfig } from '../db/neonDb.js';
 
 // Lazy Transporter initialization
@@ -48,7 +48,7 @@ export async function sendEmail({
   subject: string;
   bodyHtml: string;
   bodyText: string;
-  type: 'registration_confirmation' | 'deadline_reminder' | 'admin_announcement' | 'ps_selection';
+  type: 'registration_confirmation' | 'deadline_reminder' | 'admin_announcement' | 'ps_selection' | 'ppt_submission';
   cc?: string;
 }): Promise<EmailLog> {
   const mailTransporter = getTransporter();
@@ -752,6 +752,235 @@ Kadi Sarva Vishwavidyalaya`;
       bodyHtml,
       bodyText,
       type: 'ps_selection',
+    });
+  });
+
+  await Promise.all(emailPromises);
+}
+
+// 4. Dispatch PPT & Prototype Submission Confirmation Email
+export async function dispatchPptSubmissionEmail(team: Team, submission: PptSubmission, appUrl: string = 'http://localhost:3000') {
+  const leaderName = team.leader.fullName || 'Team Leader';
+  const leaderEmail = team.leader.email;
+  const teamName = team.teamName || (team as any).name || `Team ${team.id}`;
+  const teamId = team.id;
+  const selectedPsId = team.selectedPsId || submission.teamId || 'N/A';
+  const selectedPsTitle = team.selectedPsTitle || 'Institute Problem Statement';
+  
+  const fileName = submission.pptFileName || (submission as any).fileName || 'Presentation_Deck.pptx';
+  const demoVideoUrl = submission.demoVideoUrl || 'N/A';
+  const githubRepoUrl = submission.githubRepoUrl || 'N/A';
+  const submittedAtDate = submission.submittedAt ? new Date(submission.submittedAt) : new Date();
+  const submittedAtFormatted = submittedAtDate.toLocaleDateString('en-IN', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: true,
+  });
+
+  const allMembers = [
+    { email: leaderEmail, fullName: leaderName, role: 'Team Leader' },
+    ...team.members.map((m: any) => ({
+      email: m.email,
+      fullName: m.fullName || m.name || 'Team Member',
+      role: 'Team Member',
+    })),
+  ];
+
+  const subject = `🎉 Submission Confirmed! Internal SIH 2026 - PPT & Prototype Received [Team ${teamId} - ${teamName}]`;
+
+  const emailPromises = allMembers.map(async (member) => {
+    const bodyHtml = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PPT & Prototype Submission Successful - Internal SIH 2026</title>
+</head>
+<body style="margin: 0; padding: 0; background-color: #f4f6fb; font-family: 'Segoe UI', Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased;">
+  <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #f4f6fb; padding: 30px 10px;">
+    <tr>
+      <td align="center">
+        <table role="presentation" width="600" border="0" cellspacing="0" cellpadding="0" style="background-color: #ffffff; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.08); border: 1px solid #e2e8f0;">
+          
+          <!-- BRAND HEADER -->
+          <tr>
+            <td style="background: linear-gradient(135deg, #C1272D 0%, #1B3F8B 100%); padding: 35px 30px; text-align: center; color: #ffffff;">
+              <p style="margin: 0; font-size: 11px; text-transform: uppercase; letter-spacing: 2px; font-weight: 800; opacity: 0.9;">
+                Vidush Somany Institute of Technology &amp; Research (VSITR)
+              </p>
+              <h1 style="margin: 10px 0 0 0; font-size: 24px; font-weight: 900; letter-spacing: -0.5px; color: #ffffff;">
+                Internal Smart India Hackathon 2026
+              </h1>
+            </td>
+          </tr>
+
+          <!-- SUCCESS BANNER -->
+          <tr>
+            <td style="background-color: #ecfdf5; padding: 20px 30px; border-bottom: 1px solid #a7f3d0; text-align: center;">
+              <span style="font-size: 32px; display: block; margin-bottom: 5px;">🎉</span>
+              <h2 style="margin: 0; font-size: 18px; font-weight: 800; color: #065f46;">
+                PPT &amp; Prototype Submission Successful!
+              </h2>
+              <p style="margin: 4px 0 0 0; font-size: 13px; color: #047857; font-weight: 600;">
+                Your solution pitch deck, video demo link &amp; prototype repo have been recorded.
+              </p>
+            </td>
+          </tr>
+
+          <!-- BODY CONTENT -->
+          <tr>
+            <td style="padding: 30px;">
+              <p style="font-size: 14px; color: #334155; line-height: 1.6; margin: 0 0 20px 0; font-weight: 600;">
+                Dear <strong>${member.fullName}</strong> (${member.role}),
+              </p>
+              <p style="font-size: 13px; color: #64748b; line-height: 1.6; margin: 0 0 25px 0;">
+                Congratulations! We have successfully received official PPT &amp; Prototype submission for Team <strong>${teamName}</strong> (ID: <strong>${teamId}</strong>) for Internal SIH 2026. Below is your official submission receipt.
+              </p>
+
+              <!-- SUBMISSION RECEIPT TABLE -->
+              <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #f8fafc; border-radius: 14px; border: 1px solid #e2e8f0; margin-bottom: 25px; overflow: hidden;">
+                <tr>
+                  <td colspan="2" style="background-color: #1B3F8B; color: #ffffff; padding: 12px 18px; font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;">
+                    📋 Official Submission Receipt
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding: 10px 18px; font-size: 12px; color: #64748b; font-weight: 700; width: 38%; border-bottom: 1px solid #f1f5f9;">Team ID &amp; Name:</td>
+                  <td style="padding: 10px 18px; font-size: 13px; color: #0f172a; font-weight: 800; border-bottom: 1px solid #f1f5f9;">${teamId} &mdash; ${teamName}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 10px 18px; font-size: 12px; color: #64748b; font-weight: 700; border-bottom: 1px solid #f1f5f9;">Problem Statement:</td>
+                  <td style="padding: 10px 18px; font-size: 12px; color: #1B3F8B; font-weight: 800; border-bottom: 1px solid #f1f5f9;">[${selectedPsId}] ${selectedPsTitle}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 10px 18px; font-size: 12px; color: #64748b; font-weight: 700; border-bottom: 1px solid #f1f5f9;">PPT Presentation:</td>
+                  <td style="padding: 10px 18px; font-size: 12px; color: #047857; font-weight: 800; border-bottom: 1px solid #f1f5f9;">✔ ${fileName}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 10px 18px; font-size: 12px; color: #64748b; font-weight: 700; border-bottom: 1px solid #f1f5f9;">2-Min Pitch Video:</td>
+                  <td style="padding: 10px 18px; font-size: 12px; color: #dc2626; font-weight: 700; border-bottom: 1px solid #f1f5f9;">
+                    <a href="${demoVideoUrl}" target="_blank" style="color: #dc2626; text-decoration: underline;">Watch Video Clip</a>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding: 10px 18px; font-size: 12px; color: #64748b; font-weight: 700; border-bottom: 1px solid #f1f5f9;">GitHub Repository:</td>
+                  <td style="padding: 10px 18px; font-size: 12px; color: #0f172a; font-weight: 700; border-bottom: 1px solid #f1f5f9;">
+                    <a href="${githubRepoUrl}" target="_blank" style="color: #1B3F8B; text-decoration: underline;">View Repository</a>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding: 10px 18px; font-size: 12px; color: #64748b; font-weight: 700;">Submission Timestamp:</td>
+                  <td style="padding: 10px 18px; font-size: 12px; color: #475569; font-weight: 700;">${submittedAtFormatted}</td>
+                </tr>
+              </table>
+
+              <!-- NEXT STEP CARD -->
+              <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #f0f9ff; border-radius: 14px; border: 1px solid #bae6fd; margin-bottom: 25px;">
+                <tr>
+                  <td style="padding: 20px;">
+                    <h3 style="margin: 0 0 10px 0; font-size: 14px; font-weight: 800; color: #0369a1; text-transform: uppercase; letter-spacing: 0.5px;">
+                      📍 Next Phase: PPT Presentation Day
+                    </h3>
+                    <ul style="margin: 0 0 15px 0; padding-left: 20px; font-size: 13px; color: #334155; line-height: 1.7;">
+                      <li><strong>Date:</strong> 27 August 2026</li>
+                      <li><strong>Venue:</strong> Gandhinagar Campus</li>
+                      <li><strong>Schedule:</strong> Detailed time slots will be shared soon.</li>
+                    </ul>
+
+                    <h4 style="margin: 12px 0 6px 0; font-size: 12px; font-weight: 800; color: #0f172a; text-transform: uppercase;">
+                      📌 Presentation Day Preparation Checklist:
+                    </h4>
+                    <ul style="margin: 0 0 15px 0; padding-left: 20px; font-size: 12px; color: #475569; line-height: 1.6;">
+                      <li>Bring your laptop with your working prototype code &amp; local setup ready.</li>
+                      <li>Prepare your live pitch presentation and working prototype demonstration strictly adhering to your submitted official PPT deck format.</li>
+                      <li>All 6 team members must attend in formal attire with institute ID cards.</li>
+                    </ul>
+
+                    <div style="background-color: #ffffff; border-radius: 10px; padding: 10px 14px; border: 1px dashed #7dd3fc; font-size: 12px; color: #0369a1; font-weight: 600; line-height: 1.5;">
+                      📢 <strong>Note:</strong> Detailed guidelines, presentation rules, evaluation criteria, and complete time-slot schedules will be shared with all team leaders soon via email and your Team Portal dashboard.
+                    </div>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- CTA BUTTON -->
+              <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                  <td align="center" style="padding: 10px 0 20px 0;">
+                    <a href="${appUrl}" style="display: inline-block; background-color: #1B3F8B; color: #ffffff; text-decoration: none; font-size: 14px; font-weight: 800; padding: 14px 32px; border-radius: 12px; box-shadow: 0 4px 12px rgba(27, 63, 139, 0.25);">
+                      Go to Team Portal Dashboard &rarr;
+                    </a>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- SUPPORT INFO -->
+              <p style="font-size: 12px; color: #94a3b8; line-height: 1.5; margin: 20px 0 0 0; text-align: center; border-top: 1px solid #f1f5f9; padding-top: 20px;">
+                Need assistance? Contact our committee at <a href="mailto:sihinternal.vsitr@gmail.com" style="color: #1B3F8B; font-weight: 700; text-decoration: none;">sihinternal.vsitr@gmail.com</a>
+              </p>
+            </td>
+          </tr>
+
+          <!-- FOOTER -->
+          <tr>
+            <td style="background-color: #f8fafc; padding: 20px 30px; border-top: 1px solid #e2e8f0; text-align: center; font-size: 11px; color: #64748b; font-weight: 600;">
+              Internal SIH 2026 Organizing Committee &bull; Department of IT, CSE &amp; CE<br>
+              Vidush Somany Institute of Technology &amp; Research (VSITR), Kadi
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+    `;
+
+    const bodyText = `
+Internal Smart India Hackathon 2026 - PPT & Prototype Submission Confirmation
+
+Dear ${member.fullName} (${member.role}),
+
+Congratulations! We have successfully received official PPT & Prototype submission for Team ${teamName} (ID: ${teamId}).
+
+SUBMISSION RECEIPT:
+- Team ID: ${teamId}
+- Team Name: ${teamName}
+- Problem Statement: [${selectedPsId}] ${selectedPsTitle}
+- PPT Presentation: ${fileName}
+- 2-Min Pitch Video: ${demoVideoUrl}
+- GitHub Repository: ${githubRepoUrl}
+- Submission Timestamp: ${submittedAtFormatted}
+
+NEXT PHASE: PPT PRESENTATION DAY
+- Date: 27 August 2026
+- Venue: Gandhinagar Campus
+- Time Schedule: Detailed time slots will be shared soon.
+
+PREPARATION CHECKLIST:
+1. Bring your laptop with your working prototype code & local setup ready.
+2. Prepare your live pitch presentation and working prototype demonstration strictly adhering to your submitted official PPT deck format.
+3. All 6 team members must attend in formal attire with institute ID cards.
+
+Note: Detailed guidelines, presentation rules, evaluation criteria, and complete time-slot schedules will be shared with all team leaders soon via email and your Team Portal dashboard.
+
+Contact Support: sihinternal.vsitr@gmail.com
+VSITR, Kadi
+    `;
+
+    await sendEmail({
+      recipientEmail: member.email,
+      recipientName: member.fullName,
+      teamId: team.id,
+      subject,
+      bodyHtml,
+      bodyText,
+      type: 'ppt_submission',
     });
   });
 
