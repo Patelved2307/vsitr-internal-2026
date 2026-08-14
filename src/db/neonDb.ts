@@ -671,14 +671,9 @@ export async function getAllTeams(): Promise<Team[]> {
 
 export async function getTeamById(id: string): Promise<Team | null> {
   const cleanId = (id || '').trim().toUpperCase();
-  if (cleanId === 'SIH2026-000') {
-    const db = ensureFileDb();
-    const foundInDb = db.teams.find((t) => t.id.toUpperCase() === 'SIH2026-000');
-    return foundInDb || TEST_TEAM;
-  }
   if (isNeonConnected) {
     try {
-      const res = await runQuery('SELECT * FROM teams WHERE UPPER(id) = UPPER($1)', [id.trim()]);
+      const res = await runQuery('SELECT * FROM teams WHERE UPPER(id) = UPPER($1)', [cleanId]);
       if (res.rows.length > 0) {
         const row = res.rows[0];
         return {
@@ -700,8 +695,13 @@ export async function getTeamById(id: string): Promise<Team | null> {
       console.error('Error fetching team by ID from Neon:', err);
     }
   }
+  if (cleanId === 'SIH2026-000') {
+    const db = ensureFileDb();
+    const foundInDb = db.teams.find((t) => t.id.toUpperCase() === 'SIH2026-000');
+    return foundInDb || TEST_TEAM;
+  }
   const db = ensureFileDb();
-  return db.teams.find((t) => t.id.toUpperCase() === id.trim().toUpperCase()) || null;
+  return db.teams.find((t) => t.id.toUpperCase() === cleanId) || null;
 }
 
 export async function createTeam(team: Team): Promise<Team> {
