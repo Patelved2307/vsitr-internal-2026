@@ -38,6 +38,7 @@ import {
   resendEmailLog,
   resetTransporter,
   dispatchPsSelectionEmails,
+  dispatchPptSubmissionEmail,
 } from './src/services/emailService.js';
 
 const PORT = 3000;
@@ -636,7 +637,6 @@ async function startServer() {
         pptFileName: pptFileName.trim(),
         pptFileUrl,
         pptFileSize,
-        pptFileBase64: pptFileBase64 || team.pptSubmission?.pptFileBase64 || '',
         pptUploadedAt: new Date().toISOString(),
         demoVideoUrl: demoVideoUrl.trim(),
         githubRepoUrl: githubRepoUrl.trim(),
@@ -646,8 +646,7 @@ async function startServer() {
 
       const updatedTeam = await updateTeamPptSubmission(team.id, pptSubmissionData);
 
-      // Also populate the ppt_submissions database table
-      await createPptSubmission({
+      const submissionPayload = {
         id: `PPT-${team.id}`,
         teamId: team.id,
         teamName: team.teamName,
@@ -661,25 +660,22 @@ async function startServer() {
         githubRepoUrl: githubRepoUrl.trim(),
         githubCollaboratorsAdded: !!githubCollaboratorsAdded,
         submittedAt: pptSubmissionData.submittedAt,
-      });
+      };
 
-      // Send Confirmation Email
-      const emailSubject = `[SIH 2026] PPT & Prototype Submission Confirmation - ${team.teamName} (${team.id})`;
-      const emailBody = `Dear ${team.leader.fullName},\n\nYour PPT presentation and 20% prototype submission for Team ${team.teamName} (${team.id}) has been successfully received.\n\nSubmission Details:\n- Presentation File: ${pptFileName}\n- Demo Video: ${demoVideoUrl}\n- GitHub Repository: ${githubRepoUrl}\n- Submission Timestamp: ${new Date().toLocaleString('en-IN')}\n\nBest regards,\nOrganizing Committee\nInternal SIH 2026 - VSITR Kadi`;
-      
-      sendEmail({
-        recipientEmail: team.leader.email,
-        recipientName: team.leader.fullName,
-        teamId: team.id,
-        subject: emailSubject,
-        bodyHtml: `<p>${emailBody.replace(/\n/g, '<br>')}</p>`,
-        bodyText: emailBody,
-        type: 'ps_selection',
-      }).catch(err => console.error('Email error:', err));
+      // Populate ppt_submissions database table
+      await createPptSubmission(submissionPayload);
+
+      // Send formatted HTML confirmation emails to leader and all team members
+      try {
+        const fullTeam = updatedTeam || team;
+        await dispatchPptSubmissionEmail(fullTeam, submissionPayload);
+      } catch (emailErr) {
+        console.error('Error dispatching PPT confirmation emails:', emailErr);
+      }
 
       res.json({
         success: true,
-        team: updatedTeam,
+        team: updatedTeam || { ...team, pptSubmission: pptSubmissionData },
         message: 'PPT presentation and prototype details submitted successfully!',
       });
     } catch (err: any) {

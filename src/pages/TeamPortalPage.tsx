@@ -127,9 +127,12 @@ export const TeamPortalPage: React.FC = () => {
         githubCollaboratorsAdded: githubCollabChecked,
       });
 
-      if (res.success) {
+      if (res.success && res.team) {
+        loginTeamSession(res.team);
         showAlert('Submission Successful', 'Your PPT presentation, demo video link, and 20% prototype repository have been submitted successfully!', 'success');
+      } else if (res.success) {
         await refreshTeamSession();
+        showAlert('Submission Successful', 'Your PPT presentation, demo video link, and 20% prototype repository have been submitted successfully!', 'success');
       }
     } catch (err: any) {
       showAlert('Submission Error', err.message || 'Failed to submit presentation details.');
