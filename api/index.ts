@@ -2,6 +2,8 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
+import fs from 'fs';
+import path from 'path';
 import express, { Request, Response } from 'express';
 import { EventSettings, FAQItem, Team, TimelineEvent } from '../src/types.js';
 import { CLUB_COORDINATORS } from '../src/data/initialData.js';
@@ -25,6 +27,7 @@ import {
   updateProblemStatement,
   deleteProblemStatement,
   updateTeamPsSelection,
+  updateTeamPptSubmission,
 } from '../src/db/neonDb.js';
 import {
   dispatchTeamRegistrationEmails,
@@ -1063,6 +1066,166 @@ app.get('/api/export/csv', async (req: Request, res: Response) => {
 // =====================
 // PPT SUBMISSION ROUTES
 // =====================
+
+// 7.5 Submit PPT & Prototype Presentation (Phase 3)
+app.post('/api/teams/submit-ppt', async (req: Request, res: Response) => {
+  try {
+    const { teamId, leaderEmail, pptFileName, pptFileBase64, demoVideoUrl, githubRepoUrl, githubCollaboratorsAdded } = req.body;
+
+    if (!teamId || !leaderEmail) {
+      return res.status(400).json({ success: false, message: 'Team ID and Leader Email are required.' });
+    }
+
+    const globalConfig = await getGlobalConfig();
+    if (!globalConfig.settings?.pptSubmissionOpen) {
+      return res.status(403).json({ success: false, message: 'PPT Submission portal is currently closed by the Admin Officer.' });
+    }
+
+    const team = await getTeamById(teamId);
+    if (!team) {
+      return res.status(404).json({ success: false, message: 'Team Registration ID not found.' });
+    }
+
+    if (team.leader.email.trim().toLowerCase() !== leaderEmail.trim().toLowerCase()) {
+      return res.status(401).json({ success: false, message: 'Unauthorized. Team Leader email does not match registration records.' });
+    }
+
+    // 1. PPT File Validation (.ppt or .pptx ONLY)
+    if (!pptFileName || !/\.(ppt|pptx)$/i.test(pptFileName.trim())) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid presentation file extension. Only PowerPoint files (.ppt, .pptx) are accepted.',
+      });
+    }
+
+    // 2. Demo Video Link Validation (YouTube URL)
+    if (!demoVideoUrl || !/(youtube\.com|youtu\.be)/i.test(demoVideoUrl.trim())) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid YouTube Video URL. Please paste a valid YouTube video link (e.g. https://youtu.be/... or https://www.youtube.com/watch?v=...).',
+      });
+    }
+
+    // 3. GitHub Repo Link Validation
+    if (!githubRepoUrl || !/(github\.com)/i.test(githubRepoUrl.trim())) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid GitHub Repository URL. Please paste a valid GitHub link (e.g. https://github.com/username/repo).',
+      });
+    }
+
+    // Save PPT File locally
+    let pptFileUrl = team.pptSubmission?.pptFileUrl || '';
+    let pptFileSize = team.pptSubmission?.pptFileSize || 0;
+
+    if (pptFileBase64) {
+      const uploadDir = path.join(process.cwd(), 'data', 'uploads', 'ppt');
+      if (!fs.existsSync(uploadDir)) {
+        fs.mkdirSync(uploadDir, { recursive: true });
+      }
+
+      const cleanBase64 = pptFileBase64.replace(/^data:.*?;base64,/, '');
+      const fileBuffer = Buffer.from(cleanBase64, 'base64');
+      pptFileSize = fileBuffer.length;
+
+      const ext = path.extname(pptFileName) || '.pptx';
+      const safeName = `${team.id}_${Date.now()}_${path.basename(pptFileName, ext).replace(/[^a-zA-Z0-9]/g, '_')}${ext}`;
+      const filePath = path.join(uploadDir, safeName);
+      fs.writeFileSync(filePath, fileBuffer);
+
+      pptFileUrl = `/api/uploads/ppt/${safeName}`;
+    }
+
+    const pptSubmissionData = {
+      pptFileName: pptFileName.trim(),
+      pptFileUrl,
+      pptFileSize,
+      pptFileBase64: pptFileBase64 || team.pptSubmission?.pptFileBase64 || '',
+      pptUploadedAt: new Date().toISOString(),
+      demoVideoUrl: demoVideoUrl.trim(),
+      githubRepoUrl: githubRepoUrl.trim(),
+      githubCollaboratorsAdded: !!githubCollaboratorsAdded,
+      submittedAt: new Date().toISOString(),
+    };
+
+    const updatedTeam = await updateTeamPptSubmission(team.id, pptSubmissionData);
+
+    // Also populate the ppt_submissions database table
+    await createPptSubmission({
+      id: `PPT-${team.id}`,
+      teamId: team.id,
+      teamName: team.teamName,
+      leaderName: team.leader.fullName,
+      leaderEmail: team.leader.email,
+      fileUrl: pptFileUrl,
+      pptFileName: pptFileName.trim(),
+      pptFileUrl,
+      pptFileSize,
+      demoVideoUrl: demoVideoUrl.trim(),
+      githubRepoUrl: githubRepoUrl.trim(),
+      githubCollaboratorsAdded: !!githubCollaboratorsAdded,
+      submittedAt: pptSubmissionData.submittedAt,
+    });
+
+    // Send Confirmation Email
+    const emailSubject = `[SIH 2026] PPT & Prototype Submission Confirmation - ${team.teamName} (${team.id})`;
+    const emailBody = `Dear ${team.leader.fullName},\n\nYour PPT presentation and 20% prototype submission for Team ${team.teamName} (${team.id}) has been successfully received.\n\nSubmission Details:\n- Presentation File: ${pptFileName}\n- Demo Video: ${demoVideoUrl}\n- GitHub Repository: ${githubRepoUrl}\n- Submission Timestamp: ${new Date().toLocaleString('en-IN')}\n\nBest regards,\nOrganizing Committee\nInternal SIH 2026 - VSITR Kadi`;
+    
+    sendEmail({
+      recipientEmail: team.leader.email,
+      recipientName: team.leader.fullName,
+      teamId: team.id,
+      subject: emailSubject,
+      bodyHtml: `<p>${emailBody.replace(/\n/g, '<br>')}</p>`,
+      bodyText: emailBody,
+      type: 'ps_selection',
+    }).catch(err => console.error('Email error:', err));
+
+    res.json({
+      success: true,
+      team: updatedTeam,
+      message: 'PPT presentation and prototype details submitted successfully!',
+    });
+  } catch (err: any) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+// Serve Uploaded PPT files
+app.use('/api/uploads', express.static(path.join(process.cwd(), 'data', 'uploads')));
+
+app.get('/api/uploads/ppt/:filename', async (req: Request, res: Response) => {
+  const filename = path.basename(req.params.filename);
+  const filePath = path.join(process.cwd(), 'data', 'uploads', 'ppt', filename);
+  
+  if (fs.existsSync(filePath)) {
+    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.presentationml.presentation');
+    return res.download(filePath, filename);
+  }
+
+  // Database fallback stream if disk file is missing
+  try {
+    const teams = await getAllTeams();
+    const matchingTeam = teams.find((t) => {
+      const sub = t.pptSubmission;
+      if (!sub) return false;
+      return (sub.pptFileUrl && sub.pptFileUrl.includes(filename)) || sub.pptFileName === filename;
+    });
+
+    const base64Data = (matchingTeam?.pptSubmission as any)?.pptFileBase64;
+    if (base64Data) {
+      const cleanBase64 = base64Data.replace(/^data:.*?;base64,/, '');
+      const fileBuffer = Buffer.from(cleanBase64, 'base64');
+      res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.presentationml.presentation');
+      res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+      return res.send(fileBuffer);
+    }
+  } catch (e) {
+    console.error('Error serving fallback PPT from database:', e);
+  }
+
+  res.status(404).send('PPT File not found.');
+});
 
 // Public: Submit PPT
 app.post('/api/ppt-submission', async (req: Request, res: Response) => {

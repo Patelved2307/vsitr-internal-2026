@@ -176,7 +176,9 @@ export async function initDatabase(force = false): Promise<void> {
           `);
           if (checkRes.rows && checkRes.rows[0] && (checkRes.rows[0].exists === true || checkRes.rows[0].exists === 't')) {
             isNeonConnected = true;
-            console.log('Database tables already exist. Skipping schema creation and sync to optimize latency.');
+            console.log('Database tables already exist. Running schema migrations, syncing test team & settings...');
+            await runTableMigrations();
+            await ensureTestTeamSeeded();
             return;
           }
         } catch (err) {
@@ -255,8 +257,12 @@ export async function initDatabase(force = false): Promise<void> {
           team_name TEXT NOT NULL,
           leader_name TEXT NOT NULL,
           leader_email TEXT NOT NULL,
-          file_url TEXT NOT NULL,
-          note TEXT,
+          ppt_file_name TEXT,
+          ppt_file_url TEXT,
+          ppt_file_size BIGINT,
+          demo_video_url TEXT,
+          github_repo_url TEXT,
+          github_collaborators_added BOOLEAN DEFAULT FALSE,
           submitted_at TIMESTAMPTZ DEFAULT NOW()
         );
       `);
@@ -272,9 +278,12 @@ export async function initDatabase(force = false): Promise<void> {
         );
       `);
 
+      await runTableMigrations();
+
       await runQuery(`ALTER TABLE teams ADD COLUMN IF NOT EXISTS selected_ps_id TEXT;`);
       await runQuery(`ALTER TABLE teams ADD COLUMN IF NOT EXISTS selected_ps_title TEXT;`);
       await runQuery(`ALTER TABLE teams ADD COLUMN IF NOT EXISTS ps_selected_at TIMESTAMPTZ;`);
+      await runQuery(`ALTER TABLE teams ADD COLUMN IF NOT EXISTS ppt_submission JSONB;`);
 
       await runQuery(`ALTER TABLE problem_statements ADD COLUMN IF NOT EXISTS sdg TEXT;`);
       await runQuery(`ALTER TABLE problem_statements ADD COLUMN IF NOT EXISTS theme TEXT;`);
@@ -392,6 +401,8 @@ export async function initDatabase(force = false): Promise<void> {
         }
       }
 
+      await ensureTestTeamSeeded();
+
       console.log('Successfully connected, initialized and synced Neon PostgreSQL database tables!');
       return;
     } catch (err) {
@@ -404,6 +415,7 @@ export async function initDatabase(force = false): Promise<void> {
 
   // File-based fallback initialization
   ensureFileDb();
+  await ensureTestTeamSeeded();
 }
 
 function ensureFileDb(): DatabaseSchema {
@@ -588,6 +600,13 @@ export async function getAllTeams(): Promise<Team[]> {
           }
         } catch(e) { console.warn('Failed to parse mentor json for team:', row.id); }
 
+        let pptSubmissionData: any = undefined;
+        try {
+          if (row.ppt_submission) {
+            pptSubmissionData = typeof row.ppt_submission === 'string' ? JSON.parse(row.ppt_submission) : row.ppt_submission;
+          }
+        } catch(e) { console.warn('Failed to parse ppt_submission json for team:', row.id); }
+
         return {
           id: row.id,
           teamName: row.team_name,
@@ -600,6 +619,7 @@ export async function getAllTeams(): Promise<Team[]> {
           selectedPsId: row.selected_ps_id || undefined,
           selectedPsTitle: row.selected_ps_title || undefined,
           psSelectedAt: row.ps_selected_at || undefined,
+          pptSubmission: pptSubmissionData,
         };
       });
       return parsedTeams;
@@ -612,7 +632,6 @@ export async function getAllTeams(): Promise<Team[]> {
 }
 
 export async function getTeamById(id: string): Promise<Team | null> {
-  if (id.toUpperCase() === 'SIH2026-000') return null;
   if (isNeonConnected) {
     try {
       const res = await runQuery('SELECT * FROM teams WHERE UPPER(id) = UPPER($1)', [id.trim()]);
@@ -630,6 +649,7 @@ export async function getTeamById(id: string): Promise<Team | null> {
           selectedPsId: row.selected_ps_id || undefined,
           selectedPsTitle: row.selected_ps_title || undefined,
           psSelectedAt: row.ps_selected_at || undefined,
+          pptSubmission: row.ppt_submission ? (typeof row.ppt_submission === 'string' ? JSON.parse(row.ppt_submission) : row.ppt_submission) : undefined,
         };
       }
     } catch (err) {
@@ -637,7 +657,7 @@ export async function getTeamById(id: string): Promise<Team | null> {
     }
   }
   const db = ensureFileDb();
-  return db.teams.find((t) => t.id.toUpperCase() === id.trim().toUpperCase() && t.id.toUpperCase() !== 'SIH2026-000') || null;
+  return db.teams.find((t) => t.id.toUpperCase() === id.trim().toUpperCase()) || null;
 }
 
 export async function createTeam(team: Team): Promise<Team> {
@@ -645,8 +665,8 @@ export async function createTeam(team: Team): Promise<Team> {
   if (isNeonConnected) {
     try {
       await runQuery(
-        `INSERT INTO teams (id, team_name, leader, members, mentor, status, selected_ps_id, selected_ps_title, ps_selected_at, created_at, updated_at)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+        `INSERT INTO teams (id, team_name, leader, members, mentor, status, selected_ps_id, selected_ps_title, ps_selected_at, ppt_submission, created_at, updated_at)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
          ON CONFLICT (id) DO UPDATE SET
            team_name = EXCLUDED.team_name,
            leader = EXCLUDED.leader,
@@ -656,6 +676,7 @@ export async function createTeam(team: Team): Promise<Team> {
            selected_ps_id = EXCLUDED.selected_ps_id,
            selected_ps_title = EXCLUDED.selected_ps_title,
            ps_selected_at = EXCLUDED.ps_selected_at,
+           ppt_submission = EXCLUDED.ppt_submission,
            updated_at = EXCLUDED.updated_at`,
         [
           team.id,
@@ -667,6 +688,7 @@ export async function createTeam(team: Team): Promise<Team> {
           team.selectedPsId || null,
           team.selectedPsTitle || null,
           team.psSelectedAt || null,
+          team.pptSubmission ? JSON.stringify(team.pptSubmission) : null,
           team.createdAt,
           team.updatedAt,
         ]
@@ -706,8 +728,8 @@ export async function updateTeam(id: string, updatedFields: Partial<Team>): Prom
       const res = await runQuery(
         `UPDATE teams 
          SET team_name = $1, leader = $2, members = $3, mentor = $4, status = $5, updated_at = $6,
-             selected_ps_id = $7, selected_ps_title = $8, ps_selected_at = $9
-         WHERE UPPER(id) = UPPER($10)`,
+             selected_ps_id = $7, selected_ps_title = $8, ps_selected_at = $9, ppt_submission = $10
+         WHERE UPPER(id) = UPPER($11)`,
         [
           merged.teamName,
           JSON.stringify(merged.leader),
@@ -718,6 +740,7 @@ export async function updateTeam(id: string, updatedFields: Partial<Team>): Prom
           merged.selectedPsId || null,
           merged.selectedPsTitle || null,
           merged.psSelectedAt || null,
+          merged.pptSubmission ? JSON.stringify(merged.pptSubmission) : null,
           id.trim(),
         ]
       );
@@ -831,24 +854,71 @@ export async function getEmailLogs(): Promise<EmailLog[]> {
 
 import type { PptSubmission } from '../types.js';
 
-export async function createPptSubmission(data: Omit<PptSubmission, 'submittedAt'>): Promise<PptSubmission> {
-  const submittedAt = new Date().toISOString();
-  const submission: PptSubmission = { ...data, submittedAt };
+export async function runTableMigrations() {
+  if (!isNeonConnected) return;
+  try {
+    await runQuery(`ALTER TABLE teams ADD COLUMN IF NOT EXISTS selected_ps_id TEXT;`);
+    await runQuery(`ALTER TABLE teams ADD COLUMN IF NOT EXISTS selected_ps_title TEXT;`);
+    await runQuery(`ALTER TABLE teams ADD COLUMN IF NOT EXISTS ps_selected_at TIMESTAMPTZ;`);
+    await runQuery(`ALTER TABLE teams ADD COLUMN IF NOT EXISTS ppt_submission JSONB;`);
+
+    // Clean column reorganization for ppt_submissions table
+    await runQuery(`ALTER TABLE ppt_submissions ADD COLUMN IF NOT EXISTS ppt_file_name TEXT;`);
+    await runQuery(`ALTER TABLE ppt_submissions ADD COLUMN IF NOT EXISTS ppt_file_url TEXT;`);
+    await runQuery(`ALTER TABLE ppt_submissions ADD COLUMN IF NOT EXISTS ppt_file_size BIGINT;`);
+    await runQuery(`ALTER TABLE ppt_submissions ADD COLUMN IF NOT EXISTS demo_video_url TEXT;`);
+    await runQuery(`ALTER TABLE ppt_submissions ADD COLUMN IF NOT EXISTS github_repo_url TEXT;`);
+    await runQuery(`ALTER TABLE ppt_submissions ADD COLUMN IF NOT EXISTS github_collaborators_added BOOLEAN DEFAULT FALSE;`);
+
+    // Drop legacy unused columns if present
+    await runQuery(`ALTER TABLE ppt_submissions DROP COLUMN IF EXISTS file_url;`).catch(() => {});
+    await runQuery(`ALTER TABLE ppt_submissions DROP COLUMN IF EXISTS note;`).catch(() => {});
+  } catch (e) {
+    console.error('Error running table migrations:', e);
+  }
+}
+
+export async function createPptSubmission(data: any): Promise<PptSubmission> {
+  const submittedAt = data.submittedAt || new Date().toISOString();
+  const fileUrl = data.pptFileUrl || data.fileUrl || '';
+  const fileName = data.pptFileName || data.fileName || '';
+  const submission: any = {
+    ...data,
+    pptFileUrl: fileUrl,
+    fileUrl: fileUrl,
+    pptFileName: fileName,
+    fileName: fileName,
+    submittedAt,
+  };
 
   if (isNeonConnected) {
     try {
       await runQuery(
-        `INSERT INTO ppt_submissions (id, team_id, team_name, leader_name, leader_email, file_url, note, submitted_at)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
-         ON CONFLICT (id) DO UPDATE SET file_url = EXCLUDED.file_url, note = EXCLUDED.note, submitted_at = EXCLUDED.submitted_at`,
+        `INSERT INTO ppt_submissions (id, team_id, team_name, leader_name, leader_email, ppt_file_name, ppt_file_url, ppt_file_size, demo_video_url, github_repo_url, github_collaborators_added, submitted_at)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
+         ON CONFLICT (id) DO UPDATE SET
+           team_name = EXCLUDED.team_name,
+           leader_name = EXCLUDED.leader_name,
+           leader_email = EXCLUDED.leader_email,
+           ppt_file_name = EXCLUDED.ppt_file_name,
+           ppt_file_url = EXCLUDED.ppt_file_url,
+           ppt_file_size = EXCLUDED.ppt_file_size,
+           demo_video_url = EXCLUDED.demo_video_url,
+           github_repo_url = EXCLUDED.github_repo_url,
+           github_collaborators_added = EXCLUDED.github_collaborators_added,
+           submitted_at = EXCLUDED.submitted_at`,
         [
-          submission.id,
-          submission.teamId,
-          submission.teamName,
-          submission.leaderName,
-          submission.leaderEmail,
-          submission.fileUrl,
-          submission.note || null,
+          submission.id || `PPT-${submission.teamId || 'TEAM'}-${Date.now()}`,
+          submission.teamId || '',
+          submission.teamName || '',
+          submission.leaderName || '',
+          submission.leaderEmail || '',
+          submission.pptFileName || null,
+          submission.pptFileUrl || null,
+          submission.pptFileSize || null,
+          submission.demoVideoUrl || null,
+          submission.githubRepoUrl || null,
+          submission.githubCollaboratorsAdded ?? false,
           submittedAt,
         ]
       );
@@ -881,8 +951,14 @@ export async function getAllPptSubmissions(): Promise<PptSubmission[]> {
         teamName: row.team_name,
         leaderName: row.leader_name,
         leaderEmail: row.leader_email,
-        fileUrl: row.file_url,
-        note: row.note || undefined,
+        pptFileName: row.ppt_file_name || row.file_name,
+        pptFileUrl: row.ppt_file_url || row.file_url,
+        fileUrl: row.ppt_file_url || row.file_url,
+        fileName: row.ppt_file_name || row.file_name,
+        pptFileSize: row.ppt_file_size,
+        demoVideoUrl: row.demo_video_url,
+        githubRepoUrl: row.github_repo_url,
+        githubCollaboratorsAdded: row.github_collaborators_added,
         submittedAt: row.submitted_at,
       }));
     } catch (err) {
@@ -891,7 +967,14 @@ export async function getAllPptSubmissions(): Promise<PptSubmission[]> {
   }
 
   const db = ensureFileDb() as any;
-  return db.pptSubmissions || [];
+  const list = db.pptSubmissions || [];
+  return list.map((s: any) => ({
+    ...s,
+    fileUrl: s.fileUrl || s.pptFileUrl,
+    pptFileUrl: s.pptFileUrl || s.fileUrl,
+    fileName: s.fileName || s.pptFileName,
+    pptFileName: s.pptFileName || s.fileName,
+  }));
 }
 
 export async function deletePptSubmission(id: string): Promise<void> {
@@ -1053,4 +1136,92 @@ export async function updateTeamPsSelection(teamId: string, psId: string | null,
   };
 
   return await updateTeam(teamId, updatedFields);
+}
+
+export async function updateTeamPptSubmission(teamId: string, pptSubmission: PptSubmission): Promise<Team | null> {
+  const team = await getTeamById(teamId);
+  if (!team) return null;
+
+  return await updateTeam(teamId, { pptSubmission });
+}
+
+export const TEST_TEAM: Team = {
+  id: 'SIH2026-000',
+  teamName: 'VSITR Testing Team (Internal)',
+  leader: {
+    fullName: 'Test Leader (VSITR)',
+    enrollmentNo: '24BECSE54999',
+    mobile: '9876543210',
+    email: 'test.sih2026@vsitr.ac.in',
+    department: 'CSE',
+    semester: '5',
+    gender: 'Male',
+    isLeader: true,
+  },
+  members: [
+    { fullName: 'Member One', enrollmentNo: '24BECSE54998', mobile: '9876543211', email: 'member1@vsitr.ac.in', department: 'CSE', semester: '5', gender: 'Female', isLeader: false },
+    { fullName: 'Member Two', enrollmentNo: '24BECSE54997', mobile: '9876543212', email: 'member2@vsitr.ac.in', department: 'CSE', semester: '5', gender: 'Male', isLeader: false },
+    { fullName: 'Member Three', enrollmentNo: '24BEIT54996', mobile: '9876543213', email: 'member3@vsitr.ac.in', department: 'IT', semester: '5', gender: 'Male', isLeader: false },
+    { fullName: 'Member Four', enrollmentNo: '24BECE54995', mobile: '9876543214', email: 'member4@vsitr.ac.in', department: 'CE', semester: '5', gender: 'Male', isLeader: false },
+    { fullName: 'Member Five', enrollmentNo: '24BEIT54994', mobile: '9876543215', email: 'member5@vsitr.ac.in', department: 'IT', semester: '5', gender: 'Male', isLeader: false },
+  ],
+  mentor: {
+    prefix: 'Prof.',
+    fullName: 'Dr. Testing Mentor',
+    contactNumber: '9876543216',
+    email: 'mentor.test@vsitr.ac.in',
+    department: 'CSE',
+    institute: 'VSITR Kadi',
+    submittedAt: '2026-08-05T10:00:00.000Z',
+  },
+  status: 'completed',
+  selectedPsId: '8-L',
+  selectedPsTitle: 'Smart Waste Management and Citizen Reporting Platform',
+  psSelectedAt: '2026-08-10T12:00:00.000Z',
+  createdAt: '2026-08-01T10:00:00.000Z',
+  updatedAt: new Date().toISOString(),
+};
+
+export async function ensureTestTeamSeeded() {
+  const db = ensureFileDb();
+  const idx = db.teams.findIndex((t) => t.id.toUpperCase() === 'SIH2026-000');
+  if (idx === -1) {
+    db.teams.push(TEST_TEAM);
+  } else {
+    db.teams[idx] = { ...TEST_TEAM, ...db.teams[idx] };
+  }
+  saveFileDb(db);
+
+  if (isNeonConnected) {
+    try {
+      await runQuery(
+        `INSERT INTO teams (id, team_name, leader, members, mentor, status, selected_ps_id, selected_ps_title, ps_selected_at, created_at, updated_at)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+         ON CONFLICT (id) DO UPDATE SET
+           team_name = EXCLUDED.team_name,
+           leader = EXCLUDED.leader,
+           members = EXCLUDED.members,
+           mentor = EXCLUDED.mentor,
+           status = EXCLUDED.status,
+           selected_ps_id = EXCLUDED.selected_ps_id,
+           selected_ps_title = EXCLUDED.selected_ps_title,
+           ps_selected_at = EXCLUDED.ps_selected_at`,
+        [
+          TEST_TEAM.id,
+          TEST_TEAM.teamName,
+          JSON.stringify(TEST_TEAM.leader),
+          JSON.stringify(TEST_TEAM.members),
+          TEST_TEAM.mentor ? JSON.stringify(TEST_TEAM.mentor) : null,
+          TEST_TEAM.status,
+          TEST_TEAM.selectedPsId || null,
+          TEST_TEAM.selectedPsTitle || null,
+          TEST_TEAM.psSelectedAt || null,
+          TEST_TEAM.createdAt,
+          TEST_TEAM.updatedAt,
+        ]
+      );
+    } catch (e) {
+      console.error('Error seeding test team SIH2026-000 into Neon DB:', e);
+    }
+  }
 }

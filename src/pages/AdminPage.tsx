@@ -39,7 +39,9 @@ import {
   ChevronDown,
   BookOpen,
   Cpu,
-  Laptop
+  Laptop,
+  Play,
+  GitBranch
 } from 'lucide-react';
 
 // Helper to convert UTC ISO string from server to local YYYY-MM-DDTHH:mm for datetime-local inputs
@@ -157,6 +159,63 @@ export const AdminPage: React.FC = () => {
   const [isEditingPs, setIsEditingPs] = useState(false);
   const [editingPsData, setEditingPsData] = useState<Partial<ProblemStatement> | null>(null);
   const [isCreatingPs, setIsCreatingPs] = useState(false);
+
+  // Helper to handle smooth downloading of both Base64 Data URIs and regular URLs
+  const handleDownloadPpt = (fileUrl?: string, fileName?: string, teamId?: string) => {
+    let targetUrl = fileUrl;
+
+    // Smart fallback 1: Look up team from teams array if URL is missing
+    if (!targetUrl && teamId) {
+      const foundTeam = teams.find(t => t.id === teamId || t.id.toLowerCase() === teamId.toLowerCase());
+      if (foundTeam?.pptSubmission) {
+        targetUrl = foundTeam.pptSubmission.pptFileUrl || foundTeam.pptSubmission.fileUrl || (foundTeam.pptSubmission as any).ppt_file_url;
+      }
+    }
+
+    // Smart fallback 2: Check pptSubmissions state array
+    if (!targetUrl && teamId) {
+      const foundSub = pptSubmissions.find(s => s.teamId === teamId || s.id === teamId);
+      if (foundSub) {
+        targetUrl = foundSub.fileUrl || foundSub.pptFileUrl || (foundSub as any).file_url || (foundSub as any).ppt_file_url;
+      }
+    }
+
+    if (!targetUrl) {
+      showAlert('No File Available', 'The PPT presentation file URL is missing or unavailable for this team.');
+      return;
+    }
+
+    try {
+      if (targetUrl.startsWith('data:')) {
+        // Base64 Data URI - convert to blob for instant browser download
+        const parts = targetUrl.split(',');
+        const mimeMatch = parts[0].match(/:(.*?);/);
+        const mime = mimeMatch ? mimeMatch[1] : 'application/vnd.openxmlformats-officedocument.presentationml.presentation';
+        const bstr = atob(parts[1]);
+        let n = bstr.length;
+        const u8arr = new Uint8Array(n);
+        while (n--) {
+          u8arr[n] = bstr.charCodeAt(n);
+        }
+        const blob = new Blob([u8arr], { type: mime });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = fileName || `${teamId || 'presentation'}.pptx`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        return;
+      }
+
+      // Regular URL download fallback (e.g. /api/uploads/ppt/...)
+      window.location.href = targetUrl;
+    } catch (err: any) {
+      console.error('Error downloading PPT file:', err);
+      showAlert('Download Failed', 'Could not process the PPT file download.');
+    }
+  };
 
   const fetchAdminProblemStatements = async () => {
     try {
@@ -1262,6 +1321,16 @@ export const AdminPage: React.FC = () => {
                             </td>
                             <td className="py-3.5 px-4 text-right whitespace-nowrap align-middle">
                               <div className="inline-flex items-center justify-end gap-1.5">
+                                {t.pptSubmission && (
+                                  <button
+                                    type="button"
+                                    onClick={() => handleDownloadPpt(t.pptSubmission?.pptFileUrl || t.pptSubmission?.fileUrl, t.pptSubmission?.pptFileName || `${t.id}.pptx`, t.id)}
+                                    className="px-2.5 py-1 rounded-xl font-black text-[11px] text-emerald-800 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 transition cursor-pointer flex items-center gap-1 shadow-2xs"
+                                    title="Download PPT Deck"
+                                  >
+                                    <Download className="h-3 w-3 text-emerald-600" /> PPT
+                                  </button>
+                                )}
                                 <button
                                   onClick={() => setSelectedTeam(t)}
                                   className="px-3 py-1.5 rounded-xl font-bold text-xs text-[#1B3F8B] bg-blue-50 hover:bg-blue-100 border border-blue-200/60 transition cursor-pointer"
@@ -1871,8 +1940,8 @@ export const AdminPage: React.FC = () => {
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-slate-100 font-medium text-slate-800">
-                        {pptSubmissions.map((sub) => (
-                          <tr key={sub.id} className="hover:bg-slate-50/80 transition-colors">
+                        {pptSubmissions.map((sub: any) => (
+                          <tr key={sub.id || sub.teamId} className="hover:bg-slate-50/80 transition-colors">
                             <td className="py-3.5 px-4 font-mono font-bold text-[#1B3F8B] whitespace-nowrap">{sub.teamId}</td>
                             <td className="py-3.5 px-4 font-black text-slate-900 whitespace-nowrap">{sub.teamName}</td>
                             <td className="py-3.5 px-4">
@@ -1880,14 +1949,13 @@ export const AdminPage: React.FC = () => {
                               <span className="text-[11px] text-slate-500 font-medium block truncate max-w-[180px]">{sub.leaderEmail}</span>
                             </td>
                             <td className="py-3.5 px-4 whitespace-nowrap">
-                              <a
-                                href={sub.fileUrl}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-[11px] font-extrabold bg-blue-50 text-blue-700 hover:bg-blue-100 transition border border-blue-200/60"
+                              <button
+                                type="button"
+                                onClick={() => handleDownloadPpt(sub.fileUrl || sub.pptFileUrl || sub.ppt_file_url, sub.fileName || sub.pptFileName || `${sub.teamId || 'presentation'}.pptx`, sub.teamId || sub.id)}
+                                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-black bg-blue-50 text-[#1B3F8B] hover:bg-blue-100 transition border border-blue-200 shadow-2xs cursor-pointer"
                               >
-                                View PPT →
-                              </a>
+                                <Download className="h-3.5 w-3.5" /> View / Download PPT
+                              </button>
                             </td>
                             <td className="py-3.5 px-4 text-slate-500 whitespace-nowrap">
                               {new Date(sub.submittedAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
@@ -2468,7 +2536,68 @@ export const AdminPage: React.FC = () => {
             ) : (
               <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-500 font-bold flex items-center gap-2">
                 <BookOpen className="h-4 w-4 text-slate-400" />
-                No Problem Statement Selected Yet
+                <span>No Problem Statement Selected Yet</span>
+              </div>
+            )}
+
+            {/* PPT & Prototype Submission Details */}
+            {selectedTeam.pptSubmission ? (
+              <div className="p-4 rounded-2xl bg-blue-50 border border-blue-200 text-xs space-y-2.5">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-1.5 font-black text-[#1B3F8B]">
+                    <FileText className="h-4 w-4 text-[#1B3F8B]" />
+                    <span>PPT &amp; Prototype Submission</span>
+                  </div>
+                  <span className="text-[10px] text-slate-500 font-bold">
+                    {new Date(selectedTeam.pptSubmission.submittedAt || Date.now()).toLocaleString('en-IN')}
+                  </span>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                  <div className="p-2.5 bg-white rounded-xl border border-purple-200 space-y-0.5">
+                    <span className="text-[9px] uppercase font-bold text-slate-400 block">PPT File</span>
+                    <span className="font-bold text-slate-900 block truncate">{selectedTeam.pptSubmission.pptFileName}</span>
+                    {selectedTeam.pptSubmission && (
+                      <button
+                        type="button"
+                        onClick={() => handleDownloadPpt(
+                          selectedTeam.pptSubmission?.pptFileUrl || selectedTeam.pptSubmission?.fileUrl || (selectedTeam.pptSubmission as any)?.ppt_file_url,
+                          selectedTeam.pptSubmission?.pptFileName || `${selectedTeam.id}.pptx`,
+                          selectedTeam.id
+                        )}
+                        className="inline-flex items-center gap-1 text-[10px] font-extrabold text-[#1B3F8B] hover:underline pt-0.5 cursor-pointer"
+                      >
+                        <Download className="h-3 w-3" /> Download PPT
+                      </button>
+                    )}
+                  </div>
+                  <div className="p-2.5 bg-white rounded-xl border border-purple-200 space-y-0.5">
+                    <span className="text-[9px] uppercase font-bold text-slate-400 block">2-Min Video Clip</span>
+                    <a
+                      href={selectedTeam.pptSubmission.demoVideoUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-bold text-red-600 hover:underline flex items-center gap-1 truncate text-[11px] pt-1"
+                    >
+                      <Play className="h-3 w-3 fill-red-600" /> YouTube Video
+                    </a>
+                  </div>
+                  <div className="p-2.5 bg-white rounded-xl border border-purple-200 space-y-0.5">
+                    <span className="text-[9px] uppercase font-bold text-slate-400 block">20% Prototype Repo</span>
+                    <a
+                      href={selectedTeam.pptSubmission.githubRepoUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-bold text-slate-900 hover:underline flex items-center gap-1 truncate text-[11px] pt-1"
+                    >
+                      <GitBranch className="h-3 w-3 text-slate-700" /> GitHub Repo
+                    </a>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-500 font-bold flex items-center gap-2">
+                <FileText className="h-4 w-4 text-slate-400" />
+                <span>PPT &amp; Prototype presentation not submitted yet</span>
               </div>
             )}
 

@@ -979,55 +979,65 @@ export const RegistrationRulesView: React.FC = () => {
                     {settings.pptTemplateStatus || 'The template will be released soon. Download it from here.'}
                   </p>
 
-                  {settings.pptTemplateLink && settings.pptTemplateLink !== '#' && (
-                    <a
-                      href={settings.pptTemplateLink}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl text-xs font-black text-white bg-gradient-to-r from-[#1B3F8B] to-blue-800 hover:from-blue-700 hover:to-indigo-800 transition shadow-md shadow-blue-500/10 transform active:scale-95 duration-200"
-                    >
-                      Download Template PPT
-                      <ArrowRight className="h-4 w-4" />
-                    </a>
-                  )}
+                  <a
+                    href={(settings.pptTemplateLink && settings.pptTemplateLink !== '#' && !settings.pptTemplateLink.includes('drive.google')) ? settings.pptTemplateLink : '/SIH2026-IDEA-Presentation-Format.pptx'}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    download
+                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl text-xs font-black text-white bg-gradient-to-r from-[#1B3F8B] to-blue-800 hover:from-blue-700 hover:to-indigo-800 transition shadow-md shadow-blue-500/10 transform active:scale-95 duration-200 cursor-pointer"
+                  >
+                    Download Template PPT
+                    <ArrowRight className="h-4 w-4" />
+                  </a>
                 </div>
               </div>
 
               {/* PPT Submission Card */}
               {settings.pptSubmissionOpen && (
                 <div className="relative overflow-hidden rounded-3xl bg-white border border-slate-200/80 p-6 sm:p-8 shadow-md hover:shadow-xl hover:border-slate-300 transition duration-300">
-                  <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-gradient-to-b from-[#C1272D] to-red-500" />
-                  <div className="flex items-center gap-3.5 mb-4 pl-1">
-                    <div className="p-2.5 rounded-2xl bg-red-500/10 text-[#C1272D] border border-red-500/15">
-                      <FileText className="h-5.5 w-5.5" />
+                  <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-gradient-to-b from-[#1B3F8B] to-indigo-600" />
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4 pl-1">
+                    <div className="flex items-center gap-3.5">
+                      <div className="p-2.5 rounded-2xl bg-blue-500/10 text-[#1B3F8B] border border-blue-500/15">
+                        <FileText className="h-5.5 w-5.5" />
+                      </div>
+                      <div>
+                        <h3 className="text-lg font-black text-slate-950 tracking-tight">
+                          Submit Your PPT &amp; Prototype
+                        </h3>
+                        <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block">
+                          Pitch Deck Submission Portal
+                        </span>
+                      </div>
                     </div>
-                    <div>
-                      <h3 className="text-lg font-black text-slate-950 tracking-tight">
-                        Submit Your PPT
-                      </h3>
-                      <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block">
-                        Pitch Deck Submission Portal
-                      </span>
-                    </div>
+
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-emerald-50 text-emerald-800 border border-emerald-200 shadow-2xs self-start sm:self-auto shrink-0 whitespace-nowrap">
+                      <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+                      Portal Open
+                    </span>
                   </div>
 
                   <div className="space-y-4 pl-1">
                     <p className="text-sm text-slate-650 leading-relaxed font-semibold">
-                      {settings.pptSubmissionStatus || 'PPT submission portal will open after the registration deadline. Stay tuned.'}
+                      {settings.pptSubmissionStatus || 'PPT submission portal is live! Submit your PowerPoint presentation file, 2-minute YouTube video pitch clip, and 20% prototype GitHub repository.'}
                     </p>
+
                     {settings.pptSubmissionDeadline && (
                       <div className="flex items-center gap-2 text-xs font-bold text-[#C1272D] bg-red-50 px-2.5 py-1 rounded-lg border border-red-100/55 inline-flex w-auto">
                         <Calendar className="h-3.5 w-3.5" />
                         Submission Deadline: {settings.pptSubmissionDeadline}
                       </div>
                     )}
-                    <button
-                      onClick={() => setActiveTab('ppt-submit')}
-                      className="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl text-xs font-black text-white bg-gradient-to-r from-[#C1272D] to-red-655 hover:from-red-655 hover:to-red-500 transition shadow-md shadow-red-500/10 transform active:scale-95 duration-200"
-                    >
-                      Submit Your PPT
-                      <ArrowRight className="h-4 w-4" />
-                    </button>
+
+                    <div>
+                      <button
+                        onClick={() => setActiveTab('ppt-submit')}
+                        className="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl text-xs font-black text-white bg-gradient-to-r from-[#1B3F8B] to-blue-800 hover:from-blue-700 hover:to-indigo-800 transition shadow-md shadow-blue-500/10 transform active:scale-95 duration-200 cursor-pointer"
+                      >
+                        Submit Your PPT
+                        <ArrowRight className="h-4 w-4" />
+                      </button>
+                    </div>
                   </div>
                 </div>
               )}

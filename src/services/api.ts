@@ -99,6 +99,32 @@ export const api = {
     return data;
   },
 
+  // Submit PPT Presentation & Prototype (Phase 3)
+  submitPpt: async (payload: {
+    teamId: string;
+    leaderEmail: string;
+    teamName?: string;
+    leaderName?: string;
+    fileUrl?: string;
+    note?: string;
+    pptFileName?: string;
+    pptFileBase64?: string;
+    demoVideoUrl?: string;
+    githubRepoUrl?: string;
+    githubCollaboratorsAdded?: boolean;
+  }) => {
+    const res = await fetch('/api/teams/submit-ppt', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      throw new Error(data.message || 'Failed to submit PPT presentation');
+    }
+    return data;
+  },
+
   // Admin Login
   adminLogin: async (credentials: { username: string; password: string }) => {
     const res = await fetch('/api/admin/login', {
@@ -259,25 +285,6 @@ export const api = {
     if (!res.ok) {
       throw new Error(data.message || 'Failed to send bulk reminders');
     }
-    return data;
-  },
-
-  // Submit PPT
-  submitPpt: async (payload: {
-    teamId: string;
-    teamName: string;
-    leaderName: string;
-    leaderEmail: string;
-    fileUrl: string;
-    note?: string;
-  }) => {
-    const res = await fetch('/api/ppt-submission', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
-    });
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.message || 'PPT submission failed');
     return data;
   },
 

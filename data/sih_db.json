@@ -3,18 +3,19 @@
     "registrationDeadline": "2026-08-02T18:29:59.000Z",
     "isRegistrationOpen": false,
     "whatsappGroupLink": "https://chat.whatsapp.com/SIH2026InternalVSITR",
-    "announcementBanner": "Internal SIH 2026 PS Selection is LIVE! Deadline: 16 August 2026, 11:59 PM.",
+    "announcementBanner": "Problem Statement Selection is OPEN! Deadline: 16 August 2026, 11:59 PM.",
     "problemStatementLink": "https://www.sih.gov.in/sih2025PS",
     "problemStatementStatus": "The problem statements will be released soon at the link below, and team leaders will receive an email notification as soon as they go live. You can access them directly through that link or by navigating to the website in your browser.",
-    "pptTemplateLink": "https://drive.google.com/drive/folders/14N_F8cFzbaVpoGANSUDBqnBTJ8OJlinB?usp=sharing",
+    "pptTemplateLink": "/SIH2026-IDEA-Presentation-Format.pptx",
     "pptTemplateStatus": "Download the official SIH PPT template and prepare your presentation as per the prescribed format before submission.",
     "isExtended": false,
     "extendedDeadline": "2026-08-04T18:29:00.000Z",
     "customQuote": "Innovation distinguishes between a leader and a follower.",
     "customQuoteAuthor": "Steve Jobs",
-    "pptSubmissionOpen": false,
+    "pptSubmissionOpen": true,
     "pptSubmissionStatus": "PPT submission portal will open after the registration deadline. Stay tuned.",
-    "pptSubmissionDeadline": ""
+    "pptSubmissionDeadline": "23 August 2026, 11:56 PM",
+    "pptReferenceLink": "/SIH-PPT-REFERANCE.pdf"
   },
   "timeline": [
     {
@@ -1451,9 +1452,122 @@
       "status": "completed",
       "createdAt": "2026-07-29T12:24:23.410Z",
       "updatedAt": "2026-08-04T17:12:02.069Z"
+    },
+    {
+      "id": "SIH2026-000",
+      "teamName": "VSITR Testing Team (Internal)",
+      "leader": {
+        "email": "test.sih2026@vsitr.ac.in",
+        "gender": "Male",
+        "mobile": "9876543210",
+        "fullName": "Test Leader (VSITR)",
+        "isLeader": true,
+        "semester": "5",
+        "department": "CSE",
+        "enrollmentNo": "24BECSE54999"
+      },
+      "members": [
+        {
+          "email": "member1@vsitr.ac.in",
+          "gender": "Female",
+          "mobile": "9876543211",
+          "fullName": "Member One",
+          "isLeader": false,
+          "semester": "5",
+          "department": "CSE",
+          "enrollmentNo": "24BECSE54998"
+        },
+        {
+          "email": "member2@vsitr.ac.in",
+          "gender": "Male",
+          "mobile": "9876543212",
+          "fullName": "Member Two",
+          "isLeader": false,
+          "semester": "5",
+          "department": "CSE",
+          "enrollmentNo": "24BECSE54997"
+        },
+        {
+          "email": "member3@vsitr.ac.in",
+          "gender": "Male",
+          "mobile": "9876543213",
+          "fullName": "Member Three",
+          "isLeader": false,
+          "semester": "5",
+          "department": "IT",
+          "enrollmentNo": "24BEIT54996"
+        },
+        {
+          "email": "member4@vsitr.ac.in",
+          "gender": "Male",
+          "mobile": "9876543214",
+          "fullName": "Member Four",
+          "isLeader": false,
+          "semester": "5",
+          "department": "CE",
+          "enrollmentNo": "24BECE54995"
+        },
+        {
+          "email": "member5@vsitr.ac.in",
+          "gender": "Male",
+          "mobile": "9876543215",
+          "fullName": "Member Five",
+          "isLeader": false,
+          "semester": "5",
+          "department": "IT",
+          "enrollmentNo": "24BEIT54994"
+        }
+      ],
+      "mentor": {
+        "email": "mentor.test@vsitr.ac.in",
+        "prefix": "Prof.",
+        "fullName": "Dr. Testing Mentor",
+        "institute": "VSITR Kadi",
+        "department": "CSE",
+        "submittedAt": "2026-08-05T10:00:00.000Z",
+        "contactNumber": "9876543216"
+      },
+      "status": "completed",
+      "selectedPsId": "8-L",
+      "selectedPsTitle": "Smart Waste Management and Citizen Reporting Platform",
+      "psSelectedAt": "2026-08-10T12:00:00.000Z",
+      "createdAt": "2026-08-01T10:00:00.000Z",
+      "updatedAt": "2026-08-14T06:56:30.294Z",
+      "pptSubmission": {
+        "pptFileName": "SIH2026-000.pptx",
+        "pptFileUrl": "/api/uploads/ppt/SIH2026-000_1786690590027_SIH2026_000.pptx",
+        "pptFileSize": 924505,
+        "pptUploadedAt": "2026-08-14T06:56:30.030Z",
+        "demoVideoUrl": "https://www.youtube.com/watch?v=Dq56dKHGbcQ",
+        "githubRepoUrl": "https://github.com/Patelved2307/vsitr-internal-2026",
+        "githubCollaboratorsAdded": true,
+        "submittedAt": "2026-08-14T06:56:30.030Z"
+      }
     }
   ],
   "emailLogs": [
+    {
+      "id": "EMAIL-1786690595851-548",
+      "recipientEmail": "test.sih2026@vsitr.ac.in",
+      "recipientName": "Test Leader (VSITR)",
+      "teamId": "SIH2026-000",
+      "subject": "[SIH 2026] PPT & Prototype Submission Confirmation - VSITR Testing Team (Internal) (SIH2026-000)",
+      "body": "Dear Test Leader (VSITR),\n\nYour PPT presentation and 20% prototype submission for Team VSITR Testing Team (Internal) (SIH2026-000) has been successfully received.\n\nSubmission Details:\n- Presentation File: SIH2026-000.pptx\n- Demo Video: https://www.youtube.com/watch?v=Dq56dKHGbcQ\n- GitHub Repository: https://github.com/Patelved2307/vsitr-internal-2026\n- Submission Timestamp: 14/8/2026, 12:26:31 pm\n\nBest regards,\nOrganizing Committee\nInternal SIH 2026 - VSITR Kadi",
+      "type": "ps_selection",
+      "status": "sent",
+      "sentAt": "2026-08-14T06:56:35.851Z"
+    },
+    {
+      "id": "EMAIL-1786689027261-143",
+      "recipientEmail": "test.sih2026@vsitr.ac.in",
+      "recipientName": "Test Leader (VSITR)",
+      "teamId": "SIH2026-000",
+      "subject": "[SIH 2026] PPT & Prototype Submission Confirmation - VSITR Testing Team (Internal) (SIH2026-000)",
+      "body": "Dear Test Leader (VSITR),\n\nYour PPT presentation and 20% prototype submission for Team VSITR Testing Team (Internal) (SIH2026-000) has been successfully received.\n\nSubmission Details:\n- Presentation File: SIH2026-000.pptx\n- Demo Video: https://www.youtube.com/watch?v=Dq56dKHGbcQ\n- GitHub Repository: https://github.com/Patelved2307/vsitr-internal-2026\n- Submission Timestamp: 14/8/2026, 12:00:22 pm\n\nBest regards,\nOrganizing Committee\nInternal SIH 2026 - VSITR Kadi",
+      "type": "ps_selection",
+      "status": "sent",
+      "sentAt": "2026-08-14T06:30:27.261Z"
+    },
     {
       "id": "EMAIL-1786645859395-24",
       "recipientEmail": "vyasjenil0@gmail.com",
@@ -2694,5 +2808,21 @@
       "theme": "Digital Solutions for Smart Cities and Circular Economy"
     }
   ],
-  "pptSubmissions": []
+  "pptSubmissions": [
+    {
+      "id": "PPT-SIH2026-000",
+      "teamId": "SIH2026-000",
+      "teamName": "VSITR Testing Team (Internal)",
+      "leaderName": "Test Leader (VSITR)",
+      "leaderEmail": "test.sih2026@vsitr.ac.in",
+      "fileUrl": "/api/uploads/ppt/SIH2026-000_1786690590027_SIH2026_000.pptx",
+      "pptFileName": "SIH2026-000.pptx",
+      "pptFileUrl": "/api/uploads/ppt/SIH2026-000_1786690590027_SIH2026_000.pptx",
+      "pptFileSize": 924505,
+      "demoVideoUrl": "https://www.youtube.com/watch?v=Dq56dKHGbcQ",
+      "githubRepoUrl": "https://github.com/Patelved2307/vsitr-internal-2026",
+      "githubCollaboratorsAdded": true,
+      "submittedAt": "2026-08-14T06:56:30.030Z"
+    }
+  ]
 }

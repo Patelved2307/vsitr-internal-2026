@@ -5,7 +5,7 @@ export type Gender = 'Male' | 'Female' | 'Other';
 export type MentorPrefix = 'Dr.' | 'Prof.' | 'Ph.D.' | 'Mr.' | 'Mrs.' | 'Ms.';
 
 export interface TeamMember {
-  id: string;
+  id?: string;
   fullName: string;
   gender: Gender;
   enrollmentNo: string;
@@ -40,6 +40,24 @@ export interface ProblemStatement {
   theme?: string;
 }
 
+export interface PptSubmission {
+  id?: string;
+  teamId?: string;
+  teamName?: string;
+  leaderName?: string;
+  leaderEmail?: string;
+  fileUrl?: string;
+  note?: string;
+  pptFileName?: string;
+  pptFileUrl?: string;
+  pptFileSize?: number;
+  pptUploadedAt?: string;
+  demoVideoUrl?: string;
+  githubRepoUrl?: string;
+  githubCollaboratorsAdded?: boolean;
+  submittedAt?: string;
+}
+
 export interface Team {
   id: string; // e.g. SIH2026-001
   teamName: string;
@@ -52,6 +70,7 @@ export interface Team {
   selectedPsId?: string;
   selectedPsTitle?: string;
   psSelectedAt?: string;
+  pptSubmission?: PptSubmission;
 }
 
 export interface TimelineEvent {
@@ -90,6 +109,7 @@ export interface EventSettings {
   pptSubmissionOpen?: boolean;
   pptSubmissionStatus?: string;
   pptSubmissionDeadline?: string;
+  pptReferenceLink?: string;
   // Extension & custom closed message
   isExtended?: boolean;
   extendedDeadline?: string;
@@ -125,15 +145,4 @@ export interface EmailLog {
   type: 'registration_confirmation' | 'deadline_reminder' | 'admin_announcement' | 'ps_selection';
   status: 'sent' | 'simulated' | 'failed';
   sentAt: string;
-}
-
-export interface PptSubmission {
-  id: string;
-  teamId: string;
-  teamName: string;
-  leaderName: string;
-  leaderEmail: string;
-  fileUrl: string;
-  note?: string;
-  submittedAt: string;
 }

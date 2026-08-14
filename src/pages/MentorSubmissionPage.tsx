@@ -99,8 +99,8 @@ export const MentorSubmissionPage: React.FC = () => {
       
       {/* Header */}
       <div className="text-center mb-8">
-        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-amber-100 text-amber-800 text-xs font-bold uppercase tracking-wider mb-2">
-          Phase 2: Mentor Details Submission
+        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-amber-100 text-amber-800 text-xs font-bold uppercase tracking-wider mb-2 whitespace-nowrap">
+          Faculty Mentor Registration
         </div>
         <h1 className="text-3xl font-black text-slate-900">
           Faculty Mentor Registration (by Branch)

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { api } from '../services/api';
-import { UserCheck, ShieldCheck, UserPlus, ExternalLink, Headset, Users, GraduationCap, AlertTriangle, ArrowRight, Edit3, X, Save, Check, User, Lock, BookOpen, Clock } from 'lucide-react';
+import { UserCheck, ShieldCheck, UserPlus, ExternalLink, Headset, Users, GraduationCap, AlertTriangle, ArrowRight, Edit3, X, Save, Check, User, Lock, BookOpen, Clock, FileText, Upload, Video, GitBranch, CheckCircle2, FileUp, Download, Play } from 'lucide-react';
 import { ProblemStatement } from '../types';
 
 export const TeamPortalPage: React.FC = () => {
@@ -17,6 +17,126 @@ export const TeamPortalPage: React.FC = () => {
   const [isEditingMembers, setIsEditingMembers] = useState(false);
   const [isEditingMentor, setIsEditingMentor] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+
+  // PPT & Prototype Submission Form State (Phase 3)
+  const [pptFile, setPptFile] = useState<File | null>(null);
+  const [pptFileBase64, setPptFileBase64] = useState<string>('');
+  const [demoVideoUrl, setDemoVideoUrl] = useState<string>('');
+  const [githubRepoUrl, setGithubRepoUrl] = useState<string>('');
+  const [githubCollabChecked, setGithubCollabChecked] = useState<boolean>(false);
+  const [isSubmittingPpt, setIsSubmittingPpt] = useState<boolean>(false);
+
+  // Helper to handle smooth downloading of both Base64 Data URIs and regular URLs
+  const handleDownloadPpt = (fileUrl?: string, fileName?: string) => {
+    if (!fileUrl) {
+      showAlert('No File Available', 'The PPT presentation file URL is missing or unavailable.');
+      return;
+    }
+
+    try {
+      if (fileUrl.startsWith('data:')) {
+        // Base64 Data URI - convert to blob for instant browser download
+        const parts = fileUrl.split(',');
+        const mimeMatch = parts[0].match(/:(.*?);/);
+        const mime = mimeMatch ? mimeMatch[1] : 'application/vnd.openxmlformats-officedocument.presentationml.presentation';
+        const bstr = atob(parts[1]);
+        let n = bstr.length;
+        const u8arr = new Uint8Array(n);
+        while (n--) {
+          u8arr[n] = bstr.charCodeAt(n);
+        }
+        const blob = new Blob([u8arr], { type: mime });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = fileName || 'presentation.pptx';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        return;
+      }
+
+      // Regular URL download fallback
+      window.location.href = fileUrl;
+    } catch (err: any) {
+      console.error('Error downloading PPT file:', err);
+      showAlert('Download Failed', 'Could not process the PPT file download.');
+    }
+  };
+
+  useEffect(() => {
+    if (team?.pptSubmission) {
+      setDemoVideoUrl(team.pptSubmission.demoVideoUrl || '');
+      setGithubRepoUrl(team.pptSubmission.githubRepoUrl || '');
+      setGithubCollabChecked(team.pptSubmission.githubCollaboratorsAdded || false);
+    }
+  }, [team]);
+
+  const handlePptFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!/\.(ppt|pptx)$/i.test(file.name)) {
+      showAlert('Invalid File Extension', 'Please select a valid PowerPoint presentation file (.ppt or .pptx ONLY).');
+      e.target.value = '';
+      return;
+    }
+
+    setPptFile(file);
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      setPptFileBase64(reader.result as string);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleSubmitPptForm = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!team?.pptSubmission && !pptFile) {
+      showAlert('PPT File Required', 'Please select and upload your PowerPoint presentation file (.ppt or .pptx).');
+      return;
+    }
+
+    if (!demoVideoUrl || !/(youtube\.com|youtu\.be)/i.test(demoVideoUrl.trim())) {
+      showAlert('Invalid YouTube URL', 'Please enter a valid YouTube video URL (e.g. https://youtu.be/... or https://www.youtube.com/watch?v=...).');
+      return;
+    }
+
+    if (!githubRepoUrl || !/(github\.com)/i.test(githubRepoUrl.trim())) {
+      showAlert('Invalid GitHub URL', 'Please enter a valid GitHub repository URL (e.g. https://github.com/username/repo).');
+      return;
+    }
+
+    if (!githubCollabChecked) {
+      showAlert('Collaborators Confirmation Required', 'Please check the box confirming you have added the 2 organizing committee members as collaborators to your repository.');
+      return;
+    }
+
+    setIsSubmittingPpt(true);
+    try {
+      const res = await api.submitPpt({
+        teamId: team!.id,
+        leaderEmail: team!.leader.email,
+        pptFileName: pptFile ? pptFile.name : (team!.pptSubmission?.pptFileName || 'presentation.pptx'),
+        pptFileBase64: pptFileBase64 || undefined,
+        demoVideoUrl: demoVideoUrl.trim(),
+        githubRepoUrl: githubRepoUrl.trim(),
+        githubCollaboratorsAdded: githubCollabChecked,
+      });
+
+      if (res.success) {
+        showAlert('Submission Successful', 'Your PPT presentation, demo video link, and 20% prototype repository have been submitted successfully!', 'success');
+        await refreshTeamSession();
+      }
+    } catch (err: any) {
+      showAlert('Submission Error', err.message || 'Failed to submit presentation details.');
+    } finally {
+      setIsSubmittingPpt(false);
+    }
+  };
 
   // Problem Statement selection states
   const [psTimeLeft, setPsTimeLeft] = useState<{
@@ -279,26 +399,31 @@ export const TeamPortalPage: React.FC = () => {
 
       {/* 5.1A PROBLEM STATEMENT SELECTION SECTION */}
       <div className="rounded-3xl bg-white p-6 border border-slate-200 shadow-xl space-y-4 hover:shadow-2xl/10 transition duration-300">
-        <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-          <div className="flex items-center gap-2">
-            <div className="p-2 rounded-xl bg-red-50 text-[#C1272D]">
-              <BookOpen className="h-5 w-5" />
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100">
+          <div className="flex items-start sm:items-center gap-3">
+            <div className="p-2.5 rounded-2xl bg-red-50 text-[#C1272D] border border-red-100 shrink-0 mt-0.5 sm:mt-0">
+              <BookOpen className="h-5 w-5 sm:h-6 sm:w-6" />
             </div>
-            <h2 className="text-lg font-black text-slate-900 tracking-tight">
-              Problem Statement Selection
-            </h2>
+            <div>
+              <h2 className="text-base sm:text-lg font-black text-slate-900 tracking-tight leading-snug">
+                Problem Statement Selection
+              </h2>
+              <p className="text-xs text-slate-500 font-medium">
+                Institute-level problem statement selection details
+              </p>
+            </div>
           </div>
           
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 self-start sm:self-auto shrink-0">
             {!psTimeLeft.isExpired && (
-              <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl font-black text-[10px] uppercase tracking-wider text-amber-800 bg-amber-50 border border-amber-200 shadow-2xs">
-                <Clock className="h-3 w-3" />
+              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-black text-[10px] sm:text-xs uppercase tracking-wider text-amber-800 bg-amber-50 border border-amber-200 shadow-2xs whitespace-nowrap">
+                <Clock className="h-3.5 w-3.5" />
                 Deadline: 16 Aug, 11:59 PM
               </span>
             )}
             {psTimeLeft.isExpired && (
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl font-black text-[10px] uppercase tracking-wider text-slate-500 bg-slate-100 border border-slate-200 shadow-2xs">
-                <Lock className="h-3 w-3" />
+              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-black text-[10px] sm:text-xs uppercase tracking-wider text-slate-500 bg-slate-100 border border-slate-200 shadow-2xs whitespace-nowrap">
+                <Lock className="h-3.5 w-3.5" />
                 Locked
               </span>
             )}
@@ -383,17 +508,22 @@ export const TeamPortalPage: React.FC = () => {
 
       {/* 5.2 TEAM MEMBER DETAILS TABLE / CARDS */}
       <div className="rounded-3xl bg-white p-6 border border-slate-200 shadow-xl space-y-4 hover:shadow-2xl/10 transition duration-300">
-        <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-          <div className="flex items-center gap-2">
-            <div className="p-2 rounded-xl bg-blue-50 text-[#1B3F8B]">
-              <Users className="h-5 w-5" />
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100">
+          <div className="flex items-start sm:items-center gap-3">
+            <div className="p-2.5 rounded-2xl bg-blue-50 text-[#1B3F8B] border border-blue-100 shrink-0 mt-0.5 sm:mt-0">
+              <Users className="h-5 w-5 sm:h-6 sm:w-6" />
             </div>
-            <h2 className="text-lg font-black text-slate-900 tracking-tight">
-              Team Composition (6 Members)
-            </h2>
+            <div>
+              <h2 className="text-base sm:text-lg font-black text-slate-900 tracking-tight leading-snug">
+                Team Composition (6 Members)
+              </h2>
+              <p className="text-xs text-slate-500 font-medium">
+                Registered student leader &amp; 5 team members
+              </p>
+            </div>
           </div>
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl font-black text-[10px] uppercase tracking-wider text-slate-500 bg-slate-100 border border-slate-200 shadow-2xs">
-            <Lock className="h-3 w-3" />
+          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-black text-[10px] sm:text-xs uppercase tracking-wider text-slate-500 bg-slate-100 border border-slate-200 shadow-2xs self-start sm:self-auto shrink-0 whitespace-nowrap">
+            <Lock className="h-3.5 w-3.5" />
             Locked
           </span>
         </div>
@@ -480,17 +610,22 @@ export const TeamPortalPage: React.FC = () => {
 
       {/* 5.3 MENTOR DETAILS SECTION */}
       <div className="rounded-3xl bg-white p-6 border border-slate-200 shadow-xl space-y-4 hover:shadow-2xl/10 transition duration-300">
-        <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-          <div className="flex items-center gap-2">
-            <div className="p-2 rounded-xl bg-amber-50 text-amber-600">
-              <GraduationCap className="h-5 w-5" />
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100">
+          <div className="flex items-start sm:items-center gap-3">
+            <div className="p-2.5 rounded-2xl bg-amber-50 text-amber-600 border border-amber-100 shrink-0 mt-0.5 sm:mt-0">
+              <GraduationCap className="h-5 w-5 sm:h-6 sm:w-6" />
             </div>
-            <h2 className="text-lg font-black text-slate-900 tracking-tight">
-              Faculty Mentor Details (Phase 2)
-            </h2>
+            <div>
+              <h2 className="text-base sm:text-lg font-black text-slate-900 tracking-tight leading-snug">
+                Faculty Mentor Details
+              </h2>
+              <p className="text-xs text-slate-500 font-medium">
+                Allocated faculty mentor information
+              </p>
+            </div>
           </div>
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl font-black text-[10px] uppercase tracking-wider text-slate-500 bg-slate-100 border border-slate-200 shadow-2xs">
-            <Lock className="h-3 w-3" />
+          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-black text-[10px] sm:text-xs uppercase tracking-wider text-slate-500 bg-slate-100 border border-slate-200 shadow-2xs self-start sm:self-auto shrink-0 whitespace-nowrap">
+            <Lock className="h-3.5 w-3.5" />
             Locked
           </span>
         </div>
@@ -536,9 +671,243 @@ export const TeamPortalPage: React.FC = () => {
                 Mentor Details Not Registered
               </p>
               <p className="text-sm text-slate-500 mt-1 max-w-md mx-auto leading-relaxed font-semibold">
-                Phase 2 Mentor Submissions are closed. Your team did not register a Faculty Mentor before the deadline. Please reach out to your club coordinators immediately for emergency support or allocation.
+                Faculty Mentor Submissions are closed. Your team did not register a Faculty Mentor before the deadline. Please reach out to your club coordinators immediately for emergency support or allocation.
               </p>
             </div>
+          </div>
+        )}
+      </div>
+
+      {/* PPT TEMPLATE & SAMPLE FILLED REFERENCE GUIDE SECTION */}
+      <div className="rounded-3xl bg-white p-6 border border-slate-200 shadow-xl space-y-5 hover:shadow-2xl/10 transition duration-300">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100">
+          <div className="flex items-start sm:items-center gap-3">
+            <div className="p-2.5 rounded-2xl bg-blue-50 text-[#1B3F8B] border border-blue-100 shrink-0 mt-0.5 sm:mt-0">
+              <Download className="h-5 w-5 sm:h-6 sm:w-6" />
+            </div>
+            <div>
+              <h2 className="text-base sm:text-lg font-black text-slate-900 tracking-tight leading-snug">
+                Official SIH PPT Template &amp; Sample Reference Guide
+              </h2>
+              <p className="text-xs text-slate-500 font-medium">
+                Download presentation template and filled reference guide PDF
+              </p>
+            </div>
+          </div>
+          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-50 text-[#1B3F8B] font-black text-[10px] sm:text-xs uppercase tracking-wider border border-blue-100 shadow-2xs self-start sm:self-auto shrink-0 whitespace-nowrap">
+            Live &amp; Available
+          </span>
+        </div>
+
+        <div className="p-5 rounded-2xl bg-blue-50/40 border border-blue-100 space-y-4">
+          <p className="text-xs text-slate-600 leading-relaxed font-medium">
+            📌 <strong>Note:</strong> The official SIH presentation template is live! Download the template file to prepare your presentation deck, and download our sample filled reference guide PDF to see how solution architecture diagrams, flowcharts, and content should be placed and written.
+          </p>
+
+          <div className="flex flex-col sm:flex-row items-center gap-3">
+            <a
+              href={(settings.pptTemplateLink && settings.pptTemplateLink !== '#' && !settings.pptTemplateLink.includes('drive.google')) ? settings.pptTemplateLink : '/SIH2026-IDEA-Presentation-Format.pptx'}
+              target="_blank"
+              rel="noopener noreferrer"
+              download
+              className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-[#1B3F8B] text-white font-extrabold text-xs shadow-md hover:bg-blue-900 transition flex items-center justify-center gap-2 cursor-pointer"
+            >
+              <Download className="h-4 w-4" /> Download Official PPT Template (.pptx)
+            </a>
+
+            <a
+              href={settings.pptReferenceLink || '/SIH-PPT-REFERANCE.pdf'}
+              target="_blank"
+              rel="noopener noreferrer"
+              download
+              className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-white border border-slate-300 text-slate-800 font-extrabold text-xs shadow-2xs hover:bg-slate-50 transition flex items-center justify-center gap-2 cursor-pointer"
+            >
+              <FileText className="h-4 w-4 text-[#1B3F8B]" /> Download Sample Filled Guide (PDF)
+            </a>
+          </div>
+        </div>
+      </div>
+
+      {/* PPT & PROTOTYPE SUBMISSION SECTION */}
+      <div className="rounded-3xl bg-white p-6 border border-slate-200 shadow-xl space-y-5 hover:shadow-2xl/10 transition duration-300">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100">
+          <div className="flex items-start sm:items-center gap-3">
+            <div className="p-2.5 rounded-2xl bg-blue-50 text-[#1B3F8B] border border-blue-100 shrink-0 mt-0.5 sm:mt-0">
+              <FileText className="h-5 w-5 sm:h-6 sm:w-6" />
+            </div>
+            <div>
+              <h2 className="text-base sm:text-lg font-black text-slate-900 tracking-tight leading-snug">
+                Submit Your PPT &amp; Prototype
+              </h2>
+              <p className="text-xs text-slate-500 font-medium leading-relaxed">
+                Pitch Presentation Deck, 2-Min Demo Video Clip &amp; 20% Code Repository
+              </p>
+            </div>
+          </div>
+
+          <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-black text-[10px] sm:text-xs uppercase tracking-wider self-start sm:self-auto shrink-0 whitespace-nowrap ${
+            settings.pptSubmissionOpen
+              ? 'text-emerald-700 bg-emerald-50 border border-emerald-200 shadow-2xs'
+              : 'text-slate-500 bg-slate-100 border border-slate-200 shadow-2xs'
+          }`}>
+            {settings.pptSubmissionOpen ? (
+              <>
+                <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" />
+                Portal Live &amp; Open
+              </>
+            ) : (
+              <>
+                <Lock className="h-3.5 w-3.5" />
+                Locked
+              </>
+            )}
+          </span>
+        </div>
+
+        {/* Short Summary Information & State */}
+        {!settings.pptSubmissionOpen ? (
+          <div className="p-6 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-2xs">
+            <div className="space-y-1 text-center sm:text-left">
+              <h4 className="text-sm font-black text-slate-800">
+                PPT Submission Portal Currently Locked
+              </h4>
+              <p className="text-xs text-slate-500 max-w-lg leading-relaxed font-medium">
+                PPT submission portal will open after the registration deadline. Stay tuned.
+              </p>
+            </div>
+            <button
+              disabled
+              className="px-6 py-3 rounded-xl bg-slate-200 text-slate-400 font-extrabold text-xs cursor-not-allowed shrink-0"
+            >
+              Submit Your PPT →
+            </button>
+          </div>
+        ) : (
+          <div className="space-y-4">
+            {/* If Already Submitted */}
+            {team.pptSubmission ? (
+              <div className="rounded-3xl bg-gradient-to-br from-emerald-50/90 via-teal-50/40 to-emerald-50/90 p-5 sm:p-7 border border-emerald-200/90 shadow-md space-y-6">
+                
+                {/* Top Header: Title, Timestamp & Integrated Action Button */}
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-emerald-200/60 pb-5">
+                  <div className="flex items-center gap-3.5">
+                    <div className="p-3 rounded-2xl bg-emerald-500 text-white shrink-0 shadow-md">
+                      <CheckCircle2 className="h-6 w-6" />
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <h3 className="text-base sm:text-lg font-black text-emerald-950 tracking-tight">
+                          Presentation &amp; Prototype Submission Received
+                        </h3>
+                        <span className="hidden sm:inline-flex px-2.5 py-0.5 rounded-full bg-emerald-200/80 text-emerald-900 font-extrabold text-[10px] uppercase tracking-wider border border-emerald-300/60">
+                          Verified
+                        </span>
+                      </div>
+                      <p className="text-xs text-emerald-800 font-medium mt-0.5">
+                        Submitted on: {new Date(team.pptSubmission.submittedAt || Date.now()).toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' })}
+                      </p>
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={() => setActiveTab('ppt-submit')}
+                    className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-2xl bg-[#1B3F8B] hover:bg-blue-900 text-white text-xs font-black shadow-md transition cursor-pointer self-start sm:self-auto shrink-0"
+                  >
+                    Update Submission →
+                  </button>
+                </div>
+
+                {/* Clean Structured Grid Columns */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+                  {/* 1. PPT FILE */}
+                  <div className="p-4 rounded-2xl bg-white border border-emerald-200/80 shadow-2xs space-y-2 flex flex-col justify-between">
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2 text-slate-400">
+                        <FileText className="h-4 w-4 text-[#1B3F8B]" />
+                        <span className="text-[10px] font-black uppercase tracking-wider text-slate-500">PPT FILE DECK</span>
+                      </div>
+                      <p className="text-sm font-mono font-black text-slate-900 truncate" title={team.pptSubmission.pptFileName}>
+                        {team.pptSubmission.pptFileName}
+                      </p>
+                    </div>
+                    {team.pptSubmission.pptFileUrl && (
+                      <button
+                        type="button"
+                        onClick={() => handleDownloadPpt(team.pptSubmission?.pptFileUrl, team.pptSubmission?.pptFileName)}
+                        className="inline-flex items-center gap-1.5 text-xs font-black text-[#1B3F8B] hover:underline pt-2 border-t border-slate-100 cursor-pointer"
+                      >
+                        <Download className="h-3.5 w-3.5" /> Download PPT Deck
+                      </button>
+                    )}
+                  </div>
+
+                  {/* 2. 2-MIN VIDEO CLIP */}
+                  <div className="p-4 rounded-2xl bg-white border border-emerald-200/80 shadow-2xs space-y-2 flex flex-col justify-between">
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2 text-slate-400">
+                        <Video className="h-4 w-4 text-[#C1272D]" />
+                        <span className="text-[10px] font-black uppercase tracking-wider text-slate-500">2-MIN PITCH VIDEO</span>
+                      </div>
+                      <p className="text-sm font-extrabold text-slate-900 truncate">
+                        YouTube Video Pitch
+                      </p>
+                    </div>
+                    <a
+                      href={team.pptSubmission.demoVideoUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 text-xs font-black text-[#C1272D] hover:underline pt-2 border-t border-slate-100"
+                    >
+                      <Play className="h-3.5 w-3.5 fill-[#C1272D]" /> Watch YouTube Video →
+                    </a>
+                  </div>
+
+                  {/* 3. 20% PROTOTYPE REPO */}
+                  <div className="p-4 rounded-2xl bg-white border border-emerald-200/80 shadow-2xs space-y-2 flex flex-col justify-between">
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2 text-slate-400">
+                        <GitBranch className="h-4 w-4 text-slate-800" />
+                        <span className="text-[10px] font-black uppercase tracking-wider text-slate-500">20% PROTOTYPE REPO</span>
+                      </div>
+                      <p className="text-sm font-mono font-extrabold text-slate-900 truncate">
+                        GitHub Repository
+                      </p>
+                    </div>
+                    <a
+                      href={team.pptSubmission.githubRepoUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 text-xs font-black text-slate-900 hover:underline pt-2 border-t border-slate-100"
+                    >
+                      <GitBranch className="h-3.5 w-3.5" /> View GitHub Repo →
+                    </a>
+                  </div>
+
+                </div>
+              </div>
+            ) : (
+              /* If Portal is Open & Not Submitted Yet */
+              <div className="p-6 rounded-2xl bg-blue-50/60 border border-blue-200 flex flex-col sm:flex-row items-center justify-between gap-5 shadow-2xs">
+                <div className="space-y-1.5 text-center sm:text-left">
+                  <span className="px-2.5 py-0.5 rounded-md bg-blue-100 text-[#1B3F8B] font-extrabold text-[10px] uppercase tracking-wider">
+                    Submission Portal Active
+                  </span>
+                  <h4 className="text-base font-black text-slate-900">
+                    Submit Pitch Presentation &amp; Prototype
+                  </h4>
+                  <p className="text-xs text-slate-600 max-w-xl leading-relaxed font-medium">
+                    Upload your local PowerPoint presentation deck (<code className="font-mono text-[#1B3F8B] font-bold">{team.id}.ppt/.pptx</code>), 2-minute YouTube demo pitch link, and 20% prototype code repository.
+                  </p>
+                </div>
+                <button
+                  onClick={() => setActiveTab('ppt-submit')}
+                  className="px-8 py-3.5 rounded-xl bg-[#1B3F8B] hover:bg-blue-900 text-white font-extrabold text-xs shadow-xl transition shrink-0 flex items-center gap-2 cursor-pointer"
+                >
+                  Submit Your PPT →
+                </button>
+              </div>
+            )}
           </div>
         )}
       </div>

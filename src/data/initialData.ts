@@ -24,8 +24,8 @@ export const INITIAL_SETTINGS: EventSettings = {
   announcementBanner: 'Internal SIH 2026 PS Selection is LIVE! Deadline: 16 August 2026, 11:59 PM.',
   problemStatementLink: 'https://www.sih.gov.in/sih2025PS',
   problemStatementStatus: 'Problem statement announcements will be announced once we get update from the official SIH website.',
-  pptTemplateLink: '#',
-  pptTemplateStatus: 'The template will be released soon. Download it from here.',
+  pptTemplateLink: '/SIH2026-IDEA-Presentation-Format.pptx',
+  pptTemplateStatus: 'Official SIH PPT Template is LIVE & AVAILABLE! Download the PowerPoint presentation template directly from here.',
   // PPT Submission
   pptSubmissionOpen: false,
   pptSubmissionStatus: 'PPT submission portal will open after the registration deadline. Stay tuned.',
