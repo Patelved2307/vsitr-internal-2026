@@ -448,9 +448,10 @@ function ensureFileDb(): DatabaseSchema {
   try {
     const data = fs.readFileSync(DB_FILE, 'utf-8');
     const parsed = JSON.parse(data);
-    if (!parsed.emailLogs) parsed.emailLogs = [];
-    if (!parsed.problemStatements || parsed.problemStatements.length === 0) {
-      parsed.problemStatements = INITIAL_PROBLEM_STATEMENTS;
+    if (!parsed.teams) parsed.teams = [];
+    const testTeamIdx = parsed.teams.findIndex((t: any) => t.id && t.id.toUpperCase() === 'SIH2026-000');
+    if (testTeamIdx === -1) {
+      parsed.teams.unshift(TEST_TEAM);
     }
     saveFileDb(parsed);
     return parsed;
@@ -668,6 +669,12 @@ export async function getAllTeams(): Promise<Team[]> {
 }
 
 export async function getTeamById(id: string): Promise<Team | null> {
+  const cleanId = (id || '').trim().toUpperCase();
+  if (cleanId === 'SIH2026-000') {
+    const db = ensureFileDb();
+    const foundInDb = db.teams.find((t) => t.id.toUpperCase() === 'SIH2026-000');
+    return foundInDb || TEST_TEAM;
+  }
   if (isNeonConnected) {
     try {
       const res = await runQuery('SELECT * FROM teams WHERE UPPER(id) = UPPER($1)', [id.trim()]);

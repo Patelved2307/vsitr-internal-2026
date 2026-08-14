@@ -363,13 +363,35 @@ async function startServer() {
       const lEmail = leaderEmail.trim().toLowerCase();
 
       // Fetch team directly by ID first (supports test team SIH2026-000 login)
-      const team = await getTeamById(tId);
+      let team = await getTeamById(tId);
 
-      if (!team || team.teamName.toLowerCase() !== tName || team.leader.email.toLowerCase() !== lEmail) {
+      if (!team) {
+        const existingTeams = await getAllTeams();
+        team = existingTeams.find((t) => t.id.toUpperCase() === tId) || null;
+      }
+
+      if (!team) {
         return res.status(401).json({
           success: false,
           title: 'Login Failed',
-          message: 'The details you entered do not match our records. Please check your Team ID, Team Name, and Team Leader Email and try again.',
+          message: 'The Team ID you entered does not exist in our records.',
+        });
+      }
+
+      const dbEmail = (team.leader?.email || '').trim().toLowerCase();
+      const dbTeamName = (team.teamName || '').trim().toLowerCase();
+
+      const emailMatches = dbEmail === lEmail;
+      const nameMatches = dbTeamName === tName ||
+        tId === 'SIH2026-000' ||
+        dbTeamName.includes(tName) ||
+        tName.includes(dbTeamName);
+
+      if (!emailMatches || !nameMatches) {
+        return res.status(401).json({
+          success: false,
+          title: 'Login Failed',
+          message: 'The Team Name or Team Leader Email does not match our records. Please check your credentials.',
         });
       }
 

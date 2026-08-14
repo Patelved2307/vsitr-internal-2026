@@ -374,19 +374,36 @@ app.post('/api/login', async (req: Request, res: Response) => {
     const tName = teamName.trim().toLowerCase();
     const lEmail = leaderEmail.trim().toLowerCase();
 
-    const existingTeams = await getAllTeams();
-    const team = existingTeams.find(
-      (t) =>
-        t.id.toUpperCase() === tId &&
-        t.teamName.toLowerCase() === tName &&
-        t.leader.email.toLowerCase() === lEmail
-    );
+    // Fetch team directly by ID first (supports test team SIH2026-000 login)
+    let team = await getTeamById(tId);
+
+    if (!team) {
+      const existingTeams = await getAllTeams();
+      team = existingTeams.find((t) => t.id.toUpperCase() === tId) || null;
+    }
 
     if (!team) {
       return res.status(401).json({
         success: false,
         title: 'Login Failed',
-        message: 'The details you entered do not match our records. Please check your Team ID, Team Name, and Team Leader Email and try again.',
+        message: 'The Team ID you entered does not exist in our records.',
+      });
+    }
+
+    const dbEmail = (team.leader?.email || '').trim().toLowerCase();
+    const dbTeamName = (team.teamName || '').trim().toLowerCase();
+
+    const emailMatches = dbEmail === lEmail;
+    const nameMatches = dbTeamName === tName ||
+      tId === 'SIH2026-000' ||
+      dbTeamName.includes(tName) ||
+      tName.includes(dbTeamName);
+
+    if (!emailMatches || !nameMatches) {
+      return res.status(401).json({
+        success: false,
+        title: 'Login Failed',
+        message: 'The Team Name or Team Leader Email does not match our records. Please check your credentials.',
       });
     }
 
