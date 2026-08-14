@@ -574,7 +574,7 @@ export async function saveGlobalConfig(data: { settings?: Partial<EventSettings>
 
   // Dual-write to local JSON file
   const db = ensureFileDb();
-  if (data.settings) db.settings = { ...db.settings, ...data.settings };
+  if (data.settings) db.settings = mergedSettings;
   if (data.timeline) db.timeline = data.timeline;
   if (data.faqs) db.faqs = data.faqs;
   if (data.rules) db.rules = data.rules;
