@@ -1086,6 +1086,10 @@ app.post('/api/teams/submit-ppt', async (req: Request, res: Response) => {
       return res.status(404).json({ success: false, message: 'Team Registration ID not found.' });
     }
 
+    if (team.pptSubmission && (team.pptSubmission.submittedAt || team.pptSubmission.pptFileUrl)) {
+      return res.status(403).json({ success: false, message: 'Submission Locked: PPT presentation and prototype details have already been submitted. No further modifications are permitted.' });
+    }
+
     if (team.leader.email.trim().toLowerCase() !== leaderEmail.trim().toLowerCase()) {
       return res.status(401).json({ success: false, message: 'Unauthorized. Team Leader email does not match registration records.' });
     }

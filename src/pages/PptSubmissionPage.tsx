@@ -182,6 +182,38 @@ export const PptSubmissionPage: React.FC = () => {
     );
   }
 
+  if (team?.pptSubmission?.submittedAt || team?.pptSubmission?.pptFileUrl) {
+    return (
+      <div className="min-h-[75vh] flex items-center justify-center py-12 px-4">
+        <div className="max-w-xl w-full p-8 rounded-3xl bg-white border border-emerald-200 shadow-xl text-center space-y-5">
+          <div className="h-16 w-16 rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto shadow-sm">
+            <CheckCircle2 className="h-8 w-8" />
+          </div>
+          <div className="space-y-2">
+            <span className="px-3 py-1 rounded-full text-xs font-black text-emerald-800 bg-emerald-100 border border-emerald-300 inline-flex items-center gap-1.5">
+              <ShieldCheck className="h-3.5 w-3.5 text-emerald-600" /> Submission Completed &amp; Locked
+            </span>
+            <h2 className="text-2xl font-black text-slate-900">
+              Presentation &amp; Prototype Already Submitted
+            </h2>
+            <p className="text-xs text-slate-600 font-semibold max-w-md mx-auto leading-relaxed">
+              Your PPT deck, demo pitch video, and GitHub prototype repository details for Team <strong className="text-slate-900">{team.teamName} ({team.id})</strong> have been received and verified. No further modifications are permitted.
+            </p>
+          </div>
+
+          <div className="pt-2">
+            <button
+              onClick={() => setActiveTab('portal')}
+              className="px-6 py-3 rounded-xl bg-[#1B3F8B] text-white font-extrabold text-xs shadow-md hover:bg-blue-900 transition cursor-pointer"
+            >
+              Return to Team Portal →
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen py-6 sm:py-10 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto space-y-6 sm:space-y-8">
       

@@ -51,6 +51,7 @@ export interface PptSubmission {
   pptFileName?: string;
   pptFileUrl?: string;
   pptFileSize?: number;
+  pptFileBase64?: string;
   pptUploadedAt?: string;
   demoVideoUrl?: string;
   githubRepoUrl?: string;

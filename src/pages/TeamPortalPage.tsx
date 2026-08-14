@@ -788,7 +788,7 @@ export const TeamPortalPage: React.FC = () => {
             {team.pptSubmission ? (
               <div className="rounded-3xl bg-gradient-to-br from-emerald-50/90 via-teal-50/40 to-emerald-50/90 p-5 sm:p-7 border border-emerald-200/90 shadow-md space-y-6">
                 
-                {/* Top Header: Title, Timestamp & Integrated Action Button */}
+                {/* Top Header: Title & Timestamp */}
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-emerald-200/60 pb-5">
                   <div className="flex items-center gap-3.5">
                     <div className="p-3 rounded-2xl bg-emerald-500 text-white shrink-0 shadow-md">
@@ -808,13 +808,6 @@ export const TeamPortalPage: React.FC = () => {
                       </p>
                     </div>
                   </div>
-
-                  <button
-                    onClick={() => setActiveTab('ppt-submit')}
-                    className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-2xl bg-[#1B3F8B] hover:bg-blue-900 text-white text-xs font-black shadow-md transition cursor-pointer self-start sm:self-auto shrink-0"
-                  >
-                    Update Submission →
-                  </button>
                 </div>
 
                 {/* Clean Structured Grid Columns */}
