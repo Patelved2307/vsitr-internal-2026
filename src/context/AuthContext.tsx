@@ -85,6 +85,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   useEffect(() => {
     reloadPortalData();
+    const saved = localStorage.getItem('sih_2026_team');
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (parsed?.id) {
+          api.verifyTeam(parsed.id).then((d) => {
+            if (d.team) {
+              setTeam(d.team);
+              localStorage.setItem('sih_2026_team', JSON.stringify(d.team));
+            }
+          }).catch(() => {});
+        }
+      } catch (e) {}
+    }
   }, []);
 
   const loginTeamSession = (newTeam: Team) => {

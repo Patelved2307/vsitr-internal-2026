@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { api } from '../services/api';
 import {
@@ -20,7 +20,13 @@ import {
 } from 'lucide-react';
 
 export const PptSubmissionPage: React.FC = () => {
-  const { team, isTeamLoggedIn, setActiveTab, settings, showAlert, loginTeamSession } = useAuth();
+  const { team, isTeamLoggedIn, setActiveTab, settings, showAlert, loginTeamSession, refreshTeamSession } = useAuth();
+
+  useEffect(() => {
+    if (isTeamLoggedIn) {
+      refreshTeamSession();
+    }
+  }, []);
 
   const [pptFile, setPptFile] = useState<File | null>(null);
   const [isDragging, setIsDragging] = useState(false);
