@@ -399,6 +399,8 @@ export const AdminPage: React.FC = () => {
       if (emailLogsData.logs) setEmailLogs(emailLogsData.logs);
       if (settingsData.isNeon !== undefined) setIsNeonConnected(settingsData.isNeon);
       if (psData.problemStatements) setAdminPsList(psData.problemStatements);
+
+      await reloadPortalData();
     } catch (err) {
       console.error('Error fetching admin data', err);
     } finally {

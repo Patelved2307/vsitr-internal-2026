@@ -547,9 +547,17 @@ export async function getNextTeamNumber(): Promise<number> {
   return num;
 }
 
-export async function saveGlobalConfig(data: { settings?: EventSettings; timeline?: TimelineEvent[]; faqs?: FAQItem[]; rules?: Rule[]; nextTeamNumber?: number }) {
+export async function saveGlobalConfig(data: { settings?: Partial<EventSettings>; timeline?: TimelineEvent[]; faqs?: FAQItem[]; rules?: Rule[]; nextTeamNumber?: number }) {
   const currentConfig = await getGlobalConfig();
-  const updated = { ...currentConfig, ...data };
+  const mergedSettings = data.settings
+    ? { ...currentConfig.settings, ...data.settings }
+    : currentConfig.settings;
+
+  const updated = {
+    ...currentConfig,
+    ...data,
+    settings: mergedSettings,
+  };
 
   // Save to Neon DB
   if (isNeonConnected) {
