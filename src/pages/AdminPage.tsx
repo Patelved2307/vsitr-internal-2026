@@ -2291,14 +2291,22 @@ export const AdminPage: React.FC = () => {
                                 {log.teamId || 'N/A'}
                               </td>
                               <td className="py-3.5 px-4 whitespace-nowrap">
-                                <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold ${log.type === 'registration_confirmation'
-                                    ? 'bg-blue-50 text-blue-700 border border-blue-200'
-                                    : log.type === 'ps_selection'
-                                      ? 'bg-purple-50 text-purple-700 border border-purple-200'
-                                      : 'bg-amber-50 text-amber-700 border border-amber-200'
-                                  }`}>
-                                  {log.type === 'registration_confirmation' ? 'Member Confirmation' : log.type === 'ps_selection' ? 'PS Selection Confirmed' : 'Deadline Edit Reminder'}
-                                </span>
+                                {(() => {
+                                  const isPsSelection = log.type === 'ps_selection' || (log.subject && log.subject.toLowerCase().includes('problem statement selection'));
+                                  const isRegistration = log.type === 'registration_confirmation' && !isPsSelection;
+
+                                  return (
+                                    <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold ${
+                                      isPsSelection
+                                        ? 'bg-purple-50 text-purple-700 border border-purple-200'
+                                        : isRegistration
+                                        ? 'bg-blue-50 text-blue-700 border border-blue-200'
+                                        : 'bg-amber-50 text-amber-700 border border-amber-200'
+                                    }`}>
+                                      {isPsSelection ? 'PS Selection Completion' : isRegistration ? 'Member Confirmation' : 'Deadline Edit Reminder'}
+                                    </span>
+                                  );
+                                })()}
                               </td>
                               <td className="py-3.5 px-4 text-slate-800 font-semibold max-w-[200px] truncate" title={log.subject}>
                                 {log.subject}
