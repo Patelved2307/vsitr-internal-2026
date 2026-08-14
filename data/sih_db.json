@@ -2808,21 +2808,5 @@
       "theme": "Digital Solutions for Smart Cities and Circular Economy"
     }
   ],
-  "pptSubmissions": [
-    {
-      "id": "PPT-SIH2026-000",
-      "teamId": "SIH2026-000",
-      "teamName": "VSITR Testing Team (Internal)",
-      "leaderName": "Test Leader (VSITR)",
-      "leaderEmail": "test.sih2026@vsitr.ac.in",
-      "fileUrl": "/api/uploads/ppt/SIH2026-000_1786690590027_SIH2026_000.pptx",
-      "pptFileName": "SIH2026-000.pptx",
-      "pptFileUrl": "/api/uploads/ppt/SIH2026-000_1786690590027_SIH2026_000.pptx",
-      "pptFileSize": 924505,
-      "demoVideoUrl": "https://www.youtube.com/watch?v=Dq56dKHGbcQ",
-      "githubRepoUrl": "https://github.com/Patelved2307/vsitr-internal-2026",
-      "githubCollaboratorsAdded": true,
-      "submittedAt": "2026-08-14T06:56:30.030Z"
-    }
-  ]
+  "pptSubmissions": []
 }
