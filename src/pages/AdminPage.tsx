@@ -2266,36 +2266,45 @@ export const AdminPage: React.FC = () => {
                 ) : (
                   <div className="rounded-2xl border border-slate-200/80 max-h-[520px] overflow-y-auto w-full">
                     <table className="w-full text-left text-xs border-collapse">
+                      <colgroup>
+                        <col className="w-[20%]" />
+                        <col className="w-[11%]" />
+                        <col className="w-[17%]" />
+                        <col className="w-[26%]" />
+                        <col className="w-[9%]" />
+                        <col className="w-[10%]" />
+                        <col className="w-[7%]" />
+                      </colgroup>
                       <thead className="bg-slate-50 sticky top-0 z-10 shadow-2xs">
                         <tr className="text-slate-500 font-bold uppercase tracking-wider text-[10px] border-b border-slate-200/80">
-                          <th className="py-3 px-3 bg-slate-50">Recipient</th>
-                          <th className="py-3 px-2 bg-slate-50">Team ID</th>
-                          <th className="py-3 px-2 bg-slate-50">Type</th>
-                          <th className="py-3 px-2 bg-slate-50">Subject</th>
-                          <th className="py-3 px-2 bg-slate-50">Status</th>
-                          <th className="py-3 px-2 bg-slate-50">Timestamp</th>
-                          <th className="py-3 px-3 text-right bg-slate-50">Action</th>
+                          <th className="py-3.5 px-4 bg-slate-50">Recipient</th>
+                          <th className="py-3.5 px-3 bg-slate-50">Team ID</th>
+                          <th className="py-3.5 px-3 bg-slate-50">Type</th>
+                          <th className="py-3.5 px-3 bg-slate-50">Subject</th>
+                          <th className="py-3.5 px-3 bg-slate-50">Status</th>
+                          <th className="py-3.5 px-3 bg-slate-50">Timestamp</th>
+                          <th className="py-3.5 px-4 text-right bg-slate-50">Action</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-slate-100 font-medium text-slate-700">
                         {emailLogs.map((log) => (
                           <tr key={log.id} className="hover:bg-slate-50/80 transition-colors">
-                            <td className="py-2.5 px-3 font-bold text-slate-900 max-w-[160px] truncate" title={`${log.recipientName} (${log.recipientEmail})`}>
+                            <td className="py-3 px-4 font-bold text-slate-900 truncate" title={`${log.recipientName} (${log.recipientEmail})`}>
                               <span className="block truncate">{log.recipientName}</span>
                               <span className="block text-[10px] font-normal text-slate-500 font-mono truncate">
                                 {log.recipientEmail}
                               </span>
                             </td>
-                            <td className="py-2.5 px-2 font-mono font-bold text-[#1B3F8B] whitespace-nowrap">
+                            <td className="py-3 px-3 font-mono font-bold text-[#1B3F8B] whitespace-nowrap">
                               {log.teamId || 'N/A'}
                             </td>
-                            <td className="py-2.5 px-2 whitespace-nowrap">
+                            <td className="py-3 px-3 whitespace-nowrap">
                               {(() => {
                                 const isPsSelection = log.type === 'ps_selection' || (log.subject && log.subject.toLowerCase().includes('problem statement selection'));
                                 const isRegistration = log.type === 'registration_confirmation' && !isPsSelection;
 
                                 return (
-                                  <span className={`px-2 py-0.5 rounded-full text-[9px] font-bold ${
+                                  <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold ${
                                     isPsSelection
                                       ? 'bg-purple-50 text-purple-700 border border-purple-200'
                                       : isRegistration
@@ -2307,21 +2316,21 @@ export const AdminPage: React.FC = () => {
                                 );
                               })()}
                             </td>
-                            <td className="py-2.5 px-2 text-slate-800 font-semibold max-w-[160px] truncate" title={log.subject}>
+                            <td className="py-3 px-3 text-slate-800 font-semibold truncate" title={log.subject}>
                               {log.subject}
                             </td>
-                            <td className="py-2.5 px-2 whitespace-nowrap">
-                              <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-black uppercase ${log.status === 'sent'
+                            <td className="py-3 px-3 whitespace-nowrap">
+                              <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase ${log.status === 'sent'
                                   ? 'bg-emerald-100 text-emerald-800'
                                   : log.status === 'simulated'
                                     ? 'bg-blue-100 text-blue-800'
                                     : 'bg-red-100 text-red-800'
                                 }`}>
-                                <CheckCircle2 className="h-2.5 w-2.5" />
+                                <CheckCircle2 className="h-3 w-3" />
                                 {log.status === 'simulated' ? 'Simulated' : log.status}
                               </span>
                             </td>
-                            <td className="py-2.5 px-2 text-[10px] text-slate-500 whitespace-nowrap">
+                            <td className="py-3 px-3 text-[11px] text-slate-500 whitespace-nowrap">
                               {new Date(log.sentAt).toLocaleString('en-IN', {
                                 month: 'short',
                                 day: 'numeric',
@@ -2329,20 +2338,20 @@ export const AdminPage: React.FC = () => {
                                 minute: '2-digit',
                               })}
                             </td>
-                            <td className="py-2.5 px-3 text-right whitespace-nowrap">
-                              <div className="inline-flex items-center justify-end gap-1">
+                            <td className="py-3 px-4 text-right whitespace-nowrap">
+                              <div className="inline-flex items-center justify-end gap-1.5">
                                 <button
                                   onClick={() => handleResendEmail(log.id)}
                                   disabled={resendingEmailId === log.id}
-                                  className="px-2 py-1 rounded-lg bg-[#1B3F8B] hover:bg-blue-900 text-white font-bold text-[10px] transition flex items-center gap-1 cursor-pointer"
+                                  className="px-2.5 py-1 rounded-lg bg-[#1B3F8B] hover:bg-blue-900 text-white font-bold text-[10px] transition flex items-center gap-1 cursor-pointer"
                                   title="Resend email to recipient"
                                 >
-                                  <SendHorizontal className={`h-2.5 w-2.5 ${resendingEmailId === log.id ? 'animate-spin' : ''}`} />
+                                  <SendHorizontal className={`h-3 w-3 ${resendingEmailId === log.id ? 'animate-spin' : ''}`} />
                                   {resendingEmailId === log.id ? 'Sending...' : 'Resend'}
                                 </button>
                                 <button
                                   onClick={() => setSelectedEmailLog(log)}
-                                  className="px-2 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-[10px] transition cursor-pointer"
+                                  className="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-[10px] transition cursor-pointer"
                                 >
                                   View Body
                                 </button>
