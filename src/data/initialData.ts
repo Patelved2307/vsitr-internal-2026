@@ -28,7 +28,7 @@ export const INITIAL_SETTINGS: EventSettings = {
   pptTemplateStatus: 'Official SIH PPT Template is LIVE & AVAILABLE! Download the PowerPoint presentation template directly from here.',
   // PPT Submission
   pptSubmissionOpen: false,
-  pptSubmissionStatus: 'PPT submission portal will open after the registration deadline. Stay tuned.',
+  pptSubmissionStatus: 'PPT submission portal is coming soon. Stay tuned!',
   pptSubmissionDeadline: '',
   isExtended: false,
   extendedDeadline: '2026-08-05T18:29:59.000Z',
