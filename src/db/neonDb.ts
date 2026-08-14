@@ -297,7 +297,7 @@ export async function initDatabase(force = false): Promise<void> {
 
       isNeonConnected = true;
 
-      // Seed initial app_config in Neon if missing or update from local DB
+      // Seed initial app_config in Neon if missing or sync Neon settings into local DB
       const configRes = await runQuery('SELECT value FROM app_config WHERE key = $1', ['global_settings']);
       const fileDb = ensureFileDb();
 
@@ -313,6 +313,13 @@ export async function initDatabase(force = false): Promise<void> {
           'INSERT INTO app_config (key, value) VALUES ($1, $2)',
           ['global_settings', JSON.stringify(initialConfig)]
         );
+      } else {
+        const neonConfig = typeof configRes.rows[0].value === 'string' ? JSON.parse(configRes.rows[0].value) : configRes.rows[0].value;
+        if (neonConfig.settings) fileDb.settings = { ...fileDb.settings, ...neonConfig.settings };
+        if (neonConfig.timeline) fileDb.timeline = neonConfig.timeline;
+        if (neonConfig.faqs) fileDb.faqs = neonConfig.faqs;
+        if (neonConfig.rules) fileDb.rules = neonConfig.rules;
+        saveFileDb(fileDb);
       }
 
       // Sync any local teams from sih_db.json into Neon teams, members, and mentors tables
