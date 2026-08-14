@@ -12,8 +12,8 @@
     "extendedDeadline": "2026-08-04T18:29:00.000Z",
     "customQuote": "Innovation distinguishes between a leader and a follower.",
     "customQuoteAuthor": "Steve Jobs",
-    "pptSubmissionOpen": false,
-    "pptSubmissionStatus": "PPT submission portal is coming soon. Stay tuned!",
+    "pptSubmissionOpen": true,
+    "pptSubmissionStatus": "PPT & Prototype Submission Portal is now LIVE! Registered team leaders can submit their official PowerPoint presentation (.ppt / .pptx), YouTube prototype video demo link, and GitHub repository link before the deadline.",
     "pptSubmissionDeadline": "23 August 2026, 11:56 PM",
     "pptReferenceLink": "/SIH-PPT-REFERANCE.pdf"
   },

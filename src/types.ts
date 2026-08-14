@@ -111,6 +111,8 @@ export interface EventSettings {
   pptSubmissionStatus?: string;
   pptSubmissionDeadline?: string;
   pptReferenceLink?: string;
+  isPptExtended?: boolean;
+  pptExtendedDeadline?: string;
   // Extension & custom closed message
   isExtended?: boolean;
   extendedDeadline?: string;

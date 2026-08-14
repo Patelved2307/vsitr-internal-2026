@@ -986,9 +986,17 @@ export async function getAllPptSubmissions(): Promise<PptSubmission[]> {
 }
 
 export async function deletePptSubmission(id: string): Promise<void> {
+  let targetTeamId: string | null = null;
   if (isNeonConnected) {
     try {
+      const selectRes = await runQuery('SELECT team_id FROM ppt_submissions WHERE id = $1', [id]);
+      if (selectRes.rows.length > 0 && selectRes.rows[0].team_id) {
+        targetTeamId = selectRes.rows[0].team_id;
+      }
       await runQuery('DELETE FROM ppt_submissions WHERE id = $1', [id]);
+      if (targetTeamId) {
+        await runQuery('UPDATE teams SET ppt_submission = NULL WHERE id = $1', [targetTeamId]);
+      }
     } catch (err) {
       console.error('Error deleting PPT submission from Neon DB:', err);
     }
@@ -996,7 +1004,17 @@ export async function deletePptSubmission(id: string): Promise<void> {
 
   const db = ensureFileDb() as any;
   if (db.pptSubmissions) {
+    const existing = db.pptSubmissions.find((s: PptSubmission) => s.id === id);
+    if (existing && existing.teamId) {
+      targetTeamId = existing.teamId;
+    }
     db.pptSubmissions = db.pptSubmissions.filter((s: PptSubmission) => s.id !== id);
+    if (targetTeamId && db.teams) {
+      const teamIdx = db.teams.findIndex((t: any) => t.id.toUpperCase() === targetTeamId!.toUpperCase());
+      if (teamIdx !== -1) {
+        delete db.teams[teamIdx].pptSubmission;
+      }
+    }
     saveFileDb(db);
   }
 }

@@ -110,9 +110,12 @@ export const AdminPage: React.FC = () => {
   const [editPptTemplateLink, setEditPptTemplateLink] = useState(settings.pptTemplateLink || '');
   const [editPptTemplateStatus, setEditPptTemplateStatus] = useState(settings.pptTemplateStatus || '');
   // PPT Submission Settings
-  const [editPptSubmissionOpen, setEditPptSubmissionOpen] = useState(settings.pptSubmissionOpen ?? false);
+  const [editPptSubmissionOpen, setEditPptSubmissionOpen] = useState(settings.pptSubmissionOpen ?? true);
   const [editPptSubmissionStatus, setEditPptSubmissionStatus] = useState(settings.pptSubmissionStatus || '');
   const [editPptSubmissionDeadline, setEditPptSubmissionDeadline] = useState(settings.pptSubmissionDeadline || '');
+  const [editPptReferenceLink, setEditPptReferenceLink] = useState(settings.pptReferenceLink || '');
+  const [editIsPptExtended, setEditIsPptExtended] = useState(settings.isPptExtended ?? false);
+  const [editPptExtendedDeadline, setEditPptExtendedDeadline] = useState(settings.pptExtendedDeadline || '');
   // Extension & custom closed message
   const [editIsExtended, setEditIsExtended] = useState(settings.isExtended ?? false);
   const [editExtendedDeadline, setEditExtendedDeadline] = useState(settings.extendedDeadline || '');
@@ -363,9 +366,12 @@ export const AdminPage: React.FC = () => {
     setEditProblemStatementStatus(settings.problemStatementStatus || '');
     setEditPptTemplateLink(settings.pptTemplateLink || '');
     setEditPptTemplateStatus(settings.pptTemplateStatus || '');
-    setEditPptSubmissionOpen(settings.pptSubmissionOpen ?? false);
+    setEditPptSubmissionOpen(settings.pptSubmissionOpen ?? true);
     setEditPptSubmissionStatus(settings.pptSubmissionStatus || '');
     setEditPptSubmissionDeadline(settings.pptSubmissionDeadline || '');
+    setEditPptReferenceLink(settings.pptReferenceLink || '');
+    setEditIsPptExtended(settings.isPptExtended ?? false);
+    setEditPptExtendedDeadline(settings.pptExtendedDeadline || '');
     setEditIsExtended(settings.isExtended ?? false);
     setEditExtendedDeadline(settings.extendedDeadline || '');
     setEditCustomQuote(settings.customQuote || '');
@@ -525,6 +531,9 @@ export const AdminPage: React.FC = () => {
           pptSubmissionOpen: editPptSubmissionOpen,
           pptSubmissionStatus: editPptSubmissionStatus,
           pptSubmissionDeadline: editPptSubmissionDeadline,
+          pptReferenceLink: editPptReferenceLink,
+          isPptExtended: editIsPptExtended,
+          pptExtendedDeadline: editPptExtendedDeadline,
           isExtended: editIsExtended,
           extendedDeadline: editExtendedDeadline,
           customQuote: editCustomQuote,
@@ -548,6 +557,9 @@ export const AdminPage: React.FC = () => {
           setEditPptSubmissionOpen(res.settings.pptSubmissionOpen ?? editPptSubmissionOpen);
           setEditPptSubmissionStatus(res.settings.pptSubmissionStatus ?? editPptSubmissionStatus);
           setEditPptSubmissionDeadline(res.settings.pptSubmissionDeadline ?? editPptSubmissionDeadline);
+          setEditPptReferenceLink(res.settings.pptReferenceLink ?? editPptReferenceLink);
+          setEditIsPptExtended(res.settings.isPptExtended ?? editIsPptExtended);
+          setEditPptExtendedDeadline(res.settings.pptExtendedDeadline ?? editPptExtendedDeadline);
           setEditIsExtended(res.settings.isExtended ?? editIsExtended);
           setEditExtendedDeadline(res.settings.extendedDeadline ?? editExtendedDeadline);
           setEditCustomQuote(res.settings.customQuote ?? editCustomQuote);
@@ -1107,8 +1119,76 @@ export const AdminPage: React.FC = () => {
                     {teams.filter(t => t.selectedPsId).length} / {stats.totalTeams}
                   </span>
                   <span className="text-[11px] text-purple-700 font-bold block group-hover:underline">
-                    4 Teams Locked PS →
+                    Teams Locked PS →
                   </span>
+                </div>
+              </div>
+
+              {/* PPT Submission Portal Live Quick Control Card */}
+              <div className="p-6 rounded-3xl bg-gradient-to-r from-blue-50/90 via-indigo-50/50 to-blue-50/90 border border-blue-200/90 shadow-sm flex flex-col md:flex-row items-center justify-between gap-5">
+                <div className="space-y-1.5 text-left w-full md:w-auto">
+                  <div className="flex items-center gap-2">
+                    <span className={`px-2.5 py-0.5 rounded-full font-black text-[10px] uppercase tracking-wider border ${
+                      editPptSubmissionOpen
+                        ? 'bg-emerald-100 text-emerald-800 border-emerald-300'
+                        : 'bg-red-100 text-red-800 border-red-300'
+                    }`}>
+                      {editPptSubmissionOpen ? '🟢 PPT PORTAL LIVE & OPEN' : '🔴 PPT PORTAL CLOSED'}
+                    </span>
+                    {editIsPptExtended && (
+                      <span className="px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-900 font-black text-[10px] uppercase tracking-wider border border-amber-300">
+                        ⏳ Extension Active
+                      </span>
+                    )}
+                  </div>
+                  <h3 className="text-lg font-black text-slate-900 tracking-tight">
+                    PPT &amp; Prototype Submission Portal Management
+                  </h3>
+                  <p className="text-xs text-slate-600 font-medium max-w-xl leading-relaxed">
+                    {editPptSubmissionOpen 
+                      ? 'The submission portal is currently LIVE. Students can upload their PPT decks, 2-minute video pitch links, and GitHub prototype repos.'
+                      : 'The portal is currently CLOSED. Turn live ON to open submissions or grant deadline extensions.'}
+                  </p>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-3 shrink-0 w-full md:w-auto justify-end">
+                  <button
+                    type="button"
+                    onClick={async () => {
+                      const nextState = !editPptSubmissionOpen;
+                      setEditPptSubmissionOpen(nextState);
+                      try {
+                        await api.updateSettings({ settings: { pptSubmissionOpen: nextState } });
+                        await reloadPortalData();
+                        showAlert('PPT Portal Status', `PPT Submission Portal is now ${nextState ? 'LIVE & OPEN' : 'CLOSED'}.`, 'info');
+                      } catch (err: any) {
+                        setEditPptSubmissionOpen(!nextState);
+                        showAlert('Error', err.message || 'Could not update PPT portal state.');
+                      }
+                    }}
+                    className={`px-5 py-2.5 rounded-2xl font-black text-xs text-white shadow-md transition cursor-pointer ${
+                      editPptSubmissionOpen ? 'bg-red-600 hover:bg-red-700' : 'bg-emerald-600 hover:bg-emerald-700'
+                    }`}
+                  >
+                    {editPptSubmissionOpen ? 'Close PPT Portal' : 'Make PPT Portal LIVE'}
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={async () => {
+                      setSidebarTab('ppt-submissions');
+                      setIsLoadingPptSubmissions(true);
+                      try {
+                        const d = await api.getAdminPptSubmissions();
+                        setPptSubmissions(d.submissions || []);
+                      } catch (e) {} finally {
+                        setIsLoadingPptSubmissions(false);
+                      }
+                    }}
+                    className="px-5 py-2.5 rounded-2xl font-black text-xs text-white bg-[#1B3F8B] hover:bg-blue-900 shadow-md transition cursor-pointer flex items-center gap-1.5"
+                  >
+                    Manage Submissions &amp; Extensions →
+                  </button>
                 </div>
               </div>
 
@@ -1846,9 +1926,11 @@ export const AdminPage: React.FC = () => {
                 </div>
 
                 {/* PPT Submission Settings */}
-                <div className="p-4 rounded-2xl bg-red-50 border border-red-100 space-y-4">
-                  <h3 className="text-xs font-extrabold text-[#C1272D] uppercase tracking-wider">PPT Submission Portal Control</h3>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="p-5 rounded-2xl bg-[#C1272D]/5 border border-[#C1272D]/20 space-y-4">
+                  <h3 className="text-xs font-black text-[#C1272D] uppercase tracking-wider flex items-center gap-2">
+                    <FileText className="h-4 w-4" /> PPT Submission Portal Live Control &amp; Extensions
+                  </h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div>
                       <label className="block font-bold text-slate-800 mb-1">Submission Portal Status</label>
                       <select
@@ -1856,30 +1938,54 @@ export const AdminPage: React.FC = () => {
                         onChange={(e) => setEditPptSubmissionOpen(e.target.value === 'true')}
                         className="w-full px-4 py-2.5 rounded-xl border border-slate-300 font-bold outline-none text-slate-900 bg-white"
                       >
-                        <option value="true">OPEN — Teams Can Submit PPTs</option>
-                        <option value="false">CLOSED — Submission Not Allowed</option>
+                        <option value="true">🟢 OPEN — Teams Can Submit PPTs</option>
+                        <option value="false">🔴 CLOSED — Submission Locked</option>
                       </select>
                     </div>
                     <div>
-                      <label className="block font-bold text-slate-800 mb-1">Submission Deadline (display text)</label>
+                      <label className="block font-bold text-slate-800 mb-1">Deadline Extension Mode</label>
+                      <select
+                        value={editIsPptExtended ? 'true' : 'false'}
+                        onChange={(e) => setEditIsPptExtended(e.target.value === 'true')}
+                        className="w-full px-4 py-2.5 rounded-xl border border-slate-300 font-bold outline-none text-slate-900 bg-white"
+                      >
+                        <option value="false">REGULAR — Close at deadline</option>
+                        <option value="true">EXTENDED — Allow extension submissions</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block font-bold text-slate-800 mb-1">Submission Deadline (Display Text)</label>
                       <input
                         type="text"
                         value={editPptSubmissionDeadline || ''}
                         onChange={(e) => setEditPptSubmissionDeadline(e.target.value)}
-                        className="w-full px-4 py-2.5 rounded-xl border border-slate-300 font-medium focus:border-[#C1272D] outline-none text-slate-900"
-                        placeholder="e.g. 08 August 2026, 11:59 PM"
+                        className="w-full px-4 py-2.5 rounded-xl border border-slate-300 font-bold focus:border-[#C1272D] outline-none text-slate-900"
+                        placeholder="e.g. 23 August 2026, 11:59 PM"
                       />
                     </div>
                   </div>
-                  <div>
-                    <label className="block font-bold text-slate-800 mb-1">Submission Status Message (shown on card)</label>
-                    <textarea
-                      rows={2}
-                      value={editPptSubmissionStatus || ''}
-                      onChange={(e) => setEditPptSubmissionStatus(e.target.value)}
-                      className="w-full px-4 py-2.5 rounded-xl border border-slate-300 font-medium focus:border-[#C1272D] outline-none resize-none text-slate-900"
-                      placeholder="e.g. PPT submission portal is now open..."
-                    />
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block font-bold text-slate-800 mb-1">Submission Status Message (Shown to Students)</label>
+                      <textarea
+                        rows={2}
+                        value={editPptSubmissionStatus || ''}
+                        onChange={(e) => setEditPptSubmissionStatus(e.target.value)}
+                        className="w-full px-4 py-2.5 rounded-xl border border-slate-300 font-medium focus:border-[#C1272D] outline-none resize-none text-slate-900"
+                        placeholder="e.g. PPT & Prototype submission portal is now open..."
+                      />
+                    </div>
+                    <div>
+                      <label className="block font-bold text-slate-800 mb-1">Sample Filled Guide PDF Link</label>
+                      <input
+                        type="text"
+                        value={editPptReferenceLink || ''}
+                        onChange={(e) => setEditPptReferenceLink(e.target.value)}
+                        className="w-full px-4 py-2.5 rounded-xl border border-slate-300 font-medium focus:border-[#C1272D] outline-none text-slate-900"
+                        placeholder="e.g. /SIH-PPT-REFERANCE.pdf"
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1894,27 +2000,148 @@ export const AdminPage: React.FC = () => {
                 <div>
                   <h1 className="text-2xl font-black text-slate-900 tracking-tight flex items-center gap-2">
                     <FileText className="h-6 w-6 text-[#C1272D]" />
-                    PPT Submissions
+                    PPT &amp; Prototype Submissions Management
                   </h1>
                   <p className="text-sm text-slate-500 font-medium mt-0.5">
-                    All team pitch deck submissions. Click the link to view the shared presentation.
+                    Directly control portal submission status, deadline extensions, and review team pitch decks.
                   </p>
                 </div>
-                <button
-                  onClick={async () => {
-                    setIsLoadingPptSubmissions(true);
-                    try {
-                      const d = await api.getAdminPptSubmissions();
-                      setPptSubmissions(d.submissions || []);
-                    } catch (e) { } finally {
-                      setIsLoadingPptSubmissions(false);
-                    }
-                  }}
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-2xl font-bold text-xs text-white bg-[#1B3F8B] hover:bg-blue-900 transition cursor-pointer shrink-0"
-                >
-                  <RefreshCw className={`h-3.5 w-3.5 ${isLoadingPptSubmissions ? 'animate-spin' : ''}`} />
-                  Refresh
-                </button>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={async () => {
+                      setIsLoadingPptSubmissions(true);
+                      try {
+                        const d = await api.getAdminPptSubmissions();
+                        setPptSubmissions(d.submissions || []);
+                      } catch (e) { } finally {
+                        setIsLoadingPptSubmissions(false);
+                      }
+                    }}
+                    className="inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl font-bold text-xs text-white bg-[#1B3F8B] hover:bg-blue-900 transition cursor-pointer shrink-0 shadow-md"
+                  >
+                    <RefreshCw className={`h-3.5 w-3.5 ${isLoadingPptSubmissions ? 'animate-spin' : ''}`} />
+                    Refresh List
+                  </button>
+                </div>
+              </div>
+
+              {/* DIRECT ADMIN CONTROL PANEL FOR PPT SUBMISSION */}
+              <div className="p-6 rounded-3xl bg-gradient-to-br from-white via-slate-50/50 to-blue-50/30 border border-slate-200 shadow-md space-y-5">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200/80 pb-3.5">
+                  <div className="flex items-center gap-2.5">
+                    <div className="p-2 rounded-xl bg-red-50 text-[#C1272D] border border-red-100">
+                      <Settings className="h-5 w-5" />
+                    </div>
+                    <div>
+                      <h2 className="text-base font-black text-slate-900">
+                        Admin Live PPT Portal Controls &amp; Extensions
+                      </h2>
+                      <p className="text-xs text-slate-500 font-medium">
+                        Change submission portal state, grant extensions, or set announcement banners instantly.
+                      </p>
+                    </div>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={handleSaveSettings}
+                    disabled={isSavingSettings}
+                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-black text-xs text-white bg-gradient-to-r from-[#C1272D] to-[#1B3F8B] shadow-md hover:opacity-95 transition cursor-pointer shrink-0"
+                  >
+                    <Check className="h-4 w-4" />
+                    {isSavingSettings ? 'Saving Settings...' : 'Save Live PPT Settings'}
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                  {/* 1. Portal Live Open / Closed Switch */}
+                  <div className="p-4 rounded-2xl bg-white border border-slate-200/90 shadow-2xs space-y-2">
+                    <label className="block font-black text-slate-800 uppercase tracking-wider text-[10px]">
+                      Portal Live Status
+                    </label>
+                    <select
+                      value={editPptSubmissionOpen ? 'true' : 'false'}
+                      onChange={(e) => setEditPptSubmissionOpen(e.target.value === 'true')}
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 font-extrabold outline-none text-slate-900 bg-white"
+                    >
+                      <option value="true">🟢 OPEN — Teams Can Submit PPTs</option>
+                      <option value="false">🔴 CLOSED — Lock Submission Portal</option>
+                    </select>
+                    <span className="text-[11px] text-slate-500 font-semibold block">
+                      Currently: <strong className={editPptSubmissionOpen ? 'text-emerald-600 font-black' : 'text-red-600 font-black'}>
+                        {editPptSubmissionOpen ? 'Live & Open for All Teams' : 'Closed & Locked'}
+                      </strong>
+                    </span>
+                  </div>
+
+                  {/* 2. Extension Status Toggle */}
+                  <div className="p-4 rounded-2xl bg-white border border-slate-200/90 shadow-2xs space-y-2">
+                    <label className="block font-black text-slate-800 uppercase tracking-wider text-[10px]">
+                      Deadline Extension Status
+                    </label>
+                    <select
+                      value={editIsPptExtended ? 'true' : 'false'}
+                      onChange={(e) => setEditIsPptExtended(e.target.value === 'true')}
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 font-extrabold outline-none text-slate-900 bg-white"
+                    >
+                      <option value="false">⏹ REGULAR — Normal Submission Window</option>
+                      <option value="true">⏳ EXTENDED — Extension Active for Submissions</option>
+                    </select>
+                    <span className="text-[11px] text-slate-500 font-semibold block">
+                      Extension: <strong className={editIsPptExtended ? 'text-amber-600 font-black' : 'text-slate-700 font-bold'}>
+                        {editIsPptExtended ? 'Active (Extension Window Open)' : 'Disabled'}
+                      </strong>
+                    </span>
+                  </div>
+
+                  {/* 3. Submission Deadline Display Text */}
+                  <div className="p-4 rounded-2xl bg-white border border-slate-200/90 shadow-2xs space-y-2">
+                    <label className="block font-black text-slate-800 uppercase tracking-wider text-[10px]">
+                      Submission Deadline (Display Text)
+                    </label>
+                    <input
+                      type="text"
+                      value={editPptSubmissionDeadline || ''}
+                      onChange={(e) => setEditPptSubmissionDeadline(e.target.value)}
+                      className="w-full px-3.5 py-2 rounded-xl border border-slate-300 font-bold outline-none text-slate-900"
+                      placeholder="e.g. 23 August 2026, 11:59 PM"
+                    />
+                    <span className="text-[11px] text-slate-400 font-medium block">
+                      Text displayed on student portals &amp; rules view
+                    </span>
+                  </div>
+                </div>
+
+                {/* Additional Extended Controls */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs pt-1">
+                  <div>
+                    <label className="block font-black text-slate-800 mb-1">
+                      Portal Announcement Note / Status Message
+                    </label>
+                    <textarea
+                      rows={2}
+                      value={editPptSubmissionStatus || ''}
+                      onChange={(e) => setEditPptSubmissionStatus(e.target.value)}
+                      className="w-full px-3.5 py-2 rounded-xl border border-slate-300 font-medium focus:border-[#C1272D] outline-none text-slate-900 resize-none"
+                      placeholder="e.g. PPT & Prototype submission portal is LIVE! Submit your presentation deck, video pitch, and prototype repository."
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block font-black text-slate-800 mb-1">
+                      Extended Deadline (Optional Date &amp; Time Picker)
+                    </label>
+                    <input
+                      type="datetime-local"
+                      value={editPptExtendedDeadline ? toLocalISOString(editPptExtendedDeadline) : ''}
+                      onChange={(e) => setEditPptExtendedDeadline(new Date(e.target.value).toISOString())}
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 font-bold outline-none text-slate-900"
+                    />
+                    <p className="text-[11px] text-slate-500 mt-1">
+                      If extension is enabled, students will be notified of this new deadline.
+                    </p>
+                  </div>
+                </div>
               </div>
 
               {isLoadingPptSubmissions ? (
@@ -1924,21 +2151,31 @@ export const AdminPage: React.FC = () => {
               ) : pptSubmissions.length === 0 ? (
                 <div className="text-center py-16 text-slate-400 bg-white rounded-3xl border border-slate-200">
                   <FileText className="h-10 w-10 mx-auto mb-3 opacity-30" />
-                  <p className="text-sm font-bold text-slate-700">No PPT submissions yet.</p>
-                  <p className="text-xs text-slate-500 mt-1">Submissions will appear here once teams submit their presentations.</p>
+                  <p className="text-sm font-bold text-slate-700">No PPT submissions recorded yet.</p>
+                  <p className="text-xs text-slate-500 mt-1">Submissions will appear here in real-time once teams upload their decks.</p>
                 </div>
               ) : (
-                <div className="rounded-3xl bg-white border border-slate-200/80 overflow-hidden shadow-xs">
+                <div className="rounded-3xl bg-white border border-slate-200/80 overflow-hidden shadow-xs space-y-2">
+                  <div className="p-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
+                    <span className="text-xs font-black text-slate-900 uppercase tracking-wider">
+                      Recorded Submissions ({pptSubmissions.length} Teams Submitted)
+                    </span>
+                    <span className="text-[11px] text-slate-500 font-medium">
+                      💡 Click "Reset &amp; Allow Re-Submission" to delete a submission and unlock a team's portal.
+                    </span>
+                  </div>
                   <div className="overflow-x-auto w-full">
-                    <table className="w-full text-xs border-collapse min-w-[850px]">
+                    <table className="w-full text-xs border-collapse min-w-[950px]">
                       <thead className="bg-slate-50/90 border-b border-slate-200/80">
                         <tr className="text-left font-extrabold text-slate-500 uppercase tracking-wider whitespace-nowrap">
                           <th className="py-3.5 px-4 bg-slate-50/90">Team ID</th>
                           <th className="py-3.5 px-4 bg-slate-50/90">Team Name</th>
                           <th className="py-3.5 px-4 bg-slate-50/90">Leader</th>
-                          <th className="py-3.5 px-4 bg-slate-50/90">PPT Link</th>
+                          <th className="py-3.5 px-4 bg-slate-50/90">PPT Deck</th>
+                          <th className="py-3.5 px-4 bg-slate-50/90">YouTube Demo</th>
+                          <th className="py-3.5 px-4 bg-slate-50/90">GitHub Repo</th>
                           <th className="py-3.5 px-4 bg-slate-50/90">Submitted</th>
-                          <th className="py-3.5 px-4 bg-slate-50/90 text-right">Action</th>
+                          <th className="py-3.5 px-4 bg-slate-50/90 text-right">Actions</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-slate-100 font-medium text-slate-800">
@@ -1956,8 +2193,36 @@ export const AdminPage: React.FC = () => {
                                 onClick={() => handleDownloadPpt(sub.fileUrl || sub.pptFileUrl || sub.ppt_file_url, sub.fileName || sub.pptFileName || `${sub.teamId || 'presentation'}.pptx`, sub.teamId || sub.id)}
                                 className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-black bg-blue-50 text-[#1B3F8B] hover:bg-blue-100 transition border border-blue-200 shadow-2xs cursor-pointer"
                               >
-                                <Download className="h-3.5 w-3.5" /> View / Download PPT
+                                <Download className="h-3.5 w-3.5" /> Download PPT
                               </button>
+                            </td>
+                            <td className="py-3.5 px-4 whitespace-nowrap">
+                              {sub.demoVideoUrl ? (
+                                <a
+                                  href={sub.demoVideoUrl}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-extrabold bg-red-50 text-red-600 hover:underline border border-red-200"
+                                >
+                                  <Play className="h-3 w-3 fill-red-600" /> Watch Video
+                                </a>
+                              ) : (
+                                <span className="text-slate-400 font-medium">—</span>
+                              )}
+                            </td>
+                            <td className="py-3.5 px-4 whitespace-nowrap">
+                              {sub.githubRepoUrl ? (
+                                <a
+                                  href={sub.githubRepoUrl}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-extrabold bg-slate-100 text-slate-900 hover:underline border border-slate-200"
+                                >
+                                  <GitBranch className="h-3 w-3 text-slate-700" /> GitHub Repo
+                                </a>
+                              ) : (
+                                <span className="text-slate-400 font-medium">—</span>
+                              )}
                             </td>
                             <td className="py-3.5 px-4 text-slate-500 whitespace-nowrap">
                               {new Date(sub.submittedAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
@@ -1965,11 +2230,13 @@ export const AdminPage: React.FC = () => {
                             <td className="py-3.5 px-4 text-right whitespace-nowrap">
                               <button
                                 onClick={async () => {
-                                  if (!confirm(`Delete submission from ${sub.teamId}?`)) return;
+                                  if (!confirm(`Are you sure you want to delete PPT submission from Team ${sub.teamId}? This will unlock their Team Portal so they can re-submit.`)) return;
                                   setDeletingPptId(sub.id);
                                   try {
                                     await api.deletePptSubmission(sub.id);
                                     setPptSubmissions(prev => prev.filter(s => s.id !== sub.id));
+                                    showAlert('Submission Reset', `PPT submission for Team ${sub.teamId} has been deleted. Team Portal unlocked for re-submission.`, 'info');
+                                    await loadAdminData();
                                   } catch (e: any) {
                                     showAlert('Error', e.message || 'Could not delete submission.');
                                   } finally {
@@ -1977,10 +2244,11 @@ export const AdminPage: React.FC = () => {
                                   }
                                 }}
                                 disabled={deletingPptId === sub.id}
-                                className="p-1.5 rounded-xl text-red-500 hover:text-red-700 hover:bg-red-50 transition border border-transparent hover:border-red-100 disabled:opacity-50 cursor-pointer"
-                                title="Delete submission"
+                                className="px-3 py-1.5 rounded-xl text-red-600 hover:bg-red-50 transition border border-red-200 hover:border-red-300 font-extrabold text-[11px] disabled:opacity-50 cursor-pointer inline-flex items-center gap-1"
+                                title="Delete submission and unlock team portal for re-submission"
                               >
-                                <Trash2 className="h-4 w-4" />
+                                <Trash2 className="h-3.5 w-3.5" />
+                                Delete &amp; Allow Re-Submission
                               </button>
                             </td>
                           </tr>
