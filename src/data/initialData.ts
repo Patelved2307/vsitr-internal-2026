@@ -21,7 +21,7 @@ export const INITIAL_SETTINGS: EventSettings = {
   registrationDeadline: '2026-08-02T18:29:59.000Z',
   isRegistrationOpen: true,
   whatsappGroupLink: 'https://chat.whatsapp.com/EfS0SSUc9aX4DJUhfrpD2U',
-  announcementBanner: 'Internal SIH 2026 Registrations are now OPEN! Deadline: 02 August 2026, 11:59 PM.',
+  announcementBanner: 'Internal SIH 2026 PS Selection is LIVE! Deadline: 16 August 2026, 11:59 PM.',
   problemStatementLink: 'https://www.sih.gov.in/sih2025PS',
   problemStatementStatus: 'Problem statement announcements will be announced once we get update from the official SIH website.',
   pptTemplateLink: '#',

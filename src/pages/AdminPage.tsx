@@ -475,6 +475,23 @@ export const AdminPage: React.FC = () => {
       });
 
       if (res.success) {
+        if (res.settings) {
+          setEditBanner(res.settings.announcementBanner ?? editBanner);
+          setEditDeadline(res.settings.registrationDeadline ?? editDeadline);
+          setEditIsOpen(res.settings.isRegistrationOpen ?? editIsOpen);
+          setEditWhatsapp(res.settings.whatsappGroupLink ?? editWhatsapp);
+          setEditProblemStatementLink(res.settings.problemStatementLink ?? editProblemStatementLink);
+          setEditProblemStatementStatus(res.settings.problemStatementStatus ?? editProblemStatementStatus);
+          setEditPptTemplateLink(res.settings.pptTemplateLink ?? editPptTemplateLink);
+          setEditPptTemplateStatus(res.settings.pptTemplateStatus ?? editPptTemplateStatus);
+          setEditPptSubmissionOpen(res.settings.pptSubmissionOpen ?? editPptSubmissionOpen);
+          setEditPptSubmissionStatus(res.settings.pptSubmissionStatus ?? editPptSubmissionStatus);
+          setEditPptSubmissionDeadline(res.settings.pptSubmissionDeadline ?? editPptSubmissionDeadline);
+          setEditIsExtended(res.settings.isExtended ?? editIsExtended);
+          setEditExtendedDeadline(res.settings.extendedDeadline ?? editExtendedDeadline);
+          setEditCustomQuote(res.settings.customQuote ?? editCustomQuote);
+          setEditCustomQuoteAuthor(res.settings.customQuoteAuthor ?? editCustomQuoteAuthor);
+        }
         setEditTimeline(updatedTimeline);
         setEditFaqs(updatedFaqs);
         showAlert('Settings Updated', 'Event settings, timelines, FAQs & rules saved successfully!', 'success');
