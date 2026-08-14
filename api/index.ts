@@ -1140,21 +1140,27 @@ app.post('/api/teams/submit-ppt', async (req: Request, res: Response) => {
     let pptFileSize = team.pptSubmission?.pptFileSize || 0;
 
     if (pptFileBase64) {
-      const uploadDir = path.join(process.cwd(), 'data', 'uploads', 'ppt');
-      if (!fs.existsSync(uploadDir)) {
-        fs.mkdirSync(uploadDir, { recursive: true });
-      }
-
       const cleanBase64 = pptFileBase64.replace(/^data:.*?;base64,/, '');
       const fileBuffer = Buffer.from(cleanBase64, 'base64');
       pptFileSize = fileBuffer.length;
 
       const ext = path.extname(pptFileName) || '.pptx';
       const safeName = `${team.id}_${Date.now()}_${path.basename(pptFileName, ext).replace(/[^a-zA-Z0-9]/g, '_')}${ext}`;
-      const filePath = path.join(uploadDir, safeName);
-      fs.writeFileSync(filePath, fileBuffer);
 
-      pptFileUrl = `/api/uploads/ppt/${safeName}`;
+      try {
+        const uploadDir = path.join(process.cwd(), 'data', 'uploads', 'ppt');
+        if (!fs.existsSync(uploadDir)) {
+          fs.mkdirSync(uploadDir, { recursive: true });
+        }
+        const filePath = path.join(uploadDir, safeName);
+        fs.writeFileSync(filePath, fileBuffer);
+        pptFileUrl = `/api/uploads/ppt/${safeName}`;
+      } catch (fsErr) {
+        console.warn('Local disk write skipped (read-only environment like Vercel):', fsErr);
+        pptFileUrl = pptFileBase64.startsWith('data:')
+          ? pptFileBase64
+          : `data:application/vnd.openxmlformats-officedocument.presentationml.presentation;base64,${cleanBase64}`;
+      }
     }
 
     const pptSubmissionData = {
