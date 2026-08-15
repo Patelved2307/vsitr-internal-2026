@@ -1108,7 +1108,10 @@
       },
       "status": "completed",
       "createdAt": "2026-08-01T16:54:51.644Z",
-      "updatedAt": "2026-08-04T09:42:40.112Z"
+      "updatedAt": "2026-08-15T14:23:08.021Z",
+      "selectedPsId": "7-L",
+      "selectedPsTitle": "AI-Powered Academic Dropout Prediction and Intervention System",
+      "psSelectedAt": "2026-08-15T14:23:07.930Z"
     },
     {
       "id": "SIH2026-005",
@@ -1454,7 +1457,10 @@
       },
       "status": "completed",
       "createdAt": "2026-07-29T12:24:23.410Z",
-      "updatedAt": "2026-08-04T17:12:02.069Z"
+      "updatedAt": "2026-08-15T14:23:05.709Z",
+      "selectedPsId": "7-L",
+      "selectedPsTitle": "AI-Powered Academic Dropout Prediction and Intervention System",
+      "psSelectedAt": "2026-08-15T14:23:05.621Z"
     },
     {
       "id": "SIH2026-000",
@@ -1539,6 +1545,28 @@
     }
   ],
   "emailLogs": [
+    {
+      "id": "EMAIL-1786803789988-006",
+      "recipientEmail": "hetchaudhary474@gmail.com",
+      "recipientName": "Patel hetkumar Kiritbhai",
+      "teamId": "SIH2026-006",
+      "subject": "🎉 Problem Statement Selection Confirmed! Internal SIH 2026 [Team SIH2026-006 - Hexasync]",
+      "body": "Dear Patel hetkumar Kiritbhai,\n\nGreetings from the Internal Smart India Hackathon (SIH) 2026 Organizing Committee.\n\nWe are pleased to inform you that your team has successfully selected and submitted a Problem Statement for Internal SIH 2026 through the Team Portal.\n\n📋 Problem Statement Details\n\nTeam ID: SIH2026-006\nTeam Name: Hexasync\nProblem Statement ID: 7-L\nProblem Statement Title: AI-Powered Academic Dropout Prediction and Intervention System\n\nYour submitted Problem Statement details have been successfully recorded in the system.",
+      "type": "ps_selection",
+      "status": "sent",
+      "sentAt": "2026-08-15T14:23:05.530Z"
+    },
+    {
+      "id": "EMAIL-1786803789881-002",
+      "recipientEmail": "shahtirth425@gmail.com",
+      "recipientName": "shah tirth prashantkumar",
+      "teamId": "SIH2026-002",
+      "subject": "🎉 Problem Statement Selection Confirmed! Internal SIH 2026 [Team SIH2026-002 - astrova]",
+      "body": "Dear shah tirth prashantkumar,\n\nGreetings from the Internal Smart India Hackathon (SIH) 2026 Organizing Committee.\n\nWe are pleased to inform you that your team has successfully selected and submitted a Problem Statement for Internal SIH 2026 through the Team Portal.\n\n📋 Problem Statement Details\n\nTeam ID: SIH2026-002\nTeam Name: astrova\nProblem Statement ID: 7-L\nProblem Statement Title: AI-Powered Academic Dropout Prediction and Intervention System\n\nYour submitted Problem Statement details have been successfully recorded in the system.",
+      "type": "ps_selection",
+      "status": "sent",
+      "sentAt": "2026-08-15T14:23:05.530Z"
+    },
     {
       "id": "EMAIL-1786801221877-558",
       "recipientEmail": "member5@vsitr.ac.in",
