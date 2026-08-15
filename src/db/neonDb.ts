@@ -113,7 +113,9 @@ async function syncNormalizedMembersAndMentors(team: Team) {
 }
 
 export function getDatabaseUrl(): string | undefined {
-  const url = process.env.DATABASE_URL || process.env.NEON_DATABASE_URL;
+  const url = process.env.DATABASE_URL || 
+              process.env.NEON_DATABASE_URL || 
+              'postgresql://neondb_owner:npg_yejSI8qT0xuA@ep-lingering-mountain-aziaavg3-pooler.c-3.ap-southeast-1.aws.neon.tech/neondb?sslmode=require';
   if (!url || typeof url !== 'string') return undefined;
   let trimmed = url.trim();
   if (!trimmed || (!trimmed.startsWith('postgres://') && !trimmed.startsWith('postgresql://'))) {
