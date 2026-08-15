@@ -1094,215 +1094,168 @@ export const RegistrationRulesView: React.FC = () => {
           ) : (
             <>
               {mode === 'register' && regStep <= 3 && (
-                <div className="rounded-3xl bg-white border border-slate-200 p-6 sm:p-8 shadow-sm relative overflow-hidden">
-                  {isDeadlinePassed && (
-                    <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#C1272D] via-amber-500 to-[#1B3F8B]" />
-                  )}
+                isDeadlinePassed ? (
+                  <div className="space-y-6 animate-in fade-in duration-300">
+                    
+                    {/* CARD 1: PPT & PROTOTYPE SUBMISSION PORTAL (LIVE NOW) */}
+                    <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#0B192C] via-[#1E3E62] to-[#000000] p-6 sm:p-8 text-white shadow-2xl border border-blue-500/25 space-y-6">
+                      <div className="absolute -right-16 -top-16 w-48 h-48 bg-emerald-500/15 rounded-full blur-3xl pointer-events-none" />
+                      <div className="absolute -left-16 -bottom-16 w-48 h-48 bg-blue-500/20 rounded-full blur-3xl pointer-events-none" />
 
-                  {/* Progress Steps Header */}
-                  {regStep <= 3 && !isDeadlinePassed && (
-                    <div className="mb-6 max-w-md mx-auto">
-                      <div className="relative flex items-center justify-between">
-                        <div className="absolute top-5 left-10 right-10 h-0.5 bg-slate-100 -translate-y-1/2 z-0 overflow-hidden">
-                          <div
-                            className="h-full bg-gradient-to-r from-[#C1272D] to-[#1B3F8B] transition-all duration-300"
-                            style={{
-                              width: regStep === 1 ? '0%' : regStep === 2 ? '50%' : '100%',
-                            }}
-                          />
-                        </div>
-
-                        {/* Circle 1 */}
-                        <div className="relative z-10 flex flex-col items-center w-20">
-                          <div
-                            className={`h-9 w-9 rounded-full flex items-center justify-center font-bold text-xs border transition-all ${regStep >= 1 ? 'bg-[#C1272D] text-white border-[#C1272D] ring-4 ring-red-50' : 'bg-white text-slate-400 border-slate-200'
-                              }`}
-                          >
-                            1
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-white/10 relative z-10">
+                        <div className="flex items-center gap-3.5">
+                          <div className="p-3 rounded-2xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 backdrop-blur-md">
+                            <FileText className="h-6 w-6" />
                           </div>
-                          <span className={`text-[10px] font-extrabold mt-1 ${regStep >= 1 ? 'text-[#1B3F8B]' : 'text-slate-500'}`}>Team Name</span>
-                        </div>
-
-                        {/* Circle 2 */}
-                        <div className="relative z-10 flex flex-col items-center w-20">
-                          <div
-                            className={`h-9 w-9 rounded-full flex items-center justify-center font-bold text-xs border transition-all ${regStep >= 2 ? 'bg-[#1B3F8B] text-white border-[#1B3F8B] ring-4 ring-blue-50' : 'bg-white text-slate-400 border-slate-200'
-                              }`}
-                          >
-                            2
-                          </div>
-                          <span className={`text-[10px] font-extrabold mt-1 ${regStep >= 2 ? 'text-[#1B3F8B]' : 'text-slate-500'}`}>Leader</span>
-                        </div>
-
-                        {/* Circle 3 */}
-                        <div className="relative z-10 flex flex-col items-center w-20">
-                          <div
-                            className={`h-9 w-9 rounded-full flex items-center justify-center font-bold text-xs border transition-all ${regStep >= 3 ? 'bg-amber-600 text-white border-amber-600 ring-4 ring-amber-50' : 'bg-white text-slate-400 border-slate-200'
-                              }`}
-                          >
-                            3
-                          </div>
-                          <span className={`text-[10px] font-extrabold mt-1 ${regStep >= 3 ? 'text-[#1B3F8B]' : 'text-slate-500'}`}>Members</span>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                  {isDeadlinePassed && regStep <= 3 ? (
-                    <div className="relative z-10 space-y-6 animate-in fade-in duration-300">
-                      
-                      {/* PPT SUBMISSION LIVE ANNOUNCEMENT & COUNTDOWN TIMER CARD */}
-                      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-[#1B3F8B] to-slate-950 p-6 sm:p-8 text-white shadow-xl border border-blue-900/60 space-y-6">
-                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-white/10">
-                          <div className="flex items-center gap-3">
-                            <div className="p-3 rounded-2xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 backdrop-blur-md">
-                              <FileText className="h-6 w-6" />
+                          <div>
+                            <div className="flex items-center gap-2">
+                              <span className="px-3 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 inline-flex items-center gap-1.5 shadow-2xs">
+                                <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+                                Submission Portal Live &amp; Open
+                              </span>
                             </div>
-                            <div>
-                              <div className="flex items-center gap-2">
-                                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 inline-flex items-center gap-1.5">
-                                  <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-                                  Submission Portal Live &amp; Open
-                                </span>
-                              </div>
-                              <h3 className="text-xl sm:text-2xl font-black tracking-tight text-white mt-1">
-                                PPT &amp; Prototype Submission Is LIVE!
-                              </h3>
-                            </div>
-                          </div>
-                        </div>
-
-                        <p className="text-xs sm:text-sm text-slate-200 font-medium leading-relaxed">
-                          Internal SIH 2026 presentation PowerPoint deck (.ppt / .pptx), 2-minute YouTube video pitch clip link, and 20% working prototype GitHub repository submission portal is now active for all registered teams!
-                        </p>
-
-                        {/* Countdown Timer */}
-                        <div className="space-y-2.5">
-                          <div className="flex items-center justify-between text-xs font-bold text-slate-300">
-                            <span className="flex items-center gap-1.5 text-amber-300">
-                              <Clock className="h-4 w-4 animate-pulse text-amber-400" />
-                              PPT Submission Deadline Closes In:
-                            </span>
-                            <span className="text-[11px] font-mono text-slate-300 bg-white/10 px-2.5 py-0.5 rounded-md border border-white/15">
-                              25 August 2026, 11:59 PM IST
-                            </span>
-                          </div>
-
-                          {pptTimeLeft.isExpired ? (
-                            <div className="p-3 rounded-2xl bg-red-950/40 border border-red-800/60 text-center">
-                              <span className="text-xs font-black text-red-400 uppercase tracking-wider">PPT Submission Portal Closed</span>
-                            </div>
-                          ) : (
-                            <div className="grid grid-cols-4 gap-2.5">
-                              <div className="flex flex-col items-center bg-white/10 backdrop-blur-md border border-white/15 rounded-2xl p-3 shadow-inner">
-                                <span className="text-xl sm:text-2xl font-black text-white font-mono leading-none">
-                                  {String(pptTimeLeft.days).padStart(2, '0')}
-                                </span>
-                                <span className="text-[9px] font-black text-slate-300 uppercase mt-1 tracking-wider">
-                                  Days
-                                </span>
-                              </div>
-
-                              <div className="flex flex-col items-center bg-white/10 backdrop-blur-md border border-white/15 rounded-2xl p-3 shadow-inner">
-                                <span className="text-xl sm:text-2xl font-black text-white font-mono leading-none">
-                                  {String(pptTimeLeft.hours).padStart(2, '0')}
-                                </span>
-                                <span className="text-[9px] font-black text-slate-300 uppercase mt-1 tracking-wider">
-                                  Hours
-                                </span>
-                              </div>
-
-                              <div className="flex flex-col items-center bg-white/10 backdrop-blur-md border border-white/15 rounded-2xl p-3 shadow-inner">
-                                <span className="text-xl sm:text-2xl font-black text-white font-mono leading-none">
-                                  {String(pptTimeLeft.minutes).padStart(2, '0')}
-                                </span>
-                                <span className="text-[9px] font-black text-slate-300 uppercase mt-1 tracking-wider">
-                                  Mins
-                                </span>
-                              </div>
-
-                              <div className="flex flex-col items-center bg-emerald-500/20 border border-emerald-400/40 rounded-2xl p-3 shadow-inner">
-                                <span className="text-xl sm:text-2xl font-black text-emerald-300 font-mono leading-none animate-pulse">
-                                  {String(pptTimeLeft.seconds).padStart(2, '0')}
-                                </span>
-                                <span className="text-[9px] font-black text-emerald-400 uppercase mt-1 tracking-wider">
-                                  Secs
-                                </span>
-                              </div>
-                            </div>
-                          )}
-                        </div>
-
-                        {/* Action Buttons */}
-                        <div className="flex flex-wrap items-center gap-3 pt-2">
-                          <button
-                            type="button"
-                            onClick={() => setActiveTab(isTeamLoggedIn ? 'ppt-submit' : 'login')}
-                            className="flex-1 min-w-[200px] inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl text-xs font-black text-white bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 transition shadow-lg shadow-emerald-500/25 transform active:scale-95 duration-200 cursor-pointer"
-                          >
-                            <FileText className="h-4 w-4" />
-                            {isTeamLoggedIn ? 'Submit PPT & Prototype Deck →' : 'Log In & Submit PPT →'}
-                          </button>
-
-                          <a
-                            href="/SIH2026-IDEA-Presentation-Format.pptx"
-                            download
-                            className="inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-2xl text-xs font-black text-white bg-white/15 hover:bg-white/25 border border-white/20 transition backdrop-blur-md cursor-pointer"
-                          >
-                            <GraduationCap className="h-4 w-4 text-amber-300" />
-                            Download Template PPT
-                          </a>
-                        </div>
-                      </div>
-
-                      {/* Problem Statement Selection Card */}
-                      <div className="p-6 rounded-3xl bg-slate-50 border border-slate-200 space-y-5">
-                        <div className="text-center max-w-2xl mx-auto space-y-3">
-                          <div className="flex justify-center">
-                            <img 
-                              src="/problem_statement_selection_vector.png" 
-                              alt="Select Problem Statement" 
-                              className="h-28 w-auto object-contain select-none pointer-events-none filter drop-shadow-md" 
-                            />
-                          </div>
-                          
-                          <div className="space-y-1.5">
-                            <h3 className="text-xl font-black text-slate-900 tracking-tight">
-                              Select the Problem Statement
+                            <h3 className="text-xl sm:text-2xl font-black tracking-tight text-white mt-1">
+                              PPT &amp; 20% Prototype Submission
                             </h3>
-                            <p className="text-xs text-slate-600 font-semibold leading-relaxed">
-                              Registration is closed, and the Selection Phase is active! Selected teams must log in to their Team Portal to choose their problem statement by <strong className="text-[#C1272D]">16 August, 2026 at 11:59 PM</strong>.
-                            </p>
                           </div>
-
-                          <div className="pt-1">
-                            <button
-                              type="button"
-                              onClick={() => setActiveTab('login')}
-                              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-2xl text-xs font-black text-white bg-gradient-to-r from-[#1B3F8B] to-blue-700 hover:opacity-95 shadow-md shadow-blue-900/10 transition transform active:scale-95 duration-200 cursor-pointer"
-                            >
-                              <BookOpen className="h-4 w-4" />
-                              Select Problem Statement
-                            </button>
-                          </div>
-                        </div>
-
-                        {/* Inspiring quote */}
-                        <div className="p-4 rounded-2xl bg-white border border-slate-200/80 border-l-4 border-l-[#C1272D] text-left relative overflow-hidden shadow-2xs">
-                          <span className="absolute -top-1.5 -left-1 text-slate-200/80 text-5xl font-serif select-none pointer-events-none">
-                            “
-                          </span>
-                          <p className="text-xs italic font-bold text-slate-800 relative z-10 pl-5 leading-relaxed">
-                            {settings.customQuote || "Innovation distinguishes between a leader and a follower."}
-                          </p>
-                          <p className="text-[10px] font-extrabold text-[#C1272D] text-right mt-1.5 uppercase tracking-wider">
-                            — {settings.customQuoteAuthor || "Steve Jobs"}
-                          </p>
                         </div>
                       </div>
 
+                      <p className="text-xs sm:text-sm text-slate-200 font-medium leading-relaxed relative z-10">
+                        Official Internal SIH 2026 presentation PowerPoint deck (.ppt / .pptx), 2-minute YouTube video pitch clip link, and 20% working prototype GitHub repository submission portal is now active for all registered teams!
+                      </p>
+
+                      <div className="space-y-3 relative z-10">
+                        <div className="flex items-center justify-between text-xs font-bold text-slate-300">
+                          <span className="flex items-center gap-1.5 text-amber-300 font-extrabold">
+                            <Clock className="h-4 w-4 animate-pulse text-amber-400" />
+                            PPT Submission Deadline Closes In:
+                          </span>
+                          <span className="text-[11px] font-mono font-bold text-slate-200 bg-white/10 px-3 py-1 rounded-xl border border-white/15 backdrop-blur-md">
+                            25 August 2026, 11:59 PM IST
+                          </span>
+                        </div>
+
+                        {pptTimeLeft.isExpired ? (
+                          <div className="p-3.5 rounded-2xl bg-red-950/50 border border-red-800/60 text-center">
+                            <span className="text-xs font-black text-red-400 uppercase tracking-wider">PPT Submission Portal Closed</span>
+                          </div>
+                        ) : (
+                          <div className="grid grid-cols-4 gap-3">
+                            <div className="flex flex-col items-center bg-white/10 backdrop-blur-xl border border-white/15 rounded-2xl p-3.5 shadow-lg">
+                              <span className="text-2xl sm:text-3xl font-black text-white font-mono leading-none">
+                                {String(pptTimeLeft.days).padStart(2, '0')}
+                              </span>
+                              <span className="text-[9px] font-black text-slate-300 uppercase mt-1.5 tracking-wider">
+                                Days
+                              </span>
+                            </div>
+
+                            <div className="flex flex-col items-center bg-white/10 backdrop-blur-xl border border-white/15 rounded-2xl p-3.5 shadow-lg">
+                              <span className="text-2xl sm:text-3xl font-black text-white font-mono leading-none">
+                                {String(pptTimeLeft.hours).padStart(2, '0')}
+                              </span>
+                              <span className="text-[9px] font-black text-slate-300 uppercase mt-1.5 tracking-wider">
+                                Hours
+                              </span>
+                            </div>
+
+                            <div className="flex flex-col items-center bg-white/10 backdrop-blur-xl border border-white/15 rounded-2xl p-3.5 shadow-lg">
+                              <span className="text-2xl sm:text-3xl font-black text-white font-mono leading-none">
+                                {String(pptTimeLeft.minutes).padStart(2, '0')}
+                              </span>
+                              <span className="text-[9px] font-black text-slate-300 uppercase mt-1.5 tracking-wider">
+                                Mins
+                              </span>
+                            </div>
+
+                            <div className="flex flex-col items-center bg-emerald-500/25 border border-emerald-400/50 rounded-2xl p-3.5 shadow-lg">
+                              <span className="text-2xl sm:text-3xl font-black text-emerald-300 font-mono leading-none animate-pulse">
+                                {String(pptTimeLeft.seconds).padStart(2, '0')}
+                              </span>
+                              <span className="text-[9px] font-black text-emerald-400 uppercase mt-1.5 tracking-wider">
+                                Secs
+                              </span>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-2 relative z-10">
+                        <button
+                          type="button"
+                          onClick={() => setActiveTab(isTeamLoggedIn ? 'ppt-submit' : 'login')}
+                          className="flex-1 inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl text-xs font-black text-white bg-gradient-to-r from-emerald-500 via-teal-600 to-emerald-600 hover:from-emerald-600 hover:to-teal-700 transition shadow-lg shadow-emerald-500/20 transform active:scale-95 duration-200 cursor-pointer"
+                        >
+                          <FileText className="h-4 w-4" />
+                          {isTeamLoggedIn ? 'Submit PPT & Prototype Deck →' : 'Log In & Submit PPT →'}
+                        </button>
+
+                        <a
+                          href="/SIH2026-IDEA-Presentation-Format.pptx"
+                          download
+                          className="inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-2xl text-xs font-black text-white bg-white/10 hover:bg-white/20 border border-white/20 transition backdrop-blur-md cursor-pointer"
+                        >
+                          <GraduationCap className="h-4 w-4 text-amber-300" />
+                          Download Template PPT
+                        </a>
+                      </div>
                     </div>
-                  ) : (
+
+                    {/* CARD 2: PROBLEM STATEMENT SELECTION PHASE */}
+                    <div className="relative overflow-hidden rounded-3xl bg-white border border-slate-200/90 p-6 sm:p-8 shadow-xl hover:shadow-2xl transition duration-300 space-y-6">
+                      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                        <div className="p-3 rounded-2xl bg-blue-500/10 text-[#1B3F8B] border border-blue-500/15 shrink-0">
+                          <BookOpen className="h-7 w-7" />
+                        </div>
+                        <div className="space-y-1">
+                          <div className="flex items-center gap-2">
+                            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-blue-50 text-[#1B3F8B] border border-blue-200">
+                              Selection Phase Active
+                            </span>
+                          </div>
+                          <h3 className="text-xl sm:text-2xl font-black text-slate-950 tracking-tight">
+                            Select Your Problem Statement
+                          </h3>
+                        </div>
+                      </div>
+
+                      <p className="text-xs sm:text-sm text-slate-600 font-semibold leading-relaxed">
+                        Team registration is closed, and the Problem Statement Selection Phase is live! All selected team leaders must log in to their Team Portal to finalize their chosen problem statement by <strong className="text-[#C1272D]">16 August, 2026 at 11:59 PM</strong>.
+                      </p>
+
+                      <div className="flex flex-wrap items-center justify-between gap-4 pt-1 border-t border-slate-100">
+                        <button
+                          type="button"
+                          onClick={() => setActiveTab('login')}
+                          className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl text-xs font-black text-white bg-gradient-to-r from-[#1B3F8B] to-blue-700 hover:from-blue-900 hover:to-indigo-800 transition shadow-md shadow-blue-900/15 transform active:scale-95 duration-200 cursor-pointer"
+                        >
+                          <BookOpen className="h-4 w-4" />
+                          Select Problem Statement →
+                        </button>
+
+                        <div className="flex items-center gap-2 text-xs font-extrabold text-[#C1272D] bg-red-50 px-3.5 py-2 rounded-xl border border-red-100/70">
+                          <Calendar className="h-4 w-4" />
+                          Selection Deadline: 16 Aug, 11:59 PM
+                        </div>
+                      </div>
+
+                      {/* Inspiring quote */}
+                      <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 border-l-4 border-l-[#C1272D] text-left relative overflow-hidden shadow-2xs">
+                        <span className="absolute -top-2 -left-1 text-slate-200/80 text-5xl font-serif select-none pointer-events-none">
+                          “
+                        </span>
+                        <p className="text-xs italic font-bold text-slate-800 relative z-10 pl-5 leading-relaxed">
+                          {settings.customQuote || "Innovation distinguishes between a leader and a follower."}
+                        </p>
+                        <p className="text-[10px] font-extrabold text-[#C1272D] text-right mt-1.5 uppercase tracking-wider">
+                          — {settings.customQuoteAuthor || "Steve Jobs"}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="rounded-3xl bg-white border border-slate-200 p-6 sm:p-8 shadow-sm relative overflow-hidden">
                     <form onSubmit={(e) => { e.preventDefault(); if (regStep === 3) handleRegisterSubmit(e); }}>
 
                       {/* STEP 1: TEAM NAME */}
@@ -1648,8 +1601,8 @@ export const RegistrationRulesView: React.FC = () => {
                         </div>
                       )}
                     </form>
-                  )}
-                </div>
+                  </div>
+                )
               )}
 
               {/* LOOKUP MODE OR PHASE 2: ADD MENTOR DETAILS */}
