@@ -3,7 +3,7 @@
     "registrationDeadline": "2026-08-02T18:29:59.000Z",
     "isRegistrationOpen": false,
     "whatsappGroupLink": "https://chat.whatsapp.com/SIH2026InternalVSITR",
-    "announcementBanner": "Internal SIH 2026 PPT & Prototype Submission is LIVE! Submission Deadline: 25 August 2026, 11:59 PM.",
+    "announcementBanner": "Problem Statement Selection is OPEN! Deadline: 16 August 2026, 11:59 PM.",
     "problemStatementLink": "https://www.sih.gov.in/sih2025PS",
     "problemStatementStatus": "The problem statements will be released soon at the link below, and team leaders will receive an email notification as soon as they go live. You can access them directly through that link or by navigating to the website in your browser.",
     "pptTemplateLink": "https://drive.google.com/drive/folders/14N_F8cFzbaVpoGANSUDBqnBTJ8OJlinB?usp=sharing",
@@ -13,8 +13,8 @@
     "customQuote": "Innovation distinguishes between a leader and a follower.",
     "customQuoteAuthor": "Steve Jobs",
     "pptSubmissionOpen": true,
-    "pptSubmissionStatus": "PPT & Prototype Submission Portal is now LIVE! Registered team leaders can submit their official PowerPoint presentation (.ppt / .pptx), YouTube prototype video demo link, and GitHub repository link before the deadline.",
-    "pptSubmissionDeadline": "25 August 2026, 11:59 PM",
+    "pptSubmissionStatus": "PPT submission portal will open after the registration deadline. Stay tuned.",
+    "pptSubmissionDeadline": "23 August 2026, 11:56 PM",
     "pptReferenceLink": "/SIH-PPT-REFERANCE.pdf"
   },
   "timeline": [
@@ -36,22 +36,22 @@
       "id": "t3",
       "date": "16 August 2026, 11:59 PM",
       "title": "Problem Statement Selection",
-      "active": true,
+      "active": false,
       "description": "Select the Problem Statement from team Portal. Once the Problem statement is selected no modification can be done."
     },
     {
       "id": "t4",
-      "date": "25 August 2026, 11:59 PM",
-      "title": "PPT, Video Clip & 20% Prototype Submission",
-      "active": true,
-      "description": "Submit your PowerPoint deck (.ppt/.pptx), 2-minute YouTube video pitch clip, and 20% prototype code repository before 11:59 PM."
+      "date": "23 August 2026, 11:59 PM",
+      "title": "PPT Submission",
+      "active": false,
+      "description": "Submit your team PPT presentation detailing your proposed solution."
     },
     {
       "id": "t5",
-      "date": "27 August 2026 (Time will be shared soon)",
+      "date": "27 August 2026",
       "title": "PPT Presentation Day",
       "active": false,
-      "description": "In-person pitch deck presentation & technical evaluation before faculty panel. Venue: Gandhinagar Campus. Schedule & time slots will be shared soon."
+      "description": "In-person pitch deck presentation & technical evaluation before faculty panel."
     }
   ],
   "faqs": [
@@ -849,7 +849,10 @@
       },
       "status": "completed",
       "createdAt": "2026-08-02T08:42:35.252Z",
-      "updatedAt": "2026-08-04T09:53:38.199Z"
+      "updatedAt": "2026-08-15T13:34:35.544Z",
+      "selectedPsId": "8-L",
+      "selectedPsTitle": "Smart Waste Management and Citizen Reporting Platform",
+      "psSelectedAt": "2026-08-15T13:34:35.438Z"
     },
     {
       "id": "SIH2026-008",
@@ -1529,13 +1532,79 @@
       },
       "status": "completed",
       "createdAt": "2026-08-01T10:00:00.000Z",
-      "updatedAt": "2026-08-14T13:05:19.608Z",
-      "selectedPsId": "8-L",
-      "selectedPsTitle": "Smart Waste Management and Citizen Reporting Platform",
-      "psSelectedAt": "2026-08-10T12:00:00.000Z"
+      "updatedAt": "2026-08-15T13:40:12.399Z",
+      "selectedPsId": "7-L",
+      "selectedPsTitle": "AI-Powered Academic Dropout Prediction and Intervention System",
+      "psSelectedAt": "2026-08-15T13:40:12.059Z"
     }
   ],
   "emailLogs": [
+    {
+      "id": "EMAIL-1786801221877-558",
+      "recipientEmail": "member5@vsitr.ac.in",
+      "recipientName": "Member Five",
+      "teamId": "SIH2026-000",
+      "subject": "📢 Internal SIH 2026 – Problem Statement Selection Confirmed",
+      "body": "Dear Member Five,\n\nGreetings from the Internal Smart India Hackathon (SIH) 2026 Organizing Committee.\n\nWe are pleased to inform you that your team has successfully selected and submitted a Problem Statement for Internal SIH 2026 through the Team Portal.\n\n📋 Problem Statement Details\n\nTeam ID: SIH2026-000\nTeam Name: VSITR Testing Team (Internal)\nProblem Statement ID: 7-L\nProblem Statement Title: AI-Powered Academic Dropout Prediction and Intervention System\n\nYour submitted Problem Statement details have been successfully recorded in the system. This confirmation email has been shared with the Team Leader and all registered team members for reference.\n\n📌 Important Next Steps\nAfter selecting your Problem Statement, you can start working on your proposed solution.\nThe PPT Submission Date will be announced soon. Please stay tuned to the official communication channels.\nThe Presentation Date will also be announced soon.\nPlease regularly check the Team Portal, registered email, and official WhatsApp group for important announcements and updates.\n\n💬 Join the Official WhatsApp Group\n\nFor regular updates and announcements, please join the official Internal SIH 2026 WhatsApp Group and share the link with all your team members.\n\n👉 Join WhatsApp Group: https://chat.whatsapp.com/SIH2026InternalVSITR\n\n📞 Need Assistance?\n\nFor any queries or technical assistance, please contact us at:\n\n📧 sihinternal.vsitr@gmail.com\n\nThank you for your participation and cooperation.\n\nWe wish your team the very best for Internal SIH 2026! 🚀\n\nWarm Regards,\nInternal Smart India Hackathon (SIH) 2026 Organizing Committee\nResearch Club | Coding Club | Design Club | Soft Skills Club\nVidush Somany Institute of Technology & Research (VSITR)\nKadi Sarva Vishwavidyalaya",
+      "type": "ps_selection",
+      "status": "sent",
+      "sentAt": "2026-08-15T13:40:21.877Z"
+    },
+    {
+      "id": "EMAIL-1786801221447-678",
+      "recipientEmail": "member1@vsitr.ac.in",
+      "recipientName": "Member One",
+      "teamId": "SIH2026-000",
+      "subject": "📢 Internal SIH 2026 – Problem Statement Selection Confirmed",
+      "body": "Dear Member One,\n\nGreetings from the Internal Smart India Hackathon (SIH) 2026 Organizing Committee.\n\nWe are pleased to inform you that your team has successfully selected and submitted a Problem Statement for Internal SIH 2026 through the Team Portal.\n\n📋 Problem Statement Details\n\nTeam ID: SIH2026-000\nTeam Name: VSITR Testing Team (Internal)\nProblem Statement ID: 7-L\nProblem Statement Title: AI-Powered Academic Dropout Prediction and Intervention System\n\nYour submitted Problem Statement details have been successfully recorded in the system. This confirmation email has been shared with the Team Leader and all registered team members for reference.\n\n📌 Important Next Steps\nAfter selecting your Problem Statement, you can start working on your proposed solution.\nThe PPT Submission Date will be announced soon. Please stay tuned to the official communication channels.\nThe Presentation Date will also be announced soon.\nPlease regularly check the Team Portal, registered email, and official WhatsApp group for important announcements and updates.\n\n💬 Join the Official WhatsApp Group\n\nFor regular updates and announcements, please join the official Internal SIH 2026 WhatsApp Group and share the link with all your team members.\n\n👉 Join WhatsApp Group: https://chat.whatsapp.com/SIH2026InternalVSITR\n\n📞 Need Assistance?\n\nFor any queries or technical assistance, please contact us at:\n\n📧 sihinternal.vsitr@gmail.com\n\nThank you for your participation and cooperation.\n\nWe wish your team the very best for Internal SIH 2026! 🚀\n\nWarm Regards,\nInternal Smart India Hackathon (SIH) 2026 Organizing Committee\nResearch Club | Coding Club | Design Club | Soft Skills Club\nVidush Somany Institute of Technology & Research (VSITR)\nKadi Sarva Vishwavidyalaya",
+      "type": "ps_selection",
+      "status": "sent",
+      "sentAt": "2026-08-15T13:40:21.447Z"
+    },
+    {
+      "id": "EMAIL-1786801219719-393",
+      "recipientEmail": "member2@vsitr.ac.in",
+      "recipientName": "Member Two",
+      "teamId": "SIH2026-000",
+      "subject": "📢 Internal SIH 2026 – Problem Statement Selection Confirmed",
+      "body": "Dear Member Two,\n\nGreetings from the Internal Smart India Hackathon (SIH) 2026 Organizing Committee.\n\nWe are pleased to inform you that your team has successfully selected and submitted a Problem Statement for Internal SIH 2026 through the Team Portal.\n\n📋 Problem Statement Details\n\nTeam ID: SIH2026-000\nTeam Name: VSITR Testing Team (Internal)\nProblem Statement ID: 7-L\nProblem Statement Title: AI-Powered Academic Dropout Prediction and Intervention System\n\nYour submitted Problem Statement details have been successfully recorded in the system. This confirmation email has been shared with the Team Leader and all registered team members for reference.\n\n📌 Important Next Steps\nAfter selecting your Problem Statement, you can start working on your proposed solution.\nThe PPT Submission Date will be announced soon. Please stay tuned to the official communication channels.\nThe Presentation Date will also be announced soon.\nPlease regularly check the Team Portal, registered email, and official WhatsApp group for important announcements and updates.\n\n💬 Join the Official WhatsApp Group\n\nFor regular updates and announcements, please join the official Internal SIH 2026 WhatsApp Group and share the link with all your team members.\n\n👉 Join WhatsApp Group: https://chat.whatsapp.com/SIH2026InternalVSITR\n\n📞 Need Assistance?\n\nFor any queries or technical assistance, please contact us at:\n\n📧 sihinternal.vsitr@gmail.com\n\nThank you for your participation and cooperation.\n\nWe wish your team the very best for Internal SIH 2026! 🚀\n\nWarm Regards,\nInternal Smart India Hackathon (SIH) 2026 Organizing Committee\nResearch Club | Coding Club | Design Club | Soft Skills Club\nVidush Somany Institute of Technology & Research (VSITR)\nKadi Sarva Vishwavidyalaya",
+      "type": "ps_selection",
+      "status": "sent",
+      "sentAt": "2026-08-15T13:40:19.719Z"
+    },
+    {
+      "id": "EMAIL-1786801219332-302",
+      "recipientEmail": "member4@vsitr.ac.in",
+      "recipientName": "Member Four",
+      "teamId": "SIH2026-000",
+      "subject": "📢 Internal SIH 2026 – Problem Statement Selection Confirmed",
+      "body": "Dear Member Four,\n\nGreetings from the Internal Smart India Hackathon (SIH) 2026 Organizing Committee.\n\nWe are pleased to inform you that your team has successfully selected and submitted a Problem Statement for Internal SIH 2026 through the Team Portal.\n\n📋 Problem Statement Details\n\nTeam ID: SIH2026-000\nTeam Name: VSITR Testing Team (Internal)\nProblem Statement ID: 7-L\nProblem Statement Title: AI-Powered Academic Dropout Prediction and Intervention System\n\nYour submitted Problem Statement details have been successfully recorded in the system. This confirmation email has been shared with the Team Leader and all registered team members for reference.\n\n📌 Important Next Steps\nAfter selecting your Problem Statement, you can start working on your proposed solution.\nThe PPT Submission Date will be announced soon. Please stay tuned to the official communication channels.\nThe Presentation Date will also be announced soon.\nPlease regularly check the Team Portal, registered email, and official WhatsApp group for important announcements and updates.\n\n💬 Join the Official WhatsApp Group\n\nFor regular updates and announcements, please join the official Internal SIH 2026 WhatsApp Group and share the link with all your team members.\n\n👉 Join WhatsApp Group: https://chat.whatsapp.com/SIH2026InternalVSITR\n\n📞 Need Assistance?\n\nFor any queries or technical assistance, please contact us at:\n\n📧 sihinternal.vsitr@gmail.com\n\nThank you for your participation and cooperation.\n\nWe wish your team the very best for Internal SIH 2026! 🚀\n\nWarm Regards,\nInternal Smart India Hackathon (SIH) 2026 Organizing Committee\nResearch Club | Coding Club | Design Club | Soft Skills Club\nVidush Somany Institute of Technology & Research (VSITR)\nKadi Sarva Vishwavidyalaya",
+      "type": "ps_selection",
+      "status": "sent",
+      "sentAt": "2026-08-15T13:40:19.332Z"
+    },
+    {
+      "id": "EMAIL-1786801219067-72",
+      "recipientEmail": "test.sih2026@vsitr.ac.in",
+      "recipientName": "Test Leader (VSITR)",
+      "teamId": "SIH2026-000",
+      "subject": "📢 Internal SIH 2026 – Problem Statement Selection Confirmed",
+      "body": "Dear Test Leader (VSITR),\n\nGreetings from the Internal Smart India Hackathon (SIH) 2026 Organizing Committee.\n\nWe are pleased to inform you that your team has successfully selected and submitted a Problem Statement for Internal SIH 2026 through the Team Portal.\n\n📋 Problem Statement Details\n\nTeam ID: SIH2026-000\nTeam Name: VSITR Testing Team (Internal)\nProblem Statement ID: 7-L\nProblem Statement Title: AI-Powered Academic Dropout Prediction and Intervention System\n\nYour submitted Problem Statement details have been successfully recorded in the system. This confirmation email has been shared with the Team Leader and all registered team members for reference.\n\n📌 Important Next Steps\nAfter selecting your Problem Statement, you can start working on your proposed solution.\nThe PPT Submission Date will be announced soon. Please stay tuned to the official communication channels.\nThe Presentation Date will also be announced soon.\nPlease regularly check the Team Portal, registered email, and official WhatsApp group for important announcements and updates.\n\n💬 Join the Official WhatsApp Group\n\nFor regular updates and announcements, please join the official Internal SIH 2026 WhatsApp Group and share the link with all your team members.\n\n👉 Join WhatsApp Group: https://chat.whatsapp.com/SIH2026InternalVSITR\n\n📞 Need Assistance?\n\nFor any queries or technical assistance, please contact us at:\n\n📧 sihinternal.vsitr@gmail.com\n\nThank you for your participation and cooperation.\n\nWe wish your team the very best for Internal SIH 2026! 🚀\n\nWarm Regards,\nInternal Smart India Hackathon (SIH) 2026 Organizing Committee\nResearch Club | Coding Club | Design Club | Soft Skills Club\nVidush Somany Institute of Technology & Research (VSITR)\nKadi Sarva Vishwavidyalaya",
+      "type": "ps_selection",
+      "status": "sent",
+      "sentAt": "2026-08-15T13:40:19.067Z"
+    },
+    {
+      "id": "EMAIL-1786801218766-211",
+      "recipientEmail": "member3@vsitr.ac.in",
+      "recipientName": "Member Three",
+      "teamId": "SIH2026-000",
+      "subject": "📢 Internal SIH 2026 – Problem Statement Selection Confirmed",
+      "body": "Dear Member Three,\n\nGreetings from the Internal Smart India Hackathon (SIH) 2026 Organizing Committee.\n\nWe are pleased to inform you that your team has successfully selected and submitted a Problem Statement for Internal SIH 2026 through the Team Portal.\n\n📋 Problem Statement Details\n\nTeam ID: SIH2026-000\nTeam Name: VSITR Testing Team (Internal)\nProblem Statement ID: 7-L\nProblem Statement Title: AI-Powered Academic Dropout Prediction and Intervention System\n\nYour submitted Problem Statement details have been successfully recorded in the system. This confirmation email has been shared with the Team Leader and all registered team members for reference.\n\n📌 Important Next Steps\nAfter selecting your Problem Statement, you can start working on your proposed solution.\nThe PPT Submission Date will be announced soon. Please stay tuned to the official communication channels.\nThe Presentation Date will also be announced soon.\nPlease regularly check the Team Portal, registered email, and official WhatsApp group for important announcements and updates.\n\n💬 Join the Official WhatsApp Group\n\nFor regular updates and announcements, please join the official Internal SIH 2026 WhatsApp Group and share the link with all your team members.\n\n👉 Join WhatsApp Group: https://chat.whatsapp.com/SIH2026InternalVSITR\n\n📞 Need Assistance?\n\nFor any queries or technical assistance, please contact us at:\n\n📧 sihinternal.vsitr@gmail.com\n\nThank you for your participation and cooperation.\n\nWe wish your team the very best for Internal SIH 2026! 🚀\n\nWarm Regards,\nInternal Smart India Hackathon (SIH) 2026 Organizing Committee\nResearch Club | Coding Club | Design Club | Soft Skills Club\nVidush Somany Institute of Technology & Research (VSITR)\nKadi Sarva Vishwavidyalaya",
+      "type": "ps_selection",
+      "status": "sent",
+      "sentAt": "2026-08-15T13:40:18.766Z"
+    },
     {
       "id": "EMAIL-1786712737926-657",
       "recipientEmail": "member3@vsitr.ac.in",
@@ -2907,6 +2976,17 @@
       "type": "registration_confirmation",
       "status": "simulated",
       "sentAt": "2026-07-29T12:24:25.414Z"
+    },
+    {
+      "id": "EMAIL-1785514800000-009",
+      "recipientEmail": "vekariyajeel0@gmail.com",
+      "recipientName": "Vekariya Jeel Nileshbhai",
+      "teamId": "SIH2026-009",
+      "subject": "🎉 Problem Statement Selection Confirmed! Internal SIH 2026 [Team SIH2026-009 - Code Inovator]",
+      "body": "Dear Vekariya Jeel Nileshbhai,\n\nGreetings from the Internal Smart India Hackathon (SIH) 2026 Organizing Committee.\n\nWe are pleased to inform you that your team has successfully selected and submitted a Problem Statement for Internal SIH 2026 through the Team Portal.\n\n📋 Problem Statement Details\n\nTeam ID: SIH2026-009\nTeam Name: Code Inovator\nProblem Statement ID: 8-L\nProblem Statement Title: Smart Waste Management and Citizen Reporting Platform\n\nYour submitted Problem Statement details have been successfully recorded in the system.",
+      "type": "ps_selection",
+      "status": "sent",
+      "sentAt": "2026-08-15T18:00:00.000Z"
     }
   ],
   "nextTeamNumber": 1,

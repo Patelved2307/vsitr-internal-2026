@@ -1252,9 +1252,6 @@ export const TEST_TEAM: Team = {
     submittedAt: '2026-08-05T10:00:00.000Z',
   },
   status: 'completed',
-  selectedPsId: '8-L',
-  selectedPsTitle: 'Smart Waste Management and Citizen Reporting Platform',
-  psSelectedAt: '2026-08-10T12:00:00.000Z',
   createdAt: '2026-08-01T10:00:00.000Z',
   updatedAt: new Date().toISOString(),
 };

@@ -43,3 +43,4 @@ backup/
 .env*
 scratch_update.ts
 data/uploads/
+scratch/

@@ -163,6 +163,39 @@ export const AdminPage: React.FC = () => {
   const [editingPsData, setEditingPsData] = useState<Partial<ProblemStatement> | null>(null);
   const [isCreatingPs, setIsCreatingPs] = useState(false);
 
+  // Admin PS Selection override state
+  const [adminEditingPsId, setAdminEditingPsId] = useState<string>('');
+  const [isSavingAdminPs, setIsSavingAdminPs] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (selectedTeam) {
+      setAdminEditingPsId(selectedTeam.selectedPsId || '');
+    }
+  }, [selectedTeam]);
+
+  const handleSaveAdminPs = async () => {
+    if (!selectedTeam) return;
+    setIsSavingAdminPs(true);
+    try {
+      const targetPs = adminPsList.find((p) => p.id === adminEditingPsId);
+      const payload = {
+        selectedPsId: adminEditingPsId || undefined,
+        selectedPsTitle: targetPs ? targetPs.title : undefined,
+        psSelectedAt: adminEditingPsId ? new Date().toISOString() : undefined,
+      };
+      const res = await api.updateTeamAdmin(selectedTeam.id, payload);
+      if (res.success && res.team) {
+        setSelectedTeam(res.team);
+        showAlert('PS Selection Updated', `Updated problem statement selection for team ${selectedTeam.id}`, 'success');
+        loadAdminData();
+      }
+    } catch (err: any) {
+      showAlert('Error', err.message || 'Failed to update problem statement selection.');
+    } finally {
+      setIsSavingAdminPs(false);
+    }
+  };
+
   // Helper to handle smooth downloading of both Base64 Data URIs and regular URLs
   const handleDownloadPpt = (fileUrl?: string, fileName?: string, teamId?: string) => {
     let targetUrl = fileUrl;
@@ -2661,12 +2694,24 @@ export const AdminPage: React.FC = () => {
             )}
 
             {/* Problem Statement Details */}
-            {selectedTeam.selectedPsId ? (
-              <div className="p-4 rounded-2xl bg-blue-50 border border-blue-200 text-xs space-y-2">
+            <div className="p-4 rounded-2xl bg-blue-50/80 border border-blue-200 text-xs space-y-3">
+              <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <BookOpen className="h-4 w-4 text-[#1B3F8B]" />
-                  <span className="font-black text-slate-900 uppercase tracking-wider text-[10px]">Problem Statement Selected</span>
+                  <span className="font-black text-slate-900 uppercase tracking-wider text-[10px]">Problem Statement Selection</span>
                 </div>
+                {selectedTeam.selectedPsId ? (
+                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-blue-100 text-[#1B3F8B] border border-blue-200">
+                    ✔ Locked ({selectedTeam.selectedPsId})
+                  </span>
+                ) : (
+                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-amber-100 text-amber-800 border border-amber-200">
+                    Pending
+                  </span>
+                )}
+              </div>
+
+              {selectedTeam.selectedPsId ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   <div>
                     <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">PSID</p>
@@ -2678,18 +2723,41 @@ export const AdminPage: React.FC = () => {
                       <p className="font-semibold text-slate-700">{new Date(selectedTeam.psSelectedAt).toLocaleString('en-IN')}</p>
                     </div>
                   )}
+                  <div className="sm:col-span-2">
+                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">Title</p>
+                    <p className="font-bold text-slate-800 leading-snug">{selectedTeam.selectedPsTitle || '—'}</p>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">Title</p>
-                  <p className="font-bold text-slate-800 leading-snug">{selectedTeam.selectedPsTitle || '—'}</p>
+              ) : (
+                <div className="text-slate-500 font-bold">
+                  No Problem Statement Selected Yet
                 </div>
+              )}
+
+              {/* Admin PS Override Control */}
+              <div className="pt-2 border-t border-blue-200/60 flex flex-col sm:flex-row items-center gap-2">
+                <select
+                  value={adminEditingPsId}
+                  onChange={(e) => setAdminEditingPsId(e.target.value)}
+                  className="w-full sm:flex-1 px-3 py-1.5 rounded-xl bg-white border border-blue-300 text-xs font-semibold text-slate-900 focus:outline-none focus:border-[#1B3F8B]"
+                >
+                  <option value="">-- Assign / Change Problem Statement --</option>
+                  {adminPsList.map((ps) => (
+                    <option key={ps.id} value={ps.id}>
+                      [{ps.id}] {ps.title}
+                    </option>
+                  ))}
+                </select>
+                <button
+                  type="button"
+                  onClick={handleSaveAdminPs}
+                  disabled={isSavingAdminPs}
+                  className="w-full sm:w-auto px-4 py-1.5 rounded-xl font-bold text-xs text-white bg-[#1B3F8B] hover:bg-blue-900 transition cursor-pointer shrink-0 disabled:opacity-50"
+                >
+                  {isSavingAdminPs ? 'Updating...' : 'Save PS'}
+                </button>
               </div>
-            ) : (
-              <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-500 font-bold flex items-center gap-2">
-                <BookOpen className="h-4 w-4 text-slate-400" />
-                <span>No Problem Statement Selected Yet</span>
-              </div>
-            )}
+            </div>
 
             {/* PPT & Prototype Submission Details */}
             {selectedTeam.pptSubmission ? (
