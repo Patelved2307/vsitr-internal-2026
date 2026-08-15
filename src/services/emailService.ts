@@ -886,7 +886,7 @@ export async function dispatchPptSubmissionEmail(team: Team, submission: PptSubm
                       📍 Next Phase: PPT Presentation Day
                     </h3>
                     <ul style="margin: 0 0 15px 0; padding-left: 20px; font-size: 13px; color: #334155; line-height: 1.7;">
-                      <li><strong>Date:</strong> 27 August 2026</li>
+                      <li><strong>Date:</strong> 26 August 2026</li>
                       <li><strong>Venue:</strong> Gandhinagar Campus</li>
                       <li><strong>Schedule:</strong> Detailed time slots will be shared soon.</li>
                     </ul>
@@ -958,7 +958,7 @@ SUBMISSION RECEIPT:
 - Submission Timestamp: ${submittedAtFormatted}
 
 NEXT PHASE: PPT PRESENTATION DAY
-- Date: 27 August 2026
+- Date: 26 August 2026
 - Venue: Gandhinagar Campus
 - Time Schedule: Detailed time slots will be shared soon.
 

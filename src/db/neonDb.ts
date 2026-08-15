@@ -502,16 +502,16 @@ export async function getGlobalConfig() {
         
         const fileDb = ensureFileDb();
         const mergedSettings = { ...fileDb.settings, ...(val.settings || {}) };
-        if (!mergedSettings.pptSubmissionDeadline || mergedSettings.pptSubmissionDeadline.includes('23 August')) {
-          mergedSettings.pptSubmissionDeadline = '25 August 2026, 11:59 PM';
+        if (!mergedSettings.pptSubmissionDeadline || mergedSettings.pptSubmissionDeadline === '25 August 2026, 11:59 PM' || mergedSettings.pptSubmissionDeadline.includes('23 August')) {
+          mergedSettings.pptSubmissionDeadline = '25 August 2026, 12:00 AM';
         }
         const mergedTimeline = (val.timeline || fileDb.timeline).map((t: any) => {
           if (t.id === 't4') {
             return {
               ...t,
               title: 'PPT, Video Clip & 20% Prototype Submission',
-              date: '25 August 2026, 11:59 PM',
-              description: 'Submit your PowerPoint deck (.ppt/.pptx), 2-minute YouTube video pitch clip, and 20% prototype code repository before 11:59 PM.',
+              date: '25 August 2026, 12:00 AM',
+              description: 'Submit your PowerPoint deck (.ppt/.pptx), 2-minute YouTube video pitch clip, and 20% prototype code repository by 12:00 AM.',
               active: true,
             };
           }
@@ -519,7 +519,7 @@ export async function getGlobalConfig() {
             return {
               ...t,
               title: 'PPT Presentation Day',
-              date: '27 August 2026 (Time will be shared soon)',
+              date: '26 August 2026 (Time will be shared soon)',
               description: 'In-person pitch deck presentation & technical evaluation before faculty panel. Venue: Gandhinagar Campus. Schedule & time slots will be shared soon.',
             };
           }
@@ -538,8 +538,8 @@ export async function getGlobalConfig() {
     }
   }
   const fileDb = ensureFileDb();
-  if (!fileDb.settings.pptSubmissionDeadline || fileDb.settings.pptSubmissionDeadline.includes('23 August')) {
-    fileDb.settings.pptSubmissionDeadline = '25 August 2026, 11:59 PM';
+  if (!fileDb.settings.pptSubmissionDeadline || fileDb.settings.pptSubmissionDeadline === '25 August 2026, 11:59 PM' || fileDb.settings.pptSubmissionDeadline.includes('23 August')) {
+    fileDb.settings.pptSubmissionDeadline = '25 August 2026, 12:00 AM';
     saveFileDb(fileDb);
   }
   return {

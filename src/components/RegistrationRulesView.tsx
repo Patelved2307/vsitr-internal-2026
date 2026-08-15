@@ -1132,7 +1132,7 @@ export const RegistrationRulesView: React.FC = () => {
                             PPT Submission Deadline Closes In:
                           </span>
                           <span className="text-[11px] font-mono font-bold text-slate-200 bg-white/10 px-3 py-1 rounded-xl border border-white/15 backdrop-blur-md">
-                            25 August 2026, 11:59 PM IST
+                            25 August 2026, 12:00 AM IST
                           </span>
                         </div>
 
