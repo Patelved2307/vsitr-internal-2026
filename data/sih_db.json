@@ -1538,7 +1538,10 @@
       },
       "status": "completed",
       "createdAt": "2026-08-01T10:00:00.000Z",
-      "updatedAt": "2026-08-15T22:30:00.000Z"
+      "updatedAt": "2026-08-15T17:12:07.045Z",
+      "selectedPsId": "7-L",
+      "selectedPsTitle": "AI-Powered Academic Dropout Prediction and Intervention System",
+      "psSelectedAt": "2026-08-15T17:12:06.956Z"
     }
   ],
   "emailLogs": [

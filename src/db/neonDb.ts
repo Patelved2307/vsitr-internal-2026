@@ -773,7 +773,8 @@ export async function updateTeam(id: string, updatedFields: Partial<Team>): Prom
         `UPDATE teams 
          SET team_name = $1, leader = $2, members = $3, mentor = $4, status = $5, updated_at = $6,
              selected_ps_id = $7, selected_ps_title = $8, ps_selected_at = $9, ppt_submission = $10
-         WHERE UPPER(id) = UPPER($11)`,
+         WHERE UPPER(id) = UPPER($11)
+         RETURNING *`,
         [
           merged.teamName,
           JSON.stringify(merged.leader),
@@ -788,7 +789,7 @@ export async function updateTeam(id: string, updatedFields: Partial<Team>): Prom
           id.trim(),
         ]
       );
-      if (res.rowCount > 0) {
+      if (res.rows && res.rows.length > 0) {
         neonSuccess = true;
       } else {
         await createTeam(merged);
