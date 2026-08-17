@@ -754,6 +754,32 @@ export const TeamPortalPage: React.FC = () => {
               <Play className="h-4 w-4 fill-white" /> Watch Reference Video →
             </a>
           </div>
+
+          {/* GITHUB COLLABORATION REQUIREMENT */}
+          <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-slate-50 via-indigo-50/50 to-blue-50 border border-indigo-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-2xs mt-3">
+            <div className="flex items-start gap-3">
+              <div className="h-9 w-9 rounded-xl bg-white text-slate-800 border border-indigo-200 shadow-2xs flex items-center justify-center shrink-0 mt-0.5">
+                <GitBranch className="h-5 w-5" />
+              </div>
+              <div className="space-y-1">
+                <h4 className="text-xs sm:text-sm font-black text-slate-900">
+                  GitHub Repository &amp; Collaboration Required for 20% Coding Submission
+                </h4>
+                <p className="text-xs text-slate-600 font-medium leading-relaxed max-w-2xl">
+                  Create your GitHub repository, upload the required 20% of your solution code, and invite the Internal SIH 2026 Organizing Committee as a collaborator. Please send the invitation to <span className="font-mono font-black text-[#1B3F8B]">sihinternalvsitr-boop</span> and ensure the repository is accessible to the committee.
+                </p>
+              </div>
+            </div>
+
+            <a
+              href="https://github.com/sihinternalvsitr-boop"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-5 py-2.5 rounded-xl text-xs font-black text-white bg-[#1B3F8B] hover:bg-blue-900 transition shadow-md shrink-0 cursor-pointer"
+            >
+              <GitBranch className="h-4 w-4" /> View GitHub Account <ExternalLink className="h-3.5 w-3.5" />
+            </a>
+          </div>
         </div>
       </div>
 
