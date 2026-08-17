@@ -111,7 +111,7 @@ export const TeamPortalPage: React.FC = () => {
     }
 
     if (!githubCollabChecked) {
-      showAlert('Collaborators Confirmation Required', 'Please check the box confirming you have added the 2 organizing committee members as collaborators to your repository.');
+      showAlert('Collaborator Confirmation Required', 'Please check the box confirming you have added the organizing committee member (@sihinternalvsitr-boop) as collaborator to your repository.');
       return;
     }
 

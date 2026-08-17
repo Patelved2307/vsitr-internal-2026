@@ -1538,10 +1538,287 @@
       },
       "status": "completed",
       "createdAt": "2026-08-01T10:00:00.000Z",
-      "updatedAt": "2026-08-15T17:23:37.052Z"
+      "updatedAt": "2026-08-17T09:35:47.578Z",
+      "selectedPsId": "7-L",
+      "selectedPsTitle": "AI-Powered Academic Dropout Prediction and Intervention System",
+      "psSelectedAt": "2026-08-15T17:47:19.941Z",
+      "pptSubmission": {
+        "pptFileName": "Software_Design_Principles_Dark_theme_c.pptx",
+        "pptFileUrl": "/api/uploads/ppt/SIH2026-000_1786959347337_Software_Design_Principles_Dark_theme_c.pptx",
+        "pptFileSize": 177530,
+        "pptUploadedAt": "2026-08-17T09:35:47.339Z",
+        "demoVideoUrl": "https://youtu.be/8clRfKww5vI?si=1B4xw_50rBO3Xdmq",
+        "githubRepoUrl": "https://github.com/PATELxDEVIL/Odoo_X_KSV_2026_Final",
+        "githubCollaboratorsAdded": true,
+        "submittedAt": "2026-08-17T09:35:47.339Z"
+      }
     }
   ],
   "emailLogs": [
+    {
+      "id": "EMAIL-1786959353670-650",
+      "recipientEmail": "member4@vsitr.ac.in",
+      "recipientName": "Member Four",
+      "teamId": "SIH2026-000",
+      "subject": "🎉 Submission Confirmed! Internal SIH 2026 - PPT & Prototype Received [Team SIH2026-000 - VSITR Testing Team (Internal)]",
+      "body": "\nInternal Smart India Hackathon 2026 - PPT & Prototype Submission Confirmation\n\nDear Member Four (Team Member),\n\nCongratulations! We have successfully received official PPT & Prototype submission for Team VSITR Testing Team (Internal) (ID: SIH2026-000).\n\nSUBMISSION RECEIPT:\n- Team ID: SIH2026-000\n- Team Name: VSITR Testing Team (Internal)\n- Problem Statement: [7-L] AI-Powered Academic Dropout Prediction and Intervention System\n- PPT Presentation: Software_Design_Principles_Dark_theme_c.pptx\n- 2-Min Pitch Video: https://youtu.be/8clRfKww5vI?si=1B4xw_50rBO3Xdmq\n- GitHub Repository: https://github.com/PATELxDEVIL/Odoo_X_KSV_2026_Final\n- Submission Timestamp: 17 Aug 2026, 03:05 pm\n\nNEXT PHASE: PPT PRESENTATION DAY\n- Date: 26 August 2026\n- Venue: Gandhinagar Campus\n- Time Schedule: Detailed time slots will be shared soon.\n\nPREPARATION CHECKLIST:\n1. Bring your laptop with your working prototype code & local setup ready.\n2. Prepare your live pitch presentation and working prototype demonstration strictly adhering to your submitted official PPT deck format.\n3. All 6 team members must attend in formal attire with institute ID cards.\n\nNote: Detailed guidelines, presentation rules, evaluation criteria, and complete time-slot schedules will be shared with all team leaders soon via email and your Team Portal dashboard.\n\nContact Support: sihinternal.vsitr@gmail.com\nVSITR, Kadi\n    \n\n[DELIVERY ERROR: Invalid login: 535-5.7.8 Username and Password not accepted. For more information, go to\n535 5.7.8  https://support.google.com/mail/?p=BadCredentials a92af1059eb24-14153186ad5sm7781348c88.14 - gsmtp]",
+      "type": "ppt_submission",
+      "status": "failed",
+      "sentAt": "2026-08-17T09:35:53.670Z"
+    },
+    {
+      "id": "EMAIL-1786959353688-413",
+      "recipientEmail": "test.sih2026@vsitr.ac.in",
+      "recipientName": "Test Leader (VSITR)",
+      "teamId": "SIH2026-000",
+      "subject": "🎉 Submission Confirmed! Internal SIH 2026 - PPT & Prototype Received [Team SIH2026-000 - VSITR Testing Team (Internal)]",
+      "body": "\nInternal Smart India Hackathon 2026 - PPT & Prototype Submission Confirmation\n\nDear Test Leader (VSITR) (Team Leader),\n\nCongratulations! We have successfully received official PPT & Prototype submission for Team VSITR Testing Team (Internal) (ID: SIH2026-000).\n\nSUBMISSION RECEIPT:\n- Team ID: SIH2026-000\n- Team Name: VSITR Testing Team (Internal)\n- Problem Statement: [7-L] AI-Powered Academic Dropout Prediction and Intervention System\n- PPT Presentation: Software_Design_Principles_Dark_theme_c.pptx\n- 2-Min Pitch Video: https://youtu.be/8clRfKww5vI?si=1B4xw_50rBO3Xdmq\n- GitHub Repository: https://github.com/PATELxDEVIL/Odoo_X_KSV_2026_Final\n- Submission Timestamp: 17 Aug 2026, 03:05 pm\n\nNEXT PHASE: PPT PRESENTATION DAY\n- Date: 26 August 2026\n- Venue: Gandhinagar Campus\n- Time Schedule: Detailed time slots will be shared soon.\n\nPREPARATION CHECKLIST:\n1. Bring your laptop with your working prototype code & local setup ready.\n2. Prepare your live pitch presentation and working prototype demonstration strictly adhering to your submitted official PPT deck format.\n3. All 6 team members must attend in formal attire with institute ID cards.\n\nNote: Detailed guidelines, presentation rules, evaluation criteria, and complete time-slot schedules will be shared with all team leaders soon via email and your Team Portal dashboard.\n\nContact Support: sihinternal.vsitr@gmail.com\nVSITR, Kadi\n    \n\n[DELIVERY ERROR: Invalid login: 535-5.7.8 Username and Password not accepted. For more information, go to\n535 5.7.8  https://support.google.com/mail/?p=BadCredentials 5a478bee46e88-32678dd0891sm5037386eec.6 - gsmtp]",
+      "type": "ppt_submission",
+      "status": "failed",
+      "sentAt": "2026-08-17T09:35:53.688Z"
+    },
+    {
+      "id": "EMAIL-1786959353690-729",
+      "recipientEmail": "member3@vsitr.ac.in",
+      "recipientName": "Member Three",
+      "teamId": "SIH2026-000",
+      "subject": "🎉 Submission Confirmed! Internal SIH 2026 - PPT & Prototype Received [Team SIH2026-000 - VSITR Testing Team (Internal)]",
+      "body": "\nInternal Smart India Hackathon 2026 - PPT & Prototype Submission Confirmation\n\nDear Member Three (Team Member),\n\nCongratulations! We have successfully received official PPT & Prototype submission for Team VSITR Testing Team (Internal) (ID: SIH2026-000).\n\nSUBMISSION RECEIPT:\n- Team ID: SIH2026-000\n- Team Name: VSITR Testing Team (Internal)\n- Problem Statement: [7-L] AI-Powered Academic Dropout Prediction and Intervention System\n- PPT Presentation: Software_Design_Principles_Dark_theme_c.pptx\n- 2-Min Pitch Video: https://youtu.be/8clRfKww5vI?si=1B4xw_50rBO3Xdmq\n- GitHub Repository: https://github.com/PATELxDEVIL/Odoo_X_KSV_2026_Final\n- Submission Timestamp: 17 Aug 2026, 03:05 pm\n\nNEXT PHASE: PPT PRESENTATION DAY\n- Date: 26 August 2026\n- Venue: Gandhinagar Campus\n- Time Schedule: Detailed time slots will be shared soon.\n\nPREPARATION CHECKLIST:\n1. Bring your laptop with your working prototype code & local setup ready.\n2. Prepare your live pitch presentation and working prototype demonstration strictly adhering to your submitted official PPT deck format.\n3. All 6 team members must attend in formal attire with institute ID cards.\n\nNote: Detailed guidelines, presentation rules, evaluation criteria, and complete time-slot schedules will be shared with all team leaders soon via email and your Team Portal dashboard.\n\nContact Support: sihinternal.vsitr@gmail.com\nVSITR, Kadi\n    \n\n[DELIVERY ERROR: Invalid login: 535-5.7.8 Username and Password not accepted. For more information, go to\n535 5.7.8  https://support.google.com/mail/?p=BadCredentials a92af1059eb24-1415305a0afsm7706753c88.4 - gsmtp]",
+      "type": "ppt_submission",
+      "status": "failed",
+      "sentAt": "2026-08-17T09:35:53.690Z"
+    },
+    {
+      "id": "EMAIL-1786959353672-778",
+      "recipientEmail": "member2@vsitr.ac.in",
+      "recipientName": "Member Two",
+      "teamId": "SIH2026-000",
+      "subject": "🎉 Submission Confirmed! Internal SIH 2026 - PPT & Prototype Received [Team SIH2026-000 - VSITR Testing Team (Internal)]",
+      "body": "\nInternal Smart India Hackathon 2026 - PPT & Prototype Submission Confirmation\n\nDear Member Two (Team Member),\n\nCongratulations! We have successfully received official PPT & Prototype submission for Team VSITR Testing Team (Internal) (ID: SIH2026-000).\n\nSUBMISSION RECEIPT:\n- Team ID: SIH2026-000\n- Team Name: VSITR Testing Team (Internal)\n- Problem Statement: [7-L] AI-Powered Academic Dropout Prediction and Intervention System\n- PPT Presentation: Software_Design_Principles_Dark_theme_c.pptx\n- 2-Min Pitch Video: https://youtu.be/8clRfKww5vI?si=1B4xw_50rBO3Xdmq\n- GitHub Repository: https://github.com/PATELxDEVIL/Odoo_X_KSV_2026_Final\n- Submission Timestamp: 17 Aug 2026, 03:05 pm\n\nNEXT PHASE: PPT PRESENTATION DAY\n- Date: 26 August 2026\n- Venue: Gandhinagar Campus\n- Time Schedule: Detailed time slots will be shared soon.\n\nPREPARATION CHECKLIST:\n1. Bring your laptop with your working prototype code & local setup ready.\n2. Prepare your live pitch presentation and working prototype demonstration strictly adhering to your submitted official PPT deck format.\n3. All 6 team members must attend in formal attire with institute ID cards.\n\nNote: Detailed guidelines, presentation rules, evaluation criteria, and complete time-slot schedules will be shared with all team leaders soon via email and your Team Portal dashboard.\n\nContact Support: sihinternal.vsitr@gmail.com\nVSITR, Kadi\n    \n\n[DELIVERY ERROR: Invalid login: 535-5.7.8 Username and Password not accepted. For more information, go to\n535 5.7.8  https://support.google.com/mail/?p=BadCredentials 5a478bee46e88-32678dd22f7sm7533066eec.1 - gsmtp]",
+      "type": "ppt_submission",
+      "status": "failed",
+      "sentAt": "2026-08-17T09:35:53.672Z"
+    },
+    {
+      "id": "EMAIL-1786959353685-165",
+      "recipientEmail": "member5@vsitr.ac.in",
+      "recipientName": "Member Five",
+      "teamId": "SIH2026-000",
+      "subject": "🎉 Submission Confirmed! Internal SIH 2026 - PPT & Prototype Received [Team SIH2026-000 - VSITR Testing Team (Internal)]",
+      "body": "\nInternal Smart India Hackathon 2026 - PPT & Prototype Submission Confirmation\n\nDear Member Five (Team Member),\n\nCongratulations! We have successfully received official PPT & Prototype submission for Team VSITR Testing Team (Internal) (ID: SIH2026-000).\n\nSUBMISSION RECEIPT:\n- Team ID: SIH2026-000\n- Team Name: VSITR Testing Team (Internal)\n- Problem Statement: [7-L] AI-Powered Academic Dropout Prediction and Intervention System\n- PPT Presentation: Software_Design_Principles_Dark_theme_c.pptx\n- 2-Min Pitch Video: https://youtu.be/8clRfKww5vI?si=1B4xw_50rBO3Xdmq\n- GitHub Repository: https://github.com/PATELxDEVIL/Odoo_X_KSV_2026_Final\n- Submission Timestamp: 17 Aug 2026, 03:05 pm\n\nNEXT PHASE: PPT PRESENTATION DAY\n- Date: 26 August 2026\n- Venue: Gandhinagar Campus\n- Time Schedule: Detailed time slots will be shared soon.\n\nPREPARATION CHECKLIST:\n1. Bring your laptop with your working prototype code & local setup ready.\n2. Prepare your live pitch presentation and working prototype demonstration strictly adhering to your submitted official PPT deck format.\n3. All 6 team members must attend in formal attire with institute ID cards.\n\nNote: Detailed guidelines, presentation rules, evaluation criteria, and complete time-slot schedules will be shared with all team leaders soon via email and your Team Portal dashboard.\n\nContact Support: sihinternal.vsitr@gmail.com\nVSITR, Kadi\n    \n\n[DELIVERY ERROR: Invalid login: 535-5.7.8 Username and Password not accepted. For more information, go to\n535 5.7.8  https://support.google.com/mail/?p=BadCredentials a92af1059eb24-141530793ccsm5419436c88.8 - gsmtp]",
+      "type": "ppt_submission",
+      "status": "failed",
+      "sentAt": "2026-08-17T09:35:53.685Z"
+    },
+    {
+      "id": "EMAIL-1786959353617-908",
+      "recipientEmail": "member1@vsitr.ac.in",
+      "recipientName": "Member One",
+      "teamId": "SIH2026-000",
+      "subject": "🎉 Submission Confirmed! Internal SIH 2026 - PPT & Prototype Received [Team SIH2026-000 - VSITR Testing Team (Internal)]",
+      "body": "\nInternal Smart India Hackathon 2026 - PPT & Prototype Submission Confirmation\n\nDear Member One (Team Member),\n\nCongratulations! We have successfully received official PPT & Prototype submission for Team VSITR Testing Team (Internal) (ID: SIH2026-000).\n\nSUBMISSION RECEIPT:\n- Team ID: SIH2026-000\n- Team Name: VSITR Testing Team (Internal)\n- Problem Statement: [7-L] AI-Powered Academic Dropout Prediction and Intervention System\n- PPT Presentation: Software_Design_Principles_Dark_theme_c.pptx\n- 2-Min Pitch Video: https://youtu.be/8clRfKww5vI?si=1B4xw_50rBO3Xdmq\n- GitHub Repository: https://github.com/PATELxDEVIL/Odoo_X_KSV_2026_Final\n- Submission Timestamp: 17 Aug 2026, 03:05 pm\n\nNEXT PHASE: PPT PRESENTATION DAY\n- Date: 26 August 2026\n- Venue: Gandhinagar Campus\n- Time Schedule: Detailed time slots will be shared soon.\n\nPREPARATION CHECKLIST:\n1. Bring your laptop with your working prototype code & local setup ready.\n2. Prepare your live pitch presentation and working prototype demonstration strictly adhering to your submitted official PPT deck format.\n3. All 6 team members must attend in formal attire with institute ID cards.\n\nNote: Detailed guidelines, presentation rules, evaluation criteria, and complete time-slot schedules will be shared with all team leaders soon via email and your Team Portal dashboard.\n\nContact Support: sihinternal.vsitr@gmail.com\nVSITR, Kadi\n    \n\n[DELIVERY ERROR: Invalid login: 535-5.7.8 Username and Password not accepted. For more information, go to\n535 5.7.8  https://support.google.com/mail/?p=BadCredentials 5a478bee46e88-32678dd08d6sm7208754eec.4 - gsmtp]",
+      "type": "ppt_submission",
+      "status": "failed",
+      "sentAt": "2026-08-17T09:35:53.617Z"
+    },
+    {
+      "id": "EMAIL-1786959351213-206",
+      "recipientEmail": "test.sih2026@vsitr.ac.in",
+      "recipientName": "Test Leader (VSITR)",
+      "teamId": "SIH2026-000",
+      "subject": "🎉 Submission Confirmed! Internal SIH 2026 - PPT & Prototype Received [Team SIH2026-000 - VSITR Testing Team (Internal)]",
+      "body": "\nInternal Smart India Hackathon 2026 - PPT & Prototype Submission Confirmation\n\nDear Test Leader (VSITR) (Team Leader),\n\nCongratulations! We have successfully received official PPT & Prototype submission for Team VSITR Testing Team (Internal) (ID: SIH2026-000).\n\nSUBMISSION RECEIPT:\n- Team ID: SIH2026-000\n- Team Name: VSITR Testing Team (Internal)\n- Problem Statement: [7-L] AI-Powered Academic Dropout Prediction and Intervention System\n- PPT Presentation: Software_Design_Principles_Dark_theme_c.pptx\n- 2-Min Pitch Video: https://youtu.be/8clRfKww5vI?si=1B4xw_50rBO3Xdmq\n- GitHub Repository: https://github.com/PATELxDEVIL/Odoo_X_KSV_2026_Final\n- Submission Timestamp: 17 Aug 2026, 03:05 pm\n\nNEXT PHASE: PPT PRESENTATION DAY\n- Date: 26 August 2026\n- Venue: Gandhinagar Campus\n- Time Schedule: Detailed time slots will be shared soon.\n\nPREPARATION CHECKLIST:\n1. Bring your laptop with your working prototype code & local setup ready.\n2. Prepare your live pitch presentation and working prototype demonstration strictly adhering to your submitted official PPT deck format.\n3. All 6 team members must attend in formal attire with institute ID cards.\n\nNote: Detailed guidelines, presentation rules, evaluation criteria, and complete time-slot schedules will be shared with all team leaders soon via email and your Team Portal dashboard.\n\nContact Support: sihinternal.vsitr@gmail.com\nVSITR, Kadi\n    \n\n[DELIVERY ERROR: Invalid login: 535-5.7.8 Username and Password not accepted. For more information, go to\n535 5.7.8  https://support.google.com/mail/?p=BadCredentials 5a478bee46e88-3267be8ec4csm9430912eec.18 - gsmtp]",
+      "type": "ppt_submission",
+      "status": "failed",
+      "sentAt": "2026-08-17T09:35:51.213Z"
+    },
+    {
+      "id": "EMAIL-1786959351166-687",
+      "recipientEmail": "member3@vsitr.ac.in",
+      "recipientName": "Member Three",
+      "teamId": "SIH2026-000",
+      "subject": "🎉 Submission Confirmed! Internal SIH 2026 - PPT & Prototype Received [Team SIH2026-000 - VSITR Testing Team (Internal)]",
+      "body": "\nInternal Smart India Hackathon 2026 - PPT & Prototype Submission Confirmation\n\nDear Member Three (Team Member),\n\nCongratulations! We have successfully received official PPT & Prototype submission for Team VSITR Testing Team (Internal) (ID: SIH2026-000).\n\nSUBMISSION RECEIPT:\n- Team ID: SIH2026-000\n- Team Name: VSITR Testing Team (Internal)\n- Problem Statement: [7-L] AI-Powered Academic Dropout Prediction and Intervention System\n- PPT Presentation: Software_Design_Principles_Dark_theme_c.pptx\n- 2-Min Pitch Video: https://youtu.be/8clRfKww5vI?si=1B4xw_50rBO3Xdmq\n- GitHub Repository: https://github.com/PATELxDEVIL/Odoo_X_KSV_2026_Final\n- Submission Timestamp: 17 Aug 2026, 03:05 pm\n\nNEXT PHASE: PPT PRESENTATION DAY\n- Date: 26 August 2026\n- Venue: Gandhinagar Campus\n- Time Schedule: Detailed time slots will be shared soon.\n\nPREPARATION CHECKLIST:\n1. Bring your laptop with your working prototype code & local setup ready.\n2. Prepare your live pitch presentation and working prototype demonstration strictly adhering to your submitted official PPT deck format.\n3. All 6 team members must attend in formal attire with institute ID cards.\n\nNote: Detailed guidelines, presentation rules, evaluation criteria, and complete time-slot schedules will be shared with all team leaders soon via email and your Team Portal dashboard.\n\nContact Support: sihinternal.vsitr@gmail.com\nVSITR, Kadi\n    \n\n[DELIVERY ERROR: Invalid login: 535-5.7.8 Username and Password not accepted. For more information, go to\n535 5.7.8  https://support.google.com/mail/?p=BadCredentials 5a478bee46e88-32678dd08d6sm7208171eec.4 - gsmtp]",
+      "type": "ppt_submission",
+      "status": "failed",
+      "sentAt": "2026-08-17T09:35:51.166Z"
+    },
+    {
+      "id": "EMAIL-1786959351205-695",
+      "recipientEmail": "member2@vsitr.ac.in",
+      "recipientName": "Member Two",
+      "teamId": "SIH2026-000",
+      "subject": "🎉 Submission Confirmed! Internal SIH 2026 - PPT & Prototype Received [Team SIH2026-000 - VSITR Testing Team (Internal)]",
+      "body": "\nInternal Smart India Hackathon 2026 - PPT & Prototype Submission Confirmation\n\nDear Member Two (Team Member),\n\nCongratulations! We have successfully received official PPT & Prototype submission for Team VSITR Testing Team (Internal) (ID: SIH2026-000).\n\nSUBMISSION RECEIPT:\n- Team ID: SIH2026-000\n- Team Name: VSITR Testing Team (Internal)\n- Problem Statement: [7-L] AI-Powered Academic Dropout Prediction and Intervention System\n- PPT Presentation: Software_Design_Principles_Dark_theme_c.pptx\n- 2-Min Pitch Video: https://youtu.be/8clRfKww5vI?si=1B4xw_50rBO3Xdmq\n- GitHub Repository: https://github.com/PATELxDEVIL/Odoo_X_KSV_2026_Final\n- Submission Timestamp: 17 Aug 2026, 03:05 pm\n\nNEXT PHASE: PPT PRESENTATION DAY\n- Date: 26 August 2026\n- Venue: Gandhinagar Campus\n- Time Schedule: Detailed time slots will be shared soon.\n\nPREPARATION CHECKLIST:\n1. Bring your laptop with your working prototype code & local setup ready.\n2. Prepare your live pitch presentation and working prototype demonstration strictly adhering to your submitted official PPT deck format.\n3. All 6 team members must attend in formal attire with institute ID cards.\n\nNote: Detailed guidelines, presentation rules, evaluation criteria, and complete time-slot schedules will be shared with all team leaders soon via email and your Team Portal dashboard.\n\nContact Support: sihinternal.vsitr@gmail.com\nVSITR, Kadi\n    \n\n[DELIVERY ERROR: Invalid login: 535-5.7.8 Username and Password not accepted. For more information, go to\n535 5.7.8  https://support.google.com/mail/?p=BadCredentials a92af1059eb24-1415305e48esm5152827c88.5 - gsmtp]",
+      "type": "ppt_submission",
+      "status": "failed",
+      "sentAt": "2026-08-17T09:35:51.205Z"
+    },
+    {
+      "id": "EMAIL-1786959351167-117",
+      "recipientEmail": "member1@vsitr.ac.in",
+      "recipientName": "Member One",
+      "teamId": "SIH2026-000",
+      "subject": "🎉 Submission Confirmed! Internal SIH 2026 - PPT & Prototype Received [Team SIH2026-000 - VSITR Testing Team (Internal)]",
+      "body": "\nInternal Smart India Hackathon 2026 - PPT & Prototype Submission Confirmation\n\nDear Member One (Team Member),\n\nCongratulations! We have successfully received official PPT & Prototype submission for Team VSITR Testing Team (Internal) (ID: SIH2026-000).\n\nSUBMISSION RECEIPT:\n- Team ID: SIH2026-000\n- Team Name: VSITR Testing Team (Internal)\n- Problem Statement: [7-L] AI-Powered Academic Dropout Prediction and Intervention System\n- PPT Presentation: Software_Design_Principles_Dark_theme_c.pptx\n- 2-Min Pitch Video: https://youtu.be/8clRfKww5vI?si=1B4xw_50rBO3Xdmq\n- GitHub Repository: https://github.com/PATELxDEVIL/Odoo_X_KSV_2026_Final\n- Submission Timestamp: 17 Aug 2026, 03:05 pm\n\nNEXT PHASE: PPT PRESENTATION DAY\n- Date: 26 August 2026\n- Venue: Gandhinagar Campus\n- Time Schedule: Detailed time slots will be shared soon.\n\nPREPARATION CHECKLIST:\n1. Bring your laptop with your working prototype code & local setup ready.\n2. Prepare your live pitch presentation and working prototype demonstration strictly adhering to your submitted official PPT deck format.\n3. All 6 team members must attend in formal attire with institute ID cards.\n\nNote: Detailed guidelines, presentation rules, evaluation criteria, and complete time-slot schedules will be shared with all team leaders soon via email and your Team Portal dashboard.\n\nContact Support: sihinternal.vsitr@gmail.com\nVSITR, Kadi\n    \n\n[DELIVERY ERROR: Invalid login: 535-5.7.8 Username and Password not accepted. For more information, go to\n535 5.7.8  https://support.google.com/mail/?p=BadCredentials 5a478bee46e88-3267c897e37sm5483798eec.28 - gsmtp]",
+      "type": "ppt_submission",
+      "status": "failed",
+      "sentAt": "2026-08-17T09:35:51.167Z"
+    },
+    {
+      "id": "EMAIL-1786959351161-87",
+      "recipientEmail": "member4@vsitr.ac.in",
+      "recipientName": "Member Four",
+      "teamId": "SIH2026-000",
+      "subject": "🎉 Submission Confirmed! Internal SIH 2026 - PPT & Prototype Received [Team SIH2026-000 - VSITR Testing Team (Internal)]",
+      "body": "\nInternal Smart India Hackathon 2026 - PPT & Prototype Submission Confirmation\n\nDear Member Four (Team Member),\n\nCongratulations! We have successfully received official PPT & Prototype submission for Team VSITR Testing Team (Internal) (ID: SIH2026-000).\n\nSUBMISSION RECEIPT:\n- Team ID: SIH2026-000\n- Team Name: VSITR Testing Team (Internal)\n- Problem Statement: [7-L] AI-Powered Academic Dropout Prediction and Intervention System\n- PPT Presentation: Software_Design_Principles_Dark_theme_c.pptx\n- 2-Min Pitch Video: https://youtu.be/8clRfKww5vI?si=1B4xw_50rBO3Xdmq\n- GitHub Repository: https://github.com/PATELxDEVIL/Odoo_X_KSV_2026_Final\n- Submission Timestamp: 17 Aug 2026, 03:05 pm\n\nNEXT PHASE: PPT PRESENTATION DAY\n- Date: 26 August 2026\n- Venue: Gandhinagar Campus\n- Time Schedule: Detailed time slots will be shared soon.\n\nPREPARATION CHECKLIST:\n1. Bring your laptop with your working prototype code & local setup ready.\n2. Prepare your live pitch presentation and working prototype demonstration strictly adhering to your submitted official PPT deck format.\n3. All 6 team members must attend in formal attire with institute ID cards.\n\nNote: Detailed guidelines, presentation rules, evaluation criteria, and complete time-slot schedules will be shared with all team leaders soon via email and your Team Portal dashboard.\n\nContact Support: sihinternal.vsitr@gmail.com\nVSITR, Kadi\n    \n\n[DELIVERY ERROR: Invalid login: 535-5.7.8 Username and Password not accepted. For more information, go to\n535 5.7.8  https://support.google.com/mail/?p=BadCredentials 5a478bee46e88-3267ca93692sm4202958eec.30 - gsmtp]",
+      "type": "ppt_submission",
+      "status": "failed",
+      "sentAt": "2026-08-17T09:35:51.161Z"
+    },
+    {
+      "id": "EMAIL-1786959351153-894",
+      "recipientEmail": "member5@vsitr.ac.in",
+      "recipientName": "Member Five",
+      "teamId": "SIH2026-000",
+      "subject": "🎉 Submission Confirmed! Internal SIH 2026 - PPT & Prototype Received [Team SIH2026-000 - VSITR Testing Team (Internal)]",
+      "body": "\nInternal Smart India Hackathon 2026 - PPT & Prototype Submission Confirmation\n\nDear Member Five (Team Member),\n\nCongratulations! We have successfully received official PPT & Prototype submission for Team VSITR Testing Team (Internal) (ID: SIH2026-000).\n\nSUBMISSION RECEIPT:\n- Team ID: SIH2026-000\n- Team Name: VSITR Testing Team (Internal)\n- Problem Statement: [7-L] AI-Powered Academic Dropout Prediction and Intervention System\n- PPT Presentation: Software_Design_Principles_Dark_theme_c.pptx\n- 2-Min Pitch Video: https://youtu.be/8clRfKww5vI?si=1B4xw_50rBO3Xdmq\n- GitHub Repository: https://github.com/PATELxDEVIL/Odoo_X_KSV_2026_Final\n- Submission Timestamp: 17 Aug 2026, 03:05 pm\n\nNEXT PHASE: PPT PRESENTATION DAY\n- Date: 26 August 2026\n- Venue: Gandhinagar Campus\n- Time Schedule: Detailed time slots will be shared soon.\n\nPREPARATION CHECKLIST:\n1. Bring your laptop with your working prototype code & local setup ready.\n2. Prepare your live pitch presentation and working prototype demonstration strictly adhering to your submitted official PPT deck format.\n3. All 6 team members must attend in formal attire with institute ID cards.\n\nNote: Detailed guidelines, presentation rules, evaluation criteria, and complete time-slot schedules will be shared with all team leaders soon via email and your Team Portal dashboard.\n\nContact Support: sihinternal.vsitr@gmail.com\nVSITR, Kadi\n    \n\n[DELIVERY ERROR: Invalid login: 535-5.7.8 Username and Password not accepted. For more information, go to\n535 5.7.8  https://support.google.com/mail/?p=BadCredentials 5a478bee46e88-32678dceb20sm4193964eec.3 - gsmtp]",
+      "type": "ppt_submission",
+      "status": "failed",
+      "sentAt": "2026-08-17T09:35:51.153Z"
+    },
+    {
+      "id": "EMAIL-1786959190935-189",
+      "recipientEmail": "member4@vsitr.ac.in",
+      "recipientName": "Member Four",
+      "teamId": "SIH2026-000",
+      "subject": "🎉 Submission Confirmed! Internal SIH 2026 - PPT & Prototype Received [Team SIH2026-000 - VSITR Testing Team (Internal)]",
+      "body": "\nInternal Smart India Hackathon 2026 - PPT & Prototype Submission Confirmation\n\nDear Member Four (Team Member),\n\nCongratulations! We have successfully received official PPT & Prototype submission for Team VSITR Testing Team (Internal) (ID: SIH2026-000).\n\nSUBMISSION RECEIPT:\n- Team ID: SIH2026-000\n- Team Name: VSITR Testing Team (Internal)\n- Problem Statement: [7-L] AI-Powered Academic Dropout Prediction and Intervention System\n- PPT Presentation: Software_Design_Principles_Dark_theme_c.pptx\n- 2-Min Pitch Video: https://youtu.be/8clRfKww5vI?si=1B4xw_50rBO3Xdmq\n- GitHub Repository: https://github.com/PATELxDEVIL/Odoo_X_KSV_2026_Final\n- Submission Timestamp: 17 Aug 2026, 03:03 pm\n\nNEXT PHASE: PPT PRESENTATION DAY\n- Date: 26 August 2026\n- Venue: Gandhinagar Campus\n- Time Schedule: Detailed time slots will be shared soon.\n\nPREPARATION CHECKLIST:\n1. Bring your laptop with your working prototype code & local setup ready.\n2. Prepare your live pitch presentation and working prototype demonstration strictly adhering to your submitted official PPT deck format.\n3. All 6 team members must attend in formal attire with institute ID cards.\n\nNote: Detailed guidelines, presentation rules, evaluation criteria, and complete time-slot schedules will be shared with all team leaders soon via email and your Team Portal dashboard.\n\nContact Support: sihinternal.vsitr@gmail.com\nVSITR, Kadi\n    \n\n[DELIVERY ERROR: Invalid login: 535-5.7.8 Username and Password not accepted. For more information, go to\n535 5.7.8  https://support.google.com/mail/?p=BadCredentials d2e1a72fcca58-851b404a4d2sm285995b3a.16 - gsmtp]",
+      "type": "ppt_submission",
+      "status": "failed",
+      "sentAt": "2026-08-17T09:33:10.935Z"
+    },
+    {
+      "id": "EMAIL-1786959190894-325",
+      "recipientEmail": "test.sih2026@vsitr.ac.in",
+      "recipientName": "Test Leader (VSITR)",
+      "teamId": "SIH2026-000",
+      "subject": "🎉 Submission Confirmed! Internal SIH 2026 - PPT & Prototype Received [Team SIH2026-000 - VSITR Testing Team (Internal)]",
+      "body": "\nInternal Smart India Hackathon 2026 - PPT & Prototype Submission Confirmation\n\nDear Test Leader (VSITR) (Team Leader),\n\nCongratulations! We have successfully received official PPT & Prototype submission for Team VSITR Testing Team (Internal) (ID: SIH2026-000).\n\nSUBMISSION RECEIPT:\n- Team ID: SIH2026-000\n- Team Name: VSITR Testing Team (Internal)\n- Problem Statement: [7-L] AI-Powered Academic Dropout Prediction and Intervention System\n- PPT Presentation: Software_Design_Principles_Dark_theme_c.pptx\n- 2-Min Pitch Video: https://youtu.be/8clRfKww5vI?si=1B4xw_50rBO3Xdmq\n- GitHub Repository: https://github.com/PATELxDEVIL/Odoo_X_KSV_2026_Final\n- Submission Timestamp: 17 Aug 2026, 03:03 pm\n\nNEXT PHASE: PPT PRESENTATION DAY\n- Date: 26 August 2026\n- Venue: Gandhinagar Campus\n- Time Schedule: Detailed time slots will be shared soon.\n\nPREPARATION CHECKLIST:\n1. Bring your laptop with your working prototype code & local setup ready.\n2. Prepare your live pitch presentation and working prototype demonstration strictly adhering to your submitted official PPT deck format.\n3. All 6 team members must attend in formal attire with institute ID cards.\n\nNote: Detailed guidelines, presentation rules, evaluation criteria, and complete time-slot schedules will be shared with all team leaders soon via email and your Team Portal dashboard.\n\nContact Support: sihinternal.vsitr@gmail.com\nVSITR, Kadi\n    \n\n[DELIVERY ERROR: Invalid login: 535-5.7.8 Username and Password not accepted. For more information, go to\n535 5.7.8  https://support.google.com/mail/?p=BadCredentials 98e67ed59e1d1-3954d2b8080sm1619652a91.4 - gsmtp]",
+      "type": "ppt_submission",
+      "status": "failed",
+      "sentAt": "2026-08-17T09:33:10.894Z"
+    },
+    {
+      "id": "EMAIL-1786959190364-687",
+      "recipientEmail": "member2@vsitr.ac.in",
+      "recipientName": "Member Two",
+      "teamId": "SIH2026-000",
+      "subject": "🎉 Submission Confirmed! Internal SIH 2026 - PPT & Prototype Received [Team SIH2026-000 - VSITR Testing Team (Internal)]",
+      "body": "\nInternal Smart India Hackathon 2026 - PPT & Prototype Submission Confirmation\n\nDear Member Two (Team Member),\n\nCongratulations! We have successfully received official PPT & Prototype submission for Team VSITR Testing Team (Internal) (ID: SIH2026-000).\n\nSUBMISSION RECEIPT:\n- Team ID: SIH2026-000\n- Team Name: VSITR Testing Team (Internal)\n- Problem Statement: [7-L] AI-Powered Academic Dropout Prediction and Intervention System\n- PPT Presentation: Software_Design_Principles_Dark_theme_c.pptx\n- 2-Min Pitch Video: https://youtu.be/8clRfKww5vI?si=1B4xw_50rBO3Xdmq\n- GitHub Repository: https://github.com/PATELxDEVIL/Odoo_X_KSV_2026_Final\n- Submission Timestamp: 17 Aug 2026, 03:03 pm\n\nNEXT PHASE: PPT PRESENTATION DAY\n- Date: 26 August 2026\n- Venue: Gandhinagar Campus\n- Time Schedule: Detailed time slots will be shared soon.\n\nPREPARATION CHECKLIST:\n1. Bring your laptop with your working prototype code & local setup ready.\n2. Prepare your live pitch presentation and working prototype demonstration strictly adhering to your submitted official PPT deck format.\n3. All 6 team members must attend in formal attire with institute ID cards.\n\nNote: Detailed guidelines, presentation rules, evaluation criteria, and complete time-slot schedules will be shared with all team leaders soon via email and your Team Portal dashboard.\n\nContact Support: sihinternal.vsitr@gmail.com\nVSITR, Kadi\n    \n\n[DELIVERY ERROR: Invalid login: 535-5.7.8 Username and Password not accepted. For more information, go to\n535 5.7.8  https://support.google.com/mail/?p=BadCredentials 5a478bee46e88-3267c898ce3sm4861823eec.27 - gsmtp]",
+      "type": "ppt_submission",
+      "status": "failed",
+      "sentAt": "2026-08-17T09:33:10.364Z"
+    },
+    {
+      "id": "EMAIL-1786959190210-212",
+      "recipientEmail": "member3@vsitr.ac.in",
+      "recipientName": "Member Three",
+      "teamId": "SIH2026-000",
+      "subject": "🎉 Submission Confirmed! Internal SIH 2026 - PPT & Prototype Received [Team SIH2026-000 - VSITR Testing Team (Internal)]",
+      "body": "\nInternal Smart India Hackathon 2026 - PPT & Prototype Submission Confirmation\n\nDear Member Three (Team Member),\n\nCongratulations! We have successfully received official PPT & Prototype submission for Team VSITR Testing Team (Internal) (ID: SIH2026-000).\n\nSUBMISSION RECEIPT:\n- Team ID: SIH2026-000\n- Team Name: VSITR Testing Team (Internal)\n- Problem Statement: [7-L] AI-Powered Academic Dropout Prediction and Intervention System\n- PPT Presentation: Software_Design_Principles_Dark_theme_c.pptx\n- 2-Min Pitch Video: https://youtu.be/8clRfKww5vI?si=1B4xw_50rBO3Xdmq\n- GitHub Repository: https://github.com/PATELxDEVIL/Odoo_X_KSV_2026_Final\n- Submission Timestamp: 17 Aug 2026, 03:03 pm\n\nNEXT PHASE: PPT PRESENTATION DAY\n- Date: 26 August 2026\n- Venue: Gandhinagar Campus\n- Time Schedule: Detailed time slots will be shared soon.\n\nPREPARATION CHECKLIST:\n1. Bring your laptop with your working prototype code & local setup ready.\n2. Prepare your live pitch presentation and working prototype demonstration strictly adhering to your submitted official PPT deck format.\n3. All 6 team members must attend in formal attire with institute ID cards.\n\nNote: Detailed guidelines, presentation rules, evaluation criteria, and complete time-slot schedules will be shared with all team leaders soon via email and your Team Portal dashboard.\n\nContact Support: sihinternal.vsitr@gmail.com\nVSITR, Kadi\n    \n\n[DELIVERY ERROR: Invalid login: 535-5.7.8 Username and Password not accepted. For more information, go to\n535 5.7.8  https://support.google.com/mail/?p=BadCredentials d9443c01a7336-2d5c1ecb162sm17735ad.69 - gsmtp]",
+      "type": "ppt_submission",
+      "status": "failed",
+      "sentAt": "2026-08-17T09:33:10.210Z"
+    },
+    {
+      "id": "EMAIL-1786959190103-729",
+      "recipientEmail": "member5@vsitr.ac.in",
+      "recipientName": "Member Five",
+      "teamId": "SIH2026-000",
+      "subject": "🎉 Submission Confirmed! Internal SIH 2026 - PPT & Prototype Received [Team SIH2026-000 - VSITR Testing Team (Internal)]",
+      "body": "\nInternal Smart India Hackathon 2026 - PPT & Prototype Submission Confirmation\n\nDear Member Five (Team Member),\n\nCongratulations! We have successfully received official PPT & Prototype submission for Team VSITR Testing Team (Internal) (ID: SIH2026-000).\n\nSUBMISSION RECEIPT:\n- Team ID: SIH2026-000\n- Team Name: VSITR Testing Team (Internal)\n- Problem Statement: [7-L] AI-Powered Academic Dropout Prediction and Intervention System\n- PPT Presentation: Software_Design_Principles_Dark_theme_c.pptx\n- 2-Min Pitch Video: https://youtu.be/8clRfKww5vI?si=1B4xw_50rBO3Xdmq\n- GitHub Repository: https://github.com/PATELxDEVIL/Odoo_X_KSV_2026_Final\n- Submission Timestamp: 17 Aug 2026, 03:03 pm\n\nNEXT PHASE: PPT PRESENTATION DAY\n- Date: 26 August 2026\n- Venue: Gandhinagar Campus\n- Time Schedule: Detailed time slots will be shared soon.\n\nPREPARATION CHECKLIST:\n1. Bring your laptop with your working prototype code & local setup ready.\n2. Prepare your live pitch presentation and working prototype demonstration strictly adhering to your submitted official PPT deck format.\n3. All 6 team members must attend in formal attire with institute ID cards.\n\nNote: Detailed guidelines, presentation rules, evaluation criteria, and complete time-slot schedules will be shared with all team leaders soon via email and your Team Portal dashboard.\n\nContact Support: sihinternal.vsitr@gmail.com\nVSITR, Kadi\n    \n\n[DELIVERY ERROR: Invalid login: 535-5.7.8 Username and Password not accepted. For more information, go to\n535 5.7.8  https://support.google.com/mail/?p=BadCredentials 98e67ed59e1d1-3954d2b8080sm1619593a91.4 - gsmtp]",
+      "type": "ppt_submission",
+      "status": "failed",
+      "sentAt": "2026-08-17T09:33:10.103Z"
+    },
+    {
+      "id": "EMAIL-1786959190114-78",
+      "recipientEmail": "member1@vsitr.ac.in",
+      "recipientName": "Member One",
+      "teamId": "SIH2026-000",
+      "subject": "🎉 Submission Confirmed! Internal SIH 2026 - PPT & Prototype Received [Team SIH2026-000 - VSITR Testing Team (Internal)]",
+      "body": "\nInternal Smart India Hackathon 2026 - PPT & Prototype Submission Confirmation\n\nDear Member One (Team Member),\n\nCongratulations! We have successfully received official PPT & Prototype submission for Team VSITR Testing Team (Internal) (ID: SIH2026-000).\n\nSUBMISSION RECEIPT:\n- Team ID: SIH2026-000\n- Team Name: VSITR Testing Team (Internal)\n- Problem Statement: [7-L] AI-Powered Academic Dropout Prediction and Intervention System\n- PPT Presentation: Software_Design_Principles_Dark_theme_c.pptx\n- 2-Min Pitch Video: https://youtu.be/8clRfKww5vI?si=1B4xw_50rBO3Xdmq\n- GitHub Repository: https://github.com/PATELxDEVIL/Odoo_X_KSV_2026_Final\n- Submission Timestamp: 17 Aug 2026, 03:03 pm\n\nNEXT PHASE: PPT PRESENTATION DAY\n- Date: 26 August 2026\n- Venue: Gandhinagar Campus\n- Time Schedule: Detailed time slots will be shared soon.\n\nPREPARATION CHECKLIST:\n1. Bring your laptop with your working prototype code & local setup ready.\n2. Prepare your live pitch presentation and working prototype demonstration strictly adhering to your submitted official PPT deck format.\n3. All 6 team members must attend in formal attire with institute ID cards.\n\nNote: Detailed guidelines, presentation rules, evaluation criteria, and complete time-slot schedules will be shared with all team leaders soon via email and your Team Portal dashboard.\n\nContact Support: sihinternal.vsitr@gmail.com\nVSITR, Kadi\n    \n\n[DELIVERY ERROR: Invalid login: 535-5.7.8 Username and Password not accepted. For more information, go to\n535 5.7.8  https://support.google.com/mail/?p=BadCredentials 98e67ed59e1d1-39531e31b8fsm4227338a91.3 - gsmtp]",
+      "type": "ppt_submission",
+      "status": "failed",
+      "sentAt": "2026-08-17T09:33:10.114Z"
+    },
+    {
+      "id": "EMAIL-1786959188148-503",
+      "recipientEmail": "member1@vsitr.ac.in",
+      "recipientName": "Member One",
+      "teamId": "SIH2026-000",
+      "subject": "🎉 Submission Confirmed! Internal SIH 2026 - PPT & Prototype Received [Team SIH2026-000 - VSITR Testing Team (Internal)]",
+      "body": "\nInternal Smart India Hackathon 2026 - PPT & Prototype Submission Confirmation\n\nDear Member One (Team Member),\n\nCongratulations! We have successfully received official PPT & Prototype submission for Team VSITR Testing Team (Internal) (ID: SIH2026-000).\n\nSUBMISSION RECEIPT:\n- Team ID: SIH2026-000\n- Team Name: VSITR Testing Team (Internal)\n- Problem Statement: [7-L] AI-Powered Academic Dropout Prediction and Intervention System\n- PPT Presentation: Software_Design_Principles_Dark_theme_c.pptx\n- 2-Min Pitch Video: https://youtu.be/8clRfKww5vI?si=1B4xw_50rBO3Xdmq\n- GitHub Repository: https://github.com/PATELxDEVIL/Odoo_X_KSV_2026_Final\n- Submission Timestamp: 17 Aug 2026, 03:03 pm\n\nNEXT PHASE: PPT PRESENTATION DAY\n- Date: 26 August 2026\n- Venue: Gandhinagar Campus\n- Time Schedule: Detailed time slots will be shared soon.\n\nPREPARATION CHECKLIST:\n1. Bring your laptop with your working prototype code & local setup ready.\n2. Prepare your live pitch presentation and working prototype demonstration strictly adhering to your submitted official PPT deck format.\n3. All 6 team members must attend in formal attire with institute ID cards.\n\nNote: Detailed guidelines, presentation rules, evaluation criteria, and complete time-slot schedules will be shared with all team leaders soon via email and your Team Portal dashboard.\n\nContact Support: sihinternal.vsitr@gmail.com\nVSITR, Kadi\n    \n\n[DELIVERY ERROR: Invalid login: 535-5.7.8 Username and Password not accepted. For more information, go to\n535 5.7.8  https://support.google.com/mail/?p=BadCredentials d75a77b69052e-52db62396eesm9859021cf.20 - gsmtp]",
+      "type": "ppt_submission",
+      "status": "failed",
+      "sentAt": "2026-08-17T09:33:08.149Z"
+    },
+    {
+      "id": "EMAIL-1786959187455-144",
+      "recipientEmail": "member3@vsitr.ac.in",
+      "recipientName": "Member Three",
+      "teamId": "SIH2026-000",
+      "subject": "🎉 Submission Confirmed! Internal SIH 2026 - PPT & Prototype Received [Team SIH2026-000 - VSITR Testing Team (Internal)]",
+      "body": "\nInternal Smart India Hackathon 2026 - PPT & Prototype Submission Confirmation\n\nDear Member Three (Team Member),\n\nCongratulations! We have successfully received official PPT & Prototype submission for Team VSITR Testing Team (Internal) (ID: SIH2026-000).\n\nSUBMISSION RECEIPT:\n- Team ID: SIH2026-000\n- Team Name: VSITR Testing Team (Internal)\n- Problem Statement: [7-L] AI-Powered Academic Dropout Prediction and Intervention System\n- PPT Presentation: Software_Design_Principles_Dark_theme_c.pptx\n- 2-Min Pitch Video: https://youtu.be/8clRfKww5vI?si=1B4xw_50rBO3Xdmq\n- GitHub Repository: https://github.com/PATELxDEVIL/Odoo_X_KSV_2026_Final\n- Submission Timestamp: 17 Aug 2026, 03:03 pm\n\nNEXT PHASE: PPT PRESENTATION DAY\n- Date: 26 August 2026\n- Venue: Gandhinagar Campus\n- Time Schedule: Detailed time slots will be shared soon.\n\nPREPARATION CHECKLIST:\n1. Bring your laptop with your working prototype code & local setup ready.\n2. Prepare your live pitch presentation and working prototype demonstration strictly adhering to your submitted official PPT deck format.\n3. All 6 team members must attend in formal attire with institute ID cards.\n\nNote: Detailed guidelines, presentation rules, evaluation criteria, and complete time-slot schedules will be shared with all team leaders soon via email and your Team Portal dashboard.\n\nContact Support: sihinternal.vsitr@gmail.com\nVSITR, Kadi\n    \n\n[DELIVERY ERROR: Invalid login: 535-5.7.8 Username and Password not accepted. For more information, go to\n535 5.7.8  https://support.google.com/mail/?p=BadCredentials d9443c01a7336-2d5bb49e7d2sm2997385ad.10 - gsmtp]",
+      "type": "ppt_submission",
+      "status": "failed",
+      "sentAt": "2026-08-17T09:33:07.455Z"
+    },
+    {
+      "id": "EMAIL-1786959187475-555",
+      "recipientEmail": "member4@vsitr.ac.in",
+      "recipientName": "Member Four",
+      "teamId": "SIH2026-000",
+      "subject": "🎉 Submission Confirmed! Internal SIH 2026 - PPT & Prototype Received [Team SIH2026-000 - VSITR Testing Team (Internal)]",
+      "body": "\nInternal Smart India Hackathon 2026 - PPT & Prototype Submission Confirmation\n\nDear Member Four (Team Member),\n\nCongratulations! We have successfully received official PPT & Prototype submission for Team VSITR Testing Team (Internal) (ID: SIH2026-000).\n\nSUBMISSION RECEIPT:\n- Team ID: SIH2026-000\n- Team Name: VSITR Testing Team (Internal)\n- Problem Statement: [7-L] AI-Powered Academic Dropout Prediction and Intervention System\n- PPT Presentation: Software_Design_Principles_Dark_theme_c.pptx\n- 2-Min Pitch Video: https://youtu.be/8clRfKww5vI?si=1B4xw_50rBO3Xdmq\n- GitHub Repository: https://github.com/PATELxDEVIL/Odoo_X_KSV_2026_Final\n- Submission Timestamp: 17 Aug 2026, 03:03 pm\n\nNEXT PHASE: PPT PRESENTATION DAY\n- Date: 26 August 2026\n- Venue: Gandhinagar Campus\n- Time Schedule: Detailed time slots will be shared soon.\n\nPREPARATION CHECKLIST:\n1. Bring your laptop with your working prototype code & local setup ready.\n2. Prepare your live pitch presentation and working prototype demonstration strictly adhering to your submitted official PPT deck format.\n3. All 6 team members must attend in formal attire with institute ID cards.\n\nNote: Detailed guidelines, presentation rules, evaluation criteria, and complete time-slot schedules will be shared with all team leaders soon via email and your Team Portal dashboard.\n\nContact Support: sihinternal.vsitr@gmail.com\nVSITR, Kadi\n    \n\n[DELIVERY ERROR: Invalid login: 535-5.7.8 Username and Password not accepted. For more information, go to\n535 5.7.8  https://support.google.com/mail/?p=BadCredentials 98e67ed59e1d1-39531e31b8fsm4227078a91.3 - gsmtp]",
+      "type": "ppt_submission",
+      "status": "failed",
+      "sentAt": "2026-08-17T09:33:07.475Z"
+    },
+    {
+      "id": "EMAIL-1786959186811-483",
+      "recipientEmail": "member2@vsitr.ac.in",
+      "recipientName": "Member Two",
+      "teamId": "SIH2026-000",
+      "subject": "🎉 Submission Confirmed! Internal SIH 2026 - PPT & Prototype Received [Team SIH2026-000 - VSITR Testing Team (Internal)]",
+      "body": "\nInternal Smart India Hackathon 2026 - PPT & Prototype Submission Confirmation\n\nDear Member Two (Team Member),\n\nCongratulations! We have successfully received official PPT & Prototype submission for Team VSITR Testing Team (Internal) (ID: SIH2026-000).\n\nSUBMISSION RECEIPT:\n- Team ID: SIH2026-000\n- Team Name: VSITR Testing Team (Internal)\n- Problem Statement: [7-L] AI-Powered Academic Dropout Prediction and Intervention System\n- PPT Presentation: Software_Design_Principles_Dark_theme_c.pptx\n- 2-Min Pitch Video: https://youtu.be/8clRfKww5vI?si=1B4xw_50rBO3Xdmq\n- GitHub Repository: https://github.com/PATELxDEVIL/Odoo_X_KSV_2026_Final\n- Submission Timestamp: 17 Aug 2026, 03:03 pm\n\nNEXT PHASE: PPT PRESENTATION DAY\n- Date: 26 August 2026\n- Venue: Gandhinagar Campus\n- Time Schedule: Detailed time slots will be shared soon.\n\nPREPARATION CHECKLIST:\n1. Bring your laptop with your working prototype code & local setup ready.\n2. Prepare your live pitch presentation and working prototype demonstration strictly adhering to your submitted official PPT deck format.\n3. All 6 team members must attend in formal attire with institute ID cards.\n\nNote: Detailed guidelines, presentation rules, evaluation criteria, and complete time-slot schedules will be shared with all team leaders soon via email and your Team Portal dashboard.\n\nContact Support: sihinternal.vsitr@gmail.com\nVSITR, Kadi\n    \n\n[DELIVERY ERROR: Invalid login: 535-5.7.8 Username and Password not accepted. For more information, go to\n535 5.7.8  https://support.google.com/mail/?p=BadCredentials a92af1059eb24-141530793ccsm5394580c88.8 - gsmtp]",
+      "type": "ppt_submission",
+      "status": "failed",
+      "sentAt": "2026-08-17T09:33:06.811Z"
+    },
+    {
+      "id": "EMAIL-1786959186807-727",
+      "recipientEmail": "test.sih2026@vsitr.ac.in",
+      "recipientName": "Test Leader (VSITR)",
+      "teamId": "SIH2026-000",
+      "subject": "🎉 Submission Confirmed! Internal SIH 2026 - PPT & Prototype Received [Team SIH2026-000 - VSITR Testing Team (Internal)]",
+      "body": "\nInternal Smart India Hackathon 2026 - PPT & Prototype Submission Confirmation\n\nDear Test Leader (VSITR) (Team Leader),\n\nCongratulations! We have successfully received official PPT & Prototype submission for Team VSITR Testing Team (Internal) (ID: SIH2026-000).\n\nSUBMISSION RECEIPT:\n- Team ID: SIH2026-000\n- Team Name: VSITR Testing Team (Internal)\n- Problem Statement: [7-L] AI-Powered Academic Dropout Prediction and Intervention System\n- PPT Presentation: Software_Design_Principles_Dark_theme_c.pptx\n- 2-Min Pitch Video: https://youtu.be/8clRfKww5vI?si=1B4xw_50rBO3Xdmq\n- GitHub Repository: https://github.com/PATELxDEVIL/Odoo_X_KSV_2026_Final\n- Submission Timestamp: 17 Aug 2026, 03:03 pm\n\nNEXT PHASE: PPT PRESENTATION DAY\n- Date: 26 August 2026\n- Venue: Gandhinagar Campus\n- Time Schedule: Detailed time slots will be shared soon.\n\nPREPARATION CHECKLIST:\n1. Bring your laptop with your working prototype code & local setup ready.\n2. Prepare your live pitch presentation and working prototype demonstration strictly adhering to your submitted official PPT deck format.\n3. All 6 team members must attend in formal attire with institute ID cards.\n\nNote: Detailed guidelines, presentation rules, evaluation criteria, and complete time-slot schedules will be shared with all team leaders soon via email and your Team Portal dashboard.\n\nContact Support: sihinternal.vsitr@gmail.com\nVSITR, Kadi\n    \n\n[DELIVERY ERROR: Invalid login: 535-5.7.8 Username and Password not accepted. For more information, go to\n535 5.7.8  https://support.google.com/mail/?p=BadCredentials a92af1059eb24-1415305a0afsm7664545c88.4 - gsmtp]",
+      "type": "ppt_submission",
+      "status": "failed",
+      "sentAt": "2026-08-17T09:33:06.807Z"
+    },
+    {
+      "id": "EMAIL-1786959186810-728",
+      "recipientEmail": "member5@vsitr.ac.in",
+      "recipientName": "Member Five",
+      "teamId": "SIH2026-000",
+      "subject": "🎉 Submission Confirmed! Internal SIH 2026 - PPT & Prototype Received [Team SIH2026-000 - VSITR Testing Team (Internal)]",
+      "body": "\nInternal Smart India Hackathon 2026 - PPT & Prototype Submission Confirmation\n\nDear Member Five (Team Member),\n\nCongratulations! We have successfully received official PPT & Prototype submission for Team VSITR Testing Team (Internal) (ID: SIH2026-000).\n\nSUBMISSION RECEIPT:\n- Team ID: SIH2026-000\n- Team Name: VSITR Testing Team (Internal)\n- Problem Statement: [7-L] AI-Powered Academic Dropout Prediction and Intervention System\n- PPT Presentation: Software_Design_Principles_Dark_theme_c.pptx\n- 2-Min Pitch Video: https://youtu.be/8clRfKww5vI?si=1B4xw_50rBO3Xdmq\n- GitHub Repository: https://github.com/PATELxDEVIL/Odoo_X_KSV_2026_Final\n- Submission Timestamp: 17 Aug 2026, 03:03 pm\n\nNEXT PHASE: PPT PRESENTATION DAY\n- Date: 26 August 2026\n- Venue: Gandhinagar Campus\n- Time Schedule: Detailed time slots will be shared soon.\n\nPREPARATION CHECKLIST:\n1. Bring your laptop with your working prototype code & local setup ready.\n2. Prepare your live pitch presentation and working prototype demonstration strictly adhering to your submitted official PPT deck format.\n3. All 6 team members must attend in formal attire with institute ID cards.\n\nNote: Detailed guidelines, presentation rules, evaluation criteria, and complete time-slot schedules will be shared with all team leaders soon via email and your Team Portal dashboard.\n\nContact Support: sihinternal.vsitr@gmail.com\nVSITR, Kadi\n    \n\n[DELIVERY ERROR: Invalid login: 535-5.7.8 Username and Password not accepted. For more information, go to\n535 5.7.8  https://support.google.com/mail/?p=BadCredentials a92af1059eb24-14153073befsm4453280c88.7 - gsmtp]",
+      "type": "ppt_submission",
+      "status": "failed",
+      "sentAt": "2026-08-17T09:33:06.810Z"
+    },
     {
       "id": "EMAIL-1786814634028-355",
       "recipientEmail": "member3@vsitr.ac.in",
@@ -3167,5 +3444,22 @@
       "theme": "Digital Solutions for Smart Cities and Circular Economy"
     }
   ],
-  "pptSubmissions": []
+  "pptSubmissions": [
+    {
+      "id": "PPT-SIH2026-000",
+      "teamId": "SIH2026-000",
+      "teamName": "VSITR Testing Team (Internal)",
+      "leaderName": "Test Leader (VSITR)",
+      "leaderEmail": "test.sih2026@vsitr.ac.in",
+      "fileUrl": "/api/uploads/ppt/SIH2026-000_1786959347337_Software_Design_Principles_Dark_theme_c.pptx",
+      "pptFileName": "Software_Design_Principles_Dark_theme_c.pptx",
+      "pptFileUrl": "/api/uploads/ppt/SIH2026-000_1786959347337_Software_Design_Principles_Dark_theme_c.pptx",
+      "pptFileSize": 177530,
+      "demoVideoUrl": "https://youtu.be/8clRfKww5vI?si=1B4xw_50rBO3Xdmq",
+      "githubRepoUrl": "https://github.com/PATELxDEVIL/Odoo_X_KSV_2026_Final",
+      "githubCollaboratorsAdded": true,
+      "submittedAt": "2026-08-17T09:35:47.339Z",
+      "fileName": "Software_Design_Principles_Dark_theme_c.pptx"
+    }
+  ]
 }
