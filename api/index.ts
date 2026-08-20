@@ -149,43 +149,49 @@ app.put('/api/settings', async (req: Request, res: Response) => {
   }
 });
 
-// Production Rules PDF upload. Vercel's serverless filesystem is temporary,
-// so persistent uploads are stored in Vercel Blob when its token is configured.
+// Production Rules PDF upload. When BLOB_READ_WRITE_TOKEN is configured, the
+// PDF is stored in Vercel Blob for a permanent public URL. Otherwise it falls
+// back to returning the file as a base64 data URL so the Admin can still save
+// the Rules PDF link in the database settings without any extra infrastructure.
 app.post('/api/admin/rules-pdf', async (req: Request, res: Response) => {
   try {
     const { fileName, fileBase64 } = req.body;
     if (!fileName || !fileBase64 || !/\.pdf$/i.test(fileName)) {
       return res.status(400).json({ success: false, message: 'Please choose a PDF file.' });
     }
-    const fileBuffer = Buffer.from(String(fileBase64).replace(/^data:.*?;base64,/, ''), 'base64');
+    const cleanBase64 = String(fileBase64).replace(/^data:.*?;base64,/, '');
+    const fileBuffer = Buffer.from(cleanBase64, 'base64');
     if (!fileBuffer.length || fileBuffer.length > 10 * 1024 * 1024) {
       return res.status(400).json({ success: false, message: 'The PDF must be 10 MB or smaller.' });
     }
 
     const blobToken = process.env.BLOB_READ_WRITE_TOKEN;
-    if (!blobToken) {
-      return res.status(503).json({
-        success: false,
-        message: 'PDF uploads are not configured on the live site yet. Add BLOB_READ_WRITE_TOKEN in Vercel Project Settings → Environment Variables, or use the PDF Link option.',
+
+    // --- Vercel Blob path (when token is configured) ---
+    if (blobToken) {
+      const safeBaseName = path.basename(fileName, '.pdf').replace(/[^a-zA-Z0-9_-]/g, '_') || 'rules';
+      const blobResponse = await fetch(`https://blob.vercel-storage.com/rules/${Date.now()}_${safeBaseName}.pdf`, {
+        method: 'PUT',
+        headers: {
+          authorization: `Bearer ${blobToken}`,
+          'x-api-version': '7',
+          'x-add-random-suffix': '1',
+          'content-type': 'application/pdf',
+        },
+        body: fileBuffer,
       });
+      const blobData = await blobResponse.json().catch(() => null);
+      if (!blobResponse.ok || !blobData?.url) {
+        return res.status(502).json({ success: false, message: blobData?.error?.message || 'Could not store the PDF. Please try again or use the PDF Link option.' });
+      }
+      return res.json({ success: true, url: blobData.url });
     }
 
-    const safeBaseName = path.basename(fileName, '.pdf').replace(/[^a-zA-Z0-9_-]/g, '_') || 'rules';
-    const blobResponse = await fetch(`https://blob.vercel-storage.com/rules/${Date.now()}_${safeBaseName}.pdf`, {
-      method: 'PUT',
-      headers: {
-        authorization: `Bearer ${blobToken}`,
-        'x-api-version': '7',
-        'x-add-random-suffix': '1',
-        'content-type': 'application/pdf',
-      },
-      body: fileBuffer,
-    });
-    const blobData = await blobResponse.json().catch(() => null);
-    if (!blobResponse.ok || !blobData?.url) {
-      return res.status(502).json({ success: false, message: blobData?.error?.message || 'Could not store the PDF. Please try again or use the PDF Link option.' });
-    }
-    res.json({ success: true, url: blobData.url });
+    // --- Fallback: return as base64 data URL stored in database settings ---
+    const dataUrl = fileBase64.startsWith('data:')
+      ? fileBase64
+      : `data:application/pdf;base64,${cleanBase64}`;
+    return res.json({ success: true, url: dataUrl });
   } catch (err: any) {
     res.status(500).json({ success: false, message: err.message || 'Could not upload the Rules PDF.' });
   }
