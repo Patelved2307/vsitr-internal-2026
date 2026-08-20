@@ -160,7 +160,9 @@ export const api = {
 
   uploadRulesPdf: async (fileName: string, fileBase64: string) => {
     const res = await fetch('/api/admin/rules-pdf', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ fileName, fileBase64 }) });
-    const data = await res.json();
+    const responseText = await res.text();
+    let data: any;
+    try { data = JSON.parse(responseText); } catch { throw new Error('The upload service returned an invalid response. Please use the PDF Link option or contact the site administrator.'); }
     if (!res.ok) throw new Error(data.message || 'Failed to upload rules PDF');
     return data;
   },
