@@ -3,7 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import { Timeline } from './ui/timeline';
 
 export const TimelineSection: React.FC = () => {
-  const { timeline } = useAuth();
+  const { timeline, settings } = useAuth();
 
   const now = Date.now();
 
@@ -33,8 +33,8 @@ export const TimelineSection: React.FC = () => {
         isLiveDot = true;
       }
     } else if (event.id === 't3') {
-      const cutoff = new Date('2026-08-16T23:59:00+05:30').getTime();
-      if (now > cutoff) {
+      const cutoff = settings.problemStatementDeadline ? new Date(settings.problemStatementDeadline).getTime() : Number.NaN;
+      if (!settings.problemStatementSelectionOpen || !Number.isNaN(cutoff) && now > cutoff) {
         statusLabel = 'Closed';
         statusStyle = 'bg-red-50 text-red-700 border-red-200';
       } else {

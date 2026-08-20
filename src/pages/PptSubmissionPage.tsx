@@ -36,7 +36,8 @@ export const PptSubmissionPage: React.FC = () => {
   
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const isOpen = settings.pptSubmissionOpen ?? false;
+  const pptDeadline = settings.isPptExtended && settings.pptExtendedDeadline ? settings.pptExtendedDeadline : settings.pptSubmissionDeadline;
+  const isOpen = (settings.pptSubmissionOpen ?? false) && (!pptDeadline || Number.isNaN(new Date(pptDeadline).getTime()) || Date.now() <= new Date(pptDeadline).getTime());
 
   // Validate and set PPT file
   const validateAndSetFile = (file: File): boolean => {

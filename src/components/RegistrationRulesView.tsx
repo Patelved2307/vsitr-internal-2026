@@ -44,6 +44,10 @@ const FLOATING_LINES_BOTTOM_POS = { x: 2.0, y: -0.7, rotate: -1 };
 
 export const RegistrationRulesView: React.FC = () => {
   const { loginTeamSession, setActiveTab, showAlert, settings, rules, timeline, team, isTeamLoggedIn, activeTab, clubCoordinators } = useAuth();
+  const effectivePptDeadline = settings.isPptExtended && settings.pptExtendedDeadline ? settings.pptExtendedDeadline : settings.pptSubmissionDeadline;
+  const isPptSubmissionOpen = (settings.pptSubmissionOpen ?? false) && (!effectivePptDeadline || Number.isNaN(new Date(effectivePptDeadline).getTime()) || Date.now() <= new Date(effectivePptDeadline).getTime());
+  const isPsSelectionOpen = (settings.problemStatementSelectionOpen ?? true) && (!settings.problemStatementDeadline || Number.isNaN(new Date(settings.problemStatementDeadline).getTime()) || Date.now() <= new Date(settings.problemStatementDeadline).getTime());
+  const formattedPsDeadline = settings.problemStatementDeadline ? new Date(settings.problemStatementDeadline).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true }) : '';
 
   // Mode state: 'register' or 'mentor_lookup'
   const [mode, setMode] = useState<'register' | 'mentor_lookup'>('register');
@@ -819,8 +823,9 @@ export const RegistrationRulesView: React.FC = () => {
             </h3>
             <div className="space-y-3">
               {timeline && timeline.map((event, idx) => {
-                const isClosed = event.date.toLowerCase().includes('closed') || (isDeadlinePassed && (event.id === 't1' || event.id === 't2') && !settings.isExtended);
-                const displayDate = isClosed ? 'Closed' : event.date;
+                const isPsEvent = event.id === 't3' || event.title.toLowerCase().includes('problem statement selection');
+                const isClosed = event.date.toLowerCase().includes('closed') || (isDeadlinePassed && (event.id === 't1' || event.id === 't2') && !settings.isExtended) || (isPsEvent && !isPsSelectionOpen);
+                const displayDate = isClosed ? 'Closed' : isPsEvent && formattedPsDeadline ? formattedPsDeadline : event.date;
                 const isLivePpt = event.title.toLowerCase().includes('ppt') && event.title.toLowerCase().includes('prototype');
                 return (
                   <div key={event.id || idx} className={`flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-3 rounded-2xl border transition ${
@@ -961,6 +966,16 @@ export const RegistrationRulesView: React.FC = () => {
                     </a>
                   )}
                 </div>
+                {settings.rulesPdfLink ? (
+                  <a href={settings.rulesPdfLink} download className="inline-flex w-full items-center justify-between px-3 py-2.5 rounded-xl text-xs font-bold text-[#C1272D] bg-red-50 hover:bg-red-100 border border-red-100 transition">
+                    <span>📄 Download Rules &amp; Regulations PDF</span>
+                    <ArrowRight className="h-3.5 w-3.5" />
+                  </a>
+                ) : (
+                  <div className="inline-flex w-full items-center justify-between px-3 py-2.5 rounded-xl text-xs font-bold text-slate-500 bg-slate-50 border border-slate-200">
+                    <span>Rules &amp; Regulations PDF</span><span className="text-[10px] uppercase">Coming soon</span>
+                  </div>
+                )}
               </div>
             </div>
           )}
@@ -1042,7 +1057,7 @@ export const RegistrationRulesView: React.FC = () => {
               </div>
 
               {/* PPT Submission Card */}
-              {settings.pptSubmissionOpen && (
+              {isPptSubmissionOpen && (
                 <div className="relative overflow-hidden rounded-3xl bg-white border border-slate-200/80 p-6 sm:p-8 shadow-md hover:shadow-xl hover:border-slate-300 transition duration-300">
                   <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-gradient-to-b from-[#1B3F8B] to-indigo-600" />
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4 pl-1">
@@ -1203,7 +1218,7 @@ export const RegistrationRulesView: React.FC = () => {
                     </div>
 
                     {/* CARD 2: PROBLEM STATEMENT SELECTION PHASE */}
-                    <div className="relative overflow-hidden rounded-3xl bg-white border border-slate-200/90 p-6 sm:p-8 shadow-xl hover:shadow-2xl transition duration-300 space-y-6">
+                    {isPsSelectionOpen && <div className="relative overflow-hidden rounded-3xl bg-white border border-slate-200/90 p-6 sm:p-8 shadow-xl hover:shadow-2xl transition duration-300 space-y-6">
                       <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
                         <div className="p-3 rounded-2xl bg-blue-500/10 text-[#1B3F8B] border border-blue-500/15 shrink-0">
                           <BookOpen className="h-7 w-7" />
@@ -1221,7 +1236,7 @@ export const RegistrationRulesView: React.FC = () => {
                       </div>
 
                       <p className="text-xs sm:text-sm text-slate-600 font-semibold leading-relaxed">
-                        Team registration is closed, and the Problem Statement Selection Phase is live! All selected team leaders must log in to their Team Portal to finalize their chosen problem statement by <strong className="text-[#C1272D]">16 August, 2026 at 11:59 PM</strong>.
+                        Team registration is closed, and the Problem Statement Selection Phase is live! All selected team leaders must log in to their Team Portal to finalize their chosen problem statement by <strong className="text-[#C1272D]">{formattedPsDeadline}</strong>.
                       </p>
 
                       <div className="flex flex-wrap items-center justify-between gap-4 pt-1 border-t border-slate-100">
@@ -1236,7 +1251,7 @@ export const RegistrationRulesView: React.FC = () => {
 
                         <div className="flex items-center gap-2 text-xs font-extrabold text-[#C1272D] bg-red-50 px-3.5 py-2 rounded-xl border border-red-100/70">
                           <Calendar className="h-4 w-4" />
-                          Selection Deadline: 16 Aug, 11:59 PM
+                          Selection Deadline: {formattedPsDeadline}
                         </div>
                       </div>
 
@@ -1252,7 +1267,7 @@ export const RegistrationRulesView: React.FC = () => {
                           — {settings.customQuoteAuthor || "Steve Jobs"}
                         </p>
                       </div>
-                    </div>
+                    </div>}
                   </div>
                 ) : (
                   <div className="rounded-3xl bg-white border border-slate-200 p-6 sm:p-8 shadow-sm relative overflow-hidden">

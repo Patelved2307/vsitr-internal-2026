@@ -25,6 +25,10 @@ export const TeamPortalPage: React.FC = () => {
   const [githubRepoUrl, setGithubRepoUrl] = useState<string>('');
   const [githubCollabChecked, setGithubCollabChecked] = useState<boolean>(false);
   const [isSubmittingPpt, setIsSubmittingPpt] = useState<boolean>(false);
+  const effectivePptDeadline = settings.isPptExtended && settings.pptExtendedDeadline ? settings.pptExtendedDeadline : settings.pptSubmissionDeadline;
+  const isPptSubmissionOpen = (settings.pptSubmissionOpen ?? false) && (!effectivePptDeadline || Number.isNaN(new Date(effectivePptDeadline).getTime()) || Date.now() <= new Date(effectivePptDeadline).getTime());
+  const psDeadlineValue = settings.problemStatementDeadline || '';
+  const formattedPsDeadline = psDeadlineValue ? new Date(psDeadlineValue).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true }) : 'To be announced';
 
   // Helper to handle smooth downloading of both Base64 Data URIs and regular URLs
   const handleDownloadPpt = (fileUrl?: string, fileName?: string) => {
@@ -150,14 +154,14 @@ export const TeamPortalPage: React.FC = () => {
     isExpired: boolean;
   }>({ days: 0, hours: 0, minutes: 0, seconds: 0, isExpired: false });
 
-  // Countdown timer for PS Selection Selection Deadline (16 August, 2026 11:59 PM IST)
+  // Countdown timer for the admin-configured Problem Statement Selection deadline.
   useEffect(() => {
     const calculatePsTimeLeft = () => {
-      const psDeadline = new Date('2026-08-16T23:59:00+05:30').getTime(); // IST timezone
+      const psDeadline = new Date(psDeadlineValue).getTime();
       const nowVal = new Date().getTime();
       const difference = psDeadline - nowVal;
 
-      if (difference <= 0) {
+      if (!settings.problemStatementSelectionOpen || !psDeadlineValue || Number.isNaN(psDeadline) || difference <= 0) {
         setPsTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0, isExpired: true });
         return;
       }
@@ -174,7 +178,7 @@ export const TeamPortalPage: React.FC = () => {
     calculatePsTimeLeft();
     const timer = setInterval(calculatePsTimeLeft, 1000);
     return () => clearInterval(timer);
-  }, []);
+  }, [psDeadlineValue, settings.problemStatementSelectionOpen]);
 
 
   // Form State for editing members
@@ -421,7 +425,7 @@ export const TeamPortalPage: React.FC = () => {
             {!psTimeLeft.isExpired && (
               <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-black text-[10px] sm:text-xs uppercase tracking-wider text-amber-800 bg-amber-50 border border-amber-200 shadow-2xs whitespace-nowrap">
                 <Clock className="h-3.5 w-3.5" />
-                Deadline: 16 Aug, 11:59 PM
+                Deadline: {formattedPsDeadline}
               </span>
             )}
             {psTimeLeft.isExpired && (
@@ -681,6 +685,15 @@ export const TeamPortalPage: React.FC = () => {
         )}
       </div>
 
+      {/* RULES & REGULATIONS DOWNLOAD */}
+      <div className="rounded-3xl bg-white p-6 border border-slate-200 shadow-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <div className="p-2.5 rounded-2xl bg-red-50 text-[#C1272D] border border-red-100"><BookOpen className="h-6 w-6" /></div>
+            <div><h2 className="text-base sm:text-lg font-black text-slate-900">Rules &amp; Regulations</h2><p className="text-xs text-slate-500 font-medium">Download the official SIH rules and regulations PDF.</p></div>
+          </div>
+          {settings.rulesPdfLink ? <a href={settings.rulesPdfLink} download className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-xs font-black text-white bg-[#C1272D] hover:bg-red-700 transition"><Download className="h-4 w-4" /> Download PDF</a> : <span className="px-5 py-2.5 rounded-xl text-xs font-black text-slate-400 bg-slate-100">PDF Coming Soon</span>}
+      </div>
+
       {/* PPT TEMPLATE & SAMPLE FILLED REFERENCE GUIDE SECTION */}
       <div className="rounded-3xl bg-white p-6 border border-slate-200 shadow-xl space-y-5 hover:shadow-2xl/10 transition duration-300">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100">
@@ -801,11 +814,11 @@ export const TeamPortalPage: React.FC = () => {
           </div>
 
           <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-black text-[10px] sm:text-xs uppercase tracking-wider self-start sm:self-auto shrink-0 whitespace-nowrap ${
-            settings.pptSubmissionOpen
+            isPptSubmissionOpen
               ? 'text-emerald-700 bg-emerald-50 border border-emerald-200 shadow-2xs'
               : 'text-slate-500 bg-slate-100 border border-slate-200 shadow-2xs'
           }`}>
-            {settings.pptSubmissionOpen ? (
+            {isPptSubmissionOpen ? (
               <>
                 <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" />
                 Portal Live &amp; Open
@@ -820,7 +833,7 @@ export const TeamPortalPage: React.FC = () => {
         </div>
 
         {/* Short Summary Information & State */}
-        {!settings.pptSubmissionOpen ? (
+        {!isPptSubmissionOpen ? (
           <div className="p-6 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-2xs">
             <div className="space-y-1 text-center sm:text-left">
               <h4 className="text-sm font-black text-slate-800">

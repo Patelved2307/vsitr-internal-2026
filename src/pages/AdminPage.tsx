@@ -44,15 +44,17 @@ import {
   GitBranch
 } from 'lucide-react';
 
-// Helper to convert UTC ISO string from server to local YYYY-MM-DDTHH:mm for datetime-local inputs
-const toLocalISOString = (isoString: string): string => {
+// Admin deadlines are always edited and displayed in Indian Standard Time.
+const toISTDateTimeInput = (isoString: string): string => {
   if (!isoString) return '';
   const date = new Date(isoString);
   if (isNaN(date.getTime())) return '';
-  const offset = date.getTimezoneOffset();
-  const localDate = new Date(date.getTime() - offset * 60 * 1000);
-  return localDate.toISOString().slice(0, 16);
+  const parts = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Kolkata', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).formatToParts(date);
+  const value = (type: string) => parts.find((part) => part.type === type)?.value || '';
+  return `${value('year')}-${value('month')}-${value('day')}T${value('hour')}:${value('minute')}`;
 };
+const istInputToIso = (value: string) => value ? new Date(`${value}:00+05:30`).toISOString() : '';
+const formatIST = (value: string | number) => new Date(value).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
 
 export const AdminPage: React.FC = () => {
   const {
@@ -107,6 +109,8 @@ export const AdminPage: React.FC = () => {
   const [editBanner, setEditBanner] = useState(settings.announcementBanner || '');
   const [editProblemStatementLink, setEditProblemStatementLink] = useState(settings.problemStatementLink || '');
   const [editProblemStatementStatus, setEditProblemStatementStatus] = useState(settings.problemStatementStatus || '');
+  const [editProblemStatementSelectionOpen, setEditProblemStatementSelectionOpen] = useState(settings.problemStatementSelectionOpen ?? true);
+  const [editProblemStatementDeadline, setEditProblemStatementDeadline] = useState(settings.problemStatementDeadline || '');
   const [editPptTemplateLink, setEditPptTemplateLink] = useState(settings.pptTemplateLink || '');
   const [editPptTemplateStatus, setEditPptTemplateStatus] = useState(settings.pptTemplateStatus || '');
   // PPT Submission Settings
@@ -114,6 +118,10 @@ export const AdminPage: React.FC = () => {
   const [editPptSubmissionStatus, setEditPptSubmissionStatus] = useState(settings.pptSubmissionStatus || '');
   const [editPptSubmissionDeadline, setEditPptSubmissionDeadline] = useState(settings.pptSubmissionDeadline || '');
   const [editPptReferenceLink, setEditPptReferenceLink] = useState(settings.pptReferenceLink || '');
+  const [editRulesPdfLink, setEditRulesPdfLink] = useState(settings.rulesPdfLink || '');
+  const [isUploadingRulesPdf, setIsUploadingRulesPdf] = useState(false);
+  const [rulesPdfMode, setRulesPdfMode] = useState<'link' | 'upload'>('link');
+  const [rulesPdfFileName, setRulesPdfFileName] = useState('');
   const [editIsPptExtended, setEditIsPptExtended] = useState(settings.isPptExtended ?? false);
   const [editPptExtendedDeadline, setEditPptExtendedDeadline] = useState(settings.pptExtendedDeadline || '');
   // Extension & custom closed message
@@ -397,12 +405,15 @@ export const AdminPage: React.FC = () => {
     setEditBanner(settings.announcementBanner || '');
     setEditProblemStatementLink(settings.problemStatementLink || '');
     setEditProblemStatementStatus(settings.problemStatementStatus || '');
+    setEditProblemStatementSelectionOpen(settings.problemStatementSelectionOpen ?? true);
+    setEditProblemStatementDeadline(settings.problemStatementDeadline || '');
     setEditPptTemplateLink(settings.pptTemplateLink || '');
     setEditPptTemplateStatus(settings.pptTemplateStatus || '');
     setEditPptSubmissionOpen(settings.pptSubmissionOpen ?? true);
     setEditPptSubmissionStatus(settings.pptSubmissionStatus || '');
     setEditPptSubmissionDeadline(settings.pptSubmissionDeadline || '');
     setEditPptReferenceLink(settings.pptReferenceLink || '');
+    setEditRulesPdfLink(settings.rulesPdfLink || '');
     setEditIsPptExtended(settings.isPptExtended ?? false);
     setEditPptExtendedDeadline(settings.pptExtendedDeadline || '');
     setEditIsExtended(settings.isExtended ?? false);
@@ -531,11 +542,15 @@ export const AdminPage: React.FC = () => {
 
       const finalDeadline = editIsExtended && editExtendedDeadline ? editExtendedDeadline : editDeadline;
       const formattedTimelineDate = formatToTimelineDate(finalDeadline);
+      const formattedPsDeadline = formatToTimelineDate(editProblemStatementDeadline);
 
       // Auto update timeline first event
       const updatedTimeline = editTimeline.map(item => {
         if (item.id === 't1' || item.title.toLowerCase().includes('phase 1') || item.title.toLowerCase().includes('registration deadline')) {
           return { ...item, date: formattedTimelineDate };
+        }
+        if (item.id === 't3' || item.title.toLowerCase().includes('problem statement selection')) {
+          return { ...item, date: formattedPsDeadline || item.date, active: editProblemStatementSelectionOpen };
         }
         return item;
       });
@@ -559,12 +574,15 @@ export const AdminPage: React.FC = () => {
           announcementBanner: editBanner,
           problemStatementLink: editProblemStatementLink,
           problemStatementStatus: editProblemStatementStatus,
+          problemStatementSelectionOpen: editProblemStatementSelectionOpen,
+          problemStatementDeadline: editProblemStatementDeadline,
           pptTemplateLink: editPptTemplateLink,
           pptTemplateStatus: editPptTemplateStatus,
           pptSubmissionOpen: editPptSubmissionOpen,
           pptSubmissionStatus: editPptSubmissionStatus,
           pptSubmissionDeadline: editPptSubmissionDeadline,
           pptReferenceLink: editPptReferenceLink,
+          rulesPdfLink: editRulesPdfLink,
           isPptExtended: editIsPptExtended,
           pptExtendedDeadline: editPptExtendedDeadline,
           isExtended: editIsExtended,
@@ -585,12 +603,15 @@ export const AdminPage: React.FC = () => {
           setEditWhatsapp(res.settings.whatsappGroupLink ?? editWhatsapp);
           setEditProblemStatementLink(res.settings.problemStatementLink ?? editProblemStatementLink);
           setEditProblemStatementStatus(res.settings.problemStatementStatus ?? editProblemStatementStatus);
+          setEditProblemStatementSelectionOpen(res.settings.problemStatementSelectionOpen ?? editProblemStatementSelectionOpen);
+          setEditProblemStatementDeadline(res.settings.problemStatementDeadline ?? editProblemStatementDeadline);
           setEditPptTemplateLink(res.settings.pptTemplateLink ?? editPptTemplateLink);
           setEditPptTemplateStatus(res.settings.pptTemplateStatus ?? editPptTemplateStatus);
           setEditPptSubmissionOpen(res.settings.pptSubmissionOpen ?? editPptSubmissionOpen);
           setEditPptSubmissionStatus(res.settings.pptSubmissionStatus ?? editPptSubmissionStatus);
           setEditPptSubmissionDeadline(res.settings.pptSubmissionDeadline ?? editPptSubmissionDeadline);
           setEditPptReferenceLink(res.settings.pptReferenceLink ?? editPptReferenceLink);
+          setEditRulesPdfLink(res.settings.rulesPdfLink ?? editRulesPdfLink);
           setEditIsPptExtended(res.settings.isPptExtended ?? editIsPptExtended);
           setEditPptExtendedDeadline(res.settings.pptExtendedDeadline ?? editPptExtendedDeadline);
           setEditIsExtended(res.settings.isExtended ?? editIsExtended);
@@ -608,6 +629,20 @@ export const AdminPage: React.FC = () => {
     } finally {
       setIsSavingSettings(false);
     }
+  };
+
+  const handleRulesPdfUpload = async (file?: File) => {
+    if (!file) return;
+    if (file.type !== 'application/pdf' || file.size > 10 * 1024 * 1024) return showAlert('Invalid PDF', 'Choose a PDF file no larger than 10 MB.');
+    setRulesPdfFileName(file.name);
+    setIsUploadingRulesPdf(true);
+    try {
+      const base64 = await new Promise<string>((resolve, reject) => { const reader = new FileReader(); reader.onload = () => resolve(String(reader.result)); reader.onerror = reject; reader.readAsDataURL(file); });
+      const result = await api.uploadRulesPdf(file.name, base64);
+      setEditRulesPdfLink(result.url);
+      showAlert('PDF Uploaded', 'Save Settings Live to publish this Rules PDF.', 'success');
+    } catch (err: any) { showAlert('Upload Failed', err.message || 'Could not upload the Rules PDF.'); }
+    finally { setIsUploadingRulesPdf(false); }
   };
 
   // Toggle Registration Open/Closed Quick Action
@@ -1315,7 +1350,7 @@ export const AdminPage: React.FC = () => {
                               <td className="py-2.5 px-3 font-mono font-black text-[#C1272D] whitespace-nowrap">{t.selectedPsId}</td>
                               <td className="py-2.5 px-3 font-semibold text-slate-800">{t.selectedPsTitle}</td>
                               <td className="py-2.5 px-3 text-slate-500 font-semibold whitespace-nowrap">
-                                {t.psSelectedAt ? new Date(t.psSelectedAt).toLocaleString('en-IN') : 'N/A'}
+                                {t.psSelectedAt ? formatIST(t.psSelectedAt) : 'N/A'}
                               </td>
                             </tr>
                           ))}
@@ -1796,8 +1831,8 @@ export const AdminPage: React.FC = () => {
                   <input
                     type="datetime-local"
                     required
-                    value={toLocalISOString(editDeadline)}
-                    onChange={(e) => setEditDeadline(new Date(e.target.value).toISOString())}
+                    value={toISTDateTimeInput(editDeadline)}
+                    onChange={(e) => setEditDeadline(istInputToIso(e.target.value))}
                     className="w-full px-4 py-2.5 rounded-xl border border-slate-300 font-bold focus:border-[#C1272D] outline-none text-slate-900"
                   />
                   <p className="text-[11px] text-slate-500 mt-1">
@@ -1841,8 +1876,8 @@ export const AdminPage: React.FC = () => {
                     <input
                       type="datetime-local"
                       required
-                      value={toLocalISOString(editExtendedDeadline)}
-                      onChange={(e) => setEditExtendedDeadline(new Date(e.target.value).toISOString())}
+                    value={toISTDateTimeInput(editExtendedDeadline)}
+                    onChange={(e) => setEditExtendedDeadline(istInputToIso(e.target.value))}
                       className="w-full px-4 py-2.5 rounded-xl border border-slate-300 font-bold focus:border-[#C1272D] outline-none text-slate-900"
                     />
                     <p className="text-[11px] text-slate-500 mt-1">
@@ -1931,6 +1966,23 @@ export const AdminPage: React.FC = () => {
                   </div>
                 </div>
 
+                <div className="p-5 rounded-2xl bg-amber-50 border border-amber-200 space-y-4">
+                  <h3 className="text-xs font-black text-amber-800 uppercase tracking-wider">Problem Statement Selection Control</h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block font-bold text-slate-800 mb-1">Selection Portal Status</label>
+                      <select value={editProblemStatementSelectionOpen ? 'true' : 'false'} onChange={(e) => setEditProblemStatementSelectionOpen(e.target.value === 'true')} className="w-full px-4 py-2.5 rounded-xl border border-slate-300 font-bold outline-none text-slate-900 bg-white">
+                        <option value="true">OPEN — Teams Can Select</option>
+                        <option value="false">CLOSED — Selection Locked</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block font-bold text-slate-800 mb-1">Selection Deadline (IST)</label>
+                      <input type="datetime-local" value={toISTDateTimeInput(editProblemStatementDeadline)} onChange={(e) => setEditProblemStatementDeadline(istInputToIso(e.target.value))} className="w-full px-4 py-2.5 rounded-xl border border-slate-300 font-bold outline-none text-slate-900" />
+                    </div>
+                  </div>
+                </div>
+
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block font-bold text-slate-800 mb-1">
@@ -1987,13 +2039,12 @@ export const AdminPage: React.FC = () => {
                       </select>
                     </div>
                     <div>
-                      <label className="block font-bold text-slate-800 mb-1">Submission Deadline (Display Text)</label>
+                      <label className="block font-bold text-slate-800 mb-1">Submission Deadline (IST)</label>
                       <input
-                        type="text"
-                        value={editPptSubmissionDeadline || ''}
-                        onChange={(e) => setEditPptSubmissionDeadline(e.target.value)}
+                        type="datetime-local"
+                        value={toISTDateTimeInput(editPptSubmissionDeadline)}
+                        onChange={(e) => setEditPptSubmissionDeadline(istInputToIso(e.target.value))}
                         className="w-full px-4 py-2.5 rounded-xl border border-slate-300 font-bold focus:border-[#C1272D] outline-none text-slate-900"
-                        placeholder="e.g. 23 August 2026, 11:59 PM"
                       />
                     </div>
                   </div>
@@ -2019,6 +2070,16 @@ export const AdminPage: React.FC = () => {
                         placeholder="e.g. /SIH-PPT-REFERANCE.pdf"
                       />
                     </div>
+                  </div>
+                  <div className="p-5 rounded-2xl bg-rose-50 border border-rose-200 space-y-4">
+                    <div><h3 className="text-xs font-black text-[#C1272D] uppercase tracking-wider">Rules &amp; Regulations PDF</h3><p className="text-[11px] text-slate-600 mt-1">Choose a public PDF link or upload a PDF file. Save Settings Live to publish it.</p></div>
+                    <div className="inline-flex p-1 rounded-xl bg-white border border-rose-200 gap-1">
+                      <button type="button" onClick={() => setRulesPdfMode('link')} className={`px-4 py-2 rounded-lg text-xs font-black transition ${rulesPdfMode === 'link' ? 'bg-[#C1272D] text-white shadow-sm' : 'text-slate-600 hover:bg-slate-100'}`}>Use PDF Link</button>
+                      <button type="button" onClick={() => setRulesPdfMode('upload')} className={`px-4 py-2 rounded-lg text-xs font-black transition ${rulesPdfMode === 'upload' ? 'bg-[#C1272D] text-white shadow-sm' : 'text-slate-600 hover:bg-slate-100'}`}>Upload PDF</button>
+                    </div>
+                    {rulesPdfMode === 'link' ? <div><label className="block font-bold text-slate-800 mb-1">Public PDF URL</label><input type="url" value={editRulesPdfLink} onChange={(e) => setEditRulesPdfLink(e.target.value)} className="w-full px-4 py-2.5 rounded-xl border border-slate-300 font-medium focus:border-[#C1272D] outline-none text-slate-900" placeholder="https://example.com/rules.pdf" /></div> : <div><label className="block font-bold text-slate-800 mb-2">Add Rules &amp; Regulations PDF (maximum 10 MB)</label><input id="rules-pdf-upload" type="file" accept="application/pdf,.pdf" onChange={(e) => handleRulesPdfUpload(e.target.files?.[0])} className="sr-only" /><label htmlFor="rules-pdf-upload" className="flex flex-col items-center justify-center gap-2 min-h-28 rounded-xl border-2 border-dashed border-rose-300 bg-white cursor-pointer hover:bg-rose-50 hover:border-[#C1272D] transition"><FileText className="h-7 w-7 text-[#C1272D]" /><span className="text-xs font-black text-slate-800">Click here to choose a PDF</span><span className="text-[11px] text-slate-500">Only PDF files, up to 10 MB</span></label>{rulesPdfFileName && <p className="text-[11px] text-slate-700 mt-2 font-bold">Selected file: {rulesPdfFileName}</p>}</div>}
+                    {isUploadingRulesPdf && <p className="text-[11px] text-[#1B3F8B] mt-1 font-bold">Uploading PDF…</p>}
+                    <p className="text-[11px] text-slate-500 mt-1">The link is shown as a download on the home page and Team Portal.</p>
                   </div>
                 </div>
               </div>
@@ -2720,7 +2781,7 @@ export const AdminPage: React.FC = () => {
                   {selectedTeam.psSelectedAt && (
                     <div>
                       <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">Selected At</p>
-                      <p className="font-semibold text-slate-700">{new Date(selectedTeam.psSelectedAt).toLocaleString('en-IN')}</p>
+                      <p className="font-semibold text-slate-700">{formatIST(selectedTeam.psSelectedAt)}</p>
                     </div>
                   )}
                   <div className="sm:col-span-2">
@@ -2768,7 +2829,7 @@ export const AdminPage: React.FC = () => {
                     <span>PPT &amp; Prototype Submission</span>
                   </div>
                   <span className="text-[10px] text-slate-500 font-bold">
-                    {new Date(selectedTeam.pptSubmission.submittedAt || Date.now()).toLocaleString('en-IN')}
+                    {formatIST(selectedTeam.pptSubmission.submittedAt || Date.now())}
                   </span>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">

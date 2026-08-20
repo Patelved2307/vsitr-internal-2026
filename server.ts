@@ -140,6 +140,21 @@ async function startServer() {
     }
   });
 
+  // Admin rules PDF upload. The returned URL can be saved in Event Settings.
+  app.post('/api/admin/rules-pdf', async (req: Request, res: Response) => {
+    try {
+      const { fileName, fileBase64 } = req.body;
+      if (!fileName || !fileBase64 || !/\.pdf$/i.test(fileName)) return res.status(400).json({ success: false, message: 'Please upload a PDF file.' });
+      const bytes = Buffer.from(String(fileBase64).replace(/^data:.*?;base64,/, ''), 'base64');
+      if (!bytes.length || bytes.length > 10 * 1024 * 1024) return res.status(400).json({ success: false, message: 'PDF must be 10 MB or smaller.' });
+      const folder = path.join(process.cwd(), 'data', 'uploads', 'rules');
+      fs.mkdirSync(folder, { recursive: true });
+      const safeName = `rules_${Date.now()}_${path.basename(fileName, '.pdf').replace(/[^a-zA-Z0-9_-]/g, '_')}.pdf`;
+      fs.writeFileSync(path.join(folder, safeName), bytes);
+      res.json({ success: true, url: `/api/uploads/rules/${safeName}` });
+    } catch (err: any) { res.status(500).json({ success: false, message: err.message || 'Could not upload PDF.' }); }
+  });
+
   // 3.5 Check Team Name Availability
   app.get('/api/teams/check-name', async (req: Request, res: Response) => {
     try {
@@ -570,6 +585,12 @@ async function startServer() {
       const globalConfig = await getGlobalConfig();
       if (!globalConfig.settings?.pptSubmissionOpen) {
         return res.status(403).json({ success: false, message: 'PPT Submission portal is currently closed by the Admin Officer.' });
+      }
+      const pptDeadlineValue = globalConfig.settings?.isPptExtended && globalConfig.settings?.pptExtendedDeadline
+        ? globalConfig.settings.pptExtendedDeadline
+        : globalConfig.settings?.pptSubmissionDeadline;
+      if (pptDeadlineValue && !Number.isNaN(new Date(pptDeadlineValue).getTime()) && new Date() > new Date(pptDeadlineValue)) {
+        return res.status(403).json({ success: false, message: 'The PPT submission deadline has passed. The portal is now closed.' });
       }
 
       const team = await getTeamById(teamId);
@@ -1331,13 +1352,12 @@ async function startServer() {
         return res.status(400).json({ success: false, message: 'Team ID, Problem Statement ID, and Title are required.' });
       }
 
-      // Check deadline: 16 August, 2026 till 11:59pm
-      const deadline = new Date('2026-08-16T23:59:00+05:30'); // IST timezone
-      const now = new Date();
-      if (now > deadline) {
+      const config = await getGlobalConfig();
+      const psDeadline = config.settings?.problemStatementDeadline;
+      if (!config.settings?.problemStatementSelectionOpen || (psDeadline && !Number.isNaN(new Date(psDeadline).getTime()) && new Date() > new Date(psDeadline))) {
         return res.status(400).json({
           success: false,
-          message: 'The deadline for selecting problem statements has passed (August 16, 2026, 11:59 PM).'
+          message: 'Problem statement selection is currently closed.'
         });
       }
 
