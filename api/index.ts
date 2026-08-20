@@ -1396,13 +1396,19 @@ app.post('/api/teams/select-ps', async (req: Request, res: Response) => {
       return res.status(400).json({ success: false, message: 'Team ID, Problem Statement ID, and Title are required.' });
     }
 
-    // Check deadline: 16 August, 2026 till 11:59pm
-    const deadline = new Date('2026-08-16T23:59:00+05:30'); // IST timezone
+    // Check deadline from database settings (admin-configurable), fallback to Aug 16 IST
+    const globalConfig = await getGlobalConfig();
+    const psDeadlineStr = globalConfig.settings?.problemStatementDeadline;
+    // Use DB deadline if set and valid; otherwise fall back to hardcoded IST deadline
+    const deadline = psDeadlineStr && !isNaN(new Date(psDeadlineStr).getTime())
+      ? new Date(psDeadlineStr)
+      : new Date('2026-08-16T18:29:00.000Z'); // 11:59 PM IST = 18:29 UTC
     const now = new Date();
     if (now > deadline) {
+      const fmtDeadline = deadline.toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true });
       return res.status(400).json({
         success: false,
-        message: 'The deadline for selecting problem statements has passed (August 16, 2026, 11:59 PM).'
+        message: `The deadline for selecting problem statements has passed (${fmtDeadline} IST).`
       });
     }
 

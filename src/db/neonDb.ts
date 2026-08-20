@@ -147,6 +147,8 @@ export async function initDatabase(force = false): Promise<void> {
       try {
         neonSql = neon(dbUrl);
         await neonSql.query('SELECT 1');
+        // Ensure all timestamps use UTC regardless of Neon Singapore server timezone (UTC+8)
+        await neonSql.query("SET TIME ZONE 'UTC'");
         console.log('Successfully connected to Neon PostgreSQL via HTTP driver!');
       } catch (eHttp) {
         console.warn('Neon HTTP driver failed, trying pg Pool connection...', eHttp);
@@ -156,12 +158,14 @@ export async function initDatabase(force = false): Promise<void> {
             ssl: { rejectUnauthorized: false }
           });
           await pgPool.query('SELECT 1');
+          await pgPool.query("SET TIME ZONE 'UTC'");
           activePool = pgPool;
           console.log('Successfully connected to Neon PostgreSQL via pg Pool!');
         } catch (ePool) {
           console.warn('pg Pool connection failed, trying serverless Pool...', ePool);
           const serverlessPool = new Pool({ connectionString: dbUrl });
           await serverlessPool.query('SELECT 1');
+          await serverlessPool.query("SET TIME ZONE 'UTC'");
           activePool = serverlessPool;
           console.log('Successfully connected to Neon PostgreSQL via serverless Pool!');
         }
@@ -487,49 +491,24 @@ export async function getGlobalConfig() {
       if (res.rows.length > 0) {
         let val = res.rows[0].value;
         val = typeof val === 'string' ? JSON.parse(val) : val;
-        
+
         // Migrate legacy string rules to object rules if needed
         if (val.rules && val.rules.length > 0 && typeof val.rules[0] === 'string') {
           val.rules = val.rules.map((ruleStr: string, idx: number) => {
             let categoryId = 'official';
             if (idx >= 7 && idx < 10) categoryId = 'phases';
             else if (idx >= 10) categoryId = 'conduct';
-            return {
-              id: `r${idx + 1}`,
-              categoryId,
-              text: ruleStr
-            };
+            return { id: `r${idx + 1}`, categoryId, text: ruleStr };
           });
         }
-        
+
         const fileDb = ensureFileDb();
+        // Merge: DB (Neon) values take priority over local file defaults
         const mergedSettings = { ...fileDb.settings, ...(val.settings || {}) };
-        if (!mergedSettings.pptSubmissionDeadline || mergedSettings.pptSubmissionDeadline === '25 August 2026, 11:59 PM' || mergedSettings.pptSubmissionDeadline.includes('23 August')) {
-          mergedSettings.pptSubmissionDeadline = '25 August 2026, 12:00 AM';
-        }
-        const mergedTimeline = (val.timeline || fileDb.timeline).map((t: any) => {
-          if (t.id === 't4') {
-            return {
-              ...t,
-              title: 'PPT, Video Clip & 20% Prototype Submission',
-              date: '25 August 2026, 12:00 AM',
-              description: 'Submit your PowerPoint deck (.ppt/.pptx), 2-minute YouTube video pitch clip, and 20% prototype code repository by 12:00 AM.',
-              active: true,
-            };
-          }
-          if (t.id === 't5') {
-            return {
-              ...t,
-              title: 'PPT Presentation Day',
-              date: '26 August 2026 (Time will be shared soon)',
-              description: 'In-person pitch deck presentation & technical evaluation before faculty panel. Venue: Gandhinagar Campus. Schedule & time slots will be shared soon.',
-            };
-          }
-          return t;
-        });
+
         return {
           settings: mergedSettings,
-          timeline: mergedTimeline,
+          timeline: val.timeline || fileDb.timeline,
           faqs: val.faqs || fileDb.faqs,
           rules: val.rules || fileDb.rules,
           nextTeamNumber: val.nextTeamNumber || fileDb.nextTeamNumber || 1,
@@ -540,10 +519,6 @@ export async function getGlobalConfig() {
     }
   }
   const fileDb = ensureFileDb();
-  if (!fileDb.settings.pptSubmissionDeadline || fileDb.settings.pptSubmissionDeadline === '25 August 2026, 11:59 PM' || fileDb.settings.pptSubmissionDeadline.includes('23 August')) {
-    fileDb.settings.pptSubmissionDeadline = '25 August 2026, 12:00 AM';
-    saveFileDb(fileDb);
-  }
   return {
     settings: fileDb.settings,
     timeline: fileDb.timeline,
