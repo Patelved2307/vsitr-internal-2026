@@ -486,6 +486,9 @@ app.put('/api/teams/update', async (req: Request, res: Response) => {
       const allMembers = [leader, ...members];
       const validDepts = ['IT', 'CSE', 'CE'];
       for (const m of allMembers) {
+        if (!m.fullName || !m.fullName.trim()) {
+          return res.status(400).json({ success: false, message: 'All member names are required and cannot be blank.' });
+        }
         if (!validDepts.includes(m.department)) {
           return res.status(400).json({ success: false, message: 'Department must be IT, CSE, or CE.' });
         }
