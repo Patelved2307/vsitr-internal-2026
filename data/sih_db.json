@@ -3,7 +3,7 @@
     "registrationDeadline": "2026-08-02T18:29:59.000Z",
     "isRegistrationOpen": false,
     "whatsappGroupLink": "https://chat.whatsapp.com/SIH2026InternalVSITR",
-    "announcementBanner": "Problem Statement Selection is OPEN! Deadline: 16 August 2026, 11:59 PM.",
+    "announcementBanner": "Problem Statement Selection is OPEN! Deadline: 17 August 2026, 2:30 PM.",
     "problemStatementLink": "https://www.sih.gov.in/sih2025PS",
     "problemStatementStatus": "The problem statements will be released soon at the link below, and team leaders will receive an email notification as soon as they go live. You can access them directly through that link or by navigating to the website in your browser.",
     "pptTemplateLink": "https://drive.google.com/drive/folders/14N_F8cFzbaVpoGANSUDBqnBTJ8OJlinB?usp=sharing",
@@ -14,8 +14,13 @@
     "customQuoteAuthor": "Steve Jobs",
     "pptSubmissionOpen": true,
     "pptSubmissionStatus": "PPT submission portal will open after the registration deadline. Stay tuned.",
-    "pptSubmissionDeadline": "25 August 2026, 12:00 AM",
-    "pptReferenceLink": "/SIH-PPT-REFERANCE.pdf"
+    "pptSubmissionDeadline": "25 August 2026, 12:00 PM (Noon)",
+    "pptReferenceLink": "/SIH-PPT-REFERANCE.pdf",
+    "isPptExtended": false,
+    "pptExtendedDeadline": "2026-08-27T18:29:59.000Z",
+    "problemStatementSelectionOpen": true,
+    "problemStatementDeadline": "2026-08-17T18:29:00.000Z",
+    "rulesPdfLink": "/api/uploads/rules/rules_1787231930885_Internal_SIH_2026_Presentation_Day_Schedule____Guidelines.pdf"
   },
   "timeline": [
     {
@@ -34,9 +39,9 @@
     },
     {
       "id": "t3",
-      "date": "16 August 2026, 11:59 PM",
+      "date": "17 August 2026, 11:59 PM",
       "title": "Problem Statement Selection",
-      "active": false,
+      "active": true,
       "description": "Select the Problem Statement from team Portal. Once the Problem statement is selected no modification can be done."
     },
     {

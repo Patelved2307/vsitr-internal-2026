@@ -26,6 +26,7 @@
   "exclude": [
     "backup",
     "node_modules",
-    "dist"
+    "dist",
+    "vsitr-internal-2026"
   ]
 }

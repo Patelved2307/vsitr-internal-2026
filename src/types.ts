@@ -104,8 +104,6 @@ export interface EventSettings {
   announcementBanner?: string;
   problemStatementLink?: string;
   problemStatementStatus?: string;
-  problemStatementSelectionOpen?: boolean;
-  problemStatementDeadline?: string;
   pptTemplateLink?: string;
   pptTemplateStatus?: string;
   // PPT Submission
@@ -113,7 +111,6 @@ export interface EventSettings {
   pptSubmissionStatus?: string;
   pptSubmissionDeadline?: string;
   pptReferenceLink?: string;
-  rulesPdfLink?: string;
   isPptExtended?: boolean;
   pptExtendedDeadline?: string;
   // Extension & custom closed message
@@ -121,6 +118,12 @@ export interface EventSettings {
   extendedDeadline?: string;
   customQuote?: string;
   customQuoteAuthor?: string;
+  // Rules & Regulations Document
+  rulesDocumentLink?: string;
+  rulesDocumentPdfUrl?: string;
+  rulesDocumentTitle?: string;
+  // PS Selection deadline (admin-controlled)
+  psSelectionDeadline?: string;
 }
 
 export interface AdminStats {

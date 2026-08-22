@@ -12,10 +12,10 @@ export function resetTransporter() {
 function getTransporter() {
   if (transporter) return transporter;
 
-  const host = process.env.SMTP_HOST || 'smtp.gmail.com';
+  const host = process.env.SMTP_HOST;
   const port = parseInt(process.env.SMTP_PORT || '587', 10);
-  const user = process.env.SMTP_USER || 'sihinternal.vsitr@gmail.com';
-  const pass = process.env.SMTP_PASS || 'qkpmxxhopgoktvpo';
+  const user = process.env.SMTP_USER;
+  const pass = process.env.SMTP_PASS;
 
   if (host && host.trim() && user && user.trim() && pass && pass.trim()) {
     transporter = nodemailer.createTransport({
@@ -52,7 +52,7 @@ export async function sendEmail({
   cc?: string;
 }): Promise<EmailLog> {
   const mailTransporter = getTransporter();
-  const fromAddress = process.env.SMTP_FROM || '"Internal SIH 2026 Committee" <sihinternal.vsitr@gmail.com>';
+  const fromAddress = process.env.SMTP_FROM || '"Internal SIH 2026 Committee" <sih.vsitr@ksv.ac.in>';
   let status: 'sent' | 'simulated' | 'failed' = 'simulated';
   let errorMsg = '';
 

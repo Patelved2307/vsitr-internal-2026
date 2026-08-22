@@ -85,6 +85,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   useEffect(() => {
     reloadPortalData();
+    // A visitor returning to an already-open timeline sees the latest admin save.
+    const refreshWhenVisible = () => {
+      if (document.visibilityState === 'visible') reloadPortalData();
+    };
+    const refreshAfterAdminPublish = (event: StorageEvent) => {
+      if (event.key === 'sih_2026_timeline_updated_at') reloadPortalData();
+    };
+    document.addEventListener('visibilitychange', refreshWhenVisible);
+    window.addEventListener('storage', refreshAfterAdminPublish);
+    const refreshTimer = window.setInterval(reloadPortalData, 30_000);
     const saved = localStorage.getItem('sih_2026_team');
     if (saved) {
       try {
@@ -99,6 +109,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
       } catch (e) {}
     }
+    return () => {
+      document.removeEventListener('visibilitychange', refreshWhenVisible);
+      window.removeEventListener('storage', refreshAfterAdminPublish);
+      window.clearInterval(refreshTimer);
+    };
   }, []);
 
   const loginTeamSession = (newTeam: Team) => {

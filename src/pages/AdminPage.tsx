@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { api } from '../services/api';
 import { Team, EventSettings, TimelineEvent, FAQItem, EmailLog, PptSubmission, Rule, RuleCategory, ProblemStatement } from '../types';
+import { formatTimelineDate, toTimelineDateTimeInput } from '../lib/timeline';
 import {
   ShieldCheck,
   LogOut,
@@ -44,17 +45,15 @@ import {
   GitBranch
 } from 'lucide-react';
 
-// Admin deadlines are always edited and displayed in Indian Standard Time.
-const toISTDateTimeInput = (isoString: string): string => {
+// Helper to convert UTC ISO string from server to local YYYY-MM-DDTHH:mm for datetime-local inputs
+const toLocalISOString = (isoString: string): string => {
   if (!isoString) return '';
   const date = new Date(isoString);
   if (isNaN(date.getTime())) return '';
-  const parts = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Kolkata', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).formatToParts(date);
-  const value = (type: string) => parts.find((part) => part.type === type)?.value || '';
-  return `${value('year')}-${value('month')}-${value('day')}T${value('hour')}:${value('minute')}`;
+  const offset = date.getTimezoneOffset();
+  const localDate = new Date(date.getTime() - offset * 60 * 1000);
+  return localDate.toISOString().slice(0, 16);
 };
-const istInputToIso = (value: string) => value ? new Date(`${value}:00+05:30`).toISOString() : '';
-const formatIST = (value: string | number) => new Date(value).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
 
 export const AdminPage: React.FC = () => {
   const {
@@ -109,8 +108,6 @@ export const AdminPage: React.FC = () => {
   const [editBanner, setEditBanner] = useState(settings.announcementBanner || '');
   const [editProblemStatementLink, setEditProblemStatementLink] = useState(settings.problemStatementLink || '');
   const [editProblemStatementStatus, setEditProblemStatementStatus] = useState(settings.problemStatementStatus || '');
-  const [editProblemStatementSelectionOpen, setEditProblemStatementSelectionOpen] = useState(settings.problemStatementSelectionOpen ?? true);
-  const [editProblemStatementDeadline, setEditProblemStatementDeadline] = useState(settings.problemStatementDeadline || '');
   const [editPptTemplateLink, setEditPptTemplateLink] = useState(settings.pptTemplateLink || '');
   const [editPptTemplateStatus, setEditPptTemplateStatus] = useState(settings.pptTemplateStatus || '');
   // PPT Submission Settings
@@ -118,12 +115,16 @@ export const AdminPage: React.FC = () => {
   const [editPptSubmissionStatus, setEditPptSubmissionStatus] = useState(settings.pptSubmissionStatus || '');
   const [editPptSubmissionDeadline, setEditPptSubmissionDeadline] = useState(settings.pptSubmissionDeadline || '');
   const [editPptReferenceLink, setEditPptReferenceLink] = useState(settings.pptReferenceLink || '');
-  const [editRulesPdfLink, setEditRulesPdfLink] = useState(settings.rulesPdfLink || '');
-  const [isUploadingRulesPdf, setIsUploadingRulesPdf] = useState(false);
-  const [rulesPdfMode, setRulesPdfMode] = useState<'link' | 'upload'>('link');
-  const [rulesPdfFileName, setRulesPdfFileName] = useState('');
   const [editIsPptExtended, setEditIsPptExtended] = useState(settings.isPptExtended ?? false);
   const [editPptExtendedDeadline, setEditPptExtendedDeadline] = useState(settings.pptExtendedDeadline || '');
+  // Rules & Regulations Document
+  const [editRulesDocumentLink, setEditRulesDocumentLink] = useState(settings.rulesDocumentLink || '');
+  const [editRulesDocumentPdfUrl, setEditRulesDocumentPdfUrl] = useState(settings.rulesDocumentPdfUrl || '');
+  const [editRulesDocumentTitle, setEditRulesDocumentTitle] = useState(settings.rulesDocumentTitle || 'Official Rules & Regulations – Internal SIH 2026');
+  const [rulesDocUploadMode, setRulesDocUploadMode] = useState<'link' | 'pdf'>(settings.rulesDocumentPdfUrl ? 'pdf' : 'link');
+  const [isUploadingRulesPdf, setIsUploadingRulesPdf] = useState(false);
+  // PS Selection Deadline (admin-controlled)
+  const [editPsSelectionDeadline, setEditPsSelectionDeadline] = useState(settings.psSelectionDeadline || '2026-08-16T18:29:00.000Z');
   // Extension & custom closed message
   const [editIsExtended, setEditIsExtended] = useState(settings.isExtended ?? false);
   const [editExtendedDeadline, setEditExtendedDeadline] = useState(settings.extendedDeadline || '');
@@ -170,39 +171,6 @@ export const AdminPage: React.FC = () => {
   const [isEditingPs, setIsEditingPs] = useState(false);
   const [editingPsData, setEditingPsData] = useState<Partial<ProblemStatement> | null>(null);
   const [isCreatingPs, setIsCreatingPs] = useState(false);
-
-  // Admin PS Selection override state
-  const [adminEditingPsId, setAdminEditingPsId] = useState<string>('');
-  const [isSavingAdminPs, setIsSavingAdminPs] = useState<boolean>(false);
-
-  useEffect(() => {
-    if (selectedTeam) {
-      setAdminEditingPsId(selectedTeam.selectedPsId || '');
-    }
-  }, [selectedTeam]);
-
-  const handleSaveAdminPs = async () => {
-    if (!selectedTeam) return;
-    setIsSavingAdminPs(true);
-    try {
-      const targetPs = adminPsList.find((p) => p.id === adminEditingPsId);
-      const payload = {
-        selectedPsId: adminEditingPsId || undefined,
-        selectedPsTitle: targetPs ? targetPs.title : undefined,
-        psSelectedAt: adminEditingPsId ? new Date().toISOString() : undefined,
-      };
-      const res = await api.updateTeamAdmin(selectedTeam.id, payload);
-      if (res.success && res.team) {
-        setSelectedTeam(res.team);
-        showAlert('PS Selection Updated', `Updated problem statement selection for team ${selectedTeam.id}`, 'success');
-        loadAdminData();
-      }
-    } catch (err: any) {
-      showAlert('Error', err.message || 'Failed to update problem statement selection.');
-    } finally {
-      setIsSavingAdminPs(false);
-    }
-  };
 
   // Helper to handle smooth downloading of both Base64 Data URIs and regular URLs
   const handleDownloadPpt = (fileUrl?: string, fileName?: string, teamId?: string) => {
@@ -405,21 +373,23 @@ export const AdminPage: React.FC = () => {
     setEditBanner(settings.announcementBanner || '');
     setEditProblemStatementLink(settings.problemStatementLink || '');
     setEditProblemStatementStatus(settings.problemStatementStatus || '');
-    setEditProblemStatementSelectionOpen(settings.problemStatementSelectionOpen ?? true);
-    setEditProblemStatementDeadline(settings.problemStatementDeadline || '');
     setEditPptTemplateLink(settings.pptTemplateLink || '');
     setEditPptTemplateStatus(settings.pptTemplateStatus || '');
     setEditPptSubmissionOpen(settings.pptSubmissionOpen ?? true);
     setEditPptSubmissionStatus(settings.pptSubmissionStatus || '');
     setEditPptSubmissionDeadline(settings.pptSubmissionDeadline || '');
     setEditPptReferenceLink(settings.pptReferenceLink || '');
-    setEditRulesPdfLink(settings.rulesPdfLink || '');
     setEditIsPptExtended(settings.isPptExtended ?? false);
     setEditPptExtendedDeadline(settings.pptExtendedDeadline || '');
     setEditIsExtended(settings.isExtended ?? false);
     setEditExtendedDeadline(settings.extendedDeadline || '');
     setEditCustomQuote(settings.customQuote || '');
     setEditCustomQuoteAuthor(settings.customQuoteAuthor || '');
+    setEditRulesDocumentLink(settings.rulesDocumentLink || '');
+    setEditRulesDocumentPdfUrl(settings.rulesDocumentPdfUrl || '');
+    setEditRulesDocumentTitle(settings.rulesDocumentTitle || 'Official Rules & Regulations – Internal SIH 2026');
+    setRulesDocUploadMode(settings.rulesDocumentPdfUrl ? 'pdf' : 'link');
+    setEditPsSelectionDeadline(settings.psSelectionDeadline || '2026-08-16T18:29:00.000Z');
     setEditTimeline(timeline);
     setEditFaqs(faqs);
     setEditRules(rules);
@@ -542,15 +512,11 @@ export const AdminPage: React.FC = () => {
 
       const finalDeadline = editIsExtended && editExtendedDeadline ? editExtendedDeadline : editDeadline;
       const formattedTimelineDate = formatToTimelineDate(finalDeadline);
-      const formattedPsDeadline = formatToTimelineDate(editProblemStatementDeadline);
 
       // Auto update timeline first event
       const updatedTimeline = editTimeline.map(item => {
         if (item.id === 't1' || item.title.toLowerCase().includes('phase 1') || item.title.toLowerCase().includes('registration deadline')) {
           return { ...item, date: formattedTimelineDate };
-        }
-        if (item.id === 't3' || item.title.toLowerCase().includes('problem statement selection')) {
-          return { ...item, date: formattedPsDeadline || item.date, active: editProblemStatementSelectionOpen };
         }
         return item;
       });
@@ -574,21 +540,22 @@ export const AdminPage: React.FC = () => {
           announcementBanner: editBanner,
           problemStatementLink: editProblemStatementLink,
           problemStatementStatus: editProblemStatementStatus,
-          problemStatementSelectionOpen: editProblemStatementSelectionOpen,
-          problemStatementDeadline: editProblemStatementDeadline,
           pptTemplateLink: editPptTemplateLink,
           pptTemplateStatus: editPptTemplateStatus,
           pptSubmissionOpen: editPptSubmissionOpen,
           pptSubmissionStatus: editPptSubmissionStatus,
           pptSubmissionDeadline: editPptSubmissionDeadline,
           pptReferenceLink: editPptReferenceLink,
-          rulesPdfLink: editRulesPdfLink,
           isPptExtended: editIsPptExtended,
           pptExtendedDeadline: editPptExtendedDeadline,
           isExtended: editIsExtended,
           extendedDeadline: editExtendedDeadline,
           customQuote: editCustomQuote,
           customQuoteAuthor: editCustomQuoteAuthor,
+          rulesDocumentLink: rulesDocUploadMode === 'link' ? editRulesDocumentLink : '',
+          rulesDocumentPdfUrl: rulesDocUploadMode === 'pdf' ? editRulesDocumentPdfUrl : '',
+          rulesDocumentTitle: editRulesDocumentTitle,
+          psSelectionDeadline: editPsSelectionDeadline,
         },
         timeline: updatedTimeline,
         faqs: updatedFaqs,
@@ -603,15 +570,12 @@ export const AdminPage: React.FC = () => {
           setEditWhatsapp(res.settings.whatsappGroupLink ?? editWhatsapp);
           setEditProblemStatementLink(res.settings.problemStatementLink ?? editProblemStatementLink);
           setEditProblemStatementStatus(res.settings.problemStatementStatus ?? editProblemStatementStatus);
-          setEditProblemStatementSelectionOpen(res.settings.problemStatementSelectionOpen ?? editProblemStatementSelectionOpen);
-          setEditProblemStatementDeadline(res.settings.problemStatementDeadline ?? editProblemStatementDeadline);
           setEditPptTemplateLink(res.settings.pptTemplateLink ?? editPptTemplateLink);
           setEditPptTemplateStatus(res.settings.pptTemplateStatus ?? editPptTemplateStatus);
           setEditPptSubmissionOpen(res.settings.pptSubmissionOpen ?? editPptSubmissionOpen);
           setEditPptSubmissionStatus(res.settings.pptSubmissionStatus ?? editPptSubmissionStatus);
           setEditPptSubmissionDeadline(res.settings.pptSubmissionDeadline ?? editPptSubmissionDeadline);
           setEditPptReferenceLink(res.settings.pptReferenceLink ?? editPptReferenceLink);
-          setEditRulesPdfLink(res.settings.rulesPdfLink ?? editRulesPdfLink);
           setEditIsPptExtended(res.settings.isPptExtended ?? editIsPptExtended);
           setEditPptExtendedDeadline(res.settings.pptExtendedDeadline ?? editPptExtendedDeadline);
           setEditIsExtended(res.settings.isExtended ?? editIsExtended);
@@ -629,20 +593,6 @@ export const AdminPage: React.FC = () => {
     } finally {
       setIsSavingSettings(false);
     }
-  };
-
-  const handleRulesPdfUpload = async (file?: File) => {
-    if (!file) return;
-    if (file.type !== 'application/pdf' || file.size > 10 * 1024 * 1024) return showAlert('Invalid PDF', 'Choose a PDF file no larger than 10 MB.');
-    setRulesPdfFileName(file.name);
-    setIsUploadingRulesPdf(true);
-    try {
-      const base64 = await new Promise<string>((resolve, reject) => { const reader = new FileReader(); reader.onload = () => resolve(String(reader.result)); reader.onerror = reject; reader.readAsDataURL(file); });
-      const result = await api.uploadRulesPdf(file.name, base64);
-      setEditRulesPdfLink(result.url);
-      showAlert('PDF Uploaded', 'Save Settings Live to publish this Rules PDF.', 'success');
-    } catch (err: any) { showAlert('Upload Failed', err.message || 'Could not upload the Rules PDF.'); }
-    finally { setIsUploadingRulesPdf(false); }
   };
 
   // Toggle Registration Open/Closed Quick Action
@@ -676,6 +626,25 @@ export const AdminPage: React.FC = () => {
       )
     );
     setEditingTimelineId(null);
+  };
+
+  // Saves only the milestones shown on the public Event Timeline.  It must not
+  // also apply unsaved values from the wider Event Settings form.
+  const handleSaveTimeline = async () => {
+    try {
+      setIsSavingSettings(true);
+      const res = await api.updateSettings({ timeline: editTimeline });
+      if (res.success) {
+        // Instantly refresh an already-open main website tab in this browser.
+        localStorage.setItem('sih_2026_timeline_updated_at', new Date().toISOString());
+        await reloadPortalData();
+        showAlert('Timeline Published', 'The Event Timeline is now updated on the main website.', 'success');
+      }
+    } catch (err: any) {
+      showAlert('Timeline Save Error', err.message || 'Failed to publish timeline changes.');
+    } finally {
+      setIsSavingSettings(false);
+    }
   };
 
   const handleAddTimeline = () => {
@@ -1350,7 +1319,7 @@ export const AdminPage: React.FC = () => {
                               <td className="py-2.5 px-3 font-mono font-black text-[#C1272D] whitespace-nowrap">{t.selectedPsId}</td>
                               <td className="py-2.5 px-3 font-semibold text-slate-800">{t.selectedPsTitle}</td>
                               <td className="py-2.5 px-3 text-slate-500 font-semibold whitespace-nowrap">
-                                {t.psSelectedAt ? formatIST(t.psSelectedAt) : 'N/A'}
+                                {t.psSelectedAt ? new Date(t.psSelectedAt).toLocaleString('en-IN') : 'N/A'}
                               </td>
                             </tr>
                           ))}
@@ -1521,7 +1490,7 @@ export const AdminPage: React.FC = () => {
                 </div>
 
                 <button
-                  onClick={handleSaveSettings}
+                  onClick={handleSaveTimeline}
                   disabled={isSavingSettings}
                   className="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl font-bold text-xs text-white bg-gradient-to-r from-[#C1272D] to-[#1B3F8B] shadow-md hover:opacity-95 transition cursor-pointer"
                 >
@@ -1546,12 +1515,33 @@ export const AdminPage: React.FC = () => {
                             onChange={(e) => setTimelineEditItem({ ...timelineEditItem, title: e.target.value })}
                             className="p-2 rounded-xl border border-slate-300 font-bold text-slate-900"
                           />
-                          <input
-                            type="text"
-                            value={timelineEditItem.date}
-                            onChange={(e) => setTimelineEditItem({ ...timelineEditItem, date: e.target.value })}
-                            className="p-2 rounded-xl border border-slate-300 font-bold text-slate-900"
-                          />
+                          {(item.id === 't5' || item.title.toLowerCase().includes('presentation day')) ? (
+                            <input
+                              type="text"
+                              aria-label="PPT Presentation Day date text"
+                              placeholder="e.g. 26 August 2026, 10:00 AM"
+                              value={timelineEditItem.date}
+                              onChange={(e) => setTimelineEditItem({ ...timelineEditItem, date: e.target.value })}
+                              className="p-2 rounded-xl border border-[#1B3F8B] ring-1 ring-[#1B3F8B]/20 font-bold text-slate-900 focus:outline-none bg-blue-50/40"
+                            />
+                          ) : toTimelineDateTimeInput(timelineEditItem.date) ? (
+                            <input
+                              type="datetime-local"
+                              aria-label="Timeline date and time"
+                              value={toTimelineDateTimeInput(timelineEditItem.date)}
+                              onChange={(e) => setTimelineEditItem({ ...timelineEditItem, date: e.target.value ? new Date(e.target.value).toISOString() : '' })}
+                              className="p-2 rounded-xl border border-slate-300 font-bold text-slate-900"
+                            />
+                          ) : (
+                            <input
+                              type="text"
+                              aria-label="Timeline schedule note"
+                              placeholder="Schedule note (for example, Time will be shared soon)"
+                              value={timelineEditItem.date}
+                              onChange={(e) => setTimelineEditItem({ ...timelineEditItem, date: e.target.value })}
+                              className="p-2 rounded-xl border border-slate-300 font-bold text-slate-900"
+                            />
+                          )}
                         </div>
                         <textarea
                           value={timelineEditItem.description}
@@ -1582,7 +1572,9 @@ export const AdminPage: React.FC = () => {
                           <div className="flex items-center gap-2">
                             <span className="font-bold text-slate-900 text-sm">{item.title}</span>
                             <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-blue-50 text-[#1B3F8B]">
-                              {item.date}
+                              {(item.id === 't5' || item.title.toLowerCase().includes('presentation day'))
+                                ? item.date
+                                : formatTimelineDate(item.date)}
                             </span>
                           </div>
                           <p className="text-xs text-slate-500">{item.description}</p>
@@ -1622,10 +1614,11 @@ export const AdminPage: React.FC = () => {
                     className="px-3.5 py-2 rounded-xl border border-slate-300 bg-white focus:outline-none text-slate-900"
                   />
                   <input
-                    type="text"
-                    placeholder="Date & Time string (e.g. 10 Aug 2026, 11:00 AM)"
+                    type="datetime-local"
+                    aria-label="New timeline date and time"
+                    placeholder="Date and time"
                     value={newTimelineDate}
-                    onChange={(e) => setNewTimelineDate(e.target.value)}
+                    onChange={(e) => setNewTimelineDate(e.target.value ? new Date(e.target.value).toISOString() : '')}
                     className="px-3.5 py-2 rounded-xl border border-slate-300 bg-white focus:outline-none text-slate-900"
                   />
                   <input
@@ -1831,8 +1824,8 @@ export const AdminPage: React.FC = () => {
                   <input
                     type="datetime-local"
                     required
-                    value={toISTDateTimeInput(editDeadline)}
-                    onChange={(e) => setEditDeadline(istInputToIso(e.target.value))}
+                    value={toLocalISOString(editDeadline)}
+                    onChange={(e) => setEditDeadline(new Date(e.target.value).toISOString())}
                     className="w-full px-4 py-2.5 rounded-xl border border-slate-300 font-bold focus:border-[#C1272D] outline-none text-slate-900"
                   />
                   <p className="text-[11px] text-slate-500 mt-1">
@@ -1876,8 +1869,8 @@ export const AdminPage: React.FC = () => {
                     <input
                       type="datetime-local"
                       required
-                    value={toISTDateTimeInput(editExtendedDeadline)}
-                    onChange={(e) => setEditExtendedDeadline(istInputToIso(e.target.value))}
+                      value={toLocalISOString(editExtendedDeadline)}
+                      onChange={(e) => setEditExtendedDeadline(new Date(e.target.value).toISOString())}
                       className="w-full px-4 py-2.5 rounded-xl border border-slate-300 font-bold focus:border-[#C1272D] outline-none text-slate-900"
                     />
                     <p className="text-[11px] text-slate-500 mt-1">
@@ -1966,23 +1959,6 @@ export const AdminPage: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="p-5 rounded-2xl bg-amber-50 border border-amber-200 space-y-4">
-                  <h3 className="text-xs font-black text-amber-800 uppercase tracking-wider">Problem Statement Selection Control</h3>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block font-bold text-slate-800 mb-1">Selection Portal Status</label>
-                      <select value={editProblemStatementSelectionOpen ? 'true' : 'false'} onChange={(e) => setEditProblemStatementSelectionOpen(e.target.value === 'true')} className="w-full px-4 py-2.5 rounded-xl border border-slate-300 font-bold outline-none text-slate-900 bg-white">
-                        <option value="true">OPEN — Teams Can Select</option>
-                        <option value="false">CLOSED — Selection Locked</option>
-                      </select>
-                    </div>
-                    <div>
-                      <label className="block font-bold text-slate-800 mb-1">Selection Deadline (IST)</label>
-                      <input type="datetime-local" value={toISTDateTimeInput(editProblemStatementDeadline)} onChange={(e) => setEditProblemStatementDeadline(istInputToIso(e.target.value))} className="w-full px-4 py-2.5 rounded-xl border border-slate-300 font-bold outline-none text-slate-900" />
-                    </div>
-                  </div>
-                </div>
-
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block font-bold text-slate-800 mb-1">
@@ -2007,6 +1983,29 @@ export const AdminPage: React.FC = () => {
                       className="w-full px-4 py-2.5 rounded-xl border border-slate-300 font-medium focus:border-[#1B3F8B] outline-none text-slate-900"
                       placeholder="e.g. Coming soon..."
                     />
+                  </div>
+                </div>
+
+                {/* PS Selection Deadline */}
+                <div className="p-5 rounded-2xl bg-indigo-500/5 border border-indigo-500/20 space-y-3">
+                  <h3 className="text-xs font-black text-[#1B3F8B] uppercase tracking-wider flex items-center gap-2">
+                    <BookOpen className="h-4 w-4" /> Problem Statement Selection Deadline
+                  </h3>
+                  <p className="text-[11px] text-slate-500 font-medium">
+                    When this date &amp; time passes, the PS selection is automatically <strong className="text-red-600">locked</strong> for all teams — no further selections can be made.
+                  </p>
+                  <div>
+                    <label className="block font-bold text-slate-800 mb-1">PS Selection Cutoff Date &amp; Time</label>
+                    <input
+                      type="datetime-local"
+                      required
+                      value={toLocalISOString(editPsSelectionDeadline)}
+                      onChange={(e) => setEditPsSelectionDeadline(new Date(e.target.value).toISOString())}
+                      className="w-full px-4 py-2.5 rounded-xl border border-slate-300 font-bold focus:border-[#1B3F8B] outline-none text-slate-900"
+                    />
+                    <p className="text-[11px] text-slate-500 mt-1">
+                      Current deadline: <strong>{new Date(editPsSelectionDeadline).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })} IST</strong>
+                    </p>
                   </div>
                 </div>
 
@@ -2039,12 +2038,13 @@ export const AdminPage: React.FC = () => {
                       </select>
                     </div>
                     <div>
-                      <label className="block font-bold text-slate-800 mb-1">Submission Deadline (IST)</label>
+                      <label className="block font-bold text-slate-800 mb-1">Submission Deadline (Display Text)</label>
                       <input
-                        type="datetime-local"
-                        value={toISTDateTimeInput(editPptSubmissionDeadline)}
-                        onChange={(e) => setEditPptSubmissionDeadline(istInputToIso(e.target.value))}
+                        type="text"
+                        value={editPptSubmissionDeadline || ''}
+                        onChange={(e) => setEditPptSubmissionDeadline(e.target.value)}
                         className="w-full px-4 py-2.5 rounded-xl border border-slate-300 font-bold focus:border-[#C1272D] outline-none text-slate-900"
+                        placeholder="e.g. 23 August 2026, 11:59 PM"
                       />
                     </div>
                   </div>
@@ -2071,17 +2071,138 @@ export const AdminPage: React.FC = () => {
                       />
                     </div>
                   </div>
-                  <div className="p-5 rounded-2xl bg-rose-50 border border-rose-200 space-y-4">
-                    <div><h3 className="text-xs font-black text-[#C1272D] uppercase tracking-wider">Rules &amp; Regulations PDF</h3><p className="text-[11px] text-slate-600 mt-1">Choose a public PDF link or upload a PDF file. Save Settings Live to publish it.</p></div>
-                    <div className="inline-flex p-1 rounded-xl bg-white border border-rose-200 gap-1">
-                      <button type="button" onClick={() => setRulesPdfMode('link')} className={`px-4 py-2 rounded-lg text-xs font-black transition ${rulesPdfMode === 'link' ? 'bg-[#C1272D] text-white shadow-sm' : 'text-slate-600 hover:bg-slate-100'}`}>Use PDF Link</button>
-                      <button type="button" onClick={() => setRulesPdfMode('upload')} className={`px-4 py-2 rounded-lg text-xs font-black transition ${rulesPdfMode === 'upload' ? 'bg-[#C1272D] text-white shadow-sm' : 'text-slate-600 hover:bg-slate-100'}`}>Upload PDF</button>
-                    </div>
-                    {rulesPdfMode === 'link' ? <div><label className="block font-bold text-slate-800 mb-1">Public PDF URL</label><input type="url" value={editRulesPdfLink} onChange={(e) => setEditRulesPdfLink(e.target.value)} className="w-full px-4 py-2.5 rounded-xl border border-slate-300 font-medium focus:border-[#C1272D] outline-none text-slate-900" placeholder="https://example.com/rules.pdf" /></div> : <div><label className="block font-bold text-slate-800 mb-2">Add Rules &amp; Regulations PDF (maximum 10 MB)</label><input id="rules-pdf-upload" type="file" accept="application/pdf,.pdf" onChange={(e) => handleRulesPdfUpload(e.target.files?.[0])} className="sr-only" /><label htmlFor="rules-pdf-upload" className="flex flex-col items-center justify-center gap-2 min-h-28 rounded-xl border-2 border-dashed border-rose-300 bg-white cursor-pointer hover:bg-rose-50 hover:border-[#C1272D] transition"><FileText className="h-7 w-7 text-[#C1272D]" /><span className="text-xs font-black text-slate-800">Click here to choose a PDF</span><span className="text-[11px] text-slate-500">Only PDF files, up to 10 MB</span></label>{rulesPdfFileName && <p className="text-[11px] text-slate-700 mt-2 font-bold">Selected file: {rulesPdfFileName}</p>}</div>}
-                    {isUploadingRulesPdf && <p className="text-[11px] text-[#1B3F8B] mt-1 font-bold">Uploading PDF…</p>}
-                    <p className="text-[11px] text-slate-500 mt-1">The link is shown as a download on the home page and Team Portal.</p>
-                  </div>
                 </div>
+              </div>
+
+              {/* Rules & Regulations Document Section */}
+              <div className="p-5 rounded-2xl bg-[#1B3F8B]/5 border border-[#1B3F8B]/20 space-y-4">
+                <h3 className="text-xs font-black text-[#1B3F8B] uppercase tracking-wider flex items-center gap-2">
+                  <BookOpen className="h-4 w-4" /> Rules &amp; Regulations Document
+                </h3>
+                <p className="text-[11px] text-slate-500 font-medium -mt-2">
+                  Share the official rules &amp; regulations with students — either via an external link or by uploading a PDF file directly.
+                </p>
+
+                {/* Title */}
+                <div>
+                  <label className="block font-bold text-slate-800 mb-1">Document Title (shown on cards)</label>
+                  <input
+                    type="text"
+                    value={editRulesDocumentTitle || ''}
+                    onChange={(e) => setEditRulesDocumentTitle(e.target.value)}
+                    className="w-full px-4 py-2.5 rounded-xl border border-slate-300 font-medium focus:border-[#1B3F8B] outline-none text-slate-900"
+                    placeholder="e.g. Official Rules & Regulations – Internal SIH 2026"
+                  />
+                </div>
+
+                {/* Upload Mode Toggle */}
+                <div className="flex items-center gap-0 rounded-xl overflow-hidden border border-slate-300 w-full sm:w-auto">
+                  <button
+                    type="button"
+                    onClick={() => setRulesDocUploadMode('link')}
+                    className={`flex-1 sm:flex-none px-5 py-2.5 text-xs font-black transition cursor-pointer ${
+                      rulesDocUploadMode === 'link'
+                        ? 'bg-[#1B3F8B] text-white'
+                        : 'bg-white text-slate-600 hover:bg-slate-50'
+                    }`}
+                  >
+                    🔗 Upload Link (URL)
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setRulesDocUploadMode('pdf')}
+                    className={`flex-1 sm:flex-none px-5 py-2.5 text-xs font-black transition cursor-pointer border-l border-slate-300 ${
+                      rulesDocUploadMode === 'pdf'
+                        ? 'bg-[#1B3F8B] text-white'
+                        : 'bg-white text-slate-600 hover:bg-slate-50'
+                    }`}
+                  >
+                    📄 Upload PDF File
+                  </button>
+                </div>
+
+                {/* URL Mode */}
+                {rulesDocUploadMode === 'link' && (
+                  <div className="animate-in fade-in duration-200">
+                    <label className="block font-bold text-slate-800 mb-1">Rules Document URL</label>
+                    <input
+                      type="url"
+                      value={editRulesDocumentLink || ''}
+                      onChange={(e) => setEditRulesDocumentLink(e.target.value)}
+                      className="w-full px-4 py-2.5 rounded-xl border border-slate-300 font-medium focus:border-[#1B3F8B] outline-none text-slate-900"
+                      placeholder="e.g. https://drive.google.com/file/d/... or /rules.pdf"
+                    />
+                    <p className="text-[11px] text-slate-500 mt-1">
+                      Students will see a button linking to this URL (external link, Google Drive, or internal path).
+                    </p>
+                  </div>
+                )}
+
+                {/* PDF Upload Mode */}
+                {rulesDocUploadMode === 'pdf' && (
+                  <div className="animate-in fade-in duration-200 space-y-3">
+                    <label className="block font-bold text-slate-800 mb-1">Upload PDF File</label>
+                    <div className="flex items-start gap-3">
+                      <label className="cursor-pointer inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-dashed border-[#1B3F8B]/50 bg-blue-50 text-[#1B3F8B] text-xs font-black hover:bg-blue-100 transition">
+                        <FileText className="h-4 w-4" />
+                        {isUploadingRulesPdf ? 'Processing...' : 'Choose PDF File'}
+                        <input
+                          type="file"
+                          accept="application/pdf,.pdf"
+                          className="hidden"
+                          disabled={isUploadingRulesPdf}
+                          onChange={(e) => {
+                            const file = e.target.files?.[0];
+                            if (!file) return;
+                            if (!file.name.toLowerCase().endsWith('.pdf')) {
+                              showAlert('Invalid File', 'Please select a PDF file (.pdf) only.');
+                              return;
+                            }
+                            if (file.size > 10 * 1024 * 1024) {
+                              showAlert('File Too Large', 'PDF file must be 10 MB or smaller.');
+                              return;
+                            }
+                            setIsUploadingRulesPdf(true);
+                            const reader = new FileReader();
+                            reader.onload = () => {
+                              setEditRulesDocumentPdfUrl(reader.result as string);
+                              setIsUploadingRulesPdf(false);
+                            };
+                            reader.onerror = () => {
+                              showAlert('Read Error', 'Could not read the PDF file.');
+                              setIsUploadingRulesPdf(false);
+                            };
+                            reader.readAsDataURL(file);
+                          }}
+                        />
+                      </label>
+                      {editRulesDocumentPdfUrl && (
+                        <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-800 font-bold">
+                          <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" />
+                          PDF Uploaded — Ready to save
+                          <button
+                            type="button"
+                            onClick={() => setEditRulesDocumentPdfUrl('')}
+                            className="ml-1 text-red-500 hover:text-red-700 cursor-pointer"
+                          >
+                            <X className="h-3.5 w-3.5" />
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                    <p className="text-[11px] text-slate-500">
+                      The PDF will be encoded and served directly. Students can view or download it from the portal. Max 10 MB.
+                    </p>
+                  </div>
+                )}
+
+                {/* Preview note */}
+                {(editRulesDocumentLink || editRulesDocumentPdfUrl) && (
+                  <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-blue-50/80 border border-blue-100 text-xs text-blue-800 font-semibold">
+                    <Eye className="h-3.5 w-3.5" />
+                    Document configured. Click &quot;Save Settings Live&quot; to publish to students.
+                  </div>
+                )}
               </div>
 
             </div>
@@ -2249,17 +2370,117 @@ export const AdminPage: React.FC = () => {
                   </p>
                 </div>
 
-                <button
-                  onClick={() => {
-                    setEditingPsData({ id: '', title: '', category: 'Software', description: '', status: 'open' });
-                    setIsCreatingPs(true);
-                    setIsEditingPs(false);
-                  }}
-                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl font-bold text-xs text-white bg-[#C1272D] hover:bg-red-700 shadow-md transition cursor-pointer shrink-0"
-                >
-                  <Plus className="h-4 w-4" />
-                  Add Problem Statement
-                </button>
+                <div className="flex items-center gap-2 flex-wrap">
+                  <button
+                    type="button"
+                    onClick={async () => {
+                      const SIH_2026_OFFICIAL_PS = [
+                        { id: 'SIH26001', title: 'AI-Based Early Warning and Landslide Risk Monitoring System in NER', category: 'Software', theme: 'Disaster Management', org: 'Ministry of Development of North Eastern Region (MDoNER)' },
+                        { id: 'SIH26002', title: 'AI-Based Smart Logistics and Accessibility Intelligence Platform for North Eastern Region (NER)', category: 'Software', theme: 'Transportation & Logistics', org: 'Ministry of Development of North Eastern Region (MDoNER)' },
+                        { id: 'SIH26003', title: 'AI-Based Cognitive Gaming and Memory Assistance Platform for Elderly Dementia Patients in NER', category: 'Software', theme: 'MedTech/HealthTech/BioTech', org: 'Ministry of Development of North Eastern Region (MDoNER)' },
+                        { id: 'SIH26004', title: 'AI-Assisted Early Detection System for Osteoarthritis (OA) Risk Markers in NER', category: 'Software', theme: 'MedTech/HealthTech/BioTech', org: 'Ministry of Development of North Eastern Region (MDoNER)' },
+                        { id: 'SIH26005', title: 'Solar-Powered Smart Mini Cold Storage System for Fresh Vegetables in NER', category: 'Hardware', theme: 'Agriculture, FoodTech & Rural Development', org: 'Ministry of Development of North Eastern Region (MDoNER)' },
+                        { id: 'SIH26006', title: 'Development of an Intelligent Freight Forecasting Model for Optimized Vessel Chartering and Bulk Cargo Procurement', category: 'Software', theme: 'Transportation & Logistics', org: 'Ministry of Ports, Shipping & Waterways' },
+                        { id: 'SIH26007', title: 'Safe and Efficient Operation of Mine Vehicles in Fog and Low-Visibility Conditions in Open Cast Iron Ore Mines', category: 'Software', theme: 'Smart Vehicles', org: 'Ministry of Steel' },
+                        { id: 'SIH26008', title: 'Belt Joint Rupture and Conveyor Belt Damages in Iron Ore Mining Industry: Intelligent Monitoring and Prediction', category: 'Software', theme: 'Smart Automation', org: 'Ministry of Steel' },
+                        { id: 'SIH26009', title: 'Using AI/ML and Space Technology to Identify Manganese Reserves and Overcome Production Shortfalls', category: 'Software', theme: 'Space Technology', org: 'Ministry of Steel' },
+                        { id: 'SIH26010', title: 'Survey/Resurvey of Rural Agricultural Land in India using AI/ML', category: 'Software', theme: 'Smart Governance', org: 'Ministry of Rural Development' },
+                        { id: 'SIH26011', title: '3D ULPIN Generation and Vertical Property Mapping System', category: 'Software', theme: 'Smart Governance', org: 'Ministry of Rural Development' },
+                        { id: 'SIH26012', title: 'AI-Based Automated Urban Parcel Mapping and Cadastral Feature Extraction System using Drone Imagery', category: 'Software', theme: 'Smart Governance', org: 'Ministry of Rural Development' },
+                        { id: 'SIH26013', title: 'Automated Integration and Intelligent Harmonization of Multi-source Geospatial Data for Urban Land Record Management', category: 'Software', theme: 'Smart Governance', org: 'Ministry of Rural Development' },
+                        { id: 'SIH26014', title: 'An Integrated GIS-based Digital Public Infrastructure for Land Governance', category: 'Software', theme: 'Smart Governance', org: 'Ministry of Rural Development' },
+                        { id: 'SIH26015', title: 'Real-Time National Land Acquisition & Management System for End-to-End Digital Monitoring and Decision Support', category: 'Software', theme: 'Smart Governance', org: 'Ministry of Rural Development' },
+                        { id: 'SIH26016', title: 'Predictive Analytics System for Early Detection of Land Acquisition Delays', category: 'Software', theme: 'Smart Governance', org: 'Ministry of Rural Development' },
+                        { id: 'SIH26017', title: 'Intelligent Land Record Digitization and Validation System', category: 'Software', theme: 'Smart Governance', org: 'Ministry of Rural Development' },
+                        { id: 'SIH26018', title: 'Design and Development of Innovative Hand-Spinning Equipment for Enhancing Khadi Artisan Productivity', category: 'Hardware', theme: 'Heritage and Culture', org: 'KVIC' },
+                        { id: 'SIH26019', title: 'Honey Chain: A Blockchain-Based System for Honey Traceability and Smart Beekeeping Management', category: 'Software', theme: 'Blockchain & Cybersecurity', org: 'KVIC' },
+                        { id: 'SIH26020', title: 'Design and Develop a Smart Solar-Powered Drying and Compact Packaging System for Home-Based Agarbatti Manufacturing', category: 'Hardware', theme: 'Agriculture, FoodTech & Rural Development', org: 'KVIC' },
+                        { id: 'SIH26021', title: 'AI-Powered Geological, Mining and other Reporting Solution for CMPDI/CIL Subsidiaries', category: 'Software', theme: 'Smart Automation', org: 'Ministry of Coal' },
+                        { id: 'SIH26022', title: 'AI-Based Smart Governance and Compliance Monitoring System for Coal Mines', category: 'Software', theme: 'Smart Governance', org: 'Ministry of Coal' },
+                        { id: 'SIH26023', title: 'Development of AI-Enabled Low Cost Real-Time Mine Subsidence Monitoring, Prediction and Early Warning System for Underground Coal Mines', category: 'Software', theme: 'Disaster Management', org: 'Ministry of Coal' },
+                        { id: 'SIH26024', title: 'Development of Mobile (Quadruped)/Handheld Device/System for Real-Time Detection of Narcotics and Explosives across Indian Railways', category: 'Hardware', theme: 'Robotics and Drones', org: 'Ministry of Railways' },
+                        { id: 'SIH26025', title: 'AI-Powered Automatic Block Planning to Maximize Asset Availability for Train Operations on Indian Railways', category: 'Software', theme: 'Transportation & Logistics', org: 'Ministry of Railways' },
+                        { id: 'SIH26026', title: 'Dynamic Forecast of Expected Time of Arrival (ETA) for Coaching Trains', category: 'Software', theme: 'Transportation & Logistics', org: 'Ministry of Railways' },
+                        { id: 'SIH26027', title: 'Automated High-Current Short-Circuit Test System for IEC 60898-1:2015 MCB Compliance', category: 'Hardware', theme: 'Smart Automation', org: 'BIS' },
+                        { id: 'SIH26028', title: 'Automated Cable Specimen Preparation System for IS 10810 and IS 7098 Compliance', category: 'Hardware', theme: 'Smart Automation', org: 'BIS' },
+                        { id: 'SIH26029', title: 'Quality Assessment and Grading of Onions using AI/ML for Standardized Procurement', category: 'Software', theme: 'Agriculture, FoodTech & Rural Development', org: 'NAFED' },
+                        { id: 'SIH26030', title: 'Farmers Smart Procurement Information System with Real-Time Updates and Status Tracking', category: 'Software', theme: 'Agriculture, FoodTech & Rural Development', org: 'NAFED' },
+                        { id: 'SIH26031', title: 'Multi-Intermediary Reduction Platform for Direct Farmer Market Linkage and Price Discovery', category: 'Software', theme: 'Agriculture, FoodTech & Rural Development', org: 'NAFED' },
+                        { id: 'SIH26032', title: 'Software System to Check Compliance of Packaged Commodities under Legal Metrology Rules 2011', category: 'Software', theme: 'Smart Governance', org: 'Ministry of Consumer Affairs' },
+                        { id: 'SIH26033', title: 'Development of a Software Program for Generation of Test Reports for Non-Automatic Weighing Instruments (NAWI) as per OIML R-76', category: 'Software', theme: 'Smart Governance', org: 'Ministry of Consumer Affairs' },
+                        { id: 'SIH26034', title: 'Development of an Online Verification System for Weighing and Measuring Instruments', category: 'Software', theme: 'Smart Governance', org: 'Ministry of Consumer Affairs' },
+                        { id: 'SIH26035', title: 'Adaptive Path Planning and Collision Avoidance for Autonomous Vehicles on Unstructured Indian Roads', category: 'Software', theme: 'Smart Vehicles', org: 'MoRTH' },
+                        { id: 'SIH26036', title: 'Explainable AI for Diabetic Retinopathy Screening in Rural India', category: 'Software', theme: 'MedTech/HealthTech/BioTech', org: 'Ministry of Health' },
+                        { id: 'SIH26037', title: 'AI-Powered Underground Mine Safety, Monitoring and Rescue System', category: 'Hardware', theme: 'Disaster Management', org: 'Ministry of Mines' },
+                        { id: 'SIH26038', title: 'Smart Water Purification and Quality Monitoring System for Rural and Mining-Affected Areas', category: 'Hardware', theme: 'Clean & Green Tech', org: 'Ministry of Mines' },
+                        { id: 'SIH26039', title: 'AR-Based Vocational Training Simulator for Industrial Safety in Mining & Manufacturing Sector', category: 'Software', theme: 'Smart Education', org: 'Government of Jharkhand' },
+                        { id: 'SIH26040', title: 'AI-Powered Vernacular Pedagogy and Real-Time Translation Tool for Mother Tongue-Based Primary Education', category: 'Software', theme: 'Smart Education', org: 'Ministry of Education' },
+                        { id: 'SIH26041', title: 'A Digital Platform to Crowdsource Societal Challenges and Facilitate Collaborative Problem Solving through Universities and Industry', category: 'Software', theme: 'Smart Education', org: 'Ministry of Education' },
+                        { id: 'SIH26042', title: 'Portal for Academia-Industry Collaboration for Skill Mapping, Internships and Placement', category: 'Software', theme: 'Smart Education', org: 'Ministry of Education' },
+                        { id: 'SIH26043', title: 'IP-SAKTI: Multilingual RAG-Based AI Assistant for Intellectual Property and Regulatory Guidance in Ayurveda', category: 'Software', theme: 'MedTech/HealthTech/BioTech', org: 'AIIA' },
+                        { id: 'SIH26044', title: 'AIIA Clinical Trials Dashboard: GCP-Compliant Clinical Trial Management System for Ayurveda Research', category: 'Software', theme: 'MedTech/HealthTech/BioTech', org: 'AIIA' },
+                        { id: 'SIH26045', title: 'Modifications to Improve Reliability of Electrical Equipment in Subzero Temperature Conditions of High Altitude Areas of Ladakh', category: 'Hardware', theme: 'Smart Automation', org: 'Government of Ladakh' },
+                        { id: 'SIH26046', title: 'High Altitude Performance Optimization and Robust Design of Anti-Drone System', category: 'Hardware', theme: 'Robotics and Drones', org: 'Government of Ladakh' },
+                        { id: 'SIH26047', title: 'AI/ML-Enabled Adaptive Noise Cancellation (ANC) System for Defence Noise Suppression with Real-Time Performance', category: 'Hardware', theme: 'Smart Automation', org: 'DRDO' },
+                        { id: 'SIH26048', title: 'Adaptive Variable Resolution 2.5D Lidar Mapping for Dynamic Environment Perception', category: 'Hardware', theme: 'Robotics and Drones', org: 'DRDO' },
+                        { id: 'SIH26049', title: 'AI-Enabled Real-Time Digital Twin System for Health Monitoring and Fault Prediction of Aero Piston Engines in MALE UAVs', category: 'Software', theme: 'Robotics and Drones', org: 'DRDO' },
+                        { id: 'SIH26050', title: 'Smart Scan Strategy for Electronic Warfare', category: 'Software', theme: 'Miscellaneous', org: 'DRDO' },
+                      ];
+
+                      if (!confirm(`This will import ${SIH_2026_OFFICIAL_PS.length} official SIH 2026 Problem Statements from the government website. Existing IDs will be skipped. Continue?`)) return;
+
+                      let added = 0; let skipped = 0;
+                      for (const ps of SIH_2026_OFFICIAL_PS) {
+                        const exists = adminPsList.some(p => p.id === ps.id);
+                        if (exists) { skipped++; continue; }
+                        try {
+                          await api.createProblemStatement({ ...ps, status: 'open', description: `Organization: ${(ps as any).org || 'Government of India'}. Theme: ${ps.theme}. PS Number: ${ps.id}. Source: https://sih.gov.in/sih2026PS` });
+                          added++;
+                        } catch { skipped++; }
+                      }
+                      await loadAdminData();
+                      showAlert('Import Complete', `✅ ${added} SIH 2026 official PS imported successfully. ${skipped} skipped (already exist or error).`, 'success');
+                    }}
+                    className="inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl font-bold text-xs text-[#1B3F8B] bg-blue-50 hover:bg-blue-100 border border-blue-200 shadow-xs transition cursor-pointer shrink-0"
+                  >
+                    <Download className="h-4 w-4" />
+                    Import Official SIH 2026 PS (SIH26001–SIH26050)
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setEditingPsData({ id: '', title: '', category: 'Software', description: '', status: 'open' });
+                      setIsCreatingPs(true);
+                      setIsEditingPs(false);
+                    }}
+                    className="inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl font-bold text-xs text-white bg-[#C1272D] hover:bg-red-700 shadow-md transition cursor-pointer shrink-0"
+                  >
+                    <Plus className="h-4 w-4" />
+                    Add Problem Statement
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={async () => {
+                      if (adminPsList.length === 0) {
+                        showAlert('Nothing to Remove', 'There are no problem statements to delete.', 'info');
+                        return;
+                      }
+                      if (!confirm(`⚠️ Are you sure you want to DELETE ALL ${adminPsList.length} problem statements? This cannot be undone.`)) return;
+                      if (!confirm(`Final confirmation: This will permanently remove all ${adminPsList.length} PS entries. Proceed?`)) return;
+                      let removed = 0;
+                      for (const ps of [...adminPsList]) {
+                        try { await api.deleteProblemStatement(ps.id); removed++; } catch { /* skip */ }
+                      }
+                      await loadAdminData();
+                      showAlert('All PS Removed', `✅ ${removed} problem statements have been permanently deleted.`, 'info');
+                    }}
+                    className="inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl font-bold text-xs text-red-700 bg-red-50 hover:bg-red-100 border border-red-200 shadow-xs transition cursor-pointer shrink-0"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                    Remove All PS
+                  </button>
+                </div>
               </div>
 
               {/* Problem Statement List table */}
@@ -2755,24 +2976,12 @@ export const AdminPage: React.FC = () => {
             )}
 
             {/* Problem Statement Details */}
-            <div className="p-4 rounded-2xl bg-blue-50/80 border border-blue-200 text-xs space-y-3">
-              <div className="flex items-center justify-between">
+            {selectedTeam.selectedPsId ? (
+              <div className="p-4 rounded-2xl bg-blue-50 border border-blue-200 text-xs space-y-2">
                 <div className="flex items-center gap-2">
                   <BookOpen className="h-4 w-4 text-[#1B3F8B]" />
-                  <span className="font-black text-slate-900 uppercase tracking-wider text-[10px]">Problem Statement Selection</span>
+                  <span className="font-black text-slate-900 uppercase tracking-wider text-[10px]">Problem Statement Selected</span>
                 </div>
-                {selectedTeam.selectedPsId ? (
-                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-blue-100 text-[#1B3F8B] border border-blue-200">
-                    ✔ Locked ({selectedTeam.selectedPsId})
-                  </span>
-                ) : (
-                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-amber-100 text-amber-800 border border-amber-200">
-                    Pending
-                  </span>
-                )}
-              </div>
-
-              {selectedTeam.selectedPsId ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   <div>
                     <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">PSID</p>
@@ -2781,44 +2990,21 @@ export const AdminPage: React.FC = () => {
                   {selectedTeam.psSelectedAt && (
                     <div>
                       <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">Selected At</p>
-                      <p className="font-semibold text-slate-700">{formatIST(selectedTeam.psSelectedAt)}</p>
+                      <p className="font-semibold text-slate-700">{new Date(selectedTeam.psSelectedAt).toLocaleString('en-IN')}</p>
                     </div>
                   )}
-                  <div className="sm:col-span-2">
-                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">Title</p>
-                    <p className="font-bold text-slate-800 leading-snug">{selectedTeam.selectedPsTitle || '—'}</p>
-                  </div>
                 </div>
-              ) : (
-                <div className="text-slate-500 font-bold">
-                  No Problem Statement Selected Yet
+                <div>
+                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">Title</p>
+                  <p className="font-bold text-slate-800 leading-snug">{selectedTeam.selectedPsTitle || '—'}</p>
                 </div>
-              )}
-
-              {/* Admin PS Override Control */}
-              <div className="pt-2 border-t border-blue-200/60 flex flex-col sm:flex-row items-center gap-2">
-                <select
-                  value={adminEditingPsId}
-                  onChange={(e) => setAdminEditingPsId(e.target.value)}
-                  className="w-full sm:flex-1 px-3 py-1.5 rounded-xl bg-white border border-blue-300 text-xs font-semibold text-slate-900 focus:outline-none focus:border-[#1B3F8B]"
-                >
-                  <option value="">-- Assign / Change Problem Statement --</option>
-                  {adminPsList.map((ps) => (
-                    <option key={ps.id} value={ps.id}>
-                      [{ps.id}] {ps.title}
-                    </option>
-                  ))}
-                </select>
-                <button
-                  type="button"
-                  onClick={handleSaveAdminPs}
-                  disabled={isSavingAdminPs}
-                  className="w-full sm:w-auto px-4 py-1.5 rounded-xl font-bold text-xs text-white bg-[#1B3F8B] hover:bg-blue-900 transition cursor-pointer shrink-0 disabled:opacity-50"
-                >
-                  {isSavingAdminPs ? 'Updating...' : 'Save PS'}
-                </button>
               </div>
-            </div>
+            ) : (
+              <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-500 font-bold flex items-center gap-2">
+                <BookOpen className="h-4 w-4 text-slate-400" />
+                <span>No Problem Statement Selected Yet</span>
+              </div>
+            )}
 
             {/* PPT & Prototype Submission Details */}
             {selectedTeam.pptSubmission ? (
@@ -2829,7 +3015,7 @@ export const AdminPage: React.FC = () => {
                     <span>PPT &amp; Prototype Submission</span>
                   </div>
                   <span className="text-[10px] text-slate-500 font-bold">
-                    {formatIST(selectedTeam.pptSubmission.submittedAt || Date.now())}
+                    {new Date(selectedTeam.pptSubmission.submittedAt || Date.now()).toLocaleString('en-IN')}
                   </span>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">

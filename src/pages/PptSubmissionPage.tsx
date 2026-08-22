@@ -36,14 +36,17 @@ export const PptSubmissionPage: React.FC = () => {
   
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const pptDeadline = settings.isPptExtended && settings.pptExtendedDeadline ? settings.pptExtendedDeadline : settings.pptSubmissionDeadline;
-  const isOpen = (settings.pptSubmissionOpen ?? false) && (!pptDeadline || Number.isNaN(new Date(pptDeadline).getTime()) || Date.now() <= new Date(pptDeadline).getTime());
+  const isOpen = settings.pptSubmissionOpen ?? false;
 
   // Validate and set PPT file
   const validateAndSetFile = (file: File): boolean => {
     const ext = file.name.split('.').pop()?.toLowerCase();
     if (ext !== 'ppt' && ext !== 'pptx') {
       showAlert('Invalid File Format', 'Only PowerPoint files (.ppt or .pptx) are allowed. Please select a valid PPT file.');
+      return false;
+    }
+    if (file.size > 7 * 1024 * 1024) {
+      showAlert('File Too Large', 'The PowerPoint file must be 7 MB or smaller.');
       return false;
     }
     setPptFile(file);
@@ -127,7 +130,7 @@ export const PptSubmissionPage: React.FC = () => {
     }
 
     if (!githubCollaboratorsAdded) {
-      showAlert('Collaborator Check Required', 'Please check the box confirming you have added the organizing committee member (@sihinternalvsitr-boop) as collaborator to your GitHub repository.');
+      showAlert('Collaborators Check Required', 'Please check the box confirming you have added the 2 organizing committee members as collaborators to your GitHub repository.');
       return;
     }
 
@@ -684,27 +687,25 @@ export const PptSubmissionPage: React.FC = () => {
                 20% Prototype Code (GitHub Repository) <span className="text-[#C1272D]">*</span>
               </h2>
               <p className="text-xs text-slate-500 font-medium">
-                Provide your GitHub repository URL &amp; add required committee collaborator
+                Provide your GitHub repository URL &amp; add required committee collaborators
               </p>
             </div>
           </div>
 
           <div className="p-4 rounded-2xl bg-blue-50/70 border border-blue-200/80 text-xs space-y-2">
             <span className="font-black text-[#1B3F8B] block">
-              🐙 Required GitHub Collaborator (Organizing Committee Member):
+              🐙 Required GitHub Collaborators (Organizing Committee Members):
             </span>
             <p className="text-slate-700 font-medium">
-              You must add the following organizing committee member as a collaborator to your repository:
+              You must add the following 2 organizing committee members as collaborators to your repository:
             </p>
             <div className="flex flex-wrap items-center gap-2.5 pt-0.5">
-              <a
-                href="https://github.com/sihinternalvsitr-boop"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-3 py-1 rounded-xl bg-white border border-blue-200 text-[#1B3F8B] font-mono font-bold text-xs shadow-2xs hover:bg-blue-50 transition inline-flex items-center gap-1.5"
-              >
-                @sihinternalvsitr-boop
-              </a>
+              <span className="px-3 py-1 rounded-xl bg-white border border-blue-200 text-[#1B3F8B] font-mono font-bold text-xs shadow-2xs">
+                @sih2026-vsitr-collab1
+              </span>
+              <span className="px-3 py-1 rounded-xl bg-white border border-blue-200 text-[#1B3F8B] font-mono font-bold text-xs shadow-2xs">
+                @sih2026-vsitr-collab2
+              </span>
             </div>
           </div>
 
@@ -734,7 +735,7 @@ export const PptSubmissionPage: React.FC = () => {
               className="mt-0.5 h-4 w-4 rounded border-slate-300 text-[#1B3F8B] focus:ring-[#1B3F8B]"
             />
             <span className="text-xs font-bold text-slate-800 leading-relaxed">
-              I confirm that I have pushed the 20% prototype code to this GitHub repository and added the organizing committee member (@sihinternalvsitr-boop) as collaborator.
+              I confirm that I have pushed the 20% prototype code to this GitHub repository and added both organizing committee members (@sih2026-vsitr-collab1 and @sih2026-vsitr-collab2) as collaborators.
             </span>
           </label>
         </div>

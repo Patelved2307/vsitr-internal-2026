@@ -19,7 +19,7 @@ const renderSdg = (sdg: string) => {
 };
 
 export const ProblemStatementsPage: React.FC = () => {
-  const { setActiveTab, isTeamLoggedIn, team, refreshTeamSession, settings } = useAuth();
+  const { setActiveTab, isTeamLoggedIn, team, refreshTeamSession } = useAuth();
   const [problemStatements, setProblemStatements] = useState<ProblemStatement[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -30,7 +30,7 @@ export const ProblemStatementsPage: React.FC = () => {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const isPsExpired = !settings.problemStatementSelectionOpen || (!!settings.problemStatementDeadline && Date.now() > new Date(settings.problemStatementDeadline).getTime());
+  const isPsExpired = Date.now() > new Date('2026-08-16T23:59:00+05:30').getTime();
 
   useEffect(() => {
     const fetchProblemStatements = async () => {
@@ -62,7 +62,6 @@ export const ProblemStatementsPage: React.FC = () => {
       const res = await api.selectProblemStatement({
         teamId: team.id,
         psId: ps.id,
-        psTitle: ps.title
       });
       if (res.success) {
         await refreshTeamSession();

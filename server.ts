@@ -6,9 +6,10 @@ import { createServer as createViteServer } from 'vite';
 import { EventSettings, FAQItem, Team, TimelineEvent } from './src/types.js';
 import { CLUB_COORDINATORS } from './src/data/initialData.js';
 
-// Load environment variables strictly from .env (never from .env.example,
-// which is meant to be a safe-to-commit template, not a secrets source)
-dotenv.config({ path: '.env' });
+// Load local secrets without ever reading .env.example. `.env.local` is the
+// documented development file; `.env` remains supported for deployments.
+// Values in `.env.local` take precedence over `.env`.
+dotenv.config({ path: ['.env.local', '.env'] });
 import {
   initDatabase,
   isUsingNeon,
@@ -138,21 +139,6 @@ async function startServer() {
     } catch (err: any) {
       res.status(500).json({ success: false, message: err.message });
     }
-  });
-
-  // Admin rules PDF upload. The returned URL can be saved in Event Settings.
-  app.post('/api/admin/rules-pdf', async (req: Request, res: Response) => {
-    try {
-      const { fileName, fileBase64 } = req.body;
-      if (!fileName || !fileBase64 || !/\.pdf$/i.test(fileName)) return res.status(400).json({ success: false, message: 'Please upload a PDF file.' });
-      const bytes = Buffer.from(String(fileBase64).replace(/^data:.*?;base64,/, ''), 'base64');
-      if (!bytes.length || bytes.length > 10 * 1024 * 1024) return res.status(400).json({ success: false, message: 'PDF must be 10 MB or smaller.' });
-      const folder = path.join(process.cwd(), 'data', 'uploads', 'rules');
-      fs.mkdirSync(folder, { recursive: true });
-      const safeName = `rules_${Date.now()}_${path.basename(fileName, '.pdf').replace(/[^a-zA-Z0-9_-]/g, '_')}.pdf`;
-      fs.writeFileSync(path.join(folder, safeName), bytes);
-      res.json({ success: true, url: `/api/uploads/rules/${safeName}` });
-    } catch (err: any) { res.status(500).json({ success: false, message: err.message || 'Could not upload PDF.' }); }
   });
 
   // 3.5 Check Team Name Availability
@@ -441,6 +427,9 @@ async function startServer() {
         const allMembers = [leader, ...members];
         const validDepts = ['IT', 'CSE', 'CE'];
         for (const m of allMembers) {
+          if (!m.fullName || !m.fullName.trim()) {
+            return res.status(400).json({ success: false, message: 'All member names are required and cannot be blank.' });
+          }
           if (!validDepts.includes(m.department)) {
             return res.status(400).json({ success: false, message: 'Department must be IT, CSE, or CE.' });
           }
@@ -568,6 +557,21 @@ async function startServer() {
         status: 'completed',
       });
 
+      // Dispatch mentor submission confirmation emails
+      const appUrl = getAppUrl(req);
+      try {
+        if (updatedTeam) {
+          await dispatchTeamRegistrationEmails(updatedTeam, appUrl);
+        }
+      } catch (emailErr) {
+        console.error('Mentor email dispatch error:', emailErr);
+      }
+
+      res.json({
+        success: true,
+        team: updatedTeam,
+        message: 'Mentor details submitted successfully! Your team registration is now complete.',
+      });
     } catch (err: any) {
       res.status(500).json({ success: false, message: err.message });
     }
@@ -586,20 +590,26 @@ async function startServer() {
       if (!globalConfig.settings?.pptSubmissionOpen) {
         return res.status(403).json({ success: false, message: 'PPT Submission portal is currently closed by the Admin Officer.' });
       }
-      const pptDeadlineValue = globalConfig.settings?.isPptExtended && globalConfig.settings?.pptExtendedDeadline
-        ? globalConfig.settings.pptExtendedDeadline
-        : globalConfig.settings?.pptSubmissionDeadline;
-      if (pptDeadlineValue && !Number.isNaN(new Date(pptDeadlineValue).getTime()) && new Date() > new Date(pptDeadlineValue)) {
-        return res.status(403).json({ success: false, message: 'The PPT submission deadline has passed. The portal is now closed.' });
-      }
 
       const team = await getTeamById(teamId);
       if (!team) {
         return res.status(404).json({ success: false, message: 'Team Registration ID not found.' });
       }
 
+      if (team.pptSubmission && (team.pptSubmission.submittedAt || team.pptSubmission.pptFileUrl)) {
+        return res.status(409).json({ success: false, message: 'Submission Locked: PPT presentation and prototype details have already been submitted. No further modifications are permitted.' });
+      }
+
       if (team.leader.email.trim().toLowerCase() !== leaderEmail.trim().toLowerCase()) {
         return res.status(401).json({ success: false, message: 'Unauthorized. Team Leader email does not match registration records.' });
+      }
+
+      if (!pptFileBase64 || typeof pptFileBase64 !== 'string') {
+        return res.status(400).json({ success: false, message: 'A PowerPoint file is required.' });
+      }
+
+      if (!githubCollaboratorsAdded) {
+        return res.status(400).json({ success: false, message: 'You must confirm that the required GitHub collaborators were added.' });
       }
 
       // 1. PPT File Validation (.ppt or .pptx ONLY)
@@ -611,7 +621,13 @@ async function startServer() {
       }
 
       // 2. Demo Video Link Validation (YouTube URL)
-      if (!demoVideoUrl || !/(youtube\.com|youtu\.be)/i.test(demoVideoUrl.trim())) {
+      let videoUrl: URL;
+      try {
+        videoUrl = new URL(demoVideoUrl);
+      } catch {
+        return res.status(400).json({ success: false, message: 'Please provide a valid YouTube video URL.' });
+      }
+      if (!['youtube.com', 'www.youtube.com', 'm.youtube.com', 'youtu.be'].includes(videoUrl.hostname.toLowerCase())) {
         return res.status(400).json({
           success: false,
           message: 'Invalid YouTube Video URL. Please paste a valid YouTube video link (e.g. https://youtu.be/... or https://www.youtube.com/watch?v=...).',
@@ -619,7 +635,13 @@ async function startServer() {
       }
 
       // 3. GitHub Repo Link Validation
-      if (!githubRepoUrl || !/(github\.com)/i.test(githubRepoUrl.trim())) {
+      let repositoryUrl: URL;
+      try {
+        repositoryUrl = new URL(githubRepoUrl);
+      } catch {
+        return res.status(400).json({ success: false, message: 'Please provide a valid GitHub repository URL.' });
+      }
+      if (!['github.com', 'www.github.com'].includes(repositoryUrl.hostname.toLowerCase())) {
         return res.status(400).json({
           success: false,
           message: 'Invalid GitHub Repository URL. Please paste a valid GitHub link (e.g. https://github.com/username/repo).',
@@ -632,7 +654,13 @@ async function startServer() {
 
       if (pptFileBase64) {
         const cleanBase64 = pptFileBase64.replace(/^data:.*?;base64,/, '');
+        if (!/^[A-Za-z0-9+/]+={0,2}$/.test(cleanBase64)) {
+          return res.status(400).json({ success: false, message: 'The uploaded PPT file is not valid base64 data.' });
+        }
         const fileBuffer = Buffer.from(cleanBase64, 'base64');
+        if (fileBuffer.length > 7 * 1024 * 1024) {
+          return res.status(413).json({ success: false, message: 'The PPT file must be 7 MB or smaller.' });
+        }
         pptFileSize = fileBuffer.length;
 
         const ext = path.extname(pptFileName) || '.pptx';
@@ -1346,30 +1374,53 @@ async function startServer() {
   // Submit PS Selection for Team (Self-Service in Team Portal)
   app.post('/api/teams/select-ps', async (req: Request, res: Response) => {
     try {
-      const { teamId, psId, psTitle } = req.body;
+      const { teamId, psId, psTitle: customPsTitle } = req.body;
 
-      if (!teamId || !psId || !psTitle) {
-        return res.status(400).json({ success: false, message: 'Team ID, Problem Statement ID, and Title are required.' });
+      if (!teamId || !psId) {
+        return res.status(400).json({ success: false, message: 'Team ID and Problem Statement ID are required.' });
       }
 
-      const config = await getGlobalConfig();
-      const psDeadline = config.settings?.problemStatementDeadline;
-      if (!config.settings?.problemStatementSelectionOpen || (psDeadline && !Number.isNaN(new Date(psDeadline).getTime()) && new Date() > new Date(psDeadline))) {
+      // Check deadline from settings (or fallback)
+      const deadline = new Date('2026-08-16T23:59:00+05:30'); // IST timezone
+      const now = new Date();
+      if (now > deadline) {
         return res.status(400).json({
           success: false,
-          message: 'Problem statement selection is currently closed.'
+          message: 'The deadline for selecting problem statements has passed (August 16, 2026, 11:59 PM).'
         });
       }
 
-      const updatedTeam = await updateTeamPsSelection(teamId, psId, psTitle);
+      // First try to find in local DB (Institute PS)
+      let psIdToSave = String(psId).trim();
+      let psTitleToSave = customPsTitle || psId;
+
+      const problemStatement = (await getAllProblemStatements()).find((statement) => statement.id === psIdToSave);
+      if (problemStatement) {
+        // Found in local DB — use DB data
+        if (problemStatement.status !== 'open') {
+          return res.status(400).json({ success: false, message: 'The selected problem statement is not available.' });
+        }
+        psTitleToSave = problemStatement.title;
+      } else if (!customPsTitle) {
+        // Not in DB and no title provided — reject
+        return res.status(400).json({ success: false, message: 'The selected problem statement is not available.' });
+      }
+      // If customPsTitle is provided + PS not in DB = Official SIH PS, allow it
+
+      const existingTeam = await getTeamById(teamId);
+      if (existingTeam?.selectedPsId) {
+        return res.status(409).json({ success: false, message: 'Your team has already selected a problem statement. Changes are not allowed.' });
+      }
+
+      const updatedTeam = await updateTeamPsSelection(teamId, psIdToSave, psTitleToSave);
       if (!updatedTeam) {
         return res.status(404).json({ success: false, message: 'Team not found.' });
       }
 
       // Automatically dispatch confirmation emails to all 6 team members
       try {
-        await dispatchPsSelectionEmails(updatedTeam, psId, psTitle);
-        console.log(`[PS Selection Email] Successfully dispatched confirmation emails for team ${teamId} (${psId})`);
+        await dispatchPsSelectionEmails(updatedTeam, psIdToSave, psTitleToSave);
+        console.log(`[PS Selection Email] Successfully dispatched confirmation emails for team ${teamId} (${psIdToSave})`);
       } catch (emailErr) {
         console.error('[PS Selection Email Error] Failed to dispatch PS selection emails:', emailErr);
       }

@@ -1,9 +1,10 @@
 import React from 'react';
 import { useAuth } from '../context/AuthContext';
 import { Timeline } from './ui/timeline';
+import { formatTimelineDate, parseTimelineDate } from '../lib/timeline';
 
 export const TimelineSection: React.FC = () => {
-  const { timeline, settings } = useAuth();
+  const { timeline } = useAuth();
 
   const now = Date.now();
 
@@ -12,59 +13,29 @@ export const TimelineSection: React.FC = () => {
     let statusStyle = 'bg-blue-50 text-blue-700 border-blue-200';
     let isLiveDot = false;
 
-    if (event.id === 't1') {
-      const cutoff = new Date('2026-08-02T23:59:00+05:30').getTime();
-      if (now > cutoff) {
+    const eventDate = parseTimelineDate(event.date);
+    if (eventDate) {
+      if (now > eventDate.getTime()) {
         statusLabel = 'Closed';
         statusStyle = 'bg-red-50 text-red-700 border-red-200';
-      } else {
+      } else if (event.active) {
         statusLabel = 'Active';
         statusStyle = 'bg-emerald-50 text-emerald-700 border-emerald-200';
         isLiveDot = true;
       }
-    } else if (event.id === 't2') {
-      const cutoff = new Date('2026-08-05T23:59:00+05:30').getTime();
-      if (now > cutoff) {
-        statusLabel = 'Closed';
-        statusStyle = 'bg-red-50 text-red-700 border-red-200';
-      } else {
-        statusLabel = 'Active';
-        statusStyle = 'bg-emerald-50 text-emerald-700 border-emerald-200';
-        isLiveDot = true;
-      }
-    } else if (event.id === 't3') {
-      const cutoff = settings.problemStatementDeadline ? new Date(settings.problemStatementDeadline).getTime() : Number.NaN;
-      if (!settings.problemStatementSelectionOpen || !Number.isNaN(cutoff) && now > cutoff) {
-        statusLabel = 'Closed';
-        statusStyle = 'bg-red-50 text-red-700 border-red-200';
-      } else {
-        statusLabel = 'Active';
-        statusStyle = 'bg-emerald-50 text-emerald-700 border-emerald-200';
-        isLiveDot = true;
-      }
-    } else if (event.id === 't4') {
-      const cutoff = new Date('2026-08-25T23:59:00+05:30').getTime();
-      if (now > cutoff) {
-        statusLabel = 'Closed';
-        statusStyle = 'bg-red-50 text-red-700 border-red-200';
-      } else {
-        statusLabel = 'Active';
-        statusStyle = 'bg-emerald-50 text-emerald-700 border-emerald-200';
-        isLiveDot = true;
-      }
+    } else if (!event.active || event.date.toLowerCase().includes('closed')) {
+      statusLabel = 'Closed';
+      statusStyle = 'bg-red-50 text-red-700 border-red-200';
     } else {
       if (event.active) {
         statusLabel = 'Active';
         statusStyle = 'bg-emerald-50 text-emerald-700 border-emerald-200';
         isLiveDot = true;
-      } else if (event.date.toLowerCase().includes('closed')) {
-        statusLabel = 'Closed';
-        statusStyle = 'bg-red-50 text-red-700 border-red-200';
       }
     }
 
     return {
-      title: event.date,
+      title: formatTimelineDate(event.date),
       content: (
         <div>
           <h4 className="text-lg font-black text-[#1B3F8B] mb-2">{event.title}</h4>

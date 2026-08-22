@@ -18,6 +18,12 @@ export const TeamPortalPage: React.FC = () => {
   const [isEditingMentor, setIsEditingMentor] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
 
+  // Official SIH 2026 PS Manual Entry
+  const [showSihPsModal, setShowSihPsModal] = useState(false);
+  const [sihPsNumber, setSihPsNumber] = useState('');
+  const [sihPsTitle, setSihPsTitle] = useState('');
+  const [isSubmittingSihPs, setIsSubmittingSihPs] = useState(false);
+
   // PPT & Prototype Submission Form State (Phase 3)
   const [pptFile, setPptFile] = useState<File | null>(null);
   const [pptFileBase64, setPptFileBase64] = useState<string>('');
@@ -25,10 +31,6 @@ export const TeamPortalPage: React.FC = () => {
   const [githubRepoUrl, setGithubRepoUrl] = useState<string>('');
   const [githubCollabChecked, setGithubCollabChecked] = useState<boolean>(false);
   const [isSubmittingPpt, setIsSubmittingPpt] = useState<boolean>(false);
-  const effectivePptDeadline = settings.isPptExtended && settings.pptExtendedDeadline ? settings.pptExtendedDeadline : settings.pptSubmissionDeadline;
-  const isPptSubmissionOpen = (settings.pptSubmissionOpen ?? false) && (!effectivePptDeadline || Number.isNaN(new Date(effectivePptDeadline).getTime()) || Date.now() <= new Date(effectivePptDeadline).getTime());
-  const psDeadlineValue = settings.problemStatementDeadline || '';
-  const formattedPsDeadline = psDeadlineValue ? new Date(psDeadlineValue).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true }) : 'To be announced';
 
   // Helper to handle smooth downloading of both Base64 Data URIs and regular URLs
   const handleDownloadPpt = (fileUrl?: string, fileName?: string) => {
@@ -115,7 +117,7 @@ export const TeamPortalPage: React.FC = () => {
     }
 
     if (!githubCollabChecked) {
-      showAlert('Collaborator Confirmation Required', 'Please check the box confirming you have added the organizing committee member (@sihinternalvsitr-boop) as collaborator to your repository.');
+      showAlert('Collaborators Confirmation Required', 'Please check the box confirming you have added the 2 organizing committee members as collaborators to your repository.');
       return;
     }
 
@@ -154,14 +156,16 @@ export const TeamPortalPage: React.FC = () => {
     isExpired: boolean;
   }>({ days: 0, hours: 0, minutes: 0, seconds: 0, isExpired: false });
 
-  // Countdown timer for the admin-configured Problem Statement Selection deadline.
+  // Countdown timer for PS Selection Deadline (controlled from Admin Panel → Event Settings)
   useEffect(() => {
     const calculatePsTimeLeft = () => {
-      const psDeadline = new Date(psDeadlineValue).getTime();
+      // Use admin-set deadline, fallback to 16 Aug 2026 11:59 PM IST
+      const deadlineStr = settings.psSelectionDeadline || '2026-08-16T18:29:00.000Z';
+      const psDeadline = new Date(deadlineStr).getTime();
       const nowVal = new Date().getTime();
       const difference = psDeadline - nowVal;
 
-      if (!settings.problemStatementSelectionOpen || !psDeadlineValue || Number.isNaN(psDeadline) || difference <= 0) {
+      if (difference <= 0) {
         setPsTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0, isExpired: true });
         return;
       }
@@ -178,7 +182,7 @@ export const TeamPortalPage: React.FC = () => {
     calculatePsTimeLeft();
     const timer = setInterval(calculatePsTimeLeft, 1000);
     return () => clearInterval(timer);
-  }, [psDeadlineValue, settings.problemStatementSelectionOpen]);
+  }, [settings.psSelectionDeadline]);
 
 
   // Form State for editing members
@@ -222,7 +226,10 @@ export const TeamPortalPage: React.FC = () => {
 
   // Open Members Edit Modal
   const openEditMembers = () => {
-    showAlert('Modifications Locked', 'Team registration compositions are locked. Self-service modifications are no longer permitted.', 'info');
+    if (!team) return;
+    setEditLeader({ ...team.leader });
+    setEditMembers(team.members.map((m: any) => ({ ...m })));
+    setIsEditingMembers(true);
   };
 
   // Open Mentor Edit Modal
@@ -233,6 +240,19 @@ export const TeamPortalPage: React.FC = () => {
   // Save Member Edits
   const handleSaveMembers = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Full name validation
+    if (!editLeader.fullName?.trim()) {
+      showAlert('Name Required', 'Team Leader full name cannot be empty.');
+      return;
+    }
+    for (let i = 0; i < editMembers.length; i++) {
+      if (!editMembers[i].fullName?.trim()) {
+        showAlert('Name Required', `Member #${i + 1} full name cannot be empty.`);
+        return;
+      }
+    }
+
     if (editLeader.mobile.trim().length !== 10 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(editLeader.email.trim())) {
       return;
     }
@@ -425,13 +445,13 @@ export const TeamPortalPage: React.FC = () => {
             {!psTimeLeft.isExpired && (
               <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-black text-[10px] sm:text-xs uppercase tracking-wider text-amber-800 bg-amber-50 border border-amber-200 shadow-2xs whitespace-nowrap">
                 <Clock className="h-3.5 w-3.5" />
-                Deadline: {formattedPsDeadline}
+                {psTimeLeft.days > 0 ? `${psTimeLeft.days}d ${psTimeLeft.hours}h left` : `${psTimeLeft.hours}h ${psTimeLeft.minutes}m left`}
               </span>
             )}
             {psTimeLeft.isExpired && (
               <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-black text-[10px] sm:text-xs uppercase tracking-wider text-slate-500 bg-slate-100 border border-slate-200 shadow-2xs whitespace-nowrap">
                 <Lock className="h-3.5 w-3.5" />
-                Locked
+                Selection Closed
               </span>
             )}
           </div>
@@ -482,31 +502,114 @@ export const TeamPortalPage: React.FC = () => {
             </div>
           </div>
         ) : (
-          /* Selection is NOT made: Render the CTA redirect card */
-          <div className="p-6 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-6 shadow-xs animate-in fade-in duration-200">
-            <div className="space-y-2">
-              <h4 className="text-sm font-black text-slate-900">No Problem Statement Selected Yet</h4>
-              <p className="text-sm text-slate-550 leading-relaxed font-semibold max-w-xl">
-                Your team has not selected a problem statement yet. To participate in the Internal SIH 2026, you must select one of the institute-level problem statements before the deadline.
-              </p>
-
-            </div>
-
+          /* Selection is NOT made */
+          <div className="space-y-4 animate-in fade-in duration-200">
             {!psTimeLeft.isExpired ? (
-              <button
-                type="button"
-                onClick={() => {
-                  setActiveTab('problem-statements');
-                  window.scrollTo({ top: 0, behavior: 'smooth' });
-                }}
-                className="shrink-0 inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl font-black text-xs text-white bg-[#1B3F8B] hover:bg-indigo-900 hover:shadow-lg transition transform active:scale-95 duration-200 cursor-pointer"
-              >
-                Select Problem Statement
-                <ArrowRight className="h-4 w-4" />
-              </button>
+              <>
+                {/* Option 1: Institute PS */}
+                <div className="p-5 rounded-2xl bg-blue-50/60 border border-blue-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-xs">
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2">
+                      <div className="p-1.5 rounded-xl bg-[#1B3F8B] text-white shrink-0">
+                        <BookOpen className="h-3.5 w-3.5" />
+                      </div>
+                      <span className="text-xs font-black text-[#1B3F8B] uppercase tracking-wider">Option 1 — Institute Problem Statements</span>
+                    </div>
+                    <p className="text-xs text-slate-600 font-semibold leading-relaxed pl-7">
+                      Select from problem statements curated by VSITR organizers for Internal SIH 2026.
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setActiveTab('problem-statements');
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }}
+                    className="shrink-0 inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-black text-xs text-white bg-[#1B3F8B] hover:bg-indigo-900 transition transform active:scale-95 duration-200 cursor-pointer"
+                  >
+                    Browse Institute PS
+                    <ArrowRight className="h-4 w-4" />
+                  </button>
+                </div>
+
+                {/* Option 2: Official SIH 2026 PS */}
+                <div className="p-5 rounded-2xl bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-200 shadow-xs">
+                  <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2">
+                        <div className="p-1.5 rounded-xl bg-amber-500 text-white shrink-0">
+                          <ExternalLink className="h-3.5 w-3.5" />
+                        </div>
+                        <span className="text-xs font-black text-amber-800 uppercase tracking-wider">Option 2 — Official SIH 2026 PS (226 Problems)</span>
+                      </div>
+                      <p className="text-xs text-slate-600 font-semibold leading-relaxed pl-7">
+                        Browse all 226 official problem statements on sih.gov.in, then enter your selected PS Number and Title below.
+                      </p>
+                    </div>
+                    <a
+                      href="https://www.sih.gov.in/sih2026PS"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="shrink-0 inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-black text-xs text-white bg-amber-500 hover:bg-amber-600 transition transform active:scale-95 duration-200"
+                    >
+                      Browse SIH 2026 PS
+                      <ExternalLink className="h-3.5 w-3.5" />
+                    </a>
+                  </div>
+
+                  {/* Manual Entry Form */}
+                  <div className="mt-4 pt-4 border-t border-amber-200">
+                    <p className="text-[11px] font-bold text-amber-700 mb-3">After selecting on the official website, enter your PS details here:</p>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                      <input
+                        type="text"
+                        placeholder="PS Number (e.g. SIH26001)"
+                        value={sihPsNumber}
+                        onChange={(e) => setSihPsNumber(e.target.value.toUpperCase())}
+                        className="px-3 py-2.5 rounded-xl border border-amber-300 bg-white text-xs font-bold text-slate-900 focus:outline-none focus:border-amber-500 placeholder:font-normal placeholder:text-slate-400"
+                      />
+                      <input
+                        type="text"
+                        placeholder="Full PS Title (copy from sih.gov.in)"
+                        value={sihPsTitle}
+                        onChange={(e) => setSihPsTitle(e.target.value)}
+                        className="sm:col-span-2 px-3 py-2.5 rounded-xl border border-amber-300 bg-white text-xs font-bold text-slate-900 focus:outline-none focus:border-amber-500 placeholder:font-normal placeholder:text-slate-400"
+                      />
+                    </div>
+                    <button
+                      type="button"
+                      disabled={!sihPsNumber.trim() || !sihPsTitle.trim() || isSubmittingSihPs}
+                      onClick={async () => {
+                        if (!sihPsNumber.trim() || !sihPsTitle.trim()) return;
+                        setIsSubmittingSihPs(true);
+                        try {
+                          await api.selectProblemStatement({ teamId: team!.id, psId: sihPsNumber.trim(), psTitle: `[SIH Official] ${sihPsTitle.trim()}` });
+                          await refreshTeamSession();
+                          showAlert('Problem Statement Confirmed!', `Your team has selected official SIH 2026 PS: ${sihPsNumber} — ${sihPsTitle}`, 'success');
+                          setSihPsNumber('');
+                          setSihPsTitle('');
+                        } catch (err: any) {
+                          showAlert('Error', err.message || 'Failed to save PS selection.');
+                        } finally {
+                          setIsSubmittingSihPs(false);
+                        }
+                      }}
+                      className="mt-3 inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-black text-xs text-white bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 transition shadow-md disabled:opacity-50 disabled:cursor-not-allowed transform active:scale-95 duration-200"
+                    >
+                      {isSubmittingSihPs ? (
+                        <><span className="h-3.5 w-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" /> Confirming...</>
+                      ) : (
+                        <><Check className="h-3.5 w-3.5" /> Confirm Official SIH PS Selection</>
+                      )}
+                    </button>
+                  </div>
+                </div>
+              </>
             ) : (
-              <div className="shrink-0 px-4 py-2 bg-red-50 border border-red-200 text-red-700 font-bold text-xs rounded-xl">
-                Selection Closed
+              <div className="p-6 rounded-2xl bg-slate-50 border border-slate-200 text-center shadow-xs">
+                <Lock className="h-8 w-8 text-slate-400 mx-auto mb-2" />
+                <h4 className="text-sm font-black text-slate-700">Problem Statement Selection Closed</h4>
+                <p className="text-xs text-slate-500 mt-1 font-medium">The selection deadline has passed. No further selections can be made.</p>
               </div>
             )}
           </div>
@@ -685,14 +788,71 @@ export const TeamPortalPage: React.FC = () => {
         )}
       </div>
 
-      {/* RULES & REGULATIONS DOWNLOAD */}
-      <div className="rounded-3xl bg-white p-6 border border-slate-200 shadow-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-2xl bg-red-50 text-[#C1272D] border border-red-100"><BookOpen className="h-6 w-6" /></div>
-            <div><h2 className="text-base sm:text-lg font-black text-slate-900">Rules &amp; Regulations</h2><p className="text-xs text-slate-500 font-medium">Download the official SIH rules and regulations PDF.</p></div>
+      {/* RULES & REGULATIONS DOCUMENT CARD */}
+      {(settings.rulesDocumentLink || settings.rulesDocumentPdfUrl) && (
+        <div className="rounded-3xl bg-white p-6 border border-slate-200 shadow-xl space-y-4 hover:shadow-2xl/10 transition duration-300">
+          {/* Header */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100">
+            <div className="flex items-start sm:items-center gap-3">
+              <div className="p-2.5 rounded-2xl bg-red-50 text-[#C1272D] border border-red-100 shrink-0 mt-0.5 sm:mt-0">
+                <BookOpen className="h-5 w-5 sm:h-6 sm:w-6" />
+              </div>
+              <div>
+                <h2 className="text-base sm:text-lg font-black text-slate-900 tracking-tight leading-snug">
+                  Rules &amp; Regulations
+                </h2>
+                <p className="text-xs text-slate-500 font-medium">
+                  {settings.rulesDocumentTitle || 'Official Rules & Regulations – Internal SIH 2026'}
+                </p>
+              </div>
+            </div>
+            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-black text-[10px] sm:text-xs uppercase tracking-wider text-[#C1272D] bg-red-50 border border-red-100 shadow-2xs self-start sm:self-auto shrink-0 whitespace-nowrap">
+              <span className="h-2 w-2 rounded-full bg-[#C1272D] animate-pulse" />
+              Official Document
+            </span>
           </div>
-          {settings.rulesPdfLink ? <a href={settings.rulesPdfLink} download className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-xs font-black text-white bg-[#C1272D] hover:bg-red-700 transition"><Download className="h-4 w-4" /> Download PDF</a> : <span className="px-5 py-2.5 rounded-xl text-xs font-black text-slate-400 bg-slate-100">PDF Coming Soon</span>}
-      </div>
+
+          {/* Body */}
+          <p className="text-sm text-slate-600 font-semibold leading-relaxed">
+            Review the official eligibility criteria, team composition rules, conduct policies, and
+            competition phase guidelines before participating in Internal SIH 2026.
+          </p>
+
+          {/* CTA Button */}
+          <div className="flex flex-wrap gap-3">
+            {settings.rulesDocumentPdfUrl ? (
+              <a
+                href={settings.rulesDocumentPdfUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                download="SIH2026-Rules-Regulations.pdf"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl text-xs font-black text-white bg-gradient-to-r from-[#C1272D] to-red-600 hover:from-red-600 hover:to-red-500 transition shadow-md shadow-red-500/10 transform active:scale-95 duration-200"
+              >
+                <FileText className="h-4 w-4" />
+                View / Download Rules PDF
+              </a>
+            ) : (
+              <a
+                href={settings.rulesDocumentLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl text-xs font-black text-white bg-gradient-to-r from-[#C1272D] to-red-600 hover:from-red-600 hover:to-red-500 transition shadow-md shadow-red-500/10 transform active:scale-95 duration-200"
+              >
+                <ExternalLink className="h-4 w-4" />
+                Open Official Rules Document
+              </a>
+            )}
+            <button
+              type="button"
+              onClick={() => setActiveTab('rules')}
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl text-xs font-black text-[#C1272D] bg-red-50 hover:bg-red-100 border border-red-100 transition transform active:scale-95 duration-200"
+            >
+              <BookOpen className="h-4 w-4" />
+              View Rules Page
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* PPT TEMPLATE & SAMPLE FILLED REFERENCE GUIDE SECTION */}
       <div className="rounded-3xl bg-white p-6 border border-slate-200 shadow-xl space-y-5 hover:shadow-2xl/10 transition duration-300">
@@ -814,11 +974,11 @@ export const TeamPortalPage: React.FC = () => {
           </div>
 
           <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-black text-[10px] sm:text-xs uppercase tracking-wider self-start sm:self-auto shrink-0 whitespace-nowrap ${
-            isPptSubmissionOpen
+            settings.pptSubmissionOpen
               ? 'text-emerald-700 bg-emerald-50 border border-emerald-200 shadow-2xs'
               : 'text-slate-500 bg-slate-100 border border-slate-200 shadow-2xs'
           }`}>
-            {isPptSubmissionOpen ? (
+            {settings.pptSubmissionOpen ? (
               <>
                 <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" />
                 Portal Live &amp; Open
@@ -833,7 +993,7 @@ export const TeamPortalPage: React.FC = () => {
         </div>
 
         {/* Short Summary Information & State */}
-        {!isPptSubmissionOpen ? (
+        {!settings.pptSubmissionOpen ? (
           <div className="p-6 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-2xs">
             <div className="space-y-1 text-center sm:text-left">
               <h4 className="text-sm font-black text-slate-800">
@@ -1435,4 +1595,3 @@ export const TeamPortalPage: React.FC = () => {
     </div>
   );
 };
-

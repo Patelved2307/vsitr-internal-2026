@@ -158,15 +158,6 @@ export const api = {
     return data;
   },
 
-  uploadRulesPdf: async (fileName: string, fileBase64: string) => {
-    const res = await fetch('/api/admin/rules-pdf', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ fileName, fileBase64 }) });
-    const responseText = await res.text();
-    let data: any;
-    try { data = JSON.parse(responseText); } catch { throw new Error('The upload service returned an invalid response. Please use the PDF Link option or contact the site administrator.'); }
-    if (!res.ok) throw new Error(data.message || 'Failed to upload rules PDF');
-    return data;
-  },
-
   // Admin Teams List
   getAdminTeams: async (params?: {
     search?: string;
@@ -323,7 +314,7 @@ export const api = {
     return data;
   },
 
-  selectProblemStatement: async (payload: { teamId: string; psId: string; psTitle: string }) => {
+  selectProblemStatement: async (payload: { teamId: string; psId: string; psTitle?: string }) => {
     const res = await fetch('/api/teams/select-ps', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
