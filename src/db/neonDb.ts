@@ -35,6 +35,22 @@ let activePool: any = null;
 let neonSql: any = null;
 let isNeonConnected = false;
 
+/**
+ * Presentation Day was previously stored as a midnight timestamp. That made
+ * the public timeline imply a confirmed time even though slots are pending.
+ * Keep the date while presenting the approved, unambiguous schedule note.
+ */
+function normalizePresentationDayTimeline(timeline: TimelineEvent[]): TimelineEvent[] {
+  return timeline.map((event) => {
+    const isPresentationDay = event.id === 't5' || event.title.toLowerCase().includes('presentation day');
+    const isLegacySeptemberTenth = /(?:2026-09-09T18:30:00(?:\.000)?Z|10 September 2026,?\s*12:00 AM)/i.test(event.date);
+
+    return isPresentationDay && isLegacySeptemberTenth
+      ? { ...event, date: '10 September 2026 (Time will be shared soon)' }
+      : event;
+  });
+}
+
 export async function runQuery(queryText: string, params: any[] = []): Promise<{ rows: any[]; rowCount: number }> {
   if (activePool) {
     const res = await activePool.query(queryText, params);
@@ -528,7 +544,7 @@ export async function getGlobalConfig() {
 
         return {
           settings: mergedSettings,
-          timeline: val.timeline || fileDb.timeline,
+          timeline: normalizePresentationDayTimeline(val.timeline || fileDb.timeline),
           faqs: val.faqs || fileDb.faqs,
           rules: val.rules || fileDb.rules,
           nextTeamNumber: val.nextTeamNumber || fileDb.nextTeamNumber || 1,
@@ -545,7 +561,7 @@ export async function getGlobalConfig() {
   }
   return {
     settings: fileDb.settings,
-    timeline: fileDb.timeline,
+    timeline: normalizePresentationDayTimeline(fileDb.timeline),
     faqs: fileDb.faqs,
     rules: fileDb.rules,
     nextTeamNumber: fileDb.nextTeamNumber,

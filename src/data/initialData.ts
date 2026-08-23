@@ -78,7 +78,7 @@ export const INITIAL_TIMELINE_EVENTS: TimelineEvent[] = [
   {
     id: 't5',
     title: 'PPT Presentation Day',
-    date: '26 August 2026 (Time will be shared soon)',
+    date: '10 September 2026 (Time will be shared soon)',
     description: 'In-person pitch deck presentation & technical evaluation before faculty panel. Venue: Gandhinagar Campus. Schedule & time slots will be shared soon.',
     active: false,
   },
