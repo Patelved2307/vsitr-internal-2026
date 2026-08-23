@@ -16,7 +16,7 @@ export const TimelineSection: React.FC = () => {
     const eventDate = parseTimelineDate(event.date);
     if (eventDate) {
       if (now > eventDate.getTime()) {
-        statusLabel = 'Closed';
+        statusLabel = 'Completed';
         statusStyle = 'bg-red-50 text-red-700 border-red-200';
       } else if (event.active) {
         statusLabel = 'Active';
@@ -24,7 +24,7 @@ export const TimelineSection: React.FC = () => {
         isLiveDot = true;
       }
     } else if (!event.active || event.date.toLowerCase().includes('closed')) {
-      statusLabel = 'Closed';
+      statusLabel = 'Inactive';
       statusStyle = 'bg-red-50 text-red-700 border-red-200';
     } else {
       if (event.active) {

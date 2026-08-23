@@ -737,10 +737,11 @@ export const AdminPage: React.FC = () => {
   // Editable Timeline State
   const [editTimeline, setEditTimeline] = useState<TimelineEvent[]>(timeline);
   const [editingTimelineId, setEditingTimelineId] = useState<string | null>(null);
-  const [timelineEditItem, setTimelineEditItem] = useState<{ title: string; date: string; description: string }>({
+  const [timelineEditItem, setTimelineEditItem] = useState<{ title: string; date: string; description: string; active: boolean }>({
     title: '',
     date: '',
     description: '',
+    active: true,
   });
   const [newTimelineTitle, setNewTimelineTitle] = useState('');
   const [newTimelineDate, setNewTimelineDate] = useState('');
@@ -1214,32 +1215,18 @@ export const AdminPage: React.FC = () => {
   // Timeline handlers
   const handleStartEditTimeline = (item: TimelineEvent) => {
     setEditingTimelineId(item.id);
-    setTimelineEditItem({ title: item.title, date: item.date, description: item.description });
+    setTimelineEditItem({ title: item.title, date: item.date, description: item.description, active: item.active });
   };
 
-  const handleSaveTimelineItem = (id: string) => {
-    setEditTimeline(
-      editTimeline.map((item) =>
-        item.id === id
-          ? { ...item, ...timelineEditItem }
-          : item
-      )
-    );
-    setEditingTimelineId(null);
-  };
-
-  // Saves only the milestones shown on the public Event Timeline.  It must not
-  // also apply unsaved values from the wider Event Settings form.
-  const handleSaveTimeline = async () => {
+  const publishTimeline = async (nextTimeline: TimelineEvent[], message: string) => {
     try {
       setIsSavingSettings(true);
-      const res = await api.updateSettings({ timeline: editTimeline });
-      if (res.success) {
-        // Instantly refresh an already-open main website tab in this browser.
-        localStorage.setItem('sih_2026_timeline_updated_at', new Date().toISOString());
-        await reloadPortalData();
-        showAlert('Timeline Published', 'The Event Timeline is now updated on the main website.', 'success');
-      }
+      const res = await api.updateSettings({ timeline: nextTimeline });
+      if (!res.success) throw new Error('Failed to save timeline changes.');
+      setEditTimeline(nextTimeline);
+      localStorage.setItem('sih_2026_timeline_updated_at', new Date().toISOString());
+      await reloadPortalData();
+      showAlert('Timeline Updated', message, 'success');
     } catch (err: any) {
       showAlert('Timeline Save Error', err.message || 'Failed to publish timeline changes.');
     } finally {
@@ -1247,7 +1234,23 @@ export const AdminPage: React.FC = () => {
     }
   };
 
-  const handleAddTimeline = () => {
+  const handleSaveTimelineItem = async (id: string) => {
+    const nextTimeline = editTimeline.map((item) =>
+        item.id === id
+          ? { ...item, ...timelineEditItem }
+          : item
+    );
+    await publishTimeline(nextTimeline, 'The event has been saved and is now live on the website.');
+    setEditingTimelineId(null);
+  };
+
+  // Saves only the milestones shown on the public Event Timeline.  It must not
+  // also apply unsaved values from the wider Event Settings form.
+  const handleSaveTimeline = async () => {
+    await publishTimeline(editTimeline, 'The Event Timeline is now updated on the main website.');
+  };
+
+  const handleAddTimeline = async () => {
     if (!newTimelineTitle.trim() || !newTimelineDate.trim()) return;
     const newItem: TimelineEvent = {
       id: `t_${Date.now()}`,
@@ -1256,14 +1259,15 @@ export const AdminPage: React.FC = () => {
       description: newTimelineDesc.trim(),
       active: true,
     };
-    setEditTimeline([...editTimeline, newItem]);
+    await publishTimeline([...editTimeline, newItem], 'The new event is now live on the website.');
     setNewTimelineTitle('');
     setNewTimelineDate('');
     setNewTimelineDesc('');
   };
 
-  const handleDeleteTimelineItem = (id: string) => {
-    setEditTimeline(editTimeline.filter((t) => t.id !== id));
+  const handleDeleteTimelineItem = async (id: string) => {
+    if (!confirm('Delete this timeline event from the website?')) return;
+    await publishTimeline(editTimeline.filter((t) => t.id !== id), 'The event has been removed from the website.');
   };
 
   // FAQ handlers
@@ -2202,6 +2206,15 @@ export const AdminPage: React.FC = () => {
                           className="w-full p-2 rounded-xl border border-slate-300 text-slate-900"
                           rows={2}
                         />
+                        <label className="inline-flex items-center gap-2 text-xs font-bold text-slate-700">
+                          <input
+                            type="checkbox"
+                            checked={timelineEditItem.active}
+                            onChange={(e) => setTimelineEditItem({ ...timelineEditItem, active: e.target.checked })}
+                            className="h-4 w-4 accent-[#1B3F8B]"
+                          />
+                          Mark this event as active on the public timeline
+                        </label>
                         <div className="flex justify-end gap-2">
                           <button
                             type="button"

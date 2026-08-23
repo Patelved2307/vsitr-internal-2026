@@ -820,8 +820,8 @@ export const RegistrationRulesView: React.FC = () => {
             </h3>
             <div className="space-y-3">
               {timeline && timeline.map((event, idx) => {
-                const isClosed = event.date.toLowerCase().includes('closed') || (isDeadlinePassed && (event.id === 't1' || event.id === 't2') && !settings.isExtended);
-                const displayDate = isClosed ? 'Closed' : formatTimelineDate(event.date);
+                const isClosed = event.date.toLowerCase().includes('closed') || (!event.active && event.id !== 't5');
+                const displayDate = formatTimelineDate(event.date);
                 const isLivePpt = event.title.toLowerCase().includes('ppt') && event.title.toLowerCase().includes('prototype');
                 return (
                   <div key={event.id || idx} className={`flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-3 rounded-2xl border transition ${
@@ -842,6 +842,7 @@ export const RegistrationRulesView: React.FC = () => {
                         : 'text-slate-900 bg-slate-100 border border-slate-200'
                     }`}>
                       {isLivePpt && <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />}
+                      {isClosed && <span className="mr-1.5 text-red-600">Closed</span>}
                       {displayDate}
                     </span>
                   </div>
