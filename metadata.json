@@ -1,0 +1,6 @@
+{
+  "name": "Internal SIH 2026 Registration Portal",
+  "description": "Internal SIH 2026 Registration Portal for VSITR under KSV, organized by Research, Coding, Design, and Soft Skills Clubs.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
