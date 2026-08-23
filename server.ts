@@ -588,7 +588,12 @@ async function startServer() {
       }
 
       const globalConfig = await getGlobalConfig();
-      if (!globalConfig.settings?.pptSubmissionOpen) {
+      const pptDeadlineValue = globalConfig.settings?.isPptExtended && globalConfig.settings?.pptExtendedDeadline
+        ? globalConfig.settings.pptExtendedDeadline
+        : globalConfig.settings?.pptSubmissionDeadline;
+      const pptDeadline = pptDeadlineValue ? new Date(pptDeadlineValue) : null;
+      const isPptDeadlinePassed = !!pptDeadline && !Number.isNaN(pptDeadline.getTime()) && new Date() > pptDeadline;
+      if (!globalConfig.settings?.pptSubmissionOpen || isPptDeadlinePassed) {
         return res.status(403).json({ success: false, message: 'PPT Submission portal is currently closed by the Admin Officer.' });
       }
 
@@ -1165,13 +1170,14 @@ async function startServer() {
         return res.status(400).json({ success: false, message: 'Team ID and Problem Statement ID are required.' });
       }
 
-      // Check deadline from settings (or fallback)
-      const deadline = new Date('2026-08-16T23:59:00+05:30'); // IST timezone
+      // Use the deadline managed in the Admin Panel. The fallback preserves existing installs.
+      const globalConfig = await getGlobalConfig();
+      const deadline = new Date(globalConfig.settings?.psSelectionDeadline || '2026-08-16T18:29:00.000Z');
       const now = new Date();
-      if (now > deadline) {
+      if (!Number.isNaN(deadline.getTime()) && now > deadline) {
         return res.status(400).json({
           success: false,
-          message: 'The deadline for selecting problem statements has passed (August 16, 2026, 11:59 PM).'
+          message: 'The deadline for selecting problem statements has passed.'
         });
       }
 

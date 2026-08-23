@@ -505,6 +505,9 @@ export async function getGlobalConfig() {
         const fileDb = ensureFileDb();
         // Merge: DB (Neon) values take priority over local file defaults
         const mergedSettings = { ...fileDb.settings, ...(val.settings || {}) };
+        if (!/^\d{4}-\d{2}-\d{2}T/.test(mergedSettings.pptSubmissionDeadline || '')) {
+          mergedSettings.pptSubmissionDeadline = '2026-08-24T18:30:00.000Z';
+        }
 
         return {
           settings: mergedSettings,
@@ -519,6 +522,10 @@ export async function getGlobalConfig() {
     }
   }
   const fileDb = ensureFileDb();
+  if (!/^\d{4}-\d{2}-\d{2}T/.test(fileDb.settings.pptSubmissionDeadline || '')) {
+    fileDb.settings.pptSubmissionDeadline = '2026-08-24T18:30:00.000Z';
+    saveFileDb(fileDb);
+  }
   return {
     settings: fileDb.settings,
     timeline: fileDb.timeline,

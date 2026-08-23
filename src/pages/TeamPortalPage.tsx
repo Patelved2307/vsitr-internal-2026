@@ -155,6 +155,12 @@ export const TeamPortalPage: React.FC = () => {
     seconds: number;
     isExpired: boolean;
   }>({ days: 0, hours: 0, minutes: 0, seconds: 0, isExpired: false });
+  const effectivePptDeadline = settings.isPptExtended && settings.pptExtendedDeadline
+    ? settings.pptExtendedDeadline
+    : settings.pptSubmissionDeadline;
+  const isPptOpen = (settings.pptSubmissionOpen ?? false) && !(
+    effectivePptDeadline && new Date() > new Date(effectivePptDeadline)
+  );
 
   // Countdown timer for PS Selection Deadline (controlled from Admin Panel → Event Settings)
   useEffect(() => {
@@ -974,11 +980,11 @@ export const TeamPortalPage: React.FC = () => {
           </div>
 
           <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-black text-[10px] sm:text-xs uppercase tracking-wider self-start sm:self-auto shrink-0 whitespace-nowrap ${
-            settings.pptSubmissionOpen
+            isPptOpen
               ? 'text-emerald-700 bg-emerald-50 border border-emerald-200 shadow-2xs'
               : 'text-slate-500 bg-slate-100 border border-slate-200 shadow-2xs'
           }`}>
-            {settings.pptSubmissionOpen ? (
+            {isPptOpen ? (
               <>
                 <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" />
                 Portal Live &amp; Open
@@ -993,7 +999,7 @@ export const TeamPortalPage: React.FC = () => {
         </div>
 
         {/* Short Summary Information & State */}
-        {!settings.pptSubmissionOpen ? (
+        {!isPptOpen ? (
           <div className="p-6 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-2xs">
             <div className="space-y-1 text-center sm:text-left">
               <h4 className="text-sm font-black text-slate-800">

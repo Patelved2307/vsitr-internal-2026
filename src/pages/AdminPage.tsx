@@ -2691,15 +2691,27 @@ export const AdminPage: React.FC = () => {
                       </select>
                     </div>
                     <div>
-                      <label className="block font-bold text-slate-800 mb-1">Submission Deadline (Display Text)</label>
+                      <label className="block font-bold text-slate-800 mb-1">Submission Deadline (Auto-Close Date &amp; Time)</label>
                       <input
-                        type="text"
-                        value={editPptSubmissionDeadline || ''}
-                        onChange={(e) => setEditPptSubmissionDeadline(e.target.value)}
+                        type="datetime-local"
+                        required
+                        value={toLocalISOString(editPptSubmissionDeadline)}
+                        onChange={(e) => setEditPptSubmissionDeadline(new Date(e.target.value).toISOString())}
                         className="w-full px-4 py-2.5 rounded-xl border border-slate-300 font-bold focus:border-[#C1272D] outline-none text-slate-900"
-                        placeholder="e.g. 23 August 2026, 11:59 PM"
                       />
                     </div>
+                    {editIsPptExtended && (
+                      <div>
+                        <label className="block font-bold text-slate-800 mb-1">Extended Submission Deadline</label>
+                        <input
+                          type="datetime-local"
+                          required
+                          value={toLocalISOString(editPptExtendedDeadline)}
+                          onChange={(e) => setEditPptExtendedDeadline(new Date(e.target.value).toISOString())}
+                          className="w-full px-4 py-2.5 rounded-xl border border-slate-300 font-bold focus:border-[#C1272D] outline-none text-slate-900"
+                        />
+                      </div>
+                    )}
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

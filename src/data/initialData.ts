@@ -29,7 +29,8 @@ export const INITIAL_SETTINGS: EventSettings = {
   // PPT Submission
   pptSubmissionOpen: true,
   pptSubmissionStatus: 'PPT & Prototype Submission Portal is LIVE! Submit your pitch presentation deck (.ppt/.pptx), 2-minute YouTube video pitch clip, and 20% prototype code repository.',
-  pptSubmissionDeadline: '25 August 2026, 12:00 AM',
+  // ISO timestamp so the server and every client can enforce the same deadline.
+  pptSubmissionDeadline: '2026-08-24T18:30:00.000Z', // 25 Aug 2026, 12:00 AM IST
   pptReferenceLink: '/SIH-PPT-REFERANCE.pdf',
   isPptExtended: false,
   pptExtendedDeadline: '2026-08-27T18:29:59.000Z',

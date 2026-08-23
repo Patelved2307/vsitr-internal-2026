@@ -35,8 +35,20 @@ export const PptSubmissionPage: React.FC = () => {
   const [githubCollaboratorsAdded, setGithubCollaboratorsAdded] = useState(team?.pptSubmission?.githubCollaboratorsAdded || false);
   
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [currentTime, setCurrentTime] = useState(Date.now());
 
-  const isOpen = settings.pptSubmissionOpen ?? false;
+  useEffect(() => {
+    const timer = window.setInterval(() => setCurrentTime(Date.now()), 1000);
+    return () => window.clearInterval(timer);
+  }, []);
+
+  const effectivePptDeadline = settings.isPptExtended && settings.pptExtendedDeadline
+    ? settings.pptExtendedDeadline
+    : settings.pptSubmissionDeadline;
+  const isPptDeadlinePassed = effectivePptDeadline
+    ? currentTime > new Date(effectivePptDeadline).getTime()
+    : false;
+  const isOpen = (settings.pptSubmissionOpen ?? false) && !isPptDeadlinePassed;
 
   // Validate and set PPT file
   const validateAndSetFile = (file: File): boolean => {
@@ -110,7 +122,9 @@ export const PptSubmissionPage: React.FC = () => {
     }
 
     if (!isOpen) {
-      showAlert('Portal Closed', 'The PPT & Prototype submission portal is currently closed by the Admin Officer.');
+      showAlert('Portal Closed', isPptDeadlinePassed
+        ? 'The PPT & Prototype submission deadline has passed.'
+        : 'The PPT & Prototype submission portal is currently closed by the Admin Officer.');
       return;
     }
 

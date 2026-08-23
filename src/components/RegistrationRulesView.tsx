@@ -1121,7 +1121,7 @@ export const RegistrationRulesView: React.FC = () => {
                     {settings.pptSubmissionDeadline && (
                       <div className="flex items-center gap-2 text-xs font-bold text-[#C1272D] bg-red-50 px-2.5 py-1 rounded-lg border border-red-100/55 inline-flex w-auto">
                         <Calendar className="h-3.5 w-3.5" />
-                        Submission Deadline: {settings.pptSubmissionDeadline}
+                        Submission Deadline: {new Date(settings.isPptExtended && settings.pptExtendedDeadline ? settings.pptExtendedDeadline : settings.pptSubmissionDeadline).toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short', timeZone: 'Asia/Kolkata' })} IST
                       </div>
                     )}
 
