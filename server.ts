@@ -1491,6 +1491,21 @@ async function startServer() {
         return res.status(401).json({ success: false, message: 'Only the team leader can submit change requests.' });
       }
 
+      if (fieldName === 'enrollmentNo') {
+        const enr = String(newValue).trim().toUpperCase();
+        const allTeams = await getAllTeams();
+        for (const t of allTeams) {
+          if (t.id.toUpperCase() === teamId.toUpperCase()) continue;
+          const otherMembers = [t.leader, ...t.members];
+          if (otherMembers.some((m) => String(m.enrollmentNo || '').trim().toUpperCase() === enr)) {
+            return res.status(400).json({
+              success: false,
+              message: `Enrollment number ${enr} is already registered in team "${t.teamName}".`,
+            });
+          }
+        }
+      }
+
       const requestId = `LER-${teamId}-${Date.now()}`;
       const created = await createLeaderEditRequest({
         id: requestId,
@@ -1551,6 +1566,21 @@ async function startServer() {
       if (action === 'approved' && updated) {
         const team = await getTeamById(target.teamId);
         if (team) {
+          if (target.fieldName === 'enrollmentNo') {
+            const enr = String(target.newValue).trim().toUpperCase();
+            const allTeams = await getAllTeams();
+            for (const t of allTeams) {
+              if (t.id.toUpperCase() === target.teamId.toUpperCase()) continue;
+              const otherMembers = [t.leader, ...t.members];
+              if (otherMembers.some((m) => String(m.enrollmentNo || '').trim().toUpperCase() === enr)) {
+                return res.status(400).json({
+                  success: false,
+                  message: `Cannot approve: Enrollment number ${enr} is already registered in team "${t.teamName}".`,
+                });
+              }
+            }
+          }
+
           const fieldMap: Record<string, string> = {
             fullName: 'fullName',
             email: 'email',
