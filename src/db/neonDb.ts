@@ -113,9 +113,9 @@ async function syncNormalizedMembersAndMentors(team: Team) {
 }
 
 export function getDatabaseUrl(): string | undefined {
-  const url = process.env.DATABASE_URL || 
-              process.env.NEON_DATABASE_URL || 
-              'postgresql://neondb_owner:npg_yejSI8qT0xuA@ep-lingering-mountain-aziaavg3-pooler.c-3.ap-southeast-1.aws.neon.tech/neondb?sslmode=require';
+  const url = process.env.DATABASE_URL ||
+    process.env.NEON_DATABASE_URL ||
+    'postgresql://neondb_owner:npg_yejSI8qT0xuA@ep-lingering-mountain-aziaavg3-pooler.c-3.ap-southeast-1.aws.neon.tech/neondb?sslmode=require';
   if (!url || typeof url !== 'string') return undefined;
   let trimmed = url.trim();
   if (!trimmed || (!trimmed.startsWith('postgres://') && !trimmed.startsWith('postgresql://'))) {
@@ -137,7 +137,7 @@ export async function initDatabase(force = false): Promise<void> {
   if (dbUrl) {
     try {
       console.log('Connecting to Neon PostgreSQL database...');
-      
+
       // Reset active clients
       activePool = null;
       neonSql = null;
@@ -248,7 +248,7 @@ export async function initDatabase(force = false): Promise<void> {
           id TEXT PRIMARY KEY,
           recipient_email TEXT NOT NULL,
           recipient_name TEXT NOT NULL,
-          team_id TEXT,
+          team_id TEXT REFERENCES teams(id) ON DELETE SET NULL,
           subject TEXT NOT NULL,
           body TEXT NOT NULL,
           type TEXT NOT NULL,
@@ -260,7 +260,7 @@ export async function initDatabase(force = false): Promise<void> {
       await runQuery(`
         CREATE TABLE IF NOT EXISTS ppt_submissions (
           id TEXT PRIMARY KEY,
-          team_id TEXT NOT NULL,
+          team_id TEXT NOT NULL REFERENCES teams(id) ON DELETE CASCADE,
           team_name TEXT NOT NULL,
           leader_name TEXT NOT NULL,
           leader_email TEXT NOT NULL,
@@ -294,6 +294,23 @@ export async function initDatabase(force = false): Promise<void> {
 
       await runQuery(`ALTER TABLE problem_statements ADD COLUMN IF NOT EXISTS sdg TEXT;`);
       await runQuery(`ALTER TABLE problem_statements ADD COLUMN IF NOT EXISTS theme TEXT;`);
+
+      // Enforce data consistency and add foreign key constraints for existing tables
+      try {
+        await runQuery(`UPDATE teams SET selected_ps_id = NULL WHERE selected_ps_id IS NOT NULL AND selected_ps_id NOT IN (SELECT id FROM problem_statements);`);
+        await runQuery(`ALTER TABLE teams DROP CONSTRAINT IF EXISTS fk_team_ps;`);
+        await runQuery(`ALTER TABLE teams ADD CONSTRAINT fk_team_ps FOREIGN KEY (selected_ps_id) REFERENCES problem_statements(id) ON DELETE SET NULL;`);
+
+        await runQuery(`DELETE FROM ppt_submissions WHERE team_id NOT IN (SELECT id FROM teams);`);
+        await runQuery(`ALTER TABLE ppt_submissions DROP CONSTRAINT IF EXISTS fk_ppt_team;`);
+        await runQuery(`ALTER TABLE ppt_submissions ADD CONSTRAINT fk_ppt_team FOREIGN KEY (team_id) REFERENCES teams(id) ON DELETE CASCADE;`);
+
+        await runQuery(`UPDATE email_logs SET team_id = NULL WHERE team_id IS NOT NULL AND team_id NOT IN (SELECT id FROM teams);`);
+        await runQuery(`ALTER TABLE email_logs DROP CONSTRAINT IF EXISTS fk_email_team;`);
+        await runQuery(`ALTER TABLE email_logs ADD CONSTRAINT fk_email_team FOREIGN KEY (team_id) REFERENCES teams(id) ON DELETE SET NULL;`);
+      } catch (migrationErr) {
+        console.warn('Warning: Could not enforce some foreign key constraints dynamically:', migrationErr);
+      }
 
       // Seed and synchronize default problem statements in Neon DB
       for (const ps of INITIAL_PROBLEM_STATEMENTS) {
@@ -466,7 +483,7 @@ function ensureFileDb(): DatabaseSchema {
     console.error('Error reading DB file, reinitializing', err);
     try {
       fs.writeFileSync(DB_FILE, JSON.stringify(initialDb, null, 2), 'utf-8');
-    } catch (e) {}
+    } catch (e) { }
     return initialDb;
   }
 }
@@ -552,7 +569,7 @@ export async function getNextTeamNumber(): Promise<number> {
       console.error('Error atomically incrementing nextTeamNumber:', err);
     }
   }
-  
+
   // Fallback for local DB
   const db = ensureFileDb();
   const num = db.nextTeamNumber || 1;
@@ -602,7 +619,7 @@ export async function getAllTeams(): Promise<Team[]> {
   if (isNeonConnected) {
     try {
       const res = await runQuery("SELECT * FROM teams ORDER BY created_at DESC");
-      
+
       const parsedTeams = res.rows.map((row: any) => {
         let leaderData: any = {};
         let membersData: any = [];
@@ -610,24 +627,24 @@ export async function getAllTeams(): Promise<Team[]> {
 
         try {
           leaderData = typeof row.leader === 'string' ? JSON.parse(row.leader) : row.leader;
-        } catch(e) { console.warn('Failed to parse leader json for team:', row.id); }
+        } catch (e) { console.warn('Failed to parse leader json for team:', row.id); }
 
         try {
           membersData = typeof row.members === 'string' ? JSON.parse(row.members) : row.members;
-        } catch(e) { console.warn('Failed to parse members json for team:', row.id); }
+        } catch (e) { console.warn('Failed to parse members json for team:', row.id); }
 
         try {
           if (row.mentor) {
             mentorData = typeof row.mentor === 'string' ? JSON.parse(row.mentor) : row.mentor;
           }
-        } catch(e) { console.warn('Failed to parse mentor json for team:', row.id); }
+        } catch (e) { console.warn('Failed to parse mentor json for team:', row.id); }
 
         let pptSubmissionData: any = undefined;
         try {
           if (row.ppt_submission) {
             pptSubmissionData = typeof row.ppt_submission === 'string' ? JSON.parse(row.ppt_submission) : row.ppt_submission;
           }
-        } catch(e) { console.warn('Failed to parse ppt_submission json for team:', row.id); }
+        } catch (e) { console.warn('Failed to parse ppt_submission json for team:', row.id); }
 
         return {
           id: row.id,
@@ -904,12 +921,133 @@ export async function runTableMigrations() {
     await runQuery(`ALTER TABLE ppt_submissions ADD COLUMN IF NOT EXISTS github_collaborators_added BOOLEAN DEFAULT FALSE;`);
 
     // Drop legacy unused columns if present
-    await runQuery(`ALTER TABLE ppt_submissions DROP COLUMN IF EXISTS file_url;`).catch(() => {});
-    await runQuery(`ALTER TABLE ppt_submissions DROP COLUMN IF EXISTS note;`).catch(() => {});
+    await runQuery(`ALTER TABLE ppt_submissions DROP COLUMN IF EXISTS file_url;`).catch(() => { });
+    await runQuery(`ALTER TABLE ppt_submissions DROP COLUMN IF EXISTS note;`).catch(() => { });
+
+    // leader_edit_requests table (Team Edit Window — leader field change queue)
+    await runQuery(`
+      CREATE TABLE IF NOT EXISTS leader_edit_requests (
+        id TEXT PRIMARY KEY,
+        team_id TEXT NOT NULL REFERENCES teams(id) ON DELETE CASCADE,
+        team_name TEXT,
+        leader_name TEXT,
+        field_name TEXT NOT NULL,
+        old_value TEXT NOT NULL,
+        new_value TEXT NOT NULL,
+        reason TEXT NOT NULL,
+        status TEXT NOT NULL DEFAULT 'pending',
+        requested_at TIMESTAMPTZ DEFAULT NOW(),
+        reviewed_at TIMESTAMPTZ
+      );
+    `);
   } catch (e) {
     console.error('Error running table migrations:', e);
   }
 }
+
+// ===========================
+// LEADER EDIT REQUESTS CRUD
+// ===========================
+import type { LeaderEditRequest } from '../types.js';
+
+export async function createLeaderEditRequest(data: Omit<LeaderEditRequest, 'requestedAt'>): Promise<LeaderEditRequest> {
+  const req: LeaderEditRequest = {
+    ...data,
+    requestedAt: new Date().toISOString(),
+  };
+  if (isNeonConnected) {
+    try {
+      await runQuery(
+        `INSERT INTO leader_edit_requests (id, team_id, team_name, leader_name, field_name, old_value, new_value, reason, status, requested_at)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+         ON CONFLICT (id) DO NOTHING`,
+        [req.id, req.teamId, req.teamName || null, req.leaderName || null, req.fieldName, req.oldValue, req.newValue, req.reason, req.status, req.requestedAt]
+      );
+    } catch (err) {
+      console.error('Error creating leader_edit_request in Neon:', err);
+    }
+  }
+  return req;
+}
+
+export async function getAllLeaderEditRequests(): Promise<LeaderEditRequest[]> {
+  if (isNeonConnected) {
+    try {
+      const res = await runQuery(`SELECT * FROM leader_edit_requests ORDER BY requested_at DESC`);
+      return res.rows.map((r: any) => ({
+        id: r.id,
+        teamId: r.team_id,
+        teamName: r.team_name || undefined,
+        leaderName: r.leader_name || undefined,
+        fieldName: r.field_name,
+        oldValue: r.old_value,
+        newValue: r.new_value,
+        reason: r.reason,
+        status: r.status as 'pending' | 'approved' | 'rejected',
+        requestedAt: r.requested_at,
+        reviewedAt: r.reviewed_at || undefined,
+      }));
+    } catch (err) {
+      console.error('Error fetching leader_edit_requests:', err);
+    }
+  }
+  return [];
+}
+
+export async function getLeaderEditRequestsByTeam(teamId: string): Promise<LeaderEditRequest[]> {
+  if (isNeonConnected) {
+    try {
+      const res = await runQuery(`SELECT * FROM leader_edit_requests WHERE team_id = $1 ORDER BY requested_at DESC`, [teamId]);
+      return res.rows.map((r: any) => ({
+        id: r.id,
+        teamId: r.team_id,
+        teamName: r.team_name || undefined,
+        leaderName: r.leader_name || undefined,
+        fieldName: r.field_name,
+        oldValue: r.old_value,
+        newValue: r.new_value,
+        reason: r.reason,
+        status: r.status as 'pending' | 'approved' | 'rejected',
+        requestedAt: r.requested_at,
+        reviewedAt: r.reviewed_at || undefined,
+      }));
+    } catch (err) {
+      console.error('Error fetching leader_edit_requests by team:', err);
+    }
+  }
+  return [];
+}
+
+export async function updateLeaderEditRequest(id: string, status: 'approved' | 'rejected'): Promise<LeaderEditRequest | null> {
+  if (isNeonConnected) {
+    try {
+      const res = await runQuery(
+        `UPDATE leader_edit_requests SET status = $1, reviewed_at = NOW() WHERE id = $2 RETURNING *`,
+        [status, id]
+      );
+      if (res.rows.length > 0) {
+        const r = res.rows[0];
+        return {
+          id: r.id,
+          teamId: r.team_id,
+          teamName: r.team_name || undefined,
+          leaderName: r.leader_name || undefined,
+          fieldName: r.field_name,
+          oldValue: r.old_value,
+          newValue: r.new_value,
+          reason: r.reason,
+          status: r.status as 'pending' | 'approved' | 'rejected',
+          requestedAt: r.requested_at,
+          reviewedAt: r.reviewed_at || undefined,
+        };
+      }
+    } catch (err) {
+      console.error('Error updating leader_edit_request:', err);
+    }
+  }
+  return null;
+}
+
 
 export async function createPptSubmission(data: any): Promise<PptSubmission> {
   const submittedAt = data.submittedAt || new Date().toISOString();

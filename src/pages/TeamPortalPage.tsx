@@ -394,6 +394,22 @@ export const TeamPortalPage: React.FC = () => {
               <Lock className="h-3.5 w-3.5" />
               Modifications Locked
             </span>
+
+            {/* Team Edit Window Button */}
+            {settings.teamEditOpen && !(settings.teamEditCloseAt && new Date(settings.teamEditCloseAt) <= new Date()) ? (
+              <button
+                onClick={() => setActiveTab('team-edit')}
+                className="px-3.5 py-2 rounded-2xl text-xs font-black bg-blue-500/15 text-blue-300 border border-blue-500/30 inline-flex items-center gap-1.5 shadow-2xs hover:bg-blue-500/25 transition cursor-pointer"
+              >
+                <Edit3 className="h-3.5 w-3.5" />
+                Edit Team Members
+              </button>
+            ) : (
+              <span className="px-3.5 py-2 rounded-2xl text-xs font-black bg-slate-500/10 text-slate-400 border border-slate-500/20 inline-flex items-center gap-1.5 shadow-2xs">
+                <Lock className="h-3.5 w-3.5" />
+                Edit Window Closed
+              </span>
+            )}
           </div>
         </div>
       </div>
@@ -638,10 +654,20 @@ export const TeamPortalPage: React.FC = () => {
               </p>
             </div>
           </div>
-          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-black text-[10px] sm:text-xs uppercase tracking-wider text-slate-500 bg-slate-100 border border-slate-200 shadow-2xs self-start sm:self-auto shrink-0 whitespace-nowrap">
-            <Lock className="h-3.5 w-3.5" />
-            Locked
-          </span>
+          {settings.teamEditOpen && !(settings.teamEditCloseAt && new Date(settings.teamEditCloseAt) <= new Date()) ? (
+            <button
+              onClick={() => setActiveTab('team-edit')}
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl font-black text-[11px] sm:text-xs uppercase tracking-wider text-blue-700 bg-blue-100 hover:bg-blue-200 border border-blue-200 shadow-2xs transition cursor-pointer self-start sm:self-auto shrink-0 whitespace-nowrap"
+            >
+              <Edit3 className="h-4 w-4" />
+              Edit Details
+            </button>
+          ) : (
+            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-black text-[10px] sm:text-xs uppercase tracking-wider text-slate-500 bg-slate-100 border border-slate-200 shadow-2xs self-start sm:self-auto shrink-0 whitespace-nowrap">
+              <Lock className="h-3.5 w-3.5" />
+              Locked
+            </span>
+          )}
         </div>
 
         {/* Desktop Table View */}

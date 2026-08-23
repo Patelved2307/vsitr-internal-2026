@@ -14,6 +14,7 @@ import { AdminPage } from './pages/AdminPage';
 import { PptSubmissionPage } from './pages/PptSubmissionPage';
 import { TimelineSection } from './components/TimelineSection';
 import { ProblemStatementsPage } from './pages/ProblemStatementsPage';
+import { TeamEditPage } from './pages/TeamEditPage';
 
 const MainLayout: React.FC = () => {
   const { activeTab, settings } = useAuth();
@@ -81,6 +82,8 @@ const MainLayout: React.FC = () => {
         {activeTab === 'timeline' && <TimelineSection />}
 
         {activeTab === 'problem-statements' && <ProblemStatementsPage />}
+
+        {activeTab === 'team-edit' && <TeamEditPage />}
       </main>
 
       {/* Footer - hidden in admin section */}

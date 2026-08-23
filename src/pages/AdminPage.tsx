@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { api } from '../services/api';
-import { Team, EventSettings, TimelineEvent, FAQItem, EmailLog, PptSubmission, Rule, RuleCategory, ProblemStatement } from '../types';
+import { Team, EventSettings, TimelineEvent, FAQItem, EmailLog, PptSubmission, Rule, RuleCategory, ProblemStatement, LeaderEditRequest } from '../types';
 import { formatTimelineDate, toTimelineDateTimeInput } from '../lib/timeline';
 import {
   ShieldCheck,
@@ -674,7 +674,7 @@ export const AdminPage: React.FC = () => {
   const [isAuthLoading, setIsAuthLoading] = useState(false);
 
   // Sidebar navigation selection
-  const [sidebarTab, setSidebarTab] = useState<'overview' | 'teams' | 'timeline' | 'faqs' | 'settings' | 'emails' | 'ppt-submissions' | 'problem-statements' | 'team-lookup' | 'mentor-lookup'>('overview');
+  const [sidebarTab, setSidebarTab] = useState<'overview' | 'teams' | 'timeline' | 'faqs' | 'settings' | 'emails' | 'ppt-submissions' | 'problem-statements' | 'team-lookup' | 'mentor-lookup' | 'edit-requests'>('overview');
 
   // Email & Neon Database state
   const [emailLogs, setEmailLogs] = useState<EmailLog[]>([]);
@@ -733,6 +733,16 @@ export const AdminPage: React.FC = () => {
   const [pptSubmissions, setPptSubmissions] = useState<PptSubmission[]>([]);
   const [isLoadingPptSubmissions, setIsLoadingPptSubmissions] = useState(false);
   const [deletingPptId, setDeletingPptId] = useState<string | null>(null);
+
+  // Team Edit Window state
+  const [editTeamEditOpen, setEditTeamEditOpen] = useState(settings.teamEditOpen ?? false);
+  const [editTeamEditCloseAt, setEditTeamEditCloseAt] = useState(settings.teamEditCloseAt ? toLocalISOString(settings.teamEditCloseAt) : '');
+  // Leader Edit Requests
+  const [leaderEditRequests, setLeaderEditRequests] = useState<LeaderEditRequest[]>([]);
+  const [isLoadingEditRequests, setIsLoadingEditRequests] = useState(false);
+  const [reviewingRequestId, setReviewingRequestId] = useState<string | null>(null);
+  // Countdown for team edit close
+  const [teamEditCountdown, setTeamEditCountdown] = useState('');
 
   // Editable Timeline State
   const [editTimeline, setEditTimeline] = useState<TimelineEvent[]>(timeline);
@@ -994,7 +1004,27 @@ export const AdminPage: React.FC = () => {
     setEditTimeline(timeline);
     setEditFaqs(faqs);
     setEditRules(rules);
+    // Team Edit Window
+    setEditTeamEditOpen(settings.teamEditOpen ?? false);
+    setEditTeamEditCloseAt(settings.teamEditCloseAt ? toLocalISOString(settings.teamEditCloseAt) : '');
   }, [settings, timeline, faqs, rules]);
+
+  // Countdown timer for team edit close-at
+  useEffect(() => {
+    if (!editTeamEditCloseAt) { setTeamEditCountdown(''); return; }
+    const updateCountdown = () => {
+      const closeAt = new Date(editTeamEditCloseAt);
+      const diff = closeAt.getTime() - Date.now();
+      if (diff <= 0) { setTeamEditCountdown('Closing now…'); return; }
+      const h = Math.floor(diff / 3_600_000);
+      const m = Math.floor((diff % 3_600_000) / 60_000);
+      const s = Math.floor((diff % 60_000) / 1000);
+      setTeamEditCountdown(`${h}h ${m}m ${s}s`);
+    };
+    updateCountdown();
+    const id = setInterval(updateCountdown, 1000);
+    return () => clearInterval(id);
+  }, [editTeamEditCloseAt]);
 
   // Fetch admin stats, teams, email logs & neon status
   const loadAdminData = async () => {
@@ -1157,6 +1187,8 @@ export const AdminPage: React.FC = () => {
           rulesDocumentPdfUrl: rulesDocUploadMode === 'pdf' ? editRulesDocumentPdfUrl : '',
           rulesDocumentTitle: editRulesDocumentTitle,
           psSelectionDeadline: editPsSelectionDeadline,
+          teamEditOpen: editTeamEditOpen,
+          teamEditCloseAt: editTeamEditCloseAt ? new Date(editTeamEditCloseAt).toISOString() : undefined,
         },
         timeline: updatedTimeline,
         faqs: updatedFaqs,
@@ -1183,6 +1215,8 @@ export const AdminPage: React.FC = () => {
           setEditExtendedDeadline(res.settings.extendedDeadline ?? editExtendedDeadline);
           setEditCustomQuote(res.settings.customQuote ?? editCustomQuote);
           setEditCustomQuoteAuthor(res.settings.customQuoteAuthor ?? editCustomQuoteAuthor);
+          if (res.settings.teamEditOpen !== undefined) setEditTeamEditOpen(res.settings.teamEditOpen);
+          if (res.settings.teamEditCloseAt !== undefined) setEditTeamEditCloseAt(res.settings.teamEditCloseAt ? toLocalISOString(res.settings.teamEditCloseAt) : '');
         }
         setEditTimeline(updatedTimeline);
         setEditFaqs(updatedFaqs);
@@ -1193,6 +1227,53 @@ export const AdminPage: React.FC = () => {
       showAlert('Save Error', err.message || 'Failed to update settings.');
     } finally {
       setIsSavingSettings(false);
+    }
+  };
+
+  // Toggle Team Edit Window Quick Action
+  const handleToggleTeamEdit = async () => {
+    const newStatus = !editTeamEditOpen;
+    setEditTeamEditOpen(newStatus);
+    try {
+      await api.updateSettings({
+        settings: { teamEditOpen: newStatus },
+      });
+      await reloadPortalData();
+      showAlert('Status Changed', `Team Edit Window is now ${newStatus ? 'OPEN' : 'CLOSED'}.`, 'info');
+    } catch (err: any) {
+      setEditTeamEditOpen(!newStatus);
+      showAlert('Error', err.message || 'Failed to toggle team edit window.');
+    }
+  };
+
+  // Load leader edit requests
+  const loadEditRequests = async () => {
+    setIsLoadingEditRequests(true);
+    try {
+      const res = await api.getAdminLeaderEditRequests();
+      setLeaderEditRequests(res.requests || []);
+    } catch (err) {
+      console.error('Error loading edit requests:', err);
+    } finally {
+      setIsLoadingEditRequests(false);
+    }
+  };
+
+  // Review a leader edit request
+  const handleReviewRequest = async (id: string, action: 'approved' | 'rejected') => {
+    setReviewingRequestId(id);
+    try {
+      const res = await api.reviewLeaderEditRequest(id, action);
+      showAlert(
+        action === 'approved' ? 'Request Approved' : 'Request Rejected',
+        res.message,
+        action === 'approved' ? 'success' : 'info'
+      );
+      await loadEditRequests();
+    } catch (err: any) {
+      showAlert('Error', err.message || 'Failed to review request.');
+    } finally {
+      setReviewingRequestId(null);
     }
   };
 
@@ -1594,6 +1675,27 @@ export const AdminPage: React.FC = () => {
               </span>
             </button>
 
+            <button
+              onClick={async () => {
+                setSidebarTab('edit-requests');
+                await loadEditRequests();
+              }}
+              className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl font-bold text-xs transition ${sidebarTab === 'edit-requests'
+                  ? 'bg-rose-50 text-[#C1272D] shadow-2xs border border-rose-100'
+                  : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
+                }`}
+            >
+              <div className="flex items-center gap-3 min-w-0">
+                <Edit3 className="h-4 w-4 shrink-0" />
+                <span className="truncate">Edit Requests</span>
+              </div>
+              {leaderEditRequests.filter(r => r.status === 'pending').length > 0 && (
+                <span className="px-2 py-0.5 rounded-full text-[10px] bg-amber-100 text-amber-700 font-extrabold shrink-0">
+                  {leaderEditRequests.filter(r => r.status === 'pending').length}
+                </span>
+              )}
+            </button>
+
             {/* Divider */}
             <div className="mx-1 pt-2 pb-1">
               <p className="text-[9px] font-extrabold text-slate-300 uppercase tracking-widest px-2">Lookup Tools</p>
@@ -1641,6 +1743,28 @@ export const AdminPage: React.FC = () => {
               title="Toggle Registration Open/Closed"
             >
               {editIsOpen ? <ToggleRight className="h-7 w-7" /> : <ToggleLeft className="h-7 w-7" />}
+            </button>
+          </div>
+
+          {/* Quick Team Edit Window Toggle */}
+          <div className="p-3 rounded-2xl bg-slate-50 border border-slate-200/80 flex items-center justify-between">
+            <div>
+              <span className="text-[11px] font-bold text-slate-800 block leading-tight">
+                Team Edit Window
+              </span>
+              <span className={`text-[10px] font-extrabold block ${editTeamEditOpen ? 'text-blue-600' : 'text-slate-400'}`}>
+                {editTeamEditOpen ? 'Open' : 'Closed'}
+              </span>
+              {editTeamEditOpen && teamEditCountdown && (
+                <span className="text-[9px] text-amber-600 font-bold block mt-0.5">⏱ {teamEditCountdown}</span>
+              )}
+            </div>
+            <button
+              onClick={handleToggleTeamEdit}
+              className={`p-1 rounded-full transition cursor-pointer ${editTeamEditOpen ? 'text-blue-600' : 'text-slate-300'}`}
+              title="Toggle Team Edit Window Open/Closed"
+            >
+              {editTeamEditOpen ? <ToggleRight className="h-7 w-7" /> : <ToggleLeft className="h-7 w-7" />}
             </button>
           </div>
 
@@ -2675,6 +2799,50 @@ export const AdminPage: React.FC = () => {
                   </div>
                 </div>
 
+                {/* Team Edit Window Settings */}
+                <div className="p-5 rounded-2xl bg-blue-500/5 border border-blue-500/20 space-y-3">
+                  <h3 className="text-xs font-black text-blue-700 uppercase tracking-wider flex items-center gap-2">
+                    <Edit3 className="h-4 w-4" /> Team Edit Window
+                  </h3>
+                  <p className="text-[11px] text-slate-500 font-medium">
+                    When open, team leaders can edit their member details and submit change requests for their own fields. The window auto-closes at the scheduled time below.
+                  </p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block font-bold text-slate-800 mb-1 text-xs">Window Status</label>
+                      <select
+                        value={editTeamEditOpen ? 'true' : 'false'}
+                        onChange={(e) => setEditTeamEditOpen(e.target.value === 'true')}
+                        className="w-full px-4 py-2.5 rounded-xl border border-slate-300 font-bold outline-none text-slate-900 bg-white"
+                      >
+                        <option value="true">Open — Leaders can edit</option>
+                        <option value="false">Closed — Editing disabled</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block font-bold text-slate-800 mb-1 text-xs">Auto-close Date &amp; Time (optional)</label>
+                      <input
+                        type="datetime-local"
+                        value={editTeamEditCloseAt}
+                        onChange={(e) => setEditTeamEditCloseAt(e.target.value)}
+                        className="w-full px-4 py-2.5 rounded-xl border border-slate-300 font-bold focus:border-blue-500 outline-none text-slate-900"
+                      />
+                      {editTeamEditCloseAt && (
+                        <p className="text-[11px] text-slate-500 mt-1">
+                          {teamEditCountdown
+                            ? <span>Closes in: <strong className="text-amber-600">{teamEditCountdown}</strong></span>
+                            : <span>Auto-close at: <strong>{new Date(editTeamEditCloseAt).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })} IST</strong></span>}
+                        </p>
+                      )}
+                      {editTeamEditCloseAt && (
+                        <button type="button" onClick={() => setEditTeamEditCloseAt('')} className="mt-1 text-[10px] text-red-500 hover:underline font-bold cursor-pointer">
+                          Clear auto-close time
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
                 {/* PPT Submission Settings */}
                 <div className="p-5 rounded-2xl bg-[#C1272D]/5 border border-[#C1272D]/20 space-y-4">
                   <h3 className="text-xs font-black text-[#C1272D] uppercase tracking-wider flex items-center gap-2">
@@ -3598,9 +3766,128 @@ export const AdminPage: React.FC = () => {
             <MentorLookupTab />
           )}
 
+          {/* TAB: EDIT REQUESTS */}
+          {sidebarTab === 'edit-requests' && (
+            <div className="space-y-6 animate-in fade-in duration-200">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                  <h1 className="text-2xl font-black text-slate-900 tracking-tight">Leader Edit Requests</h1>
+                  <p className="text-sm text-slate-500 font-medium mt-0.5">Change requests submitted by team leaders for their own details. Approve to apply, Reject to dismiss.</p>
+                </div>
+                <button
+                  onClick={loadEditRequests}
+                  disabled={isLoadingEditRequests}
+                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl font-bold text-xs text-slate-700 bg-white border border-slate-200 hover:bg-slate-50 shadow-xs transition cursor-pointer shrink-0"
+                >
+                  <RefreshCw className={`h-4 w-4 ${isLoadingEditRequests ? 'animate-spin' : ''}`} />
+                  Refresh
+                </button>
+              </div>
+
+              {isLoadingEditRequests ? (
+                <div className="flex items-center justify-center py-16">
+                  <RefreshCw className="h-6 w-6 animate-spin text-[#C1272D]" />
+                  <span className="ml-3 text-sm font-bold text-slate-500">Loading requests…</span>
+                </div>
+              ) : leaderEditRequests.length === 0 ? (
+                <div className="flex flex-col items-center justify-center py-16 text-center bg-white rounded-3xl border border-slate-200">
+                  <CheckCircle2 className="h-10 w-10 text-emerald-400 mb-3" />
+                  <p className="text-sm font-black text-slate-700">No edit requests yet</p>
+                  <p className="text-xs text-slate-400 mt-1">When team leaders request leader field changes, they'll appear here for review.</p>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {/* Pending first */}
+                  {['pending', 'approved', 'rejected'].map((statusGroup) => {
+                    const grouped = leaderEditRequests.filter(r => r.status === statusGroup);
+                    if (grouped.length === 0) return null;
+                    return (
+                      <div key={statusGroup}>
+                        <h3 className={`text-[10px] font-extrabold uppercase tracking-widest mb-2 px-1 ${
+                          statusGroup === 'pending' ? 'text-amber-600' :
+                          statusGroup === 'approved' ? 'text-emerald-600' : 'text-slate-400'
+                        }`}>
+                          {statusGroup === 'pending' ? `⏳ Pending (${grouped.length})` :
+                           statusGroup === 'approved' ? `✅ Approved (${grouped.length})` :
+                           `❌ Rejected (${grouped.length})`}
+                        </h3>
+                        <div className="bg-white rounded-3xl border border-slate-200 shadow-xs overflow-hidden">
+                          <div className="overflow-x-auto">
+                            <table className="w-full text-xs min-w-[900px]">
+                              <thead className="bg-slate-50 border-b border-slate-100">
+                                <tr className="text-slate-400 font-extrabold uppercase tracking-wider text-[9px]">
+                                  {['Team', 'Leader', 'Field', 'Old Value', 'New Value', 'Reason', 'Requested At', statusGroup === 'pending' ? 'Actions' : 'Status'].map(h => (
+                                    <th key={h} className="py-3 px-4 text-left whitespace-nowrap">{h}</th>
+                                  ))}
+                                </tr>
+                              </thead>
+                              <tbody className="divide-y divide-slate-100">
+                                {grouped.map((req) => (
+                                  <tr key={req.id} className={`hover:bg-slate-50 transition ${
+                                    req.status === 'approved' ? 'bg-emerald-50/30' :
+                                    req.status === 'rejected' ? 'bg-slate-50/50 opacity-70' : ''
+                                  }`}>
+                                    <td className="py-3 px-4 whitespace-nowrap">
+                                      <span className="font-black text-[#C1272D] font-mono text-[10px]">{req.teamId}</span>
+                                      {req.teamName && <span className="text-slate-500 block text-[10px] truncate max-w-[100px]">{req.teamName}</span>}
+                                    </td>
+                                    <td className="py-3 px-4 font-bold text-slate-800 whitespace-nowrap">{req.leaderName || '—'}</td>
+                                    <td className="py-3 px-4 whitespace-nowrap">
+                                      <span className="px-2 py-0.5 rounded-full bg-[#1B3F8B]/10 text-[#1B3F8B] text-[10px] font-extrabold">{req.fieldName}</span>
+                                    </td>
+                                    <td className="py-3 px-4 text-slate-500 max-w-[140px]">
+                                      <span className="line-clamp-2 text-[11px]">{req.oldValue || <em>empty</em>}</span>
+                                    </td>
+                                    <td className="py-3 px-4 font-bold text-slate-900 max-w-[140px]">
+                                      <span className="line-clamp-2 text-[11px]">{req.newValue}</span>
+                                    </td>
+                                    <td className="py-3 px-4 text-slate-600 max-w-[180px]">
+                                      <span className="line-clamp-2 text-[11px]">{req.reason}</span>
+                                    </td>
+                                    <td className="py-3 px-4 text-slate-500 whitespace-nowrap text-[10px]">
+                                      {new Date(req.requestedAt).toLocaleString('en-IN', { dateStyle: 'short', timeStyle: 'short', timeZone: 'Asia/Kolkata' })}
+                                    </td>
+                                    <td className="py-3 px-4 whitespace-nowrap">
+                                      {req.status === 'pending' ? (
+                                        <div className="flex items-center gap-2">
+                                          <button
+                                            disabled={reviewingRequestId === req.id}
+                                            onClick={() => handleReviewRequest(req.id, 'approved')}
+                                            className="px-3 py-1 rounded-xl font-black text-[10px] bg-emerald-600 text-white hover:bg-emerald-700 transition cursor-pointer disabled:opacity-50 flex items-center gap-1"
+                                          >
+                                            <Check className="h-3 w-3" /> Approve
+                                          </button>
+                                          <button
+                                            disabled={reviewingRequestId === req.id}
+                                            onClick={() => handleReviewRequest(req.id, 'rejected')}
+                                            className="px-3 py-1 rounded-xl font-black text-[10px] bg-slate-200 text-slate-700 hover:bg-red-100 hover:text-red-700 transition cursor-pointer disabled:opacity-50 flex items-center gap-1"
+                                          >
+                                            <X className="h-3 w-3" /> Reject
+                                          </button>
+                                        </div>
+                                      ) : (
+                                        <span className={`px-2.5 py-1 rounded-full text-[10px] font-extrabold uppercase ${
+                                          req.status === 'approved' ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-500'
+                                        }`}>
+                                          {req.status}
+                                        </span>
+                                      )}
+                                    </td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          )}
+
         </div>
-
-
         {/* FOOTER BAR INSIDE DASHBOARD */}
         <div className="pt-6 mt-8 border-t border-slate-200/80 flex flex-col sm:flex-row items-center justify-between text-[11px] text-slate-400 font-medium gap-2">
           <span>VSITR Internal SIH 2026 Control Center</span>

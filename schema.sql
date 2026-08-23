@@ -7,22 +7,7 @@ CREATE TABLE IF NOT EXISTS app_config (
     value JSONB NOT NULL
 );
 
--- 2. Teams Table (Stores team info, leader details, members array, mentor details, registration status, and PS selection)
-CREATE TABLE IF NOT EXISTS teams (
-    id TEXT PRIMARY KEY,
-    team_name TEXT NOT NULL,
-    leader JSONB NOT NULL,
-    members JSONB NOT NULL,
-    mentor JSONB,
-    status TEXT NOT NULL,
-    selected_ps_id TEXT,
-    selected_ps_title TEXT,
-    ps_selected_at TIMESTAMPTZ,
-    created_at TIMESTAMPTZ DEFAULT NOW(),
-    updated_at TIMESTAMPTZ DEFAULT NOW()
-);
-
--- 6. Problem Statements Table
+-- 2. Problem Statements Table
 CREATE TABLE IF NOT EXISTS problem_statements (
     id TEXT PRIMARY KEY,
     title TEXT NOT NULL,
@@ -30,6 +15,21 @@ CREATE TABLE IF NOT EXISTS problem_statements (
     description TEXT,
     status TEXT NOT NULL DEFAULT 'open', -- 'open' or 'closed'
     created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- 3. Teams Table (Stores team info, leader details, members array, mentor details, registration status, and PS selection)
+CREATE TABLE IF NOT EXISTS teams (
+    id TEXT PRIMARY KEY,
+    team_name TEXT NOT NULL,
+    leader JSONB NOT NULL,
+    members JSONB NOT NULL,
+    mentor JSONB,
+    status TEXT NOT NULL,
+    selected_ps_id TEXT REFERENCES problem_statements(id) ON DELETE SET NULL,
+    selected_ps_title TEXT,
+    ps_selected_at TIMESTAMPTZ,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
 -- 3. Members Table (Individual member records including leaders)
@@ -59,17 +59,48 @@ CREATE TABLE IF NOT EXISTS mentors (
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- 5. Email Logs Table (Tracks all system notification emails)
+-- 6. Email Logs Table (Tracks all system notification emails)
 CREATE TABLE IF NOT EXISTS email_logs (
     id TEXT PRIMARY KEY,
     recipient_email TEXT NOT NULL,
     recipient_name TEXT NOT NULL,
-    team_id TEXT,
+    team_id TEXT REFERENCES teams(id) ON DELETE SET NULL,
     subject TEXT NOT NULL,
     body TEXT NOT NULL,
     type TEXT NOT NULL,
     status TEXT NOT NULL,
     sent_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- 7. PPT Submissions Table (Stores phase 3 presentation details)
+CREATE TABLE IF NOT EXISTS ppt_submissions (
+    id TEXT PRIMARY KEY,
+    team_id TEXT NOT NULL REFERENCES teams(id) ON DELETE CASCADE,
+    team_name TEXT NOT NULL,
+    leader_name TEXT NOT NULL,
+    leader_email TEXT NOT NULL,
+    ppt_file_name TEXT,
+    ppt_file_url TEXT,
+    ppt_file_size BIGINT,
+    demo_video_url TEXT,
+    github_repo_url TEXT,
+    github_collaborators_added BOOLEAN DEFAULT FALSE,
+    submitted_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- 8. Leader Edit Requests Table (Queued change requests from team leaders for their own fields)
+CREATE TABLE IF NOT EXISTS leader_edit_requests (
+    id TEXT PRIMARY KEY,
+    team_id TEXT NOT NULL REFERENCES teams(id) ON DELETE CASCADE,
+    team_name TEXT,
+    leader_name TEXT,
+    field_name TEXT NOT NULL,   -- e.g. 'fullName', 'email', 'mobile', 'enrollmentNo', 'department', 'semester', 'gender'
+    old_value TEXT NOT NULL,
+    new_value TEXT NOT NULL,
+    reason TEXT NOT NULL,
+    status TEXT NOT NULL DEFAULT 'pending', -- 'pending', 'approved', 'rejected'
+    requested_at TIMESTAMPTZ DEFAULT NOW(),
+    reviewed_at TIMESTAMPTZ
 );
 
 -- Helper Views for Neon SQL Editor to query normalized Member, Leader, and Mentor details:

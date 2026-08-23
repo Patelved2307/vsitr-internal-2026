@@ -124,6 +124,23 @@ export interface EventSettings {
   rulesDocumentTitle?: string;
   // PS Selection deadline (admin-controlled)
   psSelectionDeadline?: string;
+  // Team Edit Window
+  teamEditOpen?: boolean;
+  teamEditCloseAt?: string; // ISO string, nullable — auto-close time set by admin
+}
+
+export interface LeaderEditRequest {
+  id: string;
+  teamId: string;
+  teamName?: string;
+  leaderName?: string;
+  fieldName: string;  // e.g. 'fullName', 'email', 'mobile'
+  oldValue: string;
+  newValue: string;
+  reason: string;
+  status: 'pending' | 'approved' | 'rejected';
+  requestedAt: string;
+  reviewedAt?: string;
 }
 
 export interface AdminStats {

@@ -32,6 +32,10 @@ import {
   deleteProblemStatement,
   updateTeamPsSelection,
   updateTeamPptSubmission,
+  createLeaderEditRequest,
+  getAllLeaderEditRequests,
+  updateLeaderEditRequest,
+  getLeaderEditRequestsByTeam,
 } from './src/db/neonDb.js';
 import {
   dispatchTeamRegistrationEmails,
@@ -1348,6 +1352,244 @@ async function startServer() {
     }
   });
 
+
+  // ============================================================
+  // TEAM EDIT WINDOW — MEMBER EDIT + LEADER CHANGE REQUESTS
+  // ============================================================
+
+  // Helper: check if team edit window is open (also auto-closes if past deadline)
+  async function checkTeamEditOpen(): Promise<{ open: boolean; message?: string }> {
+    const config = await getGlobalConfig();
+    const s = config.settings;
+    if (s.teamEditCloseAt) {
+      const closeAt = new Date(s.teamEditCloseAt);
+      if (new Date() >= closeAt && s.teamEditOpen) {
+        // Auto-close it now
+        await saveGlobalConfig({ settings: { teamEditOpen: false } });
+        return { open: false, message: 'The Team Edit Window has automatically closed as the scheduled deadline has passed.' };
+      }
+    }
+    if (!s.teamEditOpen) {
+      return { open: false, message: 'Team editing is currently closed. Please check with the admin for the next edit window.' };
+    }
+    return { open: true };
+  }
+
+  // POST /api/teams/edit-members — Save edited member data
+  app.post('/api/teams/edit-members', async (req: Request, res: Response) => {
+    try {
+      const { teamId, leaderEmail, members } = req.body;
+
+      if (!teamId || !leaderEmail) {
+        return res.status(400).json({ success: false, message: 'Team ID and leader email are required.' });
+      }
+
+      // Server-side gate: check edit window open
+      const windowStatus = await checkTeamEditOpen();
+      if (!windowStatus.open) {
+        return res.status(403).json({ success: false, message: windowStatus.message });
+      }
+
+      const team = await getTeamById(teamId);
+      if (!team) {
+        return res.status(404).json({ success: false, message: 'Team not found.' });
+      }
+      if (team.leader.email.trim().toLowerCase() !== leaderEmail.trim().toLowerCase()) {
+        return res.status(401).json({ success: false, message: 'Only the team leader can edit member details.' });
+      }
+
+      if (!Array.isArray(members) || members.length !== 5) {
+        return res.status(400).json({ success: false, message: 'Exactly 5 member records are required.' });
+      }
+
+      // Validation a: No empty fields
+      const requiredFields = ['fullName', 'email', 'mobile', 'enrollmentNo', 'department', 'semester', 'gender'] as const;
+      for (let i = 0; i < members.length; i++) {
+        const m = members[i];
+        for (const f of requiredFields) {
+          if (!m[f] || !String(m[f]).trim()) {
+            return res.status(400).json({
+              success: false,
+              message: `Member ${i + 1}: field "${f}" cannot be empty.`,
+              field: f,
+              memberIndex: i,
+            });
+          }
+        }
+      }
+
+      // Validation b: At least 1 female across leader + all 5 members
+      const allMembersCheck = [team.leader, ...members];
+      const femaleCount = allMembersCheck.filter((m: any) => m.gender === 'Female').length;
+      if (femaleCount < 1) {
+        return res.status(400).json({
+          success: false,
+          message: 'Team must include at least one female participant (leader + members combined).',
+        });
+      }
+
+      // Validation c: Global enrollment uniqueness — scan ALL teams' enrollment columns
+      const allTeams = await getAllTeams();
+      const incomingEnrollments = members
+        .map((m: any) => String(m.enrollmentNo || '').trim().toUpperCase())
+        .filter(Boolean);
+
+      for (const enr of incomingEnrollments) {
+        for (const t of allTeams) {
+          if (t.id.toUpperCase() === teamId.toUpperCase()) continue; // skip own team
+          const otherMembers = [t.leader, ...t.members];
+          if (otherMembers.some((m) => String(m.enrollmentNo || '').trim().toUpperCase() === enr)) {
+            return res.status(400).json({
+              success: false,
+              message: `Enrollment number ${enr} is already registered in team "${t.teamName}". Each student can only belong to one team.`,
+            });
+          }
+        }
+      }
+
+      // Also check within-team duplicates (members vs each other + leader)
+      const leaderEnr = String(team.leader.enrollmentNo || '').trim().toUpperCase();
+      const allNewEnrollments = leaderEnr ? [leaderEnr, ...incomingEnrollments] : incomingEnrollments;
+      if (new Set(allNewEnrollments).size !== allNewEnrollments.length) {
+        return res.status(400).json({
+          success: false,
+          message: 'Duplicate enrollment number detected within the team (including the leader).',
+        });
+      }
+
+      const updatedTeam = await updateTeam(teamId, {
+        members: members.map((m: any) => ({ ...m, isLeader: false })),
+      });
+
+      res.json({ success: true, team: updatedTeam, message: 'Team members updated successfully!' });
+    } catch (err: any) {
+      console.error('Error editing team members:', err);
+      res.status(500).json({ success: false, message: err.message || 'Server error during member edit.' });
+    }
+  });
+
+  // POST /api/teams/leader-edit-request — Queue a change request for a leader field
+  app.post('/api/teams/leader-edit-request', async (req: Request, res: Response) => {
+    try {
+      const { teamId, leaderEmail, fieldName, oldValue, newValue, reason } = req.body;
+
+      if (!teamId || !leaderEmail || !fieldName || !newValue || !reason) {
+        return res.status(400).json({ success: false, message: 'All fields (teamId, leaderEmail, fieldName, newValue, reason) are required.' });
+      }
+
+      // Server-side gate: check edit window open
+      const windowStatus = await checkTeamEditOpen();
+      if (!windowStatus.open) {
+        return res.status(403).json({ success: false, message: windowStatus.message });
+      }
+
+      const team = await getTeamById(teamId);
+      if (!team) {
+        return res.status(404).json({ success: false, message: 'Team not found.' });
+      }
+      if (team.leader.email.trim().toLowerCase() !== leaderEmail.trim().toLowerCase()) {
+        return res.status(401).json({ success: false, message: 'Only the team leader can submit change requests.' });
+      }
+
+      const requestId = `LER-${teamId}-${Date.now()}`;
+      const created = await createLeaderEditRequest({
+        id: requestId,
+        teamId,
+        teamName: team.teamName,
+        leaderName: team.leader.fullName,
+        fieldName,
+        oldValue: oldValue || '',
+        newValue,
+        reason,
+        status: 'pending',
+      });
+
+      res.json({ success: true, request: created, message: 'Change request submitted successfully! An admin will review it.' });
+    } catch (err: any) {
+      console.error('Error creating leader edit request:', err);
+      res.status(500).json({ success: false, message: err.message || 'Server error.' });
+    }
+  });
+
+  // GET /api/teams/leader-edit-requests/:teamId — Get requests for a specific team (leader self-view)
+  app.get('/api/teams/leader-edit-requests/:teamId', async (req: Request, res: Response) => {
+    try {
+      const requests = await getLeaderEditRequestsByTeam(req.params.teamId);
+      res.json({ success: true, requests });
+    } catch (err: any) {
+      res.status(500).json({ success: false, message: err.message });
+    }
+  });
+
+  // GET /api/admin/leader-edit-requests — Admin: get all pending requests
+  app.get('/api/admin/leader-edit-requests', async (req: Request, res: Response) => {
+    try {
+      const requests = await getAllLeaderEditRequests();
+      res.json({ success: true, requests });
+    } catch (err: any) {
+      res.status(500).json({ success: false, message: err.message });
+    }
+  });
+
+  // PUT /api/admin/leader-edit-requests/:id — Admin: approve or reject a request
+  app.put('/api/admin/leader-edit-requests/:id', async (req: Request, res: Response) => {
+    try {
+      const { action } = req.body; // 'approved' | 'rejected'
+      if (action !== 'approved' && action !== 'rejected') {
+        return res.status(400).json({ success: false, message: 'Action must be "approved" or "rejected".' });
+      }
+
+      const allRequests = await getAllLeaderEditRequests();
+      const target = allRequests.find((r) => r.id === req.params.id);
+      if (!target) {
+        return res.status(404).json({ success: false, message: 'Request not found.' });
+      }
+
+      const updated = await updateLeaderEditRequest(req.params.id, action);
+
+      // If approved, apply the field change to the live team record
+      if (action === 'approved' && updated) {
+        const team = await getTeamById(target.teamId);
+        if (team) {
+          const fieldMap: Record<string, string> = {
+            fullName: 'fullName',
+            email: 'email',
+            mobile: 'mobile',
+            enrollmentNo: 'enrollmentNo',
+            department: 'department',
+            semester: 'semester',
+            gender: 'gender',
+          };
+          if (fieldMap[target.fieldName]) {
+            const updatedLeader = { ...team.leader, [target.fieldName]: target.newValue };
+            await updateTeam(target.teamId, { leader: updatedLeader });
+          }
+        }
+      }
+
+      res.json({ success: true, request: updated, message: `Request ${action} successfully.${action === 'approved' ? ' Leader record has been updated.' : ''}` });
+    } catch (err: any) {
+      console.error('Error reviewing leader edit request:', err);
+      res.status(500).json({ success: false, message: err.message });
+    }
+  });
+
+  // Server-side auto-close interval: check every 60 seconds if teamEditCloseAt has passed
+  setInterval(async () => {
+    try {
+      const config = await getGlobalConfig();
+      const s = config.settings;
+      if (s.teamEditOpen && s.teamEditCloseAt) {
+        const closeAt = new Date(s.teamEditCloseAt);
+        if (new Date() >= closeAt) {
+          await saveGlobalConfig({ settings: { teamEditOpen: false } });
+          console.log('[Auto-close] Team Edit Window automatically closed at', s.teamEditCloseAt);
+        }
+      }
+    } catch (e) {
+      // Silently ignore — next interval will retry
+    }
+  }, 60_000);
 
   // Serve Vite in dev mode / static files in production mode
   if (process.env.NODE_ENV !== 'production') {

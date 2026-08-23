@@ -402,5 +402,56 @@ export const api = {
       }[];
     };
   },
-};
 
+  // Team Edit Window: Save edited member data
+  editTeamMembers: async (payload: { teamId: string; leaderEmail: string; members: any[] }) => {
+    const res = await fetch('/api/teams/edit-members', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message || 'Failed to save member changes');
+    return data;
+  },
+
+  // Team Edit Window: Submit a leader field change request
+  submitLeaderEditRequest: async (payload: { teamId: string; leaderEmail: string; fieldName: string; oldValue: string; newValue: string; reason: string }) => {
+    const res = await fetch('/api/teams/leader-edit-request', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message || 'Failed to submit change request');
+    return data;
+  },
+
+  // Team Edit Window: Get own leader edit requests (team self-view)
+  getTeamLeaderEditRequests: async (teamId: string) => {
+    const res = await fetch(`/api/teams/leader-edit-requests/${encodeURIComponent(teamId)}`);
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message || 'Failed to fetch change requests');
+    return data;
+  },
+
+  // Admin: Get all leader edit requests
+  getAdminLeaderEditRequests: async () => {
+    const res = await fetch('/api/admin/leader-edit-requests');
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message || 'Failed to fetch edit requests');
+    return data;
+  },
+
+  // Admin: Approve or reject a leader edit request
+  reviewLeaderEditRequest: async (id: string, action: 'approved' | 'rejected') => {
+    const res = await fetch(`/api/admin/leader-edit-requests/${encodeURIComponent(id)}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message || 'Failed to review request');
+    return data;
+  },
+};
