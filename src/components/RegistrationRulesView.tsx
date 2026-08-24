@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { formatPresentationDayDate, formatTimelineDate } from '../lib/timeline';
+import { formatTimelineDate } from '../lib/timeline';
 import { api } from '../services/api';
 import { TeamMember, Department, Gender, MentorPrefix } from '../types';
 import { MentorPendingCard } from './MentorPendingCard';
@@ -821,9 +821,7 @@ export const RegistrationRulesView: React.FC = () => {
             <div className="space-y-3">
               {timeline && timeline.map((event, idx) => {
                 const isClosed = event.date.toLowerCase().includes('closed') || (!event.active && event.id !== 't5');
-                const displayDate = event.id === 't5' || event.title.toLowerCase().includes('presentation day')
-                  ? formatPresentationDayDate(event.date)
-                  : formatTimelineDate(event.date);
+                const displayDate = formatTimelineDate(event.date);
                 const isLivePpt = event.title.toLowerCase().includes('ppt') && event.title.toLowerCase().includes('prototype');
                 return (
                   <div key={event.id || idx} className={`flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-3 rounded-2xl border transition ${
