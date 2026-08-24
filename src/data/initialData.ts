@@ -18,10 +18,10 @@ export const INITIAL_RULES: Rule[] = [
 ];
 
 export const INITIAL_SETTINGS: EventSettings = {
-  registrationDeadline: '2026-08-27T18:29:59.000Z',
+  registrationDeadline: '2026-08-02T18:29:59.000Z',
   isRegistrationOpen: true,
   whatsappGroupLink: 'https://chat.whatsapp.com/EfS0SSUc9aX4DJUhfrpD2U',
-  announcementBanner: 'Internal SIH 2026 PPT & Prototype Submission is LIVE! Submission Deadline: 27 August 2026, 11:59 PM.',
+  announcementBanner: 'Internal SIH 2026 PPT & Prototype Submission is LIVE! Submission Deadline: 25 August 2026, 12:00 AM.',
   problemStatementLink: 'https://www.sih.gov.in/sih2025PS',
   problemStatementStatus: 'Problem statement announcements will be announced once we get update from the official SIH website.',
   pptTemplateLink: '/SIH2026-IDEA-Presentation-Format.pptx',
@@ -30,12 +30,12 @@ export const INITIAL_SETTINGS: EventSettings = {
   pptSubmissionOpen: true,
   pptSubmissionStatus: 'PPT & Prototype Submission Portal is LIVE! Submit your pitch presentation deck (.ppt/.pptx), 2-minute YouTube video pitch clip, and 20% prototype code repository.',
   // ISO timestamp so the server and every client can enforce the same deadline.
-  pptSubmissionDeadline: '2026-08-27T18:29:59.000Z', // 27 Aug 2026, 11:59 PM IST
+  pptSubmissionDeadline: '2026-08-24T18:30:00.000Z', // 25 Aug 2026, 12:00 AM IST
   pptReferenceLink: '/SIH-PPT-REFERANCE.pdf',
   isPptExtended: false,
   pptExtendedDeadline: '2026-08-27T18:29:59.000Z',
   isExtended: false,
-  extendedDeadline: '2026-08-27T18:29:59.000Z',
+  extendedDeadline: '2026-08-05T18:29:59.000Z',
   customQuote: 'Innovation distinguishes between a leader and a follower.',
   customQuoteAuthor: 'Steve Jobs',
   // Rules & Regulations Document
@@ -43,36 +43,36 @@ export const INITIAL_SETTINGS: EventSettings = {
   rulesDocumentPdfUrl: '',
   rulesDocumentTitle: 'Official Rules & Regulations – Internal SIH 2026',
   // PS Selection deadline (admin-controlled)
-  psSelectionDeadline: '2026-08-27T18:29:59.000Z', // 27 Aug 2026 11:59 PM IST
+  psSelectionDeadline: '2026-08-25T18:29:00.000Z', // 25 Aug 2026 11:59 PM IST
 };
 
 export const INITIAL_TIMELINE_EVENTS: TimelineEvent[] = [
   {
     id: 't1',
     title: 'Phase 1: Team Registration Deadline',
-    date: '27 August 2026, 11:59 PM',
+    date: '02 August 2026, 11:59 PM',
     description: 'All teams must complete 6-member team registration with at least 1 female participant.',
     active: true,
   },
   {
     id: 't2',
     title: 'Phase 2: Mentor Details Submission',
-    date: '27 August 2026, 11:59 PM',
+    date: '05 August 2026, 11:59 PM',
     description: 'Registered teams submit verified mentor contact details for final confirmation.',
     active: true,
   },
   {
     id: 't3',
     title: 'Problem Statement Selection',
-    date: '27 August 2026, 11:59 PM',
+    date: '16 August 2026, 11:59 PM',
     description: 'Select the Problem Statement from team Portal. Once the Problem statement is selected no modification can be done.',
     active: true,
   },
   {
     id: 't4',
-    title: 'PPT, Video Clip & 25% Prototype Submission',
-    date: '27 August 2026, 11:59 PM',
-    description: 'Submit your PowerPoint deck (.ppt/.pptx), 2-minute YouTube video pitch clip, and 25% prototype code repository by 11:59 PM.',
+    title: 'PPT, Video Clip & 20% Prototype Submission',
+    date: '25 August 2026, 12:00 AM',
+    description: 'Submit your PowerPoint deck (.ppt/.pptx), 2-minute YouTube video pitch clip, and 20% prototype code repository by 12:00 AM.',
     active: true,
   },
   {
