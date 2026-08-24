@@ -34,14 +34,8 @@ const MainLayout: React.FC = () => {
               <span className="flex items-center gap-2">
                 📢 {settings.announcementBanner}
               </span>
-              <span className="text-amber-300 font-black flex items-center gap-2">
-                ⚡ PPT &amp; Prototype Submission Portal is LIVE! Submit PowerPoint deck (.ppt/.pptx), 2-minute YouTube video pitch link &amp; 20% GitHub prototype code repository by 25 August 2026, 12:00 AM IST!
-              </span>
               <span className="flex items-center gap-2">
                 📢 {settings.announcementBanner}
-              </span>
-              <span className="text-amber-300 font-black flex items-center gap-2">
-                ⚡ PPT &amp; Prototype Submission Portal is LIVE! Submit PowerPoint deck (.ppt/.pptx), 2-minute YouTube video pitch link &amp; 20% GitHub prototype code repository by 25 August 2026, 12:00 AM IST!
               </span>
             </div>
           </div>

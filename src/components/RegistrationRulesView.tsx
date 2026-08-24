@@ -152,7 +152,9 @@ export const RegistrationRulesView: React.FC = () => {
 
   useEffect(() => {
     const calculatePptTimeLeft = () => {
-      const pptDeadline = new Date('2026-08-25T23:59:00+05:30').getTime();
+      const deadlineStr = settings?.pptExtendedDeadline || settings?.pptSubmissionDeadline;
+      if (!deadlineStr) return;
+      const pptDeadline = new Date(deadlineStr).getTime();
       const nowVal = new Date().getTime();
       const difference = pptDeadline - nowVal;
 
@@ -1180,7 +1182,7 @@ export const RegistrationRulesView: React.FC = () => {
                             PPT Submission Deadline Closes In:
                           </span>
                           <span className="text-[11px] font-mono font-bold text-slate-200 bg-white/10 px-3 py-1 rounded-xl border border-white/15 backdrop-blur-md">
-                            25 August 2026, 12:00 AM IST
+                            {formatTimelineDate(settings?.pptExtendedDeadline || settings?.pptSubmissionDeadline || '')}
                           </span>
                         </div>
 
@@ -1269,7 +1271,7 @@ export const RegistrationRulesView: React.FC = () => {
                       </div>
 
                       <p className="text-xs sm:text-sm text-slate-600 font-semibold leading-relaxed">
-                        Team registration is closed, and the Problem Statement Selection Phase is live! All selected team leaders must log in to their Team Portal to finalize their chosen problem statement by <strong className="text-[#C1272D]">16 August, 2026 at 11:59 PM</strong>.
+                        Team registration is closed, and the Problem Statement Selection Phase is live! All selected team leaders must log in to their Team Portal to finalize their chosen problem statement by <strong className="text-[#C1272D]">{formatTimelineDate(settings?.psSelectionDeadline || '')}</strong>.
                       </p>
 
                       <div className="flex flex-wrap items-center justify-between gap-4 pt-1 border-t border-slate-100">
@@ -1284,7 +1286,7 @@ export const RegistrationRulesView: React.FC = () => {
 
                         <div className="flex items-center gap-2 text-xs font-extrabold text-[#C1272D] bg-red-50 px-3.5 py-2 rounded-xl border border-red-100/70">
                           <Calendar className="h-4 w-4" />
-                          Selection Deadline: 16 Aug, 11:59 PM
+                          Selection Deadline: {formatTimelineDate(settings?.psSelectionDeadline || '').split(',')[0]}
                         </div>
                       </div>
 
