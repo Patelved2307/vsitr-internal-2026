@@ -1,7 +1,7 @@
 import React from 'react';
 import { useAuth } from '../context/AuthContext';
 import { Timeline } from './ui/timeline';
-import { formatTimelineDate, parseTimelineDate } from '../lib/timeline';
+import { formatPresentationDayDate, formatTimelineDate, parseTimelineDate } from '../lib/timeline';
 
 export const TimelineSection: React.FC = () => {
   const { timeline } = useAuth();
@@ -35,7 +35,9 @@ export const TimelineSection: React.FC = () => {
     }
 
     return {
-      title: formatTimelineDate(event.date),
+      title: event.id === 't5' || event.title.toLowerCase().includes('presentation day')
+        ? formatPresentationDayDate(event.date)
+        : formatTimelineDate(event.date),
       content: (
         <div>
           <h4 className="text-lg font-black text-[#1B3F8B] mb-2">{event.title}</h4>

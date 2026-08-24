@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { api } from '../services/api';
 import { Team, EventSettings, TimelineEvent, FAQItem, EmailLog, PptSubmission, Rule, RuleCategory, ProblemStatement, LeaderEditRequest } from '../types';
-import { formatTimelineDate, toTimelineDateTimeInput } from '../lib/timeline';
+import { formatPresentationDayDate, formatTimelineDate, toTimelineDateTimeInput } from '../lib/timeline';
 import {
   ShieldCheck,
   LogOut,
@@ -2363,7 +2363,7 @@ export const AdminPage: React.FC = () => {
                             <span className="font-bold text-slate-900 text-sm">{item.title}</span>
                             <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-blue-50 text-[#1B3F8B]">
                               {(item.id === 't5' || item.title.toLowerCase().includes('presentation day'))
-                                ? item.date
+                                ? formatPresentationDayDate(item.date)
                                 : formatTimelineDate(item.date)}
                             </span>
                           </div>
