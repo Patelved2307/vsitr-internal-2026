@@ -383,6 +383,16 @@ const TeamLookupTab: React.FC = () => {
                     <dt className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">Title</dt>
                     <dd className="text-xs font-bold text-slate-800 leading-relaxed">{teamData.selectedPsTitle || '—'}</dd>
                   </div>
+                  {[
+                    ['Organization', teamData.selectedPsOrganization],
+                    ['Category', teamData.selectedPsCategory],
+                    ['Theme', teamData.selectedPsTheme],
+                  ].map(([label, value]) => value ? (
+                    <div key={label}>
+                      <dt className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">{label}</dt>
+                      <dd className="text-xs font-semibold text-slate-700 leading-relaxed">{value}</dd>
+                    </div>
+                  ) : null)}
                   <div>
                     <dt className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">Selected At</dt>
                     <dd className="text-xs font-semibold text-slate-600">{formatDate(teamData.psSelectedAt)}</dd>
@@ -723,7 +733,7 @@ export const AdminPage: React.FC = () => {
   const [rulesDocUploadMode, setRulesDocUploadMode] = useState<'link' | 'pdf'>(settings.rulesDocumentPdfUrl ? 'pdf' : 'link');
   const [isUploadingRulesPdf, setIsUploadingRulesPdf] = useState(false);
   // PS Selection Deadline (admin-controlled)
-  const [editPsSelectionDeadline, setEditPsSelectionDeadline] = useState(settings.psSelectionDeadline || '2026-08-16T18:29:00.000Z');
+  const [editPsSelectionDeadline, setEditPsSelectionDeadline] = useState(settings.psSelectionDeadline || '2026-08-25T18:29:00.000Z');
   // Extension & custom closed message
   const [editIsExtended, setEditIsExtended] = useState(settings.isExtended ?? false);
   const [editExtendedDeadline, setEditExtendedDeadline] = useState(settings.extendedDeadline || '');
@@ -1000,7 +1010,7 @@ export const AdminPage: React.FC = () => {
     setEditRulesDocumentPdfUrl(settings.rulesDocumentPdfUrl || '');
     setEditRulesDocumentTitle(settings.rulesDocumentTitle || 'Official Rules & Regulations – Internal SIH 2026');
     setRulesDocUploadMode(settings.rulesDocumentPdfUrl ? 'pdf' : 'link');
-    setEditPsSelectionDeadline(settings.psSelectionDeadline || '2026-08-16T18:29:00.000Z');
+    setEditPsSelectionDeadline(settings.psSelectionDeadline || '2026-08-25T18:29:00.000Z');
     setEditTimeline(timeline);
     setEditFaqs(faqs);
     setEditRules(rules);
@@ -2207,7 +2217,7 @@ export const AdminPage: React.FC = () => {
                               {t.selectedPsId ? (
                                 <div>
                                   <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-blue-100 text-blue-800 border border-blue-200 inline-block mb-0.5">
-                                    {t.selectedPsId}
+                                    Selected · {t.selectedPsId}
                                   </span>
                                   <span className="text-[11px] text-slate-600 font-medium block truncate max-w-[180px]" title={t.selectedPsTitle}>
                                     {t.selectedPsTitle || '—'}

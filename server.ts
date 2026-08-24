@@ -1175,9 +1175,9 @@ async function startServer() {
         return res.status(400).json({ success: false, message: 'All problem statement details are required.' });
       }
 
-      // Use the deadline managed in the Admin Panel. The fallback preserves existing installs.
+      // Use the deadline managed in the Admin Panel.
       const globalConfig = await getGlobalConfig();
-      const deadline = new Date(globalConfig.settings?.psSelectionDeadline || '2026-08-16T18:29:00.000Z');
+      const deadline = new Date(globalConfig.settings?.psSelectionDeadline || '2026-08-25T18:29:00.000Z');
       const now = new Date();
       if (!Number.isNaN(deadline.getTime()) && now > deadline) {
         return res.status(400).json({
@@ -1337,6 +1337,9 @@ async function startServer() {
         leaderPhone: t.leader.mobile,
         selectedPsId: t.selectedPsId || null,
         selectedPsTitle: t.selectedPsTitle || null,
+        selectedPsOrganization: t.selectedPsOrganization || null,
+        selectedPsCategory: t.selectedPsCategory || null,
+        selectedPsTheme: t.selectedPsTheme || null,
         status: t.status,
       }));
 

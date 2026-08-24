@@ -1189,13 +1189,13 @@ app.post('/api/teams/select-ps', async (req: Request, res: Response) => {
       return res.status(400).json({ success: false, message: 'All problem statement details are required.' });
     }
 
-    // Check deadline from database settings (admin-configurable), fallback to Aug 16 IST
+    // Use the same Admin Panel setting as the Team Portal countdown.
     const globalConfig = await getGlobalConfig();
-    const psDeadlineStr = globalConfig.settings?.problemStatementDeadline;
-    // Use DB deadline if set and valid; otherwise fall back to hardcoded IST deadline
+    const psDeadlineStr = globalConfig.settings?.psSelectionDeadline;
+    // Fallback: 25 August 2026, 11:59 PM IST.
     const deadline = psDeadlineStr && !isNaN(new Date(psDeadlineStr).getTime())
       ? new Date(psDeadlineStr)
-      : new Date('2026-08-16T18:29:00.000Z'); // 11:59 PM IST = 18:29 UTC
+      : new Date('2026-08-25T18:29:00.000Z');
     const now = new Date();
     if (now > deadline) {
       const fmtDeadline = deadline.toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true });
@@ -1332,8 +1332,11 @@ app.get('/api/admin/mentor/:mentorName', async (req: Request, res: Response) => 
       teamName: t.teamName,
       leaderName: t.leader.fullName,
       leaderPhone: t.leader.mobile,
-      selectedPsId: t.selectedPsId || null,
-      selectedPsTitle: t.selectedPsTitle || null,
+        selectedPsId: t.selectedPsId || null,
+        selectedPsTitle: t.selectedPsTitle || null,
+        selectedPsOrganization: t.selectedPsOrganization || null,
+        selectedPsCategory: t.selectedPsCategory || null,
+        selectedPsTheme: t.selectedPsTheme || null,
       status: t.status,
     }));
 

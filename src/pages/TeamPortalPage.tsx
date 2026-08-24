@@ -596,8 +596,14 @@ export const TeamPortalPage: React.FC = () => {
                         if (!sihPsNumber.trim() || !sihPsTitle.trim() || !sihPsOrganization.trim() || !sihPsCategory.trim() || !sihPsTheme.trim()) return;
                         setIsSubmittingSihPs(true);
                         try {
-                          await api.selectProblemStatement({ teamId: team!.id, psId: sihPsNumber.trim(), psTitle: `[SIH Official] ${sihPsTitle.trim()}`, organization: sihPsOrganization.trim(), category: sihPsCategory.trim(), theme: sihPsTheme.trim() });
-                          await refreshTeamSession();
+                          const selectionResponse = await api.selectProblemStatement({ teamId: team!.id, psId: sihPsNumber.trim(), psTitle: `[SIH Official] ${sihPsTitle.trim()}`, organization: sihPsOrganization.trim(), category: sihPsCategory.trim(), theme: sihPsTheme.trim() });
+                          // Use the confirmed record immediately, so closing the success popup
+                          // always reveals the selected-statement card without a stale refresh.
+                          if (selectionResponse.team) {
+                            loginTeamSession(selectionResponse.team);
+                          } else {
+                            await refreshTeamSession();
+                          }
                           showAlert('Problem Statement Confirmed!', `Your team has selected official SIH 2026 PS: ${sihPsNumber} — ${sihPsTitle}`, 'success');
                           setSihPsNumber('');
                           setSihPsTitle('');

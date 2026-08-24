@@ -323,11 +323,10 @@ export async function initDatabase(force = false): Promise<void> {
       await runQuery(`ALTER TABLE problem_statements ADD COLUMN IF NOT EXISTS sdg TEXT;`);
       await runQuery(`ALTER TABLE problem_statements ADD COLUMN IF NOT EXISTS theme TEXT;`);
 
-      // Enforce data consistency and add foreign key constraints for existing tables
+      // Official SIH entries are manually selected external PS IDs, so they must not
+      // be constrained to the institute-only problem_statements table.
       try {
-        await runQuery(`UPDATE teams SET selected_ps_id = NULL WHERE selected_ps_id IS NOT NULL AND selected_ps_id NOT IN (SELECT id FROM problem_statements);`);
         await runQuery(`ALTER TABLE teams DROP CONSTRAINT IF EXISTS fk_team_ps;`);
-        await runQuery(`ALTER TABLE teams ADD CONSTRAINT fk_team_ps FOREIGN KEY (selected_ps_id) REFERENCES problem_statements(id) ON DELETE SET NULL;`);
 
         await runQuery(`DELETE FROM ppt_submissions WHERE team_id NOT IN (SELECT id FROM teams);`);
         await runQuery(`ALTER TABLE ppt_submissions DROP CONSTRAINT IF EXISTS fk_ppt_team;`);
@@ -952,6 +951,9 @@ export async function runTableMigrations() {
   try {
     await runQuery(`ALTER TABLE teams ADD COLUMN IF NOT EXISTS selected_ps_id TEXT;`);
     await runQuery(`ALTER TABLE teams ADD COLUMN IF NOT EXISTS selected_ps_title TEXT;`);
+    await runQuery(`ALTER TABLE teams ADD COLUMN IF NOT EXISTS selected_ps_organization TEXT;`);
+    await runQuery(`ALTER TABLE teams ADD COLUMN IF NOT EXISTS selected_ps_category TEXT;`);
+    await runQuery(`ALTER TABLE teams ADD COLUMN IF NOT EXISTS selected_ps_theme TEXT;`);
     await runQuery(`ALTER TABLE teams ADD COLUMN IF NOT EXISTS ps_selected_at TIMESTAMPTZ;`);
     await runQuery(`ALTER TABLE teams ADD COLUMN IF NOT EXISTS ppt_submission JSONB;`);
 

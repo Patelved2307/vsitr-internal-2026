@@ -43,7 +43,7 @@ export const INITIAL_SETTINGS: EventSettings = {
   rulesDocumentPdfUrl: '',
   rulesDocumentTitle: 'Official Rules & Regulations – Internal SIH 2026',
   // PS Selection deadline (admin-controlled)
-  psSelectionDeadline: '2026-08-16T18:29:00.000Z', // 16 Aug 2026 11:59 PM IST
+  psSelectionDeadline: '2026-08-25T18:29:00.000Z', // 25 Aug 2026 11:59 PM IST
 };
 
 export const INITIAL_TIMELINE_EVENTS: TimelineEvent[] = [

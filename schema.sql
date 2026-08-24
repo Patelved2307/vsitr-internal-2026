@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS teams (
     members JSONB NOT NULL,
     mentor JSONB,
     status TEXT NOT NULL,
-    selected_ps_id TEXT REFERENCES problem_statements(id) ON DELETE SET NULL,
+    selected_ps_id TEXT,
     selected_ps_title TEXT,
     selected_ps_organization TEXT,
     selected_ps_category TEXT,
