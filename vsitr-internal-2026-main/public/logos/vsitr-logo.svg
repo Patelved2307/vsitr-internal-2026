@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" width="300" height="300">
+  <defs>
+    <!-- Outer Text Curve Path -->
+    <path id="topArc" d="M 38,150 A 112,112 0 1,1 262,150" fill="none"/>
+    <path id="bottomArc" d="M 250,150 A 100,100 0 0,1 50,150" fill="none"/>
+    
+    <!-- Shield Clip -->
+    <clipPath id="shieldClip">
+      <path d="M 105,80 L 195,80 C 195,80 195,155 195,165 C 195,200 150,225 150,225 C 150,225 105,200 105,165 C 105,155 105,80 105,80 Z"/>
+    </clipPath>
+    
+    <!-- Left Shield Clip (Red) -->
+    <clipPath id="leftShieldClip">
+      <rect x="100" y="70" width="50" height="170"/>
+    </clipPath>
+
+    <!-- Right Shield Clip (Blue) -->
+    <clipPath id="rightShieldClip">
+      <rect x="150" y="70" width="50" height="170"/>
+    </clipPath>
+  </defs>
+
+  <!-- Base Seal Circle -->
+  <circle cx="150" cy="150" r="145" fill="#FFFDEB" stroke="#E28743" stroke-width="3"/>
+  <circle cx="150" cy="150" r="138" fill="none" stroke="#E28743" stroke-width="1.5"/>
+
+  <!-- Top Text: VIDUSH SOMANY INSTITUTE OF TECHNOLOGY & RESEARCH -->
+  <text font-family="'Arial Black', 'Helvetica Neue', Arial, sans-serif" font-size="14.5" font-weight="900" fill="#222222" letter-spacing="0.5">
+    <textPath href="#topArc" startOffset="50%" text-anchor="middle">
+      VIDUSH SOMANY INSTITUTE OF TECHNOLOGY &amp; RESEARCH
+    </textPath>
+  </text>
+
+  <!-- Bottom Text: KADI - GUJARAT -->
+  <text font-family="'Arial Black', 'Helvetica Neue', Arial, sans-serif" font-size="14" font-weight="900" fill="#222222" letter-spacing="1">
+    <textPath href="#bottomArc" startOffset="50%" text-anchor="middle">
+      KADI-GUJARAT
+    </textPath>
+  </text>
+
+  <!-- Side Teal Dots -->
+  <circle cx="62" cy="202" r="4.5" fill="#00B4D8"/>
+  <circle cx="238" cy="202" r="4.5" fill="#00B4D8"/>
+
+  <!-- CENTRAL SHIELD -->
+  <!-- Left Red Field -->
+  <g clip-path="url(#shieldClip)">
+    <rect x="100" y="75" width="50" height="160" fill="#E63946"/>
+    <!-- Red Side: Gears -->
+    <!-- Large Gear -->
+    <g transform="translate(130, 150)" fill="#FFFFFF">
+      <circle cx="0" cy="0" r="12" fill="none" stroke="#FFFFFF" stroke-width="3"/>
+      <circle cx="0" cy="0" r="4" fill="#FFFFFF"/>
+      <path d="M -2,-16 L 2,-16 L 2,-12 L -2,-12 Z
+               M -2,12 L 2,12 L 2,16 L -2,16 Z
+               M -16,-2 L -16,2 L -12,2 L -12,-2 Z
+               M 12,-2 L 12,2 L 16,2 L 16,-2 Z
+               M -12,-12 L -9,-15 L -6,-12 Z
+               M 9,9 L 12,12 L 9,15 Z" fill="#FFFFFF"/>
+    </g>
+    <!-- Medium Gear Top -->
+    <g transform="translate(122, 122)" fill="#FFD166">
+      <circle cx="0" cy="0" r="7" fill="none" stroke="#FFD166" stroke-width="2"/>
+      <circle cx="0" cy="0" r="2.5" fill="#FFD166"/>
+    </g>
+    <!-- Small Gear Bottom -->
+    <g transform="translate(120, 172)" fill="#FFD166">
+      <circle cx="0" cy="0" r="6" fill="none" stroke="#FFD166" stroke-width="2"/>
+      <circle cx="0" cy="0" r="2" fill="#FFD166"/>
+    </g>
+
+    <!-- Right Blue Field -->
+    <rect x="150" y="75" width="50" height="160" fill="#1D3557"/>
+    <!-- Blue Side: Network Tech Tree -->
+    <g stroke="#00B4D8" stroke-width="2" fill="none" stroke-linecap="round">
+      <line x1="150" y1="180" x2="175" y2="150"/>
+      <line x1="175" y1="150" x2="175" y2="120"/>
+      <line x1="175" y1="150" x2="188" y2="135"/>
+      <line x1="175" y1="130" x2="160" y2="115"/>
+      <line x1="175" y1="120" x2="182" y2="102"/>
+      <line x1="160" y1="115" x2="168" y2="100"/>
+
+      <!-- Network Nodes (Circles) -->
+      <circle cx="175" cy="150" r="4" fill="#00B4D8" stroke="#FFFFFF" stroke-width="1"/>
+      <circle cx="175" cy="120" r="5" fill="#0077B6" stroke="#FFFFFF" stroke-width="1"/>
+      <circle cx="188" cy="135" r="4" fill="#00B4D8" stroke="#FFFFFF" stroke-width="1"/>
+      <circle cx="160" cy="115" r="4" fill="#00B4D8" stroke="#FFFFFF" stroke-width="1"/>
+      <circle cx="182" cy="102" r="3.5" fill="#90E0EF" stroke="#FFFFFF" stroke-width="1"/>
+      <circle cx="168" cy="100" r="3.5" fill="#90E0EF" stroke="#FFFFFF" stroke-width="1"/>
+    </g>
+
+    <!-- Central White Tree Trunk connecting bottom to top -->
+    <polygon points="150,225 146,180 150,110 154,180" fill="#FFFDEB"/>
+  </g>
+
+  <!-- Gold Shield Outline -->
+  <path d="M 105,80 L 195,80 C 195,80 195,155 195,165 C 195,200 150,225 150,225 C 150,225 105,200 105,165 C 105,155 105,80 105,80 Z" fill="none" stroke="#FFD166" stroke-width="3.5"/>
+
+  <!-- "VSITR" Text Arch inside top of Shield -->
+  <text x="150" y="100" text-anchor="middle" font-family="'Arial Black', sans-serif" font-size="14" font-weight="900" fill="#FFFFFF" letter-spacing="1">
+    VSITR
+  </text>
+</svg>

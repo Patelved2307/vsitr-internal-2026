@@ -1,0 +1,146 @@
+@import "tailwindcss";
+
+/* ─── Brand Fonts ─────────────────────────────────── */
+/* Matter: body/UI text. Season Mix: display headings. Both self-hosted from
+   public/fonts so they're on the same origin (no external font requests). */
+@font-face {
+  font-family: 'Matter';
+  src: url('/fonts/MatterRegular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Matter';
+  src: url('/fonts/MatterMedium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Matter';
+  src: url('/fonts/MatterSemiBold.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Season Mix';
+  src: url('/fonts/SeasonMix-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Season Mix';
+  src: url('/fonts/SeasonMix-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@theme {
+  --font-sans: 'Matter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-display: 'Season Mix', 'Matter', ui-sans-serif, system-ui, sans-serif;
+}
+
+.rainbow-border::before,
+.rainbow-border::after {
+  content: '';
+  position: absolute;
+  left: -2px;
+  top: -2px;
+  border-radius: 12px;
+  background: linear-gradient(45deg, #C1272D, #8B235E, #1B3F8B, #eab308, #C1272D, #8B235E, #1B3F8B, #eab308);
+  background-size: 400%;
+  width: calc(100% + 4px);
+  height: calc(100% + 4px);
+  z-index: -1;
+  animation: rainbow 12s linear infinite;
+}
+.rainbow-border::after {
+  filter: blur(20px);
+  opacity: 0.85;
+}
+@keyframes rainbow {
+  0% { background-position: 0 0; }
+  50% { background-position: 400% 0; }
+  100% { background-position: 0 0; }
+}
+
+/* ─── Global Scrollbar Removal ─────────────────── */
+::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
+  display: none;
+}
+
+* {
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* ─── Global Cursor Fix ──────────────────────────── */
+/* Prevent the text-cursor (I-beam) on non-editable content */
+*,
+*::before,
+*::after {
+  cursor: default;
+}
+
+/* Restore pointer cursor for interactive elements */
+a,
+button,
+[role="button"],
+[role="menuitem"],
+[role="tab"],
+[role="option"],
+select,
+label,
+input[type="checkbox"],
+input[type="radio"],
+input[type="submit"],
+input[type="button"],
+input[type="reset"],
+summary,
+.cursor-pointer {
+  cursor: pointer;
+}
+
+/* Restore text cursor for editable inputs */
+input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="button"]):not([type="reset"]):not([type="range"]),
+textarea {
+  cursor: text;
+}
+
+/* Disabled elements */
+[disabled],
+button:disabled,
+input:disabled,
+select:disabled {
+  cursor: not-allowed;
+}
+
+/* ─── Continuous Marquee Animation ───────────────── */
+@keyframes marquee {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  display: inline-flex;
+  white-space: nowrap;
+  animation: marquee 30s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}

@@ -1,0 +1,50 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Build output
+dist/
+dist-ssr/
+
+# Environment variables (keep .env.example but never .env)
+.env
+.env.local
+.env.*.local
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Editor directories
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# TypeScript compiled output (keep source only)
+*.js.map
+*.d.ts.map
+
+# Local Backups
+backup/
+
+
+.vercel
+.env
+.env.production
+.env.development
+.env.local
+!.env.example
+scratch_update.ts
+data/uploads/
+scratch/
