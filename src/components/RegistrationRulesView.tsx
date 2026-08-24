@@ -175,7 +175,7 @@ export const RegistrationRulesView: React.FC = () => {
     calculatePptTimeLeft();
     const timer = setInterval(calculatePptTimeLeft, 1000);
     return () => clearInterval(timer);
-  }, []);
+  }, [settings?.pptExtendedDeadline, settings?.pptSubmissionDeadline]);
 
   const eligibilityRules = rules.filter(r => r.categoryId === 'official');
   const processRules = rules.filter(r => r.categoryId === 'phases');
@@ -836,7 +836,7 @@ export const RegistrationRulesView: React.FC = () => {
                     <span className="text-xs font-extrabold text-slate-800 leading-snug" title={event.title}>
                       {event.title}
                     </span>
-                    <span className={`font-black text-xs shrink-0 self-start sm:self-auto px-2.5 py-1 rounded-xl whitespace-nowrap ${
+                    <span className={`font-black text-xs max-w-full self-start sm:self-auto sm:max-w-[60%] px-2.5 py-1 rounded-xl whitespace-normal break-words leading-snug ${
                       isClosed
                         ? 'text-red-700 bg-red-100/90 border border-red-200'
                         : isLivePpt
