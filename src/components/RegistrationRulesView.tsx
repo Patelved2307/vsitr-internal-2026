@@ -793,23 +793,18 @@ export const RegistrationRulesView: React.FC = () => {
           <h3 className="text-base sm:text-lg font-black tracking-tight text-amber-950 flex items-center gap-2">
             📢 Important Announcement: Official SIH Problem Statements Released
           </h3>
-          <div className="text-xs sm:text-sm text-slate-800 leading-relaxed font-semibold space-y-2">
-            <p>
-              The official SIH Problem Statements have now been released. Teams are requested to stop working on the previously provided institute-level problem statements and begin their work on the official SIH Problem Statements. The Internal SIH round will be conducted based on problem statements present on the official website of Smart India Hackathon 2026.
-            </p>
-            <p>
-              Please review the official problem statements carefully and select the statement that aligns best with your team’s idea, skills, and interests.
-            </p>
-          </div>
+          <p className="text-xs sm:text-sm text-slate-800 leading-relaxed font-semibold">
+            The official SIH Problem Statements have now been released. Teams are requested to stop working on the previously provided institute-level problem statements and begin their work on the  official SIH Problem Statements. The Internal SIH round will be conducted based on problem statements present on the official website of Smart India Hackathon 2026.
+
+            Please review the official problem statements carefully and select the statement that aligns best with your team’s idea, skills, and interests.
+          </p>
           <div className="pt-2 flex gap-3">
-            <a
-              href="https://www.sih.gov.in/sih2026PS"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-4 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-500 text-white text-xs font-black shadow-sm transition cursor-pointer inline-flex items-center"
+            <button
+              onClick={() => window.open('https://www.sih.gov.in/sih2026PS', '_blank', 'noopener,noreferrer')}
+              className="px-4 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-500 text-white text-xs font-black shadow-sm transition cursor-pointer"
             >
-              View Official Problem Statements
-            </a>
+              View Official SIH Problem Statements
+            </button>
           </div>
         </div>
       </div>
@@ -833,41 +828,21 @@ export const RegistrationRulesView: React.FC = () => {
                 const displayDate = formatTimelineDate(event.date);
                 const isLivePpt = event.title.toLowerCase().includes('ppt') && event.title.toLowerCase().includes('prototype');
                 return (
-<<<<<<< HEAD
                   <div key={event.id || idx} className={`flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-3 rounded-2xl border transition ${isLivePpt
-                      ? 'bg-emerald-50/70 border-emerald-200/80'
-                      : isClosed
-                        ? 'bg-slate-50/90 border-slate-200/60'
-                        : 'bg-white border-slate-200/80 shadow-2xs'
+                    ? 'bg-emerald-50/70 border-emerald-200/80'
+                    : isClosed
+                      ? 'bg-slate-50/90 border-slate-200/60'
+                      : 'bg-white border-slate-200/80 shadow-2xs'
                     }`}>
                     <span className="text-xs font-extrabold text-slate-800 leading-snug" title={event.title}>
                       {event.title}
                     </span>
                     <span className={`font-black text-xs max-w-full self-start sm:self-auto sm:max-w-[60%] px-2.5 py-1 rounded-xl whitespace-normal break-words leading-snug ${isClosed
-                        ? 'text-red-700 bg-red-100/90 border border-red-200'
-                        : isLivePpt
-                          ? 'text-emerald-900 bg-emerald-100 border border-emerald-300 font-extrabold flex items-center gap-1.5'
-                          : 'text-slate-900 bg-slate-100 border border-slate-200'
-                      }`}>
-=======
-                  <div key={event.id || idx} className={`flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-3 rounded-2xl border transition ${
-                    isLivePpt
-                      ? 'bg-emerald-50/70 border-emerald-200/80'
-                      : isClosed
-                      ? 'bg-slate-50/90 border-slate-200/60'
-                      : 'bg-white border-slate-200/80 shadow-2xs'
-                  }`}>
-                    <span className="text-xs font-extrabold text-slate-800 leading-snug" title={event.title}>
-                      {event.title}
-                    </span>
-                    <span className={`font-black text-xs max-w-full self-start sm:self-auto sm:max-w-[60%] px-2.5 py-1 rounded-xl whitespace-normal break-words leading-snug ${
-                      isClosed
-                        ? 'text-red-700 bg-red-100/90 border border-red-200'
-                        : isLivePpt
+                      ? 'text-red-700 bg-red-100/90 border border-red-200'
+                      : isLivePpt
                         ? 'text-emerald-900 bg-emerald-100 border border-emerald-300 font-extrabold flex items-center gap-1.5'
                         : 'text-slate-900 bg-slate-100 border border-slate-200'
-                    }`}>
->>>>>>> 0076024c6e0a2464c2d6e045195055e3ec773fb0
+                      }`}>
                       {isLivePpt && <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />}
                       {isClosed && <span className="mr-1.5 text-red-600">Closed</span>}
                       {displayDate}
@@ -1171,11 +1146,7 @@ export const RegistrationRulesView: React.FC = () => {
               {mode === 'register' && regStep <= 3 && (
                 isDeadlinePassed ? (
                   <div className="space-y-6 animate-in fade-in duration-300">
-<<<<<<< HEAD
 
-=======
-                    
->>>>>>> 0076024c6e0a2464c2d6e045195055e3ec773fb0
                     {/* CARD 1: PPT & PROTOTYPE SUBMISSION PORTAL (LIVE NOW) */}
                     <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#0B192C] via-[#1E3E62] to-[#000000] p-6 sm:p-8 text-white shadow-2xl border border-blue-500/25 space-y-6">
                       <div className="absolute -right-16 -top-16 w-48 h-48 bg-emerald-500/15 rounded-full blur-3xl pointer-events-none" />
@@ -1460,13 +1431,8 @@ export const RegistrationRulesView: React.FC = () => {
                                 value={leader.mobile}
                                 onChange={(e) => setLeader({ ...leader, mobile: e.target.value.replace(/\D/g, '') })}
                                 className={`w-full px-3 py-2 rounded-xl border text-xs font-mono outline-none focus:ring-2 ${leader.mobile && leader.mobile.length !== 10
-<<<<<<< HEAD
                                   ? 'border-red-500 focus:ring-red-500'
                                   : 'border-slate-300 focus:ring-[#1B3F8B]'
-=======
-                                    ? 'border-red-500 focus:ring-red-500'
-                                    : 'border-slate-300 focus:ring-[#1B3F8B]'
->>>>>>> 0076024c6e0a2464c2d6e045195055e3ec773fb0
                                   }`}
                               />
                               {leader.mobile && leader.mobile.length !== 10 && (
@@ -1485,13 +1451,8 @@ export const RegistrationRulesView: React.FC = () => {
                                 value={leader.email}
                                 onChange={(e) => setLeader({ ...leader, email: e.target.value })}
                                 className={`w-full px-3 py-2 rounded-xl border text-xs font-medium outline-none focus:ring-2 ${leader.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(leader.email.trim())
-<<<<<<< HEAD
                                   ? 'border-red-500 focus:ring-red-500'
                                   : 'border-slate-300 focus:ring-[#1B3F8B]'
-=======
-                                    ? 'border-red-500 focus:ring-red-500'
-                                    : 'border-slate-300 focus:ring-[#1B3F8B]'
->>>>>>> 0076024c6e0a2464c2d6e045195055e3ec773fb0
                                   }`}
                               />
                               {leader.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(leader.email.trim()) && (
@@ -1635,13 +1596,8 @@ export const RegistrationRulesView: React.FC = () => {
                                       value={member.mobile}
                                       onChange={(e) => updateMember(idx, 'mobile', e.target.value.replace(/\D/g, ''))}
                                       className={`w-full px-2.5 py-1.5 rounded-lg border text-xs font-mono bg-white outline-none focus:ring-2 ${member.mobile && member.mobile.length !== 10
-<<<<<<< HEAD
                                         ? 'border-red-500 focus:ring-red-500'
                                         : 'border-slate-200 focus:ring-[#1B3F8B]'
-=======
-                                          ? 'border-red-500 focus:ring-red-500'
-                                          : 'border-slate-200 focus:ring-[#1B3F8B]'
->>>>>>> 0076024c6e0a2464c2d6e045195055e3ec773fb0
                                         }`}
                                     />
                                     {member.mobile && member.mobile.length !== 10 && (
@@ -1660,13 +1616,8 @@ export const RegistrationRulesView: React.FC = () => {
                                       value={member.email}
                                       onChange={(e) => updateMember(idx, 'email', e.target.value)}
                                       className={`w-full px-2.5 py-1.5 rounded-lg border text-xs bg-white outline-none focus:ring-2 ${member.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(member.email.trim())
-<<<<<<< HEAD
                                         ? 'border-red-500 focus:ring-red-500'
                                         : 'border-slate-200 focus:ring-[#1B3F8B]'
-=======
-                                          ? 'border-red-500 focus:ring-red-500'
-                                          : 'border-slate-200 focus:ring-[#1B3F8B]'
->>>>>>> 0076024c6e0a2464c2d6e045195055e3ec773fb0
                                         }`}
                                     />
                                     {member.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(member.email.trim()) && (
@@ -1755,7 +1706,6 @@ export const RegistrationRulesView: React.FC = () => {
                           />
                         </div>
                       )}
-<<<<<<< HEAD
                       <div>
                         <label className="block text-[10px] font-bold text-slate-700 mb-1">Title *</label>
                         <select
@@ -1845,97 +1795,6 @@ export const RegistrationRulesView: React.FC = () => {
                       {isMentorSubmitting ? 'Submitting...' : 'Submit Mentor Details & Complete Registration'}
                     </button>
                   </form>
-=======
-                          <div>
-                            <label className="block text-[10px] font-bold text-slate-700 mb-1">Title *</label>
-                            <select
-                              value={mentorPrefix}
-                              onChange={(e) => setMentorPrefix(e.target.value as MentorPrefix)}
-                              className="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs font-semibold outline-none bg-white"
-                            >
-                              <option value="Dr.">Dr.</option>
-                              <option value="Prof.">Prof.</option>
-                              <option value="Ph.D.">Ph.D.</option>
-                              <option value="Mr.">Mr.</option>
-                              <option value="Mrs.">Mrs.</option>
-                              <option value="Ms.">Ms.</option>
-                            </select>
-                          </div>
-
-                          <div className="sm:col-span-2">
-                            <label className="block text-[10px] font-bold text-slate-700 mb-1">Full Name *</label>
-                            <input
-                              type="text"
-                              required
-                              placeholder="e.g. Parita Shah"
-                              value={mentorName}
-                              onChange={(e) => setMentorName(e.target.value)}
-                              className="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs outline-none"
-                            />
-                          </div>
-
-                          <div>
-                            <label className="block text-[10px] font-bold text-slate-700 mb-1">Contact (10 digits) *</label>
-                            <input
-                              type="tel"
-                              required
-                              maxLength={10}
-                              placeholder="Mobile"
-                              value={mentorMobile}
-                              onChange={(e) => setMentorMobile(e.target.value)}
-                              className="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs font-mono outline-none"
-                            />
-                          </div>
-
-                          <div className="sm:col-span-2">
-                            <label className="block text-[10px] font-bold text-slate-700 mb-1">Email *</label>
-                            <input
-                              type="email"
-                              required
-                              placeholder="e.g. mentor.it@ksv.ac.in"
-                              value={mentorEmail}
-                              onChange={(e) => setMentorEmail(e.target.value)}
-                              className="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs outline-none"
-                            />
-                          </div>
-
-                          <div>
-                            <label className="block text-[10px] font-bold text-slate-700 mb-1">Mentor's Branch / Department *</label>
-                            <select
-                              value={mentorDept}
-                              onChange={(e) => setMentorDept(e.target.value as Department)}
-                              className="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs font-semibold bg-white outline-none"
-                            >
-                              <option value="IT">IT</option>
-                              <option value="CSE">CSE</option>
-                              <option value="CE">CE</option>
-                            </select>
-                          </div>
-
-                          <div className="sm:col-span-2">
-                            <label className="block text-[10px] font-bold text-slate-700 mb-1">Institute *</label>
-                            <select
-                              value={mentorInst}
-                              onChange={(e) => setMentorInst(e.target.value)}
-                              className="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs font-semibold bg-white outline-none"
-                            >
-                              <option value="VSITR Kadi">VSITR Kadi</option>
-                              <option value="VSITR Gandhinagar">VSITR Gandhinagar</option>
-                            </select>
-                          </div>
-
-
-                        </div>
-
-                        <button
-                          type="submit"
-                          disabled={isMentorSubmitting}
-                          className="w-full mt-3 py-3 rounded-xl font-extrabold text-xs text-white bg-gradient-to-r from-amber-600 via-orange-600 to-amber-700 hover:opacity-95 transition disabled:opacity-50"
-                        >
-                          {isMentorSubmitting ? 'Submitting...' : 'Submit Mentor Details & Complete Registration'}
-                        </button>
-                      </form>
->>>>>>> 0076024c6e0a2464c2d6e045195055e3ec773fb0
                 </div>
               )}
 
@@ -1985,11 +1844,7 @@ export const RegistrationRulesView: React.FC = () => {
         </div>
       </div>
 
-<<<<<<< HEAD
       {/* REGISTRATION SUCCESS MODAL OVERLAY */}
-=======
-        {/* REGISTRATION SUCCESS MODAL OVERLAY */}
->>>>>>> 0076024c6e0a2464c2d6e045195055e3ec773fb0
       {successData && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4 animate-in fade-in zoom-in duration-200">
           <div className="relative w-full max-w-md rounded-3xl bg-white p-6 shadow-2xl border border-slate-100 text-slate-800 space-y-4">
