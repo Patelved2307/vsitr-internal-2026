@@ -30,38 +30,38 @@
   "timeline": [
     {
       "id": "t1",
-      "date": "02 August 2026, 11:59 PM",
+      "date": "2026-08-25T18:29:00.000Z",
       "title": "Phase 1: Team Registration Deadline",
       "active": true,
       "description": "All teams must complete 6-member team registration with at least 1 female participant."
     },
     {
       "id": "t2",
-      "date": "05 August 2026, 11:59 PM",
+      "date": "2026-08-25T18:29:00.000Z",
       "title": "Phase 2: Mentor Details Submission",
       "active": true,
       "description": "Registered teams submit verified mentor contact details for final confirmation."
     },
     {
       "id": "t3",
-      "date": "17 August 2026, 11:59 PM",
+      "date": "2026-08-25T18:29:00.000Z",
       "title": "Problem Statement Selection",
       "active": true,
       "description": "Select the Problem Statement from team Portal. Once the Problem statement is selected no modification can be done."
     },
     {
       "id": "t4",
-      "date": "25 August 2026, 12:00 AM",
-      "title": "PPT, Video Clip & 20% Prototype Submission",
+      "date": "2026-09-08T18:29:00.000Z",
+      "title": "PPT, Video Clip & 25% Prototype Submission",
       "active": true,
-      "description": "Submit your PowerPoint deck (.ppt/.pptx), 2-minute YouTube video pitch clip, and 20% prototype code repository by 12:00 AM."
+      "description": "Submit your PowerPoint deck (.ppt/.pptx), 2-minute YouTube video pitch clip, and 25% prototype code repository by 11:59 PM."
     },
     {
       "id": "t5",
       "date": "10 September 2026 (Time will be shared soon)",
       "title": "PPT Presentation Day",
-      "active": false,
-      "description": "In-person pitch deck presentation & technical evaluation before faculty panel. Venue: Gandhinagar Campus. Schedule & time slots will be shared soon."
+      "active": true,
+      "description": "In-person pitch deck presentation & technical evaluation before faculty panel. Venue: Gandhinagar Campus. Schedule & tme slots will be shared soon."
     }
   ],
   "faqs": [
