@@ -1508,7 +1508,7 @@
         },
         {
           "email": "member3@vsitr.ac.in",
-          "gender": "Male",
+          "gender": "Female",
           "mobile": "9876543213",
           "fullName": "Member Three",
           "isLeader": false,
@@ -1548,20 +1548,82 @@
       },
       "status": "completed",
       "createdAt": "2026-08-01T10:00:00.000Z",
-      "updatedAt": "2026-08-23T13:35:49.946Z",
-      "pptSubmission": {
-        "pptFileUrl": "/api/uploads/ppt/SIH2026-000_1787477149493_SIH2026_IDEA_Presentation_Format.pptx",
-        "pptFileName": "SIH2026-IDEA-Presentation-Format.pptx",
-        "pptFileSize": 924505,
-        "submittedAt": "2026-08-23T09:25:49.508Z",
-        "demoVideoUrl": "https://youtu.be/O71o9dbQPq0?si=tXtTkJvevCUJzqag",
-        "githubRepoUrl": "https://github.com/PATELxDEVIL/INTERNAL_SIH_2026_2",
-        "pptUploadedAt": "2026-08-23T09:25:49.508Z",
-        "githubCollaboratorsAdded": true
-      }
+      "updatedAt": "2026-08-24T14:18:24.382Z",
+      "selectedPsId": "SIH2026-00001",
+      "selectedPsTitle": "[SIH Official] weejcveu",
+      "selectedPsOrganization": "du2uegcg",
+      "selectedPsCategory": "fug4fg4f",
+      "selectedPsTheme": "uehfihfi4 fieieief fifyiefif cirvhirvh",
+      "psSelectedAt": "2026-08-24T14:18:23.589Z"
     }
   ],
   "emailLogs": [
+    {
+      "id": "EMAIL-1787581108997-961",
+      "recipientEmail": "member3@vsitr.ac.in",
+      "recipientName": "Member Three",
+      "teamId": "SIH2026-000",
+      "subject": "📢 Internal SIH 2026 – Problem Statement Selection Confirmed",
+      "body": "Dear Member Three,\n\nGreetings from the Internal Smart India Hackathon (SIH) 2026 Organizing Committee.\n\nWe are pleased to inform you that your team has successfully selected and submitted a Problem Statement for Internal SIH 2026 through the Team Portal.\n\n📋 Problem Statement Details\n\nTeam ID: SIH2026-000\nTeam Name: VSITR Testing Team (Internal)\nProblem Statement ID: SIH2026-00001\nProblem Statement Title: [SIH Official] weejcveu\n\nYour submitted Problem Statement details have been successfully recorded in the system. This confirmation email has been shared with the Team Leader and all registered team members for reference.\n\n📌 Important Next Steps\nAfter selecting your Problem Statement, you can start working on your proposed solution.\nThe PPT Submission Date will be announced soon. Please stay tuned to the official communication channels.\nThe Presentation Date will also be announced soon.\nPlease regularly check the Team Portal, registered email, and official WhatsApp group for important announcements and updates.\n\n💬 Join the Official WhatsApp Group\n\nFor regular updates and announcements, please join the official Internal SIH 2026 WhatsApp Group and share the link with all your team members.\n\n👉 Join WhatsApp Group: https://chat.whatsapp.com/EfS0SSUc9aX4DJUhfrpD2U\n\n📞 Need Assistance?\n\nFor any queries or technical assistance, please contact us at:\n\n📧 sihinternal.vsitr@gmail.com\n\nThank you for your participation and cooperation.\n\nWe wish your team the very best for Internal SIH 2026! 🚀\n\nWarm Regards,\nInternal Smart India Hackathon (SIH) 2026 Organizing Committee\nResearch Club | Coding Club | Design Club | Soft Skills Club\nVidush Somany Institute of Technology & Research (VSITR)\nKadi Sarva Vishwavidyalaya",
+      "type": "ps_selection",
+      "status": "simulated",
+      "sentAt": "2026-08-24T14:18:28.997Z"
+    },
+    {
+      "id": "EMAIL-1787581108997-507",
+      "recipientEmail": "member5@vsitr.ac.in",
+      "recipientName": "Member Five",
+      "teamId": "SIH2026-000",
+      "subject": "📢 Internal SIH 2026 – Problem Statement Selection Confirmed",
+      "body": "Dear Member Five,\n\nGreetings from the Internal Smart India Hackathon (SIH) 2026 Organizing Committee.\n\nWe are pleased to inform you that your team has successfully selected and submitted a Problem Statement for Internal SIH 2026 through the Team Portal.\n\n📋 Problem Statement Details\n\nTeam ID: SIH2026-000\nTeam Name: VSITR Testing Team (Internal)\nProblem Statement ID: SIH2026-00001\nProblem Statement Title: [SIH Official] weejcveu\n\nYour submitted Problem Statement details have been successfully recorded in the system. This confirmation email has been shared with the Team Leader and all registered team members for reference.\n\n📌 Important Next Steps\nAfter selecting your Problem Statement, you can start working on your proposed solution.\nThe PPT Submission Date will be announced soon. Please stay tuned to the official communication channels.\nThe Presentation Date will also be announced soon.\nPlease regularly check the Team Portal, registered email, and official WhatsApp group for important announcements and updates.\n\n💬 Join the Official WhatsApp Group\n\nFor regular updates and announcements, please join the official Internal SIH 2026 WhatsApp Group and share the link with all your team members.\n\n👉 Join WhatsApp Group: https://chat.whatsapp.com/EfS0SSUc9aX4DJUhfrpD2U\n\n📞 Need Assistance?\n\nFor any queries or technical assistance, please contact us at:\n\n📧 sihinternal.vsitr@gmail.com\n\nThank you for your participation and cooperation.\n\nWe wish your team the very best for Internal SIH 2026! 🚀\n\nWarm Regards,\nInternal Smart India Hackathon (SIH) 2026 Organizing Committee\nResearch Club | Coding Club | Design Club | Soft Skills Club\nVidush Somany Institute of Technology & Research (VSITR)\nKadi Sarva Vishwavidyalaya",
+      "type": "ps_selection",
+      "status": "simulated",
+      "sentAt": "2026-08-24T14:18:28.997Z"
+    },
+    {
+      "id": "EMAIL-1787581108997-337",
+      "recipientEmail": "member4@vsitr.ac.in",
+      "recipientName": "Member Four",
+      "teamId": "SIH2026-000",
+      "subject": "📢 Internal SIH 2026 – Problem Statement Selection Confirmed",
+      "body": "Dear Member Four,\n\nGreetings from the Internal Smart India Hackathon (SIH) 2026 Organizing Committee.\n\nWe are pleased to inform you that your team has successfully selected and submitted a Problem Statement for Internal SIH 2026 through the Team Portal.\n\n📋 Problem Statement Details\n\nTeam ID: SIH2026-000\nTeam Name: VSITR Testing Team (Internal)\nProblem Statement ID: SIH2026-00001\nProblem Statement Title: [SIH Official] weejcveu\n\nYour submitted Problem Statement details have been successfully recorded in the system. This confirmation email has been shared with the Team Leader and all registered team members for reference.\n\n📌 Important Next Steps\nAfter selecting your Problem Statement, you can start working on your proposed solution.\nThe PPT Submission Date will be announced soon. Please stay tuned to the official communication channels.\nThe Presentation Date will also be announced soon.\nPlease regularly check the Team Portal, registered email, and official WhatsApp group for important announcements and updates.\n\n💬 Join the Official WhatsApp Group\n\nFor regular updates and announcements, please join the official Internal SIH 2026 WhatsApp Group and share the link with all your team members.\n\n👉 Join WhatsApp Group: https://chat.whatsapp.com/EfS0SSUc9aX4DJUhfrpD2U\n\n📞 Need Assistance?\n\nFor any queries or technical assistance, please contact us at:\n\n📧 sihinternal.vsitr@gmail.com\n\nThank you for your participation and cooperation.\n\nWe wish your team the very best for Internal SIH 2026! 🚀\n\nWarm Regards,\nInternal Smart India Hackathon (SIH) 2026 Organizing Committee\nResearch Club | Coding Club | Design Club | Soft Skills Club\nVidush Somany Institute of Technology & Research (VSITR)\nKadi Sarva Vishwavidyalaya",
+      "type": "ps_selection",
+      "status": "simulated",
+      "sentAt": "2026-08-24T14:18:28.997Z"
+    },
+    {
+      "id": "EMAIL-1787581108997-187",
+      "recipientEmail": "member1@vsitr.ac.in",
+      "recipientName": "Member One",
+      "teamId": "SIH2026-000",
+      "subject": "📢 Internal SIH 2026 – Problem Statement Selection Confirmed",
+      "body": "Dear Member One,\n\nGreetings from the Internal Smart India Hackathon (SIH) 2026 Organizing Committee.\n\nWe are pleased to inform you that your team has successfully selected and submitted a Problem Statement for Internal SIH 2026 through the Team Portal.\n\n📋 Problem Statement Details\n\nTeam ID: SIH2026-000\nTeam Name: VSITR Testing Team (Internal)\nProblem Statement ID: SIH2026-00001\nProblem Statement Title: [SIH Official] weejcveu\n\nYour submitted Problem Statement details have been successfully recorded in the system. This confirmation email has been shared with the Team Leader and all registered team members for reference.\n\n📌 Important Next Steps\nAfter selecting your Problem Statement, you can start working on your proposed solution.\nThe PPT Submission Date will be announced soon. Please stay tuned to the official communication channels.\nThe Presentation Date will also be announced soon.\nPlease regularly check the Team Portal, registered email, and official WhatsApp group for important announcements and updates.\n\n💬 Join the Official WhatsApp Group\n\nFor regular updates and announcements, please join the official Internal SIH 2026 WhatsApp Group and share the link with all your team members.\n\n👉 Join WhatsApp Group: https://chat.whatsapp.com/EfS0SSUc9aX4DJUhfrpD2U\n\n📞 Need Assistance?\n\nFor any queries or technical assistance, please contact us at:\n\n📧 sihinternal.vsitr@gmail.com\n\nThank you for your participation and cooperation.\n\nWe wish your team the very best for Internal SIH 2026! 🚀\n\nWarm Regards,\nInternal Smart India Hackathon (SIH) 2026 Organizing Committee\nResearch Club | Coding Club | Design Club | Soft Skills Club\nVidush Somany Institute of Technology & Research (VSITR)\nKadi Sarva Vishwavidyalaya",
+      "type": "ps_selection",
+      "status": "simulated",
+      "sentAt": "2026-08-24T14:18:28.997Z"
+    },
+    {
+      "id": "EMAIL-1787581108997-52",
+      "recipientEmail": "member2@vsitr.ac.in",
+      "recipientName": "Member Two",
+      "teamId": "SIH2026-000",
+      "subject": "📢 Internal SIH 2026 – Problem Statement Selection Confirmed",
+      "body": "Dear Member Two,\n\nGreetings from the Internal Smart India Hackathon (SIH) 2026 Organizing Committee.\n\nWe are pleased to inform you that your team has successfully selected and submitted a Problem Statement for Internal SIH 2026 through the Team Portal.\n\n📋 Problem Statement Details\n\nTeam ID: SIH2026-000\nTeam Name: VSITR Testing Team (Internal)\nProblem Statement ID: SIH2026-00001\nProblem Statement Title: [SIH Official] weejcveu\n\nYour submitted Problem Statement details have been successfully recorded in the system. This confirmation email has been shared with the Team Leader and all registered team members for reference.\n\n📌 Important Next Steps\nAfter selecting your Problem Statement, you can start working on your proposed solution.\nThe PPT Submission Date will be announced soon. Please stay tuned to the official communication channels.\nThe Presentation Date will also be announced soon.\nPlease regularly check the Team Portal, registered email, and official WhatsApp group for important announcements and updates.\n\n💬 Join the Official WhatsApp Group\n\nFor regular updates and announcements, please join the official Internal SIH 2026 WhatsApp Group and share the link with all your team members.\n\n👉 Join WhatsApp Group: https://chat.whatsapp.com/EfS0SSUc9aX4DJUhfrpD2U\n\n📞 Need Assistance?\n\nFor any queries or technical assistance, please contact us at:\n\n📧 sihinternal.vsitr@gmail.com\n\nThank you for your participation and cooperation.\n\nWe wish your team the very best for Internal SIH 2026! 🚀\n\nWarm Regards,\nInternal Smart India Hackathon (SIH) 2026 Organizing Committee\nResearch Club | Coding Club | Design Club | Soft Skills Club\nVidush Somany Institute of Technology & Research (VSITR)\nKadi Sarva Vishwavidyalaya",
+      "type": "ps_selection",
+      "status": "simulated",
+      "sentAt": "2026-08-24T14:18:28.997Z"
+    },
+    {
+      "id": "EMAIL-1787581108997-685",
+      "recipientEmail": "test.sih2026@vsitr.ac.in",
+      "recipientName": "Test Leader (VSITR)",
+      "teamId": "SIH2026-000",
+      "subject": "📢 Internal SIH 2026 – Problem Statement Selection Confirmed",
+      "body": "Dear Test Leader (VSITR),\n\nGreetings from the Internal Smart India Hackathon (SIH) 2026 Organizing Committee.\n\nWe are pleased to inform you that your team has successfully selected and submitted a Problem Statement for Internal SIH 2026 through the Team Portal.\n\n📋 Problem Statement Details\n\nTeam ID: SIH2026-000\nTeam Name: VSITR Testing Team (Internal)\nProblem Statement ID: SIH2026-00001\nProblem Statement Title: [SIH Official] weejcveu\n\nYour submitted Problem Statement details have been successfully recorded in the system. This confirmation email has been shared with the Team Leader and all registered team members for reference.\n\n📌 Important Next Steps\nAfter selecting your Problem Statement, you can start working on your proposed solution.\nThe PPT Submission Date will be announced soon. Please stay tuned to the official communication channels.\nThe Presentation Date will also be announced soon.\nPlease regularly check the Team Portal, registered email, and official WhatsApp group for important announcements and updates.\n\n💬 Join the Official WhatsApp Group\n\nFor regular updates and announcements, please join the official Internal SIH 2026 WhatsApp Group and share the link with all your team members.\n\n👉 Join WhatsApp Group: https://chat.whatsapp.com/EfS0SSUc9aX4DJUhfrpD2U\n\n📞 Need Assistance?\n\nFor any queries or technical assistance, please contact us at:\n\n📧 sihinternal.vsitr@gmail.com\n\nThank you for your participation and cooperation.\n\nWe wish your team the very best for Internal SIH 2026! 🚀\n\nWarm Regards,\nInternal Smart India Hackathon (SIH) 2026 Organizing Committee\nResearch Club | Coding Club | Design Club | Soft Skills Club\nVidush Somany Institute of Technology & Research (VSITR)\nKadi Sarva Vishwavidyalaya",
+      "type": "ps_selection",
+      "status": "simulated",
+      "sentAt": "2026-08-24T14:18:28.997Z"
+    },
     {
       "id": "EMAIL-1787477151764-789",
       "recipientEmail": "member5@vsitr.ac.in",

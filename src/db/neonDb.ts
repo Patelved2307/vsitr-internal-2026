@@ -969,6 +969,14 @@ export async function runTableMigrations() {
     await runQuery(`ALTER TABLE ppt_submissions DROP COLUMN IF EXISTS file_url;`).catch(() => { });
     await runQuery(`ALTER TABLE ppt_submissions DROP COLUMN IF EXISTS note;`).catch(() => { });
 
+    // Official SIH entries are manually selected external PS IDs, so they must not
+    // be constrained to the institute-only problem_statements table.
+    try {
+      await runQuery(`ALTER TABLE teams DROP CONSTRAINT IF EXISTS fk_team_ps;`);
+    } catch (e) {
+      console.warn('Warning: Could not enforce some foreign key constraints dynamically:', e);
+    }
+
     // leader_edit_requests table (Team Edit Window — leader field change queue)
     await runQuery(`
       CREATE TABLE IF NOT EXISTS leader_edit_requests (
