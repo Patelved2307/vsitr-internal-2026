@@ -1,6 +1,23 @@
 /** Convert a stored timeline value (ISO or legacy display text) to a Date. */
 export const parseTimelineDate = (value: string): Date | null => {
   if (!value) return null;
+  
+  // If the value contains any letters or custom text indicating it's a custom text/description date,
+  // (e.g. contains parentheses, or words like "soon", "will", "shared", "tbd", "pending")
+  // we do not want to parse it as a Date object, to avoid V8's Date.parse from discarding the comment.
+  const lowercase = value.toLowerCase();
+  if (
+    lowercase.includes('(') ||
+    lowercase.includes(')') ||
+    lowercase.includes('soon') ||
+    lowercase.includes('will') ||
+    lowercase.includes('shared') ||
+    lowercase.includes('tbd') ||
+    lowercase.includes('pending')
+  ) {
+    return null;
+  }
+
   const parsed = new Date(value);
   return Number.isNaN(parsed.getTime()) ? null : parsed;
 };
