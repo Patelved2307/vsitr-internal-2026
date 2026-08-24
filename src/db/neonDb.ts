@@ -314,6 +314,9 @@ export async function initDatabase(force = false): Promise<void> {
 
       await runQuery(`ALTER TABLE teams ADD COLUMN IF NOT EXISTS selected_ps_id TEXT;`);
       await runQuery(`ALTER TABLE teams ADD COLUMN IF NOT EXISTS selected_ps_title TEXT;`);
+      await runQuery(`ALTER TABLE teams ADD COLUMN IF NOT EXISTS selected_ps_organization TEXT;`);
+      await runQuery(`ALTER TABLE teams ADD COLUMN IF NOT EXISTS selected_ps_category TEXT;`);
+      await runQuery(`ALTER TABLE teams ADD COLUMN IF NOT EXISTS selected_ps_theme TEXT;`);
       await runQuery(`ALTER TABLE teams ADD COLUMN IF NOT EXISTS ps_selected_at TIMESTAMPTZ;`);
       await runQuery(`ALTER TABLE teams ADD COLUMN IF NOT EXISTS ppt_submission JSONB;`);
 
@@ -682,6 +685,9 @@ export async function getAllTeams(): Promise<Team[]> {
           updatedAt: row.updated_at,
           selectedPsId: row.selected_ps_id || undefined,
           selectedPsTitle: row.selected_ps_title || undefined,
+          selectedPsOrganization: row.selected_ps_organization || undefined,
+          selectedPsCategory: row.selected_ps_category || undefined,
+          selectedPsTheme: row.selected_ps_theme || undefined,
           psSelectedAt: row.ps_selected_at || undefined,
           pptSubmission: pptSubmissionData,
         };
@@ -713,6 +719,9 @@ export async function getTeamById(id: string): Promise<Team | null> {
           updatedAt: row.updated_at,
           selectedPsId: row.selected_ps_id || undefined,
           selectedPsTitle: row.selected_ps_title || undefined,
+          selectedPsOrganization: row.selected_ps_organization || undefined,
+          selectedPsCategory: row.selected_ps_category || undefined,
+          selectedPsTheme: row.selected_ps_theme || undefined,
           psSelectedAt: row.ps_selected_at || undefined,
           pptSubmission: row.ppt_submission ? (typeof row.ppt_submission === 'string' ? JSON.parse(row.ppt_submission) : row.ppt_submission) : undefined,
         };
@@ -735,8 +744,8 @@ export async function createTeam(team: Team): Promise<Team> {
   if (isNeonConnected) {
     try {
       await runQuery(
-        `INSERT INTO teams (id, team_name, leader, members, mentor, status, selected_ps_id, selected_ps_title, ps_selected_at, ppt_submission, created_at, updated_at)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
+        `INSERT INTO teams (id, team_name, leader, members, mentor, status, selected_ps_id, selected_ps_title, selected_ps_organization, selected_ps_category, selected_ps_theme, ps_selected_at, ppt_submission, created_at, updated_at)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)
          ON CONFLICT (id) DO UPDATE SET
            team_name = EXCLUDED.team_name,
            leader = EXCLUDED.leader,
@@ -745,6 +754,9 @@ export async function createTeam(team: Team): Promise<Team> {
            status = EXCLUDED.status,
            selected_ps_id = EXCLUDED.selected_ps_id,
            selected_ps_title = EXCLUDED.selected_ps_title,
+           selected_ps_organization = EXCLUDED.selected_ps_organization,
+           selected_ps_category = EXCLUDED.selected_ps_category,
+           selected_ps_theme = EXCLUDED.selected_ps_theme,
            ps_selected_at = EXCLUDED.ps_selected_at,
            ppt_submission = EXCLUDED.ppt_submission,
            updated_at = EXCLUDED.updated_at`,
@@ -757,6 +769,9 @@ export async function createTeam(team: Team): Promise<Team> {
           team.status,
           team.selectedPsId || null,
           team.selectedPsTitle || null,
+          team.selectedPsOrganization || null,
+          team.selectedPsCategory || null,
+          team.selectedPsTheme || null,
           team.psSelectedAt || null,
           team.pptSubmission ? JSON.stringify(team.pptSubmission) : null,
           team.createdAt,
@@ -798,8 +813,8 @@ export async function updateTeam(id: string, updatedFields: Partial<Team>): Prom
       const res = await runQuery(
         `UPDATE teams 
          SET team_name = $1, leader = $2, members = $3, mentor = $4, status = $5, updated_at = $6,
-             selected_ps_id = $7, selected_ps_title = $8, ps_selected_at = $9, ppt_submission = $10
-         WHERE UPPER(id) = UPPER($11)
+             selected_ps_id = $7, selected_ps_title = $8, selected_ps_organization = $9, selected_ps_category = $10, selected_ps_theme = $11, ps_selected_at = $12, ppt_submission = $13
+         WHERE UPPER(id) = UPPER($14)
          RETURNING *`,
         [
           merged.teamName,
@@ -810,6 +825,9 @@ export async function updateTeam(id: string, updatedFields: Partial<Team>): Prom
           merged.updatedAt,
           merged.selectedPsId || null,
           merged.selectedPsTitle || null,
+          merged.selectedPsOrganization || null,
+          merged.selectedPsCategory || null,
+          merged.selectedPsTheme || null,
           merged.psSelectedAt || null,
           merged.pptSubmission ? JSON.stringify(merged.pptSubmission) : null,
           id.trim(),
@@ -1350,13 +1368,16 @@ export async function deleteProblemStatement(id: string): Promise<boolean> {
   return neonSuccess;
 }
 
-export async function updateTeamPsSelection(teamId: string, psId: string | null, psTitle: string | null): Promise<Team | null> {
+export async function updateTeamPsSelection(teamId: string, psId: string | null, psTitle: string | null, organization?: string, category?: string, theme?: string): Promise<Team | null> {
   const team = await getTeamById(teamId);
   if (!team) return null;
 
   const updatedFields = {
     selectedPsId: psId || undefined,
     selectedPsTitle: psTitle || undefined,
+    selectedPsOrganization: organization || undefined,
+    selectedPsCategory: category || undefined,
+    selectedPsTheme: theme || undefined,
     psSelectedAt: psId ? new Date().toISOString() : undefined,
   };
 

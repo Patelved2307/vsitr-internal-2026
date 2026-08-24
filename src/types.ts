@@ -70,6 +70,9 @@ export interface Team {
   updatedAt: string;
   selectedPsId?: string;
   selectedPsTitle?: string;
+  selectedPsOrganization?: string;
+  selectedPsCategory?: string;
+  selectedPsTheme?: string;
   psSelectedAt?: string;
   pptSubmission?: PptSubmission;
 }

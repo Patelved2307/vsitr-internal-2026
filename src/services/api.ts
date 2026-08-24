@@ -314,7 +314,7 @@ export const api = {
     return data;
   },
 
-  selectProblemStatement: async (payload: { teamId: string; psId: string; psTitle?: string }) => {
+  selectProblemStatement: async (payload: { teamId: string; psId: string; psTitle?: string; organization?: string; category?: string; theme?: string }) => {
     const res = await fetch('/api/teams/select-ps', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

@@ -1169,10 +1169,10 @@ async function startServer() {
   // Submit PS Selection for Team (Self-Service in Team Portal)
   app.post('/api/teams/select-ps', async (req: Request, res: Response) => {
     try {
-      const { teamId, psId, psTitle: customPsTitle } = req.body;
+      const { teamId, psId, psTitle: customPsTitle, organization, category, theme } = req.body;
 
-      if (!teamId || !psId) {
-        return res.status(400).json({ success: false, message: 'Team ID and Problem Statement ID are required.' });
+      if (!teamId || !psId || !customPsTitle || !organization || !category || !theme) {
+        return res.status(400).json({ success: false, message: 'All problem statement details are required.' });
       }
 
       // Use the deadline managed in the Admin Panel. The fallback preserves existing installs.
@@ -1208,7 +1208,7 @@ async function startServer() {
         return res.status(409).json({ success: false, message: 'Your team has already selected a problem statement. Changes are not allowed.' });
       }
 
-      const updatedTeam = await updateTeamPsSelection(teamId, psIdToSave, psTitleToSave);
+      const updatedTeam = await updateTeamPsSelection(teamId, psIdToSave, psTitleToSave, organization, category, theme);
       if (!updatedTeam) {
         return res.status(404).json({ success: false, message: 'Team not found.' });
       }

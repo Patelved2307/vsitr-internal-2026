@@ -1165,14 +1165,14 @@ export const RegistrationRulesView: React.FC = () => {
                               </span>
                             </div>
                             <h3 className="text-xl sm:text-2xl font-black tracking-tight text-white mt-1">
-                              PPT &amp; 20% Prototype Submission
+                              PPT &amp; 25% Prototype Submission
                             </h3>
                           </div>
                         </div>
                       </div>
 
                       <p className="text-xs sm:text-sm text-slate-200 font-medium leading-relaxed relative z-10">
-                        Official Internal SIH 2026 presentation PowerPoint deck (.ppt / .pptx), 2-minute YouTube video pitch clip link, and 20% working prototype GitHub repository submission portal is now active for all registered teams!
+                        Official Internal SIH 2026 presentation PowerPoint deck (.ppt / .pptx), 2-minute YouTube video pitch clip link, and 25% working prototype GitHub repository submission portal is now active for all registered teams!
                       </p>
 
                       <div className="space-y-3 relative z-10">

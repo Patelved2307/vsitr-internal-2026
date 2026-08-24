@@ -1183,10 +1183,10 @@ app.delete('/api/problem-statements/:id', async (req: Request, res: Response) =>
 // Submit PS Selection for Team (Self-Service in Team Portal)
 app.post('/api/teams/select-ps', async (req: Request, res: Response) => {
   try {
-    const { teamId, psId, psTitle } = req.body;
+    const { teamId, psId, psTitle, organization, category, theme } = req.body;
 
-    if (!teamId || !psId || !psTitle) {
-      return res.status(400).json({ success: false, message: 'Team ID, Problem Statement ID, and Title are required.' });
+    if (!teamId || !psId || !psTitle || !organization || !category || !theme) {
+      return res.status(400).json({ success: false, message: 'All problem statement details are required.' });
     }
 
     // Check deadline from database settings (admin-configurable), fallback to Aug 16 IST
@@ -1205,7 +1205,7 @@ app.post('/api/teams/select-ps', async (req: Request, res: Response) => {
       });
     }
 
-    const updatedTeam = await updateTeamPsSelection(teamId, psId, psTitle);
+    const updatedTeam = await updateTeamPsSelection(teamId, psId, psTitle, organization, category, theme);
     if (!updatedTeam) {
       return res.status(404).json({ success: false, message: 'Team not found.' });
     }
