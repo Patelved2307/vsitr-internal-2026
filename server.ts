@@ -103,6 +103,7 @@ async function startServer() {
   app.get('/api/settings', async (req: Request, res: Response) => {
     try {
       const config = await getGlobalConfig();
+      res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
       res.json({
         settings: config.settings,
         timeline: config.timeline,

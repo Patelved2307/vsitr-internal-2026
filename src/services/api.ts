@@ -3,7 +3,7 @@ import { EventSettings, FAQItem, Team, TimelineEvent, Rule } from '../types';
 export const api = {
   // Fetch site settings, FAQs, rules, and timeline
   getSettings: async () => {
-    const res = await fetch('/api/settings');
+    const res = await fetch('/api/settings', { cache: 'no-store' });
     if (!res.ok) throw new Error('Failed to load portal settings');
     return res.json();
   },

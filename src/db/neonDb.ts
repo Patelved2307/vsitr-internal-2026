@@ -43,10 +43,19 @@ let isNeonConnected = false;
 function normalizePresentationDayTimeline(timeline: TimelineEvent[]): TimelineEvent[] {
   return timeline.map((event) => {
     const isPresentationDay = event.id === 't5' || event.title.toLowerCase().includes('presentation day');
-    const isLegacySeptemberTenth = /(?:2026-09-09T18:30:00(?:\.000)?Z|10 September 2026,?\s*12:00 AM)/i.test(event.date);
+    const parsedDate = new Date(event.date);
+    const formattedInIndia = Number.isNaN(parsedDate.getTime())
+      ? event.date
+      : parsedDate.toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit', hour12: true });
+    const isMidnightPlaceholder = /12:00\s*AM/i.test(event.date) || /12:00\s*am/i.test(formattedInIndia);
 
-    return isPresentationDay && isLegacySeptemberTenth
-      ? { ...event, date: '10 September 2026 (Time will be shared soon)' }
+    return isPresentationDay && isMidnightPlaceholder
+      ? {
+          ...event,
+          date: `${parsedDate.toLocaleDateString('en-IN', {
+            day: '2-digit', month: 'long', year: 'numeric', timeZone: 'Asia/Kolkata',
+          })} (Time will be shared soon)`,
+        }
       : event;
   });
 }
